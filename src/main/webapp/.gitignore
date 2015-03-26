@@ -1,0 +1,7 @@
+# exclude project files
+RHCareerFairLayout.sublime-project
+RHCareerFairLayout.sublime-workspace
+/archive
+/test
+*.psd Handlers
+// }

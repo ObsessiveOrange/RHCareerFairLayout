@@ -1,0 +1,37 @@
+Name	Type
+Applied Biology	Majors
+Applied Optics	Majors
+Biochemistry	Majors
+Biochemistry & Molecular Biology	Majors
+Biology	Majors
+Biomedical Engineering	Majors
+Chemical Engineering	Majors
+Chemistry	Majors
+Civil Engineering	Majors
+Computational Science	Majors
+Computer Engineering	Majors
+Computer Science	Majors
+Economics	Majors
+Electrical and Computer Engineering	Majors
+Electrical Engineering	Majors
+Engineering Management-GR Only	Majors
+Engineering Physics	Majors
+Environmental Engineering-GR Only	Majors
+International Computer Science	Majors
+International Studies	Majors
+Math	Majors
+Mechanical Engineering	Majors
+Optical Engineering	Majors
+Physics	Majors
+Software Engineering	Majors
+Syst Engr & Mgmt Internat'l	Majors
+US Citizen	Work Authorizations
+Permanent Resident	Work Authorizations
+H-1 Visa	Work Authorizations
+F-1 Student Visa	Work Authorizations
+J-1 Student Visa	Work Authorizations
+Full Time	Position Types
+Part Time	Position Types
+Co-op	Position Types
+Internship/Externship	Position Types
+Volunteer	Position Types
