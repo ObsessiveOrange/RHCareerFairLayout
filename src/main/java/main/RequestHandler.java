@@ -26,6 +26,12 @@ public class RequestHandler {
     private static CachedResult cachedData = null;
     private static String       adminKey   = "M4Z-Z#hA=NDL.p^E93=3NO;8vO]uFF";
     
+    private static String       dbHost     = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    private static String       dbPort     = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+    private static String       dbUserName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+    private static String       dbPassword = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+    private static String       gearName   = System.getenv("OPENSHIFT_GEAR_NAME");
+    
     public static String handleStartRequest(HttpServletRequest request) {
     
         return successString("Ready to serve requests");
@@ -142,17 +148,7 @@ public class RequestHandler {
         StringBuilder s = new StringBuilder();
         PreparedStatement prepStatement = null;
         try {
-            // InitialContext ic = new InitialContext();
-            // Context initialContext = (Context) ic.lookup("java:comp/env");
-            // DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
-            // Connection conn = datasource.getConnection();
             Class.forName("com.mysql.jdbc.Driver");
-            
-            String dbHost = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-            String dbPort = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-            String dbUserName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-            String dbPassword = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-            String gearName = System.getenv("OPENSHIFT_GEAR_NAME");
             
             s.append("dbHost: " + dbHost + "\n");
             s.append("dbPort: " + dbPort + "\n");
