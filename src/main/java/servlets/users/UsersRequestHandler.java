@@ -54,6 +54,7 @@ public class UsersRequestHandler {
             // check to make sure username does not already exist
             PreparedStatement check = conn.prepareStatement("SELECT COUNT(id) FROM Users WHERE username = '" + request.getHeader("authUser") + "';");
             ResultSet users = check.executeQuery();
+            users.next();
             if (users.getInt(0) != 0) {
                 return SystemVars.failString("Username already exists");
             }
