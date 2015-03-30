@@ -63,7 +63,7 @@ public class UsersServlet extends HttpServlet {
         String responseString;
         
         switch (method) {
-            case "registerUserRequest":
+            case "registerUser":
                 responseString = UsersRequestHandler.handleRegisterUserRequest(request);
                 break;
             case "testDB":
