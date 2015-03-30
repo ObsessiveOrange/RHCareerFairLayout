@@ -1,4 +1,4 @@
-package main;
+package servlets.data;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import misc.ArrayList2D;
-import objects.Category;
-import objects.Company;
-import objects.DataVars;
-import objects.LayoutVars;
-import objects.SystemVars;
+import adt.Category;
+import adt.Company;
+import adt.DataVars;
+import adt.ItemVars;
+import adt.LayoutVars;
 
 import com.google.gson.Gson;
 
-public class RHCareerFairLayout extends HttpServlet {
+public class DataServlet extends HttpServlet {
     
     /**
      * 
@@ -29,15 +29,13 @@ public class RHCareerFairLayout extends HttpServlet {
     
     public static DataVars                   dataVars;
     public static LayoutVars                 layoutVars;
-    public static SystemVars                 systemVars;
+    public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
     public static HashMap<Integer, Company>  entryMap         = new HashMap<Integer, Company>();
     
-    public static boolean                    isTest           = true;
-    
     /** Getter & Setter Methods **/
     
-    public RHCareerFairLayout() throws IOException {
+    public DataServlet() throws IOException {
     
         super();
         dataVars = new DataVars();
@@ -55,13 +53,13 @@ public class RHCareerFairLayout extends HttpServlet {
         
         switch (method) {
             case "getData":
-                responseString = RequestHandler.handleGetDataRequest(request);
+                responseString = DataRequestHandler.handleGetDataRequest(request);
                 break;
             case "start":
-                responseString = RequestHandler.handleStartRequest(request);
+                responseString = DataRequestHandler.handleStartRequest(request);
                 break;
             case "testDB":
-                responseString = RequestHandler.handleTestDbRequest(request);
+                responseString = DataRequestHandler.handleTestDbRequest(request);
                 break;
             case "test":
                 Map<String, String> env = System.getenv();
@@ -110,10 +108,10 @@ public class RHCareerFairLayout extends HttpServlet {
         
         switch (method) {
             case "setSize":
-                responseString = RequestHandler.handleSetSizeRequest(request);
+                responseString = DataRequestHandler.handleSetSizeRequest(request);
                 break;
             case "forceRegenerationOfData":
-                responseString = RequestHandler.handleForceRegenerationOfData(request);
+                responseString = DataRequestHandler.handleForceRegenerationOfData(request);
                 break;
             // case "resetTestData":
             // response.getWriter().print(RequestHandler.resetTestData(request));

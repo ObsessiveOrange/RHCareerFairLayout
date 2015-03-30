@@ -1,9 +1,9 @@
-package objects;
+package adt;
 
 import java.util.List;
 import java.util.Map;
 
-import main.RHCareerFairLayout;
+import servlets.data.DataServlet;
 
 public class Company extends Item implements Comparable<Company> {
     
@@ -23,7 +23,7 @@ public class Company extends Item implements Comparable<Company> {
     
     public Company(String title, Map<String, List<Integer>> categories, String description, Map<String, String> parameters) {
     
-        super(RHCareerFairLayout.dataVars.getNextEntryID());
+        super(DataServlet.dataVars.getNextEntryID());
         this.title = title;
         this.categories = categories;
         this.description = description;
@@ -35,7 +35,7 @@ public class Company extends Item implements Comparable<Company> {
                 if (id == 0) {
                     continue;
                 }
-                Category category = RHCareerFairLayout.categoryMap.get(id);
+                Category category = DataServlet.categoryMap.get(id);
                 category.getEntries().add(this.getID());
             }
         }

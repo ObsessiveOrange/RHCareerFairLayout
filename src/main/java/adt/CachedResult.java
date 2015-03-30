@@ -1,4 +1,4 @@
-package objects;
+package adt;
 
 public class CachedResult {
     

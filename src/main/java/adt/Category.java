@@ -1,8 +1,8 @@
-package objects;
+package adt;
 
 import java.util.ArrayList;
 
-import main.RHCareerFairLayout;
+import servlets.data.DataServlet;
 
 public class Category extends Item implements Comparable<Category> {
     
@@ -20,7 +20,7 @@ public class Category extends Item implements Comparable<Category> {
     
     public Category(String title, String type) {
     
-        super(RHCareerFairLayout.dataVars.getNextCategoryID());
+        super(DataServlet.dataVars.getNextCategoryID());
         
         this.title = title;
         this.entries = new ArrayList<Integer>();

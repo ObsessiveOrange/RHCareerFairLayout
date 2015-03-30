@@ -1,4 +1,4 @@
-package objects;
+package adt;
 
 import java.util.Collection;
 import java.util.HashMap;

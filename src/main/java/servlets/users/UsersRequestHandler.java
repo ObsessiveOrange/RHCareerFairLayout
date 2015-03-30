@@ -1,4 +1,4 @@
-package main;
+package servlets.users;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,27 +15,59 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
-import objects.CachedResult;
-import objects.Category;
-import objects.Company;
-import objects.LayoutVars;
+import misc.BCrypt;
+import servlets.SystemVars;
+import adt.CachedResult;
+import adt.Category;
+import adt.Company;
+import adt.LayoutVars;
 
 import com.google.gson.Gson;
 
-public class RequestHandler {
+public class UsersRequestHandler {
     
     private static CachedResult cachedData = null;
     private static String       adminKey   = "M4Z-Z#hA=NDL.p^E93=3NO;8vO]uFF";
     
-    private static String       dbHost     = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-    private static String       dbPort     = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-    private static String       dbUserName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-    private static String       dbPassword = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-    private static String       gearName   = System.getenv("OPENSHIFT_GEAR_NAME");
+    private static Connection   conn       = null;
     
-    public static String handleStartRequest(HttpServletRequest request) {
+    public static boolean setupAdminRequestHandler() {
     
-        return successString("Ready to serve requests");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/Users",
+                    SystemVars.getDbusername(), SystemVars.getDbpassword());
+            return true;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public static String handleRegisterUserRequest(HttpServletRequest request) {
+    
+        try {
+            // Permissions levels:
+            // 1 - Users (Edit saved companies, visit list)
+            // 10 - Admin (Edit user permssions, edit company/category list)
+            // Always add as users, require admin access to elevate
+            PreparedStatement statement = conn.prepareStatement("INSERT INTO USERS (username, hashedPw, permissions) values (?, ?, 1");
+            statement.setString(1, request.getHeader("authUser"));
+            statement.setString(2, BCrypt.hashpw(request.getHeader("authPass"), BCrypt.gensalt()));
+            
+            Integer insertResult = statement.executeUpdate();
+            
+            return SystemVars.successString("Rows changed: " + insertResult);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return SystemVars.successString("Ready to serve requests");
     }
     
     public static String handleGetDataRequest(HttpServletRequest request) throws IOException {
@@ -46,15 +79,15 @@ public class RequestHandler {
         
         System.out.println("Generating cached data");
         
-        HashMap<Integer, Category> categoryMap = RHCareerFairLayout.categoryMap;
-        HashMap<Integer, Company> entryMap = RHCareerFairLayout.entryMap;
-        LayoutVars layout = RHCareerFairLayout.layoutVars;
+        HashMap<Integer, Category> categoryMap = UsersServlet.categoryMap;
+        HashMap<Integer, Company> entryMap = UsersServlet.entryMap;
+        LayoutVars layout = UsersServlet.layoutVars;
         
         HashMap<String, Object> returnMap = new HashMap<String, Object>();
         
         returnMap.put("success", 1);
-        returnMap.put("title", "Career Fair " + RHCareerFairLayout.dataVars.getQuarter() + " "
-                + RHCareerFairLayout.dataVars.getYear());
+        returnMap.put("title", "Career Fair " + UsersServlet.dataVars.getQuarter() + " "
+                + UsersServlet.dataVars.getYear());
         returnMap.put("categories", categoryMap);
         returnMap.put("entries", entryMap);
         returnMap.put("layout", layout);
@@ -69,7 +102,7 @@ public class RequestHandler {
     
         cachedData = null;
         
-        return successString("Cached data removed - will regenerate on next request");
+        return SystemVars.successString("Cached data removed - will regenerate on next request");
     }
     
     public static String handleSetSizeRequest(HttpServletRequest request) {
@@ -78,7 +111,7 @@ public class RequestHandler {
         cachedData = null;
         
         if (request.getHeader("key") == null || !request.getHeader("key").equals(adminKey)) {
-            return failString("Invalid key");
+            return SystemVars.failString("Invalid key");
         }
         
         String section = request.getHeader("section");
@@ -87,7 +120,7 @@ public class RequestHandler {
             return "{\"Server Timestamp\"" + System.currentTimeMillis() + ",\"Success\":0, \"Error\":\"Invalid section supplied\"}";
         }
         
-        LayoutVars layout = RHCareerFairLayout.layoutVars;
+        LayoutVars layout = UsersServlet.layoutVars;
         
         switch (section.toLowerCase()) {
             case "1":
@@ -111,36 +144,10 @@ public class RequestHandler {
                 layout.setSection3(size);
                 break;
             default:
-                return failString("Invalid section provided");
+                return SystemVars.failString("Invalid section provided");
         }
         
-        return successString("Size successfully set");
-    }
-    
-    private static String failString(String error) {
-    
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-        
-        returnMap.put("success", 0);
-        if (error != null) {
-            returnMap.put("error", error);
-        }
-        returnMap.put("timestamp", System.currentTimeMillis());
-        
-        return new Gson().toJson(returnMap);
-    }
-    
-    private static String successString(String message) {
-    
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-        
-        returnMap.put("success", 1);
-        if (message != null) {
-            returnMap.put("message", message);
-        }
-        returnMap.put("timestamp", System.currentTimeMillis());
-        
-        return new Gson().toJson(returnMap);
+        return SystemVars.successString("Size successfully set");
     }
     
     public static String handleTestDbRequest(HttpServletRequest request) {
@@ -148,15 +155,7 @@ public class RequestHandler {
         StringBuilder s = new StringBuilder();
         PreparedStatement prepStatement = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            
-            s.append("dbHost: " + dbHost + "\n");
-            s.append("dbPort: " + dbPort + "\n");
-            s.append("dbUserName: " + dbUserName + "\n");
-            s.append("dbPassword: " + dbPassword + "\n");
-            s.append("gearName: " + gearName + "\n");
-            
-            Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/testDB", dbUserName, dbPassword);
+            // Class.forName("com.mysql.jdbc.Driver");
             
             prepStatement = conn.prepareStatement("SELECT * FROM comments;");
             

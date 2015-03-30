@@ -17,7 +17,7 @@
     
  	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
+			<web-resource-name>Force all to HTTPS</web-resource-name>
 			<url-pattern>/*</url-pattern>
 			<http-method>GET</http-method>
 			<http-method>POST</http-method>
