@@ -6,12 +6,20 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
 	<servlet>
-		<servlet-name>RHCareerFairLayoutServlet</servlet-name>
-		<servlet-class>main.RHCareerFairLayout</servlet-class>
+		<servlet-name>Data Servlet</servlet-name>
+		<servlet-class>servlets.data.DataServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>RHCareerFairLayoutServlet</servlet-name>
+		<servlet-name>Data Servlet</servlet-name>
 		<url-pattern>/data/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Users Servlet</servlet-name>
+		<servlet-class>servlets.data.UsersServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Users Servlet</servlet-name>
+		<url-pattern>/users/*</url-pattern>
 	</servlet-mapping>
          
     
