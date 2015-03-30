@@ -55,7 +55,7 @@ public class UsersRequestHandler {
             // 1 - Users (Edit saved companies, visit list)
             // 10 - Admin (Edit user permssions, edit company/category list)
             // Always add as users, require admin access to elevate
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO USERS (username, hashedPw, permissions) values (?, ?, 1");
+            PreparedStatement statement = conn.prepareStatement("INSERT INTO Users (username, hashedPw, permissions) values (?, ?, 1");
             statement.setString(1, request.getHeader("authUser"));
             statement.setString(2, BCrypt.hashpw(request.getHeader("authPass"), BCrypt.gensalt()));
             

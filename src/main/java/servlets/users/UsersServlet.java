@@ -44,6 +44,7 @@ public class UsersServlet extends HttpServlet {
     public UsersServlet() throws IOException {
     
         super();
+        UsersRequestHandler.setupAdminRequestHandler();
     }
     
     @Override

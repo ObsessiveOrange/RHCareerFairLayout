@@ -41,6 +41,7 @@ public class DataServlet extends HttpServlet {
         dataVars = new DataVars();
         
         setupTestData();
+        DataRequestHandler.setupDataRequestHandler();
     }
     
     @Override
