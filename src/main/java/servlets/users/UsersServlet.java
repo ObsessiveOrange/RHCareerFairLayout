@@ -49,7 +49,7 @@ public class UsersServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-        if (request.getParameter("method") != null && request.getParameter("method") != "registerUser") {
+        if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("registerUser")) {
             if (!checkAuth(request)) {
                 
                 response.getWriter().print(SystemVars.failString("Invalid Username or Password supplied."));
