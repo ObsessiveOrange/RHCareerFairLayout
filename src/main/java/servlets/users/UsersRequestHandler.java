@@ -65,9 +65,9 @@ public class UsersRequestHandler {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return SystemVars.failString(e.toString());
         }
         
-        return SystemVars.successString("Ready to serve requests");
     }
     
     public static String handleGetDataRequest(HttpServletRequest request) throws IOException {
