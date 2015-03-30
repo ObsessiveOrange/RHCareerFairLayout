@@ -36,7 +36,7 @@ public class UsersRequestHandler {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             
-            DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/Users",
+            conn = DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/Users",
                     SystemVars.getDbusername(), SystemVars.getDbpassword());
             return true;
             

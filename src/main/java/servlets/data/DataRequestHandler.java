@@ -28,12 +28,14 @@ public class DataRequestHandler {
     private static CachedResult cachedData = null;
     private static String       adminKey   = "M4Z-Z#hA=NDL.p^E93=3NO;8vO]uFF";
     
+    private static Connection   conn       = null;
+    
     public static boolean setupDataRequestHandler() {
     
         try {
             Class.forName("com.mysql.jdbc.Driver");
             
-            DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/" + SystemVars.getTerm(),
+            conn = DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/" + SystemVars.getTerm(),
                     SystemVars.getDbusername(), SystemVars.getDbpassword());
             return true;
             
@@ -161,11 +163,6 @@ public class DataRequestHandler {
         StringBuilder s = new StringBuilder();
         PreparedStatement prepStatement = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            
-            Connection conn =
-                    DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/testDB",
-                            SystemVars.getDbusername(), SystemVars.getDbpassword());
             
             prepStatement = conn.prepareStatement("SELECT * FROM comments;");
             
