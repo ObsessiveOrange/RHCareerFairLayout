@@ -15,7 +15,7 @@
 	</servlet-mapping>
          
     
-	<security-constraint>
+ 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
 			<url-pattern>/*</url-pattern>
@@ -28,7 +28,6 @@
 		</auth-constraint>
 
 		<user-data-constraint>
-			<!-- transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE -->
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
