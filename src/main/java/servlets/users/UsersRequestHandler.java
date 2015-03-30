@@ -51,6 +51,13 @@ public class UsersRequestHandler {
     public static String handleRegisterUserRequest(HttpServletRequest request) {
     
         try {
+            // check to make sure username does not already exist
+            PreparedStatement check = conn.prepareStatement("SELECT COUNT(id) FROM users WHERE username = '" + request.getHeader("authUser") + "';");
+            ResultSet users = check.executeQuery();
+            if (users.getInt(0) != 0) {
+                return SystemVars.failString("Username already exists");
+            }
+            
             // Permissions levels:
             // 1 - Users (Edit saved companies, visit list)
             // 10 - Admin (Edit user permssions, edit company/category list)
@@ -58,7 +65,6 @@ public class UsersRequestHandler {
             PreparedStatement statement = conn.prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
             statement.setString(1, request.getHeader("authUser"));
             statement.setString(2, BCrypt.hashpw(request.getHeader("authPass"), BCrypt.gensalt()));
-            
             Integer insertResult = statement.executeUpdate();
             
             return SystemVars.successString("Rows changed: " + insertResult);

@@ -147,7 +147,7 @@ public class UsersServlet extends HttpServlet {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/Users",
                     SystemVars.getDbusername(), SystemVars.getDbpassword());
-            PreparedStatement prepStatement = conn.prepareStatement("SELECT hashedPw FROM users WHERE username = '" + user + "';");
+            PreparedStatement prepStatement = conn.prepareStatement("SELECT hashedPw FROM Users WHERE username = '" + user + "';");
             
             ResultSet result = prepStatement.executeQuery();
             result.next();
