@@ -53,28 +53,8 @@ public class DataServlet extends HttpServlet {
             case "getData":
                 responseObject = DataRequestHandler.handleGetDataRequest(request);
                 break;
-            case "start":
-                responseObject = DataRequestHandler.handleStartRequest(request);
-                break;
             default:
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
-                break;
-        }
-        response.getWriter().print(responseObject);
-    }
-    
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-        response.setContentType("text/plain");
-        
-        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
-        
-        Response responseObject;
-        
-        switch (method) {
-            default:
-                responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
         }
         response.getWriter().print(responseObject);

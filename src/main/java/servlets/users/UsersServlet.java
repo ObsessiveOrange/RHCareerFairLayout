@@ -1,18 +1,12 @@
 package servlets.users;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
-import adt.Category;
-import adt.Company;
-import adt.DataVars;
-import adt.ItemVars;
-import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -21,15 +15,7 @@ public class UsersServlet extends HttpServlet {
     /**
      * 
      */
-    private static final long                serialVersionUID = -5982008108929904358L;
-    
-    public static DataVars                   dataVars;
-    public static LayoutVars                 layoutVars;
-    public static ItemVars                   systemVars;
-    public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
-    public static HashMap<Integer, Company>  entryMap         = new HashMap<Integer, Company>();
-    
-    public static boolean                    isTest           = true;
+    private static final long serialVersionUID = -2790596508036351419L;
     
     /** Getter & Setter Methods **/
     

@@ -81,6 +81,11 @@ public class AuthManager {
         try {
             setupAuthManager();
             
+            // Response checkTokenResponse;
+            // if ((checkTokenResponse = AuthManager.checkToken(request)).success) {
+            // return checkTokenResponse;
+            // }
+            
             String userName = request.getHeader("authUser");
             String password = request.getHeader("authPass");
             

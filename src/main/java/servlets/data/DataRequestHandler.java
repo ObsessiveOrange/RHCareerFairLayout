@@ -13,11 +13,6 @@ import adt.Response.SuccessResponse;
 
 public class DataRequestHandler {
     
-    public static Response handleStartRequest(HttpServletRequest request) {
-    
-        return new SuccessResponse("Ready to serve requests");
-    }
-    
     public static Response handleGetDataRequest(HttpServletRequest request) throws IOException {
     
         HashMap<Integer, Category> categoryMap = DataServlet.categoryMap;

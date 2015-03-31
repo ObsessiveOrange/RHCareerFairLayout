@@ -11,7 +11,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Data Servlet</servlet-name>
-		<url-pattern>/data/*</url-pattern>
+		<url-pattern>/api/data/*</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Admin Servlet</servlet-name>
@@ -19,7 +19,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Admin Servlet</servlet-name>
-		<url-pattern>/users/admin/*</url-pattern>
+		<url-pattern>/api/users/admin/*</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Users Servlet</servlet-name>
@@ -27,7 +27,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Users Servlet</servlet-name>
-		<url-pattern>/users/*</url-pattern>
+		<url-pattern>/api/users/*</url-pattern>
 	</servlet-mapping>
          
     
