@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import misc.BCrypt;
@@ -122,7 +123,12 @@ public class AuthManager {
             setupAuthManager();
             
             String userName = request.getHeader("authUser");
-            String token = request.getHeader("authToken");
+            String token = null;
+            for (Cookie c : request.getCookies()) {
+                if (c.getName().equals("authToken")) {
+                    token = c.getValue();
+                }
+            }
             
             getAuthToken.setString(1, userName);
             getAuthToken.setString(2, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
