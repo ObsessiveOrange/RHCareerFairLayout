@@ -101,12 +101,12 @@ public class AuthManager {
             newSession.setDate(3, sessionValidDate);
             newSession.setString(4, sessionClient);
             
-            Integer resultInt = newSession.executeUpdate();
+            newSession.executeUpdate();
             
             SuccessResponse response = new SuccessResponse();
             
             response.addToReturnData("token", sessionKey);
-            response.addToReturnData("[DEBUG] dbResult", resultInt);
+            response.setAuthCookie(sessionKey);
             
             return response;
         } catch (SQLException e) {
