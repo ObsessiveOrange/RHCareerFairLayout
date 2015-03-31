@@ -43,7 +43,7 @@ public class UsersServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
         if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
-                && !!request.getParameter("method").equalsIgnoreCase("registerUser")) {
+                && !request.getParameter("method").equalsIgnoreCase("registerUser")) {
             Response authResponse;
             if (!(authResponse = AuthManager.checkToken(request)).success) {
                 
