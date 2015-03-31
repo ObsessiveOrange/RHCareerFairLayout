@@ -14,20 +14,20 @@
 		<url-pattern>/data/*</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>Admin Servlet</servlet-name>
+		<servlet-class>servlets.admin.AdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Admin Servlet</servlet-name>
+		<url-pattern>/users/admin/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>Users Servlet</servlet-name>
 		<servlet-class>servlets.users.UsersServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Users Servlet</servlet-name>
 		<url-pattern>/users/*</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>Admin Servlet</servlet-name>
-		<servlet-class>servlets.admin.AdminServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Admin Servlet</servlet-name>
-		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
          
     
