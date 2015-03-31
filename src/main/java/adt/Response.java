@@ -73,7 +73,6 @@ public abstract class Response {
             super(false);
             addToReturnData("success", 0);
             
-            StringBuilder s = new StringBuilder();
             addToReturnData("exception message", exception.getLocalizedMessage());
             addToReturnData("exception stack trace", exception.getStackTrace());
             addToReturnData("timestamp", System.currentTimeMillis());
