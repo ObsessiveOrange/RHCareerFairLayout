@@ -36,7 +36,6 @@ public class AdminServlet extends HttpServlet {
     public AdminServlet() throws IOException {
     
         super();
-        AdminRequestHandler.setupAdminRequestHandler();
     }
     
     @Override
@@ -77,9 +76,6 @@ public class AdminServlet extends HttpServlet {
         switch (method) {
             case "setSize":
                 responseObject = AdminRequestHandler.handleSetSizeRequest(request);
-                break;
-            case "forceRegenerationOfData":
-                responseObject = AdminRequestHandler.handleForceRegenerationOfData(request);
                 break;
             default:
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
