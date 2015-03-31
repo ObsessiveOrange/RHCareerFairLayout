@@ -2,10 +2,12 @@ package servlets.admin;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.http.HttpServletRequest;
 
 import managers.SQLManager;
+import misc.Utils;
 import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
@@ -17,16 +19,44 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = request.getHeader("term").replaceAll("[^\\p{L}\\p{Nd}]+", "");
+            String dbName = Utils.sanitizeString(request.getHeader("term"));
             
             // Create new database
-            PreparedStatement statement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE " + dbName + ";");
-            String insertResult = statement.executeUpdate() + "";
+            PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE " + dbName + ";");
+            String insertResult = createDatabaseStatement.executeUpdate() + "";
             
-            statement = SQLManager.getConn(dbName).prepareStatement("CREATE TABLE Categories (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, "
-                    + "title VARCHAR(50) NOT NULL"
+            Statement newCategoryStatement = SQLManager.getConn(dbName).createStatement();
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories ("
+                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "title VARCHAR(50) NOT NULL,"
+                    + "type VARCHAR(25) NOT NULL"
                     + ")ENGINE=INNODB;");
-            insertResult += ", " + statement.executeUpdate();
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies ("
+                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "name VARCHAR(50) NOT NULL,"
+                    + "description TEXT"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Representatives ("
+                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "name VARCHAR(50) NOT NULL,"
+                    + "roseGrad BOOLEAN NOT NULL"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories_Companies ("
+                    + "categoryId int NOT NULL,"
+                    + "companyId int NOT NULL,"
+                    + "FOREIGN KEY (categoryId) REFERENCES Categories(id) ON UPDATE CASCADE ON DELETE CASCADE,"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
+                    + "companyId INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "name VARCHAR(50) NOT NULL,"
+                    + "description TEXT,"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
