@@ -1,8 +1,5 @@
 package servlets;
 
-import java.util.HashMap;
-
-import com.google.gson.Gson;
 
 public class SystemVars {
     
@@ -59,31 +56,5 @@ public class SystemVars {
     public static String getTerm() {
     
         return term;
-    }
-    
-    public static String failString(String error) {
-    
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-        
-        returnMap.put("success", 0);
-        if (error != null) {
-            returnMap.put("error", error);
-        }
-        returnMap.put("timestamp", System.currentTimeMillis());
-        
-        return new Gson().toJson(returnMap);
-    }
-    
-    public static String successString(String message) {
-    
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-        
-        returnMap.put("success", 1);
-        if (message != null) {
-            returnMap.put("message", message);
-        }
-        returnMap.put("timestamp", System.currentTimeMillis());
-        
-        return new Gson().toJson(returnMap);
     }
 }

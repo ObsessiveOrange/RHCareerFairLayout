@@ -21,6 +21,14 @@
 		<servlet-name>Users Servlet</servlet-name>
 		<url-pattern>/users/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Admin Servlet</servlet-name>
+		<servlet-class>servlets.admin.AdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Admin Servlet</servlet-name>
+		<url-pattern>/admin/*</url-pattern>
+	</servlet-mapping>
          
     
  	<security-constraint>

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +15,8 @@ import adt.Company;
 import adt.DataVars;
 import adt.ItemVars;
 import adt.LayoutVars;
-
-import com.google.gson.Gson;
+import adt.Response;
+import adt.Response.FailResponse;
 
 public class DataServlet extends HttpServlet {
     
@@ -50,52 +48,20 @@ public class DataServlet extends HttpServlet {
         response.setContentType("text/plain");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
-        String responseString;
+        Response responseObject;
         
         switch (method) {
             case "getData":
-                responseString = DataRequestHandler.handleGetDataRequest(request);
+                responseObject = DataRequestHandler.handleGetDataRequest(request);
                 break;
             case "start":
-                responseString = DataRequestHandler.handleStartRequest(request);
+                responseObject = DataRequestHandler.handleStartRequest(request);
                 break;
-            case "testDB":
-                responseString = DataRequestHandler.handleTestDbRequest(request);
-                break;
-            case "test":
-                Map<String, String> env = System.getenv();
-                Properties prop = System.getProperties();
-                
-                HashMap<String, Object> returnMap = new HashMap<String, Object>();
-                
-                returnMap.put("success", 0);
-                returnMap.put("env", env);
-                returnMap.put("prop", prop.entrySet());
-                returnMap.put("timestamp", System.currentTimeMillis());
-                
-                responseString = new Gson().toJson(returnMap);
-                break;
-            // case "getUniqueID":
-            // response.getWriter().print(RequestHandler.handleGetUniqueIDRequest(request));
-            // break;
-            // case "getCartItems":
-            // response.getWriter().print(RequestHandler.handleGetCartItemsRequest(request));
-            // break;
-            // case "getAllCarts":
-            // response.getWriter().print(RequestHandler.handleGetAllCartsRequest(request));
-            // break;
-            // case "getAllOrders":
-            // response.getWriter().print(RequestHandler.handleGetAllOrdersRequest(request));
-            // break;
-            // case "null":
             default:
-                responseString =
-                        "{\"timestamp\":" + System.currentTimeMillis() + ", \"success\":0, \"error\":\"Invalid GET method supplied: " + method
-                                + "\"}";
+                responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
         }
-        response.getWriter().print(responseString);
-        System.out.println(responseString);
+        response.getWriter().print(responseObject);
     }
     
     @Override
@@ -105,29 +71,17 @@ public class DataServlet extends HttpServlet {
         
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
-        String responseString;
+        Response responseObject;
         
         switch (method) {
-            case "setSize":
-                responseString = DataRequestHandler.handleSetSizeRequest(request);
-                break;
             case "forceRegenerationOfData":
-                responseString = DataRequestHandler.handleForceRegenerationOfData(request);
+                responseObject = DataRequestHandler.handleForceRegenerationOfData(request);
                 break;
-            // case "resetTestData":
-            // response.getWriter().print(RequestHandler.resetTestData(request));
-            // break;
-            // case "submitOrder":
-            // response.getWriter().print(RequestHandler.handleSubmitOrderRequest(request));
-            // break;
             default:
-                responseString =
-                        "{\"timestamp\":" + System.currentTimeMillis() + ", \"success\":0, \"error\":\"Invalid POST method supplied: " + method
-                                + "\"}";
+                responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
         }
-        response.getWriter().print(responseString);
-        System.out.println(responseString);
+        response.getWriter().print(responseObject);
     }
     
     public static void setupTestData() throws IOException {

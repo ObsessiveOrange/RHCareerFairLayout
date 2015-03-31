@@ -1,4 +1,4 @@
-package servlets.users;
+package servlets.admin;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,19 +16,19 @@ import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
 
-public class UsersRequestHandler {
+public class AdminRequestHandler {
     
     private static CachedResult cachedData = null;
     private static String       adminKey   = "M4Z-Z#hA=NDL.p^E93=3NO;8vO]uFF";
     
     private static Connection   conn       = null;
     
-    public static boolean setupUserRequestHandler() {
+    public static boolean setupAdminRequestHandler() {
     
         try {
             Class.forName("com.mysql.jdbc.Driver");
             
-            conn = DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/Users",
+            conn = DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport(),
                     SystemVars.getDbusername(), SystemVars.getDbpassword());
             return true;
             
@@ -40,29 +40,20 @@ public class UsersRequestHandler {
         return false;
     }
     
-    public static Response handleRegisterUserRequest(HttpServletRequest request) {
+    public static Response handleNewTermRequest(HttpServletRequest request) {
     
         try {
             
-            String user = request.getHeader("authUser");
-            String pass = request.getHeader("authPass");
+            String dbName = request.getHeader("term").replaceAll("[^\\p{L}\\p{Nd}]+", "");
             
-            // check to make sure username does not already exist
-            PreparedStatement check = conn.prepareStatement("SELECT COUNT(id) FROM Users WHERE username = '" + user + "';");
-            ResultSet users = check.executeQuery();
-            users.next();
-            if (users.getInt(1) != 0) {
-                return new FailResponse("Username already exists");
-            }
+            // Create new database
+            PreparedStatement statement = conn.prepareStatement("CREATE DATABASE " + dbName + ";");
+            String insertResult = statement.executeUpdate() + "";
             
-            // Permissions levels:
-            // 1 - Users (Edit saved companies, visit list)
-            // 10 - Admin (Edit user permssions, edit company/category list)
-            // Always add as users, require admin access to elevate
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
-            statement.setString(1, user);
-            statement.setString(2, BCrypt.hashpw(pass, BCrypt.gensalt()));
-            Integer insertResult = statement.executeUpdate();
+            statement = conn.prepareStatement("CREATE TABLE Categories (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, "
+                    + "title VARCHAR(50) NOT NULL"
+                    + ")ENGINE=INNODB;");
+            insertResult += ", " + statement.executeUpdate();
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
@@ -119,10 +110,10 @@ public class UsersRequestHandler {
         String section = request.getHeader("section");
         Integer size = request.getHeader("size") == null ? -1 : Integer.valueOf(request.getHeader("size"));
         if (section == null || size == -1) {
-            return new FailResponse("Invalid section specified");
+            return new FailResponse("Invalid section provided");
         }
         
-        LayoutVars layout = UsersServlet.layoutVars;
+        LayoutVars layout = AdminServlet.layoutVars;
         
         switch (section.toLowerCase()) {
             case "1":
@@ -207,6 +198,5 @@ public class UsersRequestHandler {
     // returnMap.put("error", s.toString());
     // returnMap.put("timestamp", System.currentTimeMillis());
     // return new Gson().toJson(returnMap);
-    // }
     // }
 }

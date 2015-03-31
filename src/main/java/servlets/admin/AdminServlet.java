@@ -1,4 +1,4 @@
-package servlets.users;
+package servlets.admin;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
-public class UsersServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
     
     /**
      * 
@@ -33,23 +33,20 @@ public class UsersServlet extends HttpServlet {
     
     /** Getter & Setter Methods **/
     
-    public UsersServlet() throws IOException {
+    public AdminServlet() throws IOException {
     
         super();
-        UsersRequestHandler.setupUserRequestHandler();
+        AdminRequestHandler.setupAdminRequestHandler();
     }
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-        if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
-                && !!request.getParameter("method").equalsIgnoreCase("registerUser")) {
-            Response authResponse;
-            if (!(authResponse = AuthManager.checkToken(request)).success) {
-                
-                response.getWriter().print(authResponse);
-                return;
-            }
+        Response authResponse;
+        if (!(authResponse = AuthManager.checkToken(request)).success) {
+            
+            response.getWriter().print(authResponse);
+            return;
         }
         
         response.setContentType("application/json");
@@ -58,8 +55,8 @@ public class UsersServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-            case "registerUser":
-                responseObject = UsersRequestHandler.handleRegisterUserRequest(request);
+            case "newTerm":
+                responseObject = AdminRequestHandler.handleNewTermRequest(request);
                 break;
             default:
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
@@ -78,6 +75,12 @@ public class UsersServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
+            case "setSize":
+                responseObject = AdminRequestHandler.handleSetSizeRequest(request);
+                break;
+            case "forceRegenerationOfData":
+                responseObject = AdminRequestHandler.handleForceRegenerationOfData(request);
+                break;
             default:
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
