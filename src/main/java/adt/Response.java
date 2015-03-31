@@ -68,17 +68,14 @@ public abstract class Response {
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         
-        public FailResponse(Exception error) {
+        public FailResponse(Exception exception) {
         
             super(false);
             addToReturnData("success", 0);
             
             StringBuilder s = new StringBuilder();
-            for (StackTraceElement e : error.getStackTrace()) {
-                s.append(e);
-                s.append("\n");
-            }
-            addToReturnData("error", s.toString());
+            addToReturnData("exception message", exception.getLocalizedMessage());
+            addToReturnData("exception stack trace", exception.getStackTrace());
             addToReturnData("timestamp", System.currentTimeMillis());
         }
     }
