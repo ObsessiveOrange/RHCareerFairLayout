@@ -33,7 +33,7 @@ public class AuthManager {
                 check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
                 newSession =
                         SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions"
-                                + "VALUES(?, ?, ?, ?");
+                                + "VALUES(?, ?, ?, ?);");
                 getAuthToken =
                         SQLManager.getConn("Users").prepareStatement("SELECT sessionKey FROM Sessions WHERE username = ? AND sessionClient = ?;");
             } catch (SQLException e) {
