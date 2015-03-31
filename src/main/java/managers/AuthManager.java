@@ -22,23 +22,30 @@ public class AuthManager {
     private static PreparedStatement newSession           = null;
     private static PreparedStatement getAuthToken         = null;
     
+    private static boolean           isSetup              = false;
+    
     public static void setupAuthManager() {
     
-        try {
-            getHashedPWStatement = SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
-            check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(id) FROM Users WHERE username = ?;");
-            newSession =
-                    SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions"
-                            + "VALUES(?, ?, ?, ?");
-            getAuthToken = SQLManager.getConn("Users").prepareStatement("SELECT sessionKey FROM Sessions WHERE username = ? AND sessionClient = ?;");
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (!isSetup) {
+            
+            try {
+                getHashedPWStatement = SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
+                check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(id) FROM Users WHERE username = ?;");
+                newSession =
+                        SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions"
+                                + "VALUES(?, ?, ?, ?");
+                getAuthToken =
+                        SQLManager.getConn("Users").prepareStatement("SELECT sessionKey FROM Sessions WHERE username = ? AND sessionClient = ?;");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     public static Response addUser(String userName, String password) {
     
         try {
+            setupAuthManager();
             
             // check to make sure username does not already exist
             check.setString(1, userName);
@@ -68,6 +75,8 @@ public class AuthManager {
     public static Response authenticateUser(HttpServletRequest request) {
     
         try {
+            setupAuthManager();
+            
             String userName = request.getHeader("authUser");
             String password = request.getHeader("authPass");
             
@@ -107,6 +116,8 @@ public class AuthManager {
     public static Response checkToken(HttpServletRequest request) {
     
         try {
+            setupAuthManager();
+            
             String userName = request.getHeader("authUser");
             String token = request.getHeader("authToken");
             
