@@ -59,11 +59,17 @@ public class UsersServlet extends HttpServlet {
         
         switch (method) {
             case "registerUser":
-                responseObject = UsersRequestHandler.handleRegisterUserRequest(request);
+                responseObject = AuthManager.addUser(request);
+                break;
+            case "login":
+                responseObject = AuthManager.authenticateUser(request);
                 break;
             default:
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
+        }
+        if (responseObject.cookie != null) {
+            response.addCookie(responseObject.cookie);
         }
         response.getWriter().print(responseObject);
     }

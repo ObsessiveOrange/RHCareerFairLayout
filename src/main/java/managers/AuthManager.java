@@ -42,10 +42,13 @@ public class AuthManager {
         }
     }
     
-    public static Response addUser(String userName, String password) {
+    public static Response addUser(HttpServletRequest request) {
     
         try {
             setupAuthManager();
+            
+            String userName = request.getHeader("authUser");
+            String password = request.getHeader("authPass");
             
             // check to make sure username does not already exist
             check.setString(1, userName);
@@ -132,25 +135,10 @@ public class AuthManager {
                 }
             }
             if (!hasNextResult) {
-                return new FailResponse("Invalid Username/Password Combination");
+                return new FailResponse("Invalid Token");
             }
             
-            String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
-            Date sessionValidDate = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
-            String sessionClient = request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent");
-            String sessionIP = request.getRemoteAddr();
-            
-            newSession.setString(1, userName);
-            newSession.setString(2, sessionKey);
-            newSession.setDate(3, sessionValidDate);
-            newSession.setString(4, sessionClient);
-            
-            Integer resultInt = newSession.executeUpdate();
-            
-            SuccessResponse response = new SuccessResponse();
-            response.setAuthCookie(sessionKey);
-            
-            return response;
+            return new SuccessResponse();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
