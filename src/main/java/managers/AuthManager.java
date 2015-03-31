@@ -32,7 +32,7 @@ public class AuthManager {
                 getHashedPWStatement = SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
                 check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
                 newSession =
-                        SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions"
+                        SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions "
                                 + "VALUES(?, ?, ?, ?);");
                 getAuthToken =
                         SQLManager.getConn("Users").prepareStatement("SELECT sessionKey FROM Sessions WHERE username = ? AND sessionClient = ?;");
