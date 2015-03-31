@@ -39,7 +39,6 @@ public class DataServlet extends HttpServlet {
         dataVars = new DataVars();
         
         setupTestData();
-        DataRequestHandler.setupDataRequestHandler();
     }
     
     @Override
@@ -74,9 +73,6 @@ public class DataServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-            case "forceRegenerationOfData":
-                responseObject = DataRequestHandler.handleForceRegenerationOfData(request);
-                break;
             default:
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;

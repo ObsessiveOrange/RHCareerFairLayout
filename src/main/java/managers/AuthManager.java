@@ -30,7 +30,7 @@ public class AuthManager {
             
             try {
                 getHashedPWStatement = SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
-                check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(id) FROM Users WHERE username = ?;");
+                check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
                 newSession =
                         SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions"
                                 + "VALUES(?, ?, ?, ?");
@@ -71,7 +71,7 @@ public class AuthManager {
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
             e.printStackTrace();
-            return new FailResponse(e.toString());
+            return new FailResponse(e);
         }
     }
     
@@ -112,7 +112,7 @@ public class AuthManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return new FailResponse(e.toString());
+            return new FailResponse(e);
         }
     }
     
