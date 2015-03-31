@@ -123,7 +123,7 @@ public class AuthManager {
             
             getAuthToken.setString(1, userName);
             getAuthToken.setString(2, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
-            ResultSet result = getHashedPWStatement.executeQuery();
+            ResultSet result = getAuthToken.executeQuery();
             
             boolean hasNextResult;
             while (hasNextResult = result.next()) {
