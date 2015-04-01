@@ -27,21 +27,24 @@ public class AdminRequestHandler {
             
             Statement newCategoryStatement = SQLManager.getConn(dbName).createStatement();
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories ("
-                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "id INT NOT NULL AUTO_INCREMENT,"
                     + "title VARCHAR(50) NOT NULL,"
-                    + "type VARCHAR(25) NOT NULL"
+                    + "type VARCHAR(25) NOT NULL,"
+                    + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies ("
-                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "id INT NOT NULL AUTO_INCREMENT,"
                     + "name VARCHAR(50) NOT NULL,"
-                    + "description TEXT"
+                    + "description TEXT,"
+                    + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Representatives ("
-                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    + "id INT NOT NULL AUTO_INCREMENT,"
                     + "name VARCHAR(50) NOT NULL,"
-                    + "roseGrad BOOLEAN NOT NULL"
+                    + "roseGrad BOOLEAN NOT NULL,"
+                    + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories_Companies ("
@@ -53,7 +56,7 @@ public class AdminRequestHandler {
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
                     + "companyId INT NOT NULL,"
-                    + "repId INT NOT NULL"
+                    + "repId INT NOT NULL,"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
