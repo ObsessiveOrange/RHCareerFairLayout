@@ -52,9 +52,17 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
-                    + "companyId INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
-                    + "name VARCHAR(50) NOT NULL,"
-                    + "description TEXT,"
+                    + "companyId INT NOT NULL,"
+                    + "repId INT NOT NULL"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
+                    + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE UserCompanyList ("
+                    + "username VARCHAR(30) NOT NULL,"
+                    + "companyId INT NOT NULL,"
+                    + "priority INT NOT NULL,"
+                    + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             

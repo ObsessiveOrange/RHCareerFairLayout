@@ -129,10 +129,19 @@ public class AuthManager {
             
             String userName = request.getHeader("authUser");
             String token = null;
+            
+            if (request.getCookies() == null) {
+                return new FailResponse("Invalid Token");
+            }
+            
             for (Cookie c : request.getCookies()) {
                 if (c.getName().equals("authToken")) {
                     token = c.getValue();
                 }
+            }
+            
+            if (token == null) {
+                return new FailResponse("Invalid Token");
             }
             
             getAuthToken.setString(1, userName);
