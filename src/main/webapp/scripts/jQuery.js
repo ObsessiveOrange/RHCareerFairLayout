@@ -141,7 +141,7 @@ $(document).ready(function() {
 //Get data from server, call first round of updates
 function getInitialRequest() {
     sendGetRequest({
-        url: "data?method=getData",
+        url: "api/data?method=getData",
         successHandler: function(data) {
             careerFairData = $.parseJSON(data);
             //			$(".careerFairDescription").html(careerFairData.title);
