@@ -1,3 +1,5 @@
+var careerFairData;
+
 $(document).ready(function() {
     var options = {
         valueNames: ['show', 'company', 'table', 'info']
