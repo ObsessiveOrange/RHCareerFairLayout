@@ -19,7 +19,9 @@ function getInitialRequest() {
                 valueNames: ['show', 'company', 'table', 'info']
             };
             companyList = new List('companyListContainer', options);
-            companyList.sort('company', {order:"asc"});
+            companyList.sort('company', {
+                order: "asc"
+            });
             generateTableLocations();
             drawTables($("#mapCanvasTables"));
         }
@@ -48,13 +50,11 @@ function toggleCheckbox(id) {
     if (careerFairData.entries[id].checked) {
         $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
         careerFairData.entries[id].checked = false;
-    }
-    else {
+    } else {
         $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
         careerFairData.entries[id].checked = true;
     }
 }
-
 //draw tables and table numbers
 function drawRect($canvas, tableNumber, x, y, width, height) {
     $canvas.drawLine({
@@ -89,12 +89,8 @@ function drawRect($canvas, tableNumber, x, y, width, height) {
 //generate positions of all tables.
 function generateTableLocations() {
     var $container = $("#canvasMapContainer");
-    $("#mapCanvasTables").width($container.width);
-    $("#mapCanvasTables").height($container.height);
-    $("#mapCanvasHighlights").width($container.width);
-    $("#mapCanvasHighlights").height($container.height);
-
-
+    $("#mapCanvasTables").attr("width", $container.width).attr("height", $container.height);
+    $("#mapCanvasHighlights").attr("width", $container.width).attr("height", $container.height);
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
@@ -182,6 +178,7 @@ function drawTables($canvas) {
         text: 'Registration'
     });
 }
+
 function sendGetRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
