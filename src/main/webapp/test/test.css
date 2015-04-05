@@ -75,13 +75,13 @@ tr{
 th, td {
     padding: 30px 10px;
     border-top: solid 1px #AAA;
-    border-left: solid 1px #00F;
+    border-left: solid 1px #AAA;
     vertical-align: middle;
     overflow: hidden;
 	text-overflow: ellipsis;
 }
 th:last-child, td:last-child{
-    border-right: solid 1px #00F;
+    border-right: solid 1px #AAA;
 }
 tr:last-child td{
     border-bottom: solid 1px #AAA;
