@@ -28,12 +28,12 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr>");
-            companyListBody.append("<td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "/></td>");
-            companyListBody.append("<td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td>");
-            companyListBody.append("<td class='table center'>" + entry.parameters.table + "</td>");
-            companyListBody.append("<td class='info center'>[i]</td>");
-            companyListBody.append("</tr>");
+            companyListBody.append("<tr>
+                <td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "/></td>
+                <td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td>
+                <td class='table center'>" + entry.parameters.table + "</td>
+                <td class='info center'>[i]</td>
+                </tr>");
             // companyList.add({
             //     show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
             //     company: entry.title,
@@ -44,6 +44,8 @@ function updateCompanyList() {
         }
     }
 }
+
+function toggleCheckbox(id) {}
 
 function sendGetRequest(requestObject) {
     $.ajax({
