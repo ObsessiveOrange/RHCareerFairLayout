@@ -19,7 +19,7 @@ function getInitialRequest() {
                 valueNames: ['show', 'company', 'table', 'info']
             };
             companyList = new List('companyListContainer', options);
-            companyList.sort("company", {order:"asc"});
+            companyList.sort('company', {order:"asc"});
         }
     });
 }
