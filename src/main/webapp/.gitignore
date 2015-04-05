@@ -2,6 +2,6 @@
 RHCareerFairLayout.sublime-project
 RHCareerFairLayout.sublime-workspace
 /archive
-/test
+#/test
 *.psd Handlers
 // }

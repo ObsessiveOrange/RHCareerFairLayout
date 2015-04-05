@@ -1,0 +1,212 @@
+html, body {
+    margin: 0;
+    padding: 0 20px 0 20px;
+    width: calc(100% - 40px);
+    background-color: #222;
+    color: #CCC;
+    -webkit-overflow-scrolling: touch;
+}
+/*
+ *
+ * Navbar Customization:
+ */
+
+.navBarContainer {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    width: calc(100% - 40px);
+    height: 75px;
+    padding: 25px 20px 20px 20px;
+    margin-bottom: 25px;
+    background-color: #800000;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #FFFFFF;
+}
+.rhLogo {
+    float: left;
+    height: 100%;
+}
+.backBtn {
+    float: left;
+    cursor: pointer;
+    padding-right: 30px;
+    height: 100%;
+}
+.filterBtn {
+    float: right;
+    cursor: pointer;
+    height: 100%;
+}
+/*
+ *
+ * Body Customization:
+ */
+
+.bodyContent {
+    font-size: 2.0em;
+}
+.searchBar {
+    width: calc(100% - 34px);
+    padding: 10px 15px;
+    border: solid 2px #EEE;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #EEE;
+    font-size: 2.0em;
+}
+.searchBar:focus {
+    outline: none;
+    border: solid 2px #5555FF;
+    background-color: #FDFFD6;
+}
+.searchResultsTable {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+tr{
+	background-color: #EEE;
+	color: #000;
+}
+th, td {
+    padding: 30px 10px;
+    border-top: solid 1px #AAA;
+    border-left: solid 1px #00F;
+    vertical-align: middle;
+    overflow: hidden;
+	text-overflow: ellipsis;
+}
+th:last-child, td:last-child{
+    border-right: solid 1px #00F;
+}
+tr:last-child td{
+    border-bottom: solid 1px #AAA;
+}
+#searchResultHighlightColumn {
+    width:100px;
+}
+#searchResultCompanyColumn {
+    width: calc(100% - 200px);
+}
+#searchResultTableColumn {
+    width:150px;
+}
+#searchResultInfoColumn {
+    width:100px;
+}
+.roundTableTopLeft thead:first-child th:first-child, .roundTableAllCorners thead:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+.roundTableTopRight thead:first-child th:last-child, .roundTableAllCorners thead:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.checkbox{
+	width:35px;
+	height:35px;
+}
+/**
+ *
+ * Modification classes
+ */
+
+.left{
+	text-align: left;
+}
+.center{
+	text-align: center;
+}
+.right{
+	text-align: right;
+}
+.verticalAlignTop {
+    display: inline-block;
+    position: relative;
+    top: 0%;
+    transform: translateY(0%);
+    -webkit-transform: translateY(0%);
+}
+.verticalAlignCenter {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.verticalAlignBottom {
+    display: inline-block;
+    position: relative;
+    top: 100%;
+    transform: translateY(-100%);
+    -webkit-transform: translateY(-100%);
+}
+.horizontalAlignLeft {
+    display: inline-block;
+    position: relative;
+    left: 0%;
+    transform: translateX(0%);
+    -webkit-transform: translateX(0%);
+}
+.horizontalAlignCenter {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+}
+.horizontalAlignRight {
+    display: inline-block;
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+}
+.list {
+    font-family: sans-serif;
+}
+.sort {
+}
+.sort:after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    content: "";
+    position: relative;
+    top: -10px;
+    right: -5px;
+}
+.sort.asc:after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #AAA;
+    content: "";
+    position: relative;
+    top: 0px;
+    right: -5px;
+}
+.sort.desc:after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #AAA;
+    content: "";
+    position: relative;
+    top: -15px;
+    right: -5px;
+}
