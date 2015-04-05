@@ -20,6 +20,8 @@ function getInitialRequest() {
             };
             companyList = new List('companyListContainer', options);
             companyList.sort('company', {order:"asc"});
+            generateTableLocations();
+            drawTables($("#mapCanvasTables"));
         }
     });
 }
@@ -53,6 +55,126 @@ function toggleCheckbox(id) {
     }
 }
 
+//draw tables and table numbers
+function drawRect($canvas, tableNumber, x, y, width, height) {
+    $canvas.drawLine({
+        //    layer: true,
+        strokeStyle: '#000',
+        strokeWidth: 1,
+        x1: x,
+        y1: y,
+        x2: x + width,
+        y2: y,
+        x3: x + width,
+        y3: y + height,
+        x4: x,
+        y4: y + height,
+        closed: true,
+        //    click : function(layer) {
+        //      alert("You clicked an area!");
+        //    } //Box and text both need to be a layer for this to work.
+    });
+    if (tableNumber != 0) {
+        $canvas.drawText({
+            //      layer: true,
+            fillStyle: '#000000',
+            x: x + width / 2,
+            y: y + height / 2,
+            fontSize: height / 2,
+            fontFamily: 'Verdana, sans-serif',
+            text: tableNumber
+        });
+    }
+}
+//generate positions of all tables.
+function generateTableLocations() {
+    tableLocations = [];
+    var hrzCount = careerFairData.layout.section2 + 2;
+    var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
+    unitX = $(currentPage + "Content").width() / 100;
+    tableWidth = unitX * 80 / hrzCount;
+    unitY = $(currentPage + "Content").width() / 2 / 100;
+    tableHeight = unitY * 70 / vrtCount;
+    var s1 = careerFairData.layout.section1;
+    var s2 = careerFairData.layout.section2;
+    var s2Rows = careerFairData.layout.section2Rows;
+    var s2PathWidth = careerFairData.layout.section2PathWidth;
+    var s3 = careerFairData.layout.section3;
+    // section 1
+    for (var i = 0; i < s1; i++) {
+        tableLocations.push({
+            x: 5 * unitX,
+            y: 5 * unitY + i * tableHeight
+        });
+    }
+    // section 2
+    var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+    //rows
+    for (var i = 0; i < s2Rows; i++) {
+        //outer rows have no walkway
+        if (i == 0 || i == s2Rows - 1) {
+            for (var j = 0; j < s2; j++) {
+                tableLocations.push({
+                    x: (10 * unitX) + ((1 + j) * tableWidth),
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                });
+            }
+        }
+        //inner rows need to have walkway halfway through
+        else {
+            var leftTables = Math.floor((s2 - s2PathWidth) / 2);
+            var rightTables = s2 - 2 - leftTables;
+            for (var j = 0; j < leftTables; j++) {
+                tableLocations.push({
+                    x: (10 * unitX) + ((1 + j) * tableWidth),
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                });
+            }
+            for (var j = 0; j < rightTables; j++) {
+                tableLocations.push({
+                    x: (10 * unitX) + ((1 + leftTables + 2 + j) * tableWidth),
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                });
+            }
+        }
+    }
+    // section 3
+    for (var i = 0; i < s3; i++) {
+        tableLocations.push({
+            x: (15 * unitX) + ((1 + s2) * tableWidth),
+            y: 5 * unitY + i * tableHeight
+        });
+    }
+}
+//draw actual tables, then draw registration and rest areas
+function drawTables($canvas) {
+    for (var i = 0; i < tableLocations.length; i++) {
+        var locationX = tableLocations[i].x;
+        var locationY = tableLocations[i].y;
+        drawRect($canvas, i + 1, locationX, locationY, tableWidth, tableHeight);
+    }
+    // rest & registration areas
+    drawRect($canvas, 0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
+    $canvas.drawText({
+        //    layer: true,
+        fillStyle: '#000000',
+        x: 62.5 * unitX,
+        y: 87.5 * unitY,
+        fontSize: 20,
+        fontFamily: 'Verdana, sans-serif',
+        text: 'Rest Area'
+    });
+    drawRect($canvas, 0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
+    $canvas.drawText({
+        //    layer: true,
+        fillStyle: '#000000',
+        x: 20 * unitX,
+        y: 87.5 * unitY,
+        fontSize: 20,
+        fontFamily: 'Verdana, sans-serif',
+        text: 'Registration'
+    });
+}
 function sendGetRequest(requestObject) {
     $.ajax({
         url: requestObject.url,

@@ -6,7 +6,7 @@
         <script src="scripts/test.js"></script>
         <link rel="stylesheet" href="test.css" />
         <meta charset=utf-8 />
-        <title>Existing list</title>
+        <title>Rose Hulman Career Fair Layout</title>
     </head>
     <body>
         <div class="navBarContainer">
@@ -16,9 +16,11 @@
             src="images/filterBtn.png" class="filterBtn" alt="Filter" /></a>
             <!-- <a href="#searchPage" data-transition="slideup"><img src="images/searchBtn.png" id="searchBtn" /></a> -->
         </div>
-        <canvas id="mapCanvasTables" class="canvasMap" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
-        <canvas id="mapCanvasHighlights" class="canvasMap" style="position: relative; top: 0; left: 0; z-index: 0"></canvas>
+        <div class="canvasMapContainer">
+	        <canvas id="mapCanvasTables" class="canvasMap" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
+	        <canvas id="mapCanvasHighlights" class="canvasMap" style="position: relative; top: 0; left: 0; z-index: 0"></canvas>
         <div class="bodyContent">
+        </div>
             <div id="companyListContainer">
                 <input class="search searchBar" id="CompanySearchBar" placeholder="Search" /><br />
                 <table class="companyList roundTableAllCorners" id="companyListTable">

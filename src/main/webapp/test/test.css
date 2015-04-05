@@ -48,11 +48,17 @@ html, body {
 .bodyContent {
     font-size: 2.0em;
 }
+.canvasMapContainer {
+	position:relative;
+	width:100%;
+	margin-bottom:30px;
+}
 .canvasMap {
     width: 100%;
 }
 .canvasMap:before {
-    content="" display: block;
+    content="";
+    display: block;
     padding-top: 50%;
 }
 .searchBar {
