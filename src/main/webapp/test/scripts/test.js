@@ -28,12 +28,7 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr>"
-                + "<td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td>"
-                + "<td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td>"
-                + "<td class='table center'>" + entry.parameters.table + "</td>"
-                + "<td class='info center'>[i]</td>"
-                + "</tr>");
+            companyListBody.append("<tr><td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='table center'>" + entry.parameters.table + "</td><td class='info center'>[i]</td></tr>");
             // companyList.add({
             //     show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
             //     company: entry.title,
@@ -45,7 +40,17 @@ function updateCompanyList() {
     }
 }
 
-function toggleCheckbox(id) {}
+function toggleCheckbox(id) {
+    console.log("Toggling checkbox with id: " + id);
+    if (careerFairData.entries[id].checked) {
+        $("#showOnMapCheckbox_" + id).src = "images/checkboxUnchecked.png";
+        careerFairData.entries[id].checked = false;
+    }
+    else {
+        $("#showOnMapCheckbox_" + id).src = "images/checkboxChecked.png";
+        careerFairData.entries[id].checked = true;
+    }
+}
 
 function sendGetRequest(requestObject) {
     $.ajax({
