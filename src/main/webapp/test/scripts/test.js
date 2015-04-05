@@ -89,8 +89,11 @@ function drawRect($canvas, tableNumber, x, y, width, height) {
 //generate positions of all tables.
 function generateTableLocations() {
     var $container = $("#canvasMapContainer");
-    $("#mapCanvasTables").prop("width", $container.width()).prop("height", $container.height());
-    $("#mapCanvasHighlights").prop("width", $container.width()).prop("height", $container.height());
+    var containerWidth = $container.width();
+    var containerHeight = $container.height();
+
+    $("#mapCanvasTables").prop("width", containerWidth).prop("height", containerHeight);
+    $("#mapCanvasHighlights").prop("width", containerWidth)).prop("height", containerHeight);
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
