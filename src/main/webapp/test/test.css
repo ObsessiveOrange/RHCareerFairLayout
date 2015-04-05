@@ -61,7 +61,7 @@ html, body {
     border: solid 2px #5555FF;
     background-color: #FDFFD6;
 }
-.searchResultsTable {
+.companyList {
     width: 100%;
     padding: 0;
     margin: 0;
@@ -86,16 +86,16 @@ th:last-child, td:last-child{
 tr:last-child td{
     border-bottom: solid 1px #AAA;
 }
-#searchResultHighlightColumn {
+#companyListHighlightColumn {
     width:100px;
 }
-#searchResultCompanyColumn {
+#companyListCompanyColumn {
     width: calc(100% - 200px);
 }
-#searchResultTableColumn {
+#companyListTableColumn {
     width:150px;
 }
-#searchResultInfoColumn {
+#companyListInfoColumn {
     width:100px;
 }
 .roundTableTopLeft thead:first-child th:first-child, .roundTableAllCorners thead:first-child th:first-child {

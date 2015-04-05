@@ -206,7 +206,7 @@ function updateCompanyList() {
 }
 
 function addEntryToCompanyList($list, element) {
-    var $newCategory = $("<input type='checkbox' id='" + element.id + "_checkbox' class='showOnMapCheckbox'  style='display:hidden' checked/>" + "<label for='" + element.id + "_checkbox' id='" + element.id + "_checkboxLabel' class='showOnMapCompany' style='font-size: 2.25em !important;'>" + "<div class='searchResultsDescription' id='" + element.id + "_name'>" + element.title + "</div>" + "<div class='searchResultsTableNumber' id='" + element.id + "_table'>" + element.parameters.table + "</div>" + "</label>");
+    var $newCategory = $("<input type='checkbox' id='" + element.id + "_checkbox' class='showOnMapCheckbox'  style='display:hidden' checked/>" + "<label for='" + element.id + "_checkbox' id='" + element.id + "_checkboxLabel' class='showOnMapCompany' style='font-size: 2.25em !important;'>" + "<div class='companyListsDescription' id='" + element.id + "_name'>" + element.title + "</div>" + "<div class='companyListNumber' id='" + element.id + "_table'>" + element.parameters.table + "</div>" + "</label>");
     $list.controlgroup("container").append($newCategory);
 }
 

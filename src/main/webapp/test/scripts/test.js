@@ -18,7 +18,7 @@ function getInitialRequest() {
             var options = {
                 valueNames: ['show', 'company', 'table', 'info']
             };
-            companyList = new List('CompanyList', options);
+            companyList = new List('companyListContainer', options);
         }
     });
 }
