@@ -1,10 +1,11 @@
 var careerFairData;
+var companyList;
 
 $(document).ready(function() {
     var options = {
         valueNames: ['show', 'company', 'table', 'info']
     };
-    var userList = new List('users', options);
+    var companyList = new List('CompanyList', options);
     getInitialRequest();
 });
 
@@ -19,7 +20,7 @@ function getInitialRequest() {
             careerFairData = $.parseJSON(data);
             //      $(".careerFairDescription").html(careerFairData.title);
             $("span.careerFairDescription").html(careerFairData.title);
-            updateCompanyList
+            updateCompanyList();
         }
     });
 }
@@ -28,7 +29,7 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            userList.add({
+            companyList.add({
                 show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
                 company: entry.name,
                 table: entry.table,
