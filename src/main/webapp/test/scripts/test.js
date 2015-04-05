@@ -5,7 +5,7 @@ $(document).ready(function() {
     var options = {
         valueNames: ['show', 'company', 'table', 'info']
     };
-    var companyList = new List('CompanyList', options);
+    companyList = new List('CompanyList', options);
     getInitialRequest();
 });
 
