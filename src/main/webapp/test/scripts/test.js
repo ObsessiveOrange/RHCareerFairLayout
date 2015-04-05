@@ -1,9 +1,6 @@
 var careerFairData;
 var companyList;
 $(document).ready(function() {
-    var options = {
-        valueNames: ['show', 'company', 'table', 'info']
-    };
     getInitialRequest();
 });
 
@@ -18,6 +15,9 @@ function getInitialRequest() {
             careerFairData = $.parseJSON(data);
             $("span.careerFairDescription").html(careerFairData.title);
             updateCompanyList();
+            var options = {
+                valueNames: ['show', 'company', 'table', 'info']
+            };
             companyList = new List('CompanyList', options);
         }
     });

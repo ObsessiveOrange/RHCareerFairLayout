@@ -19,35 +19,20 @@
         <div class="bodyContent">
             <div id="users">
                 <input class="search searchBar" id="CompanySearchBar" placeholder="Search" /><br />
-                <table class="searchResultsTable roundTableAllCorners" id="CompanyList">
+                <table class="searchResultsTable roundTableAllCorners" id="companyList">
                     <thead><th id="searchResultHighlightColumn">Show</th><th id="searchResultCompanyColumn" class="sort" data-sort="company">Company Name</th>
                     <th id="searchResultTableColumn" class="sort" data-sort="table">Table Number</th><th id="searchResultInfoColumn">Info</th></thead>
                     <!-- IMPORTANT, class="list" have to be at tbody -->
-                    <tbody class="list">
+                    <tbody class="list" id="companyListBody">
+                        <!-- Sample element
+
                         <tr>
                             <td class="show center"><img src="images/checkboxChecked.png" class="checkbox"/></td>
                             <td class="company" onclick="test()">Amazon</td>
                             <td class="table center">6</td>
                             <td class="info center">[i]</td>
-                        </tr>
-                        <tr>
-                            <td class="show center"><img src="images/checkboxUnchecked.png" class="checkbox"/></td>
-                            <td class="company" onclick="test()">Google</td>
-                            <td class="table center">15</td>
-                            <td class="info center">[i]</td>
-                        </tr>
-                        <tr>
-                            <td class="show center"><img src="images/checkboxUnchecked.png" class="checkbox"/></td>
-                            <td class="company" onclick="test()">Microsoft</td>
-                            <td class="table center">268</td>
-                            <td class="info center">[i]</td>
-                        </tr>
-                        <tr>
-                            <td class="show center"><img src="images/checkboxChecked.png" class="checkbox"/></td>
-                            <td class="company" onclick="test()">Groupon</td>
-                            <td class="table center">108</td>
-                            <td class="info center">[i]</td>
-                        </tr>
+                        </tr> 
+                        -->
                     </tbody>
                 </table>
             </div>
