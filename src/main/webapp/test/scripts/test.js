@@ -43,11 +43,11 @@ function updateCompanyList() {
 function toggleCheckbox(id) {
     console.log("Toggling checkbox with id: " + id);
     if (careerFairData.entries[id].checked) {
-        $("#showOnMapCheckbox_" + id).src = "images/checkboxUnchecked.png";
+        $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
         careerFairData.entries[id].checked = false;
     }
     else {
-        $("#showOnMapCheckbox_" + id).src = "images/checkboxChecked.png";
+        $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
         careerFairData.entries[id].checked = true;
     }
 }
