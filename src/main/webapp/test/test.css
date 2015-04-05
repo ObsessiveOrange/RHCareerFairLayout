@@ -60,7 +60,11 @@ html, body {
 }
 .canvasMap {
     width: 100%;
-    height: 100%;
+}
+.canvasMap:before {
+    content="";
+    display: block;
+    padding-top: 50%;
 }
 .searchBar {
     width: calc(100% - 34px);
