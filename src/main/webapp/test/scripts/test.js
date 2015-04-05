@@ -31,10 +31,11 @@ function updateCompanyList() {
             var entry = careerFairData.entries[key];
             companyList.add({
                 show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
-                company: entry.name,
-                table: entry.table,
+                company: entry.title,
+                table: entry.parameters.table,
                 info: "{i}"
             });
+            entry.checked = true;
         }
     }
 }
