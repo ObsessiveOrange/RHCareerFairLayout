@@ -29,7 +29,7 @@ function updateCompanyList() {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
             companyListBody.append("<tr>"
-                + "<td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "/></td>"
+                + "<td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td>"
                 + "<td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td>"
                 + "<td class='table center'>" + entry.parameters.table + "</td>"
                 + "<td class='info center'>[i]</td>"
