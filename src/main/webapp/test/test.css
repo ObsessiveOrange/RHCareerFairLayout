@@ -53,13 +53,17 @@ html, body {
 	width:100%;
 	margin-bottom:30px;
 }
-.canvasMap {
-    width: 100%;
-}
-.canvasMap:before {
+.canvasMapContainer:before {
     content="";
     display: block;
     padding-top: 50%;
+}
+.canvasMap {
+	position:aboslute;
+	top:0;
+	left:0;
+    width: 100%;
+    height: 100%;
 }
 .searchBar {
     width: calc(100% - 34px);
