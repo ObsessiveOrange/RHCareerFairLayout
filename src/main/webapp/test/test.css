@@ -60,12 +60,14 @@ html, body {
 }
 .canvasMap {
     width: 100%;
+    border: 0px solid #EEE;
+    border-radius: 10px;
 }
 .searchBar {
     width: calc(100% - 34px);
     padding: 10px 15px;
     border: solid 2px #EEE;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-bottom: 10px;
     background-color: #EEE;
     font-size: 2.0em;
