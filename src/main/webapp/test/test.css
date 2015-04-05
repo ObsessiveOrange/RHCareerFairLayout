@@ -5,6 +5,7 @@ html, body {
     background-color: #222;
     color: #CCC;
     -webkit-overflow-scrolling: touch;
+    font-family: sans-serif;
 }
 /*
  *
@@ -170,43 +171,4 @@ tr:last-child td{
     left: 100%;
     transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
-}
-.list {
-    font-family: sans-serif;
-}
-.sort {
-}
-.sort:after {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    content: "";
-    position: relative;
-    top: -10px;
-    right: -5px;
-}
-.sort.asc:after {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #AAA;
-    content: "";
-    position: relative;
-    top: 0px;
-    right: -5px;
-}
-.sort.desc:after {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid #AAA;
-    content: "";
-    position: relative;
-    top: -15px;
-    right: -5px;
 }
