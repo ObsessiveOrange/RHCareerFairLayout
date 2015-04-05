@@ -48,6 +48,13 @@ html, body {
 .bodyContent {
     font-size: 2.0em;
 }
+.canvasMap {
+    width: 100%;
+}
+.canvasMap:before {
+    content="" display: block;
+    padding-top: 50%;
+}
 .searchBar {
     width: calc(100% - 34px);
     padding: 10px 15px;
@@ -69,9 +76,9 @@ html, body {
     border-spacing: 0;
     table-layout: fixed;
 }
-tr{
-	background-color: #EEE;
-	color: #000;
+tr {
+    background-color: #EEE;
+    color: #000;
 }
 th, td {
     padding: 30px 10px;
@@ -79,56 +86,55 @@ th, td {
     border-left: solid 1px #CCC;
     vertical-align: middle;
     overflow: hidden;
-	text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
-th:last-child, td:last-child{
+th: last-child, td: last-child {
     border-right: solid 1px #AAA;
 }
-tr:last-child td{
+tr: last-child td {
     border-bottom: solid 1px #CCC;
 }
 #companyListHighlightColumn {
-    width:100px;
+    width: 100px;
 }
 #companyListCompanyColumn {
     width: calc(100% - 200px);
 }
 #companyListTableColumn {
-    width:150px;
+    width: 150px;
 }
 #companyListInfoColumn {
-    width:100px;
+    width: 100px;
 }
 .roundTableTopLeft thead:first-child th:first-child, .roundTableAllCorners thead:first-child th:first-child {
     border-top-left-radius: 10px;
 }
-.roundTableTopRight thead:first-child th:last-child, .roundTableAllCorners thead:first-child th:last-child {
+.roundTableTopRight thead:first-child th: last-child, .roundTableAllCorners thead:first-child th: last-child {
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
+.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr: last-child td:first-child {
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
+.roundTableBottomRight tr: last-child td: last-child, .roundTableAllCorners tr: last-child td: last-child {
     border-bottom-right-radius: 10px;
 }
-
-.checkbox{
-	width:35px;
-	height:35px;
+.checkbox {
+    width: 35px;
+    height: 35px;
 }
 /**
  *
  * Modification classes
  */
 
-.left{
-	text-align: left;
+.left {
+    text-align: left;
 }
-.center{
-	text-align: center;
+.center {
+    text-align: center;
 }
-.right{
-	text-align: right;
+.right {
+    text-align: right;
 }
 .verticalAlignTop {
     display: inline-block;
