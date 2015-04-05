@@ -49,20 +49,20 @@ html, body {
     font-size: 2.0em;
 }
 .canvasMapContainer {
-    position: relative;
-    width: 100%;
-    margin-bottom: 30px;
-}
-.canvasMapContainer:before {
-    content="";
-    display: block;
-    padding-top: 50%;
+	position:relative;
+	width:100%;
+	margin-bottom:30px;
 }
 .canvasMap {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+}
+.canvasMap:before {
+    content="";
+    display: block;
+    padding-top: 50%;
 }
 .searchBar {
     width: calc(100% - 34px);
