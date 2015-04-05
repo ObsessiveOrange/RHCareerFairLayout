@@ -91,9 +91,10 @@ function generateTableLocations() {
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
-    unitX = $(currentPage + "Content").width() / 100;
+    var $container = $("#canvasMapContainer");
+    unitX = $container.width() / 100;
     tableWidth = unitX * 80 / hrzCount;
-    unitY = $(currentPage + "Content").width() / 2 / 100;
+    unitY = $container.width() / 2 / 100;
     tableHeight = unitY * 70 / vrtCount;
     var s1 = careerFairData.layout.section1;
     var s2 = careerFairData.layout.section2;
