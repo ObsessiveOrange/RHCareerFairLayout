@@ -88,10 +88,16 @@ function drawRect($canvas, tableNumber, x, y, width, height) {
 }
 //generate positions of all tables.
 function generateTableLocations() {
+    var $container = $("#canvasMapContainer");
+    $("#mapCanvasTables").width($container.width);
+    $("#mapCanvasTables").height($container.height);
+    $("#mapCanvasHighlights").width($container.width);
+    $("#mapCanvasHighlights").height($container.height);
+
+
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
-    var $container = $("#canvasMapContainer");
     unitX = $container.width() / 100;
     tableWidth = unitX * 80 / hrzCount;
     unitY = $container.width() / 2 / 100;
