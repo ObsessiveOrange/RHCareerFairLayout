@@ -93,7 +93,7 @@ function generateTableLocations() {
     var containerHeight = $container.height();
 
     $("#mapCanvasTables").prop("width", containerWidth).prop("height", containerHeight);
-    $("#mapCanvasHighlights").prop("width", containerWidth)).prop("height", containerHeight);
+    $("#mapCanvasHighlights").prop("width", containerWidth).prop("height", containerHeight);
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
