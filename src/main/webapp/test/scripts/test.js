@@ -49,14 +49,14 @@ function markCheckboxChecked(id) {
     console.log("Checked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
     careerFairData.entries[id].checked = true;
-    console.log(highlightedTables.addToOrderedList(careerFairData.entries[itemID].parameters.table));
+    console.log(highlightedTables.addToOrderedList(careerFairData.entries[id].parameters.table));
 }
 
 function markCheckboxUnchecked(id) {
     console.log("Unchecked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
     careerFairData.entries[id].checked = false;
-    console.log(highlightedTables.removeFromOrderedList(careerFairData.entries[itemID].parameters.table));
+    console.log(highlightedTables.removeFromOrderedList(careerFairData.entries[id].parameters.table));
 }
 
 function toggleCheckbox(id) {
