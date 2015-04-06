@@ -62,10 +62,10 @@ function markCheckboxUnchecked(id) {
 function toggleCheckbox(id) {
     if (careerFairData.entries[id].checked) {
         markCheckboxUnchecked(id);
-        highlightTable(id, "#EEE");
+        highlightTable(careerFairData.entries[id].parameters.table), "#EEE");
     } else {
         markCheckboxChecked(id);
-        highlightTable(id, "#0F0");
+        highlightTable(careerFairData.entries[id].parameters.table), "#0F0");
     }
 }
 //draw tables and table numbers
