@@ -49,9 +49,9 @@ html, body {
     font-size: 2.0em;
 }
 .canvasMapContainer {
-	position:relative;
-	width:100%;
-	margin-bottom:30px;
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
 }
 .canvasMapContainer:before {
     content="";
@@ -95,6 +95,7 @@ td {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 td: last-child {
     border-right: solid 1px #AAA;
@@ -117,13 +118,13 @@ tr: last-child td {
 .roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
     border-top-left-radius: 10px;
 }
-.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child {
+.roundTableTopRight tr:first-child td: last-child, .roundTableAllCorners tr:first-child td: last-child {
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
+.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr: last-child td:first-child {
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr: last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
+.roundTableBottomRight tr: last-child td: last-child, .roundTableAllCorners tr: last-child td: last-child {
     border-bottom-right-radius: 10px;
 }
 .checkbox {

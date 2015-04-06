@@ -32,10 +32,10 @@ function getInitialRequest() {
             $("span.careerFairDescription").html(careerFairData.title);
             updateCompanyList();
             var options = {
-                valueNames: ['show', 'company', 'table', 'info']
+                valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn']
             };
             companyList = new List('companyListContainer', options);
-            companyList.sort('company', {
+            companyList.sort('companyListCompanyColumn', {
                 order: "asc"
             });
             generateTableLocations();
@@ -50,7 +50,7 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr><td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='table center'>" + entry.parameters.table + "</td><td class='info center'>[i]</td></tr>");
+            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
             markCheckboxChecked(key);
             careerFairData.entries[key].checked = true;
             entry.checked = true;
