@@ -8,7 +8,7 @@ $(document).ready(function() {
 });
 
 function test() {
-    console.log("Success");
+    // console.log("Success");
 }
 //Get data from server, call first round of updates
 function getInitialRequest() {
@@ -37,6 +37,7 @@ function updateCompanyList() {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
             companyListBody.append("<tr><td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='table center'>" + entry.parameters.table + "</td><td class='info center'>[i]</td></tr>");
+            markCheckboxChecked(key);
             // companyList.add({
             //     show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
             //     company: entry.title,
@@ -48,16 +49,25 @@ function updateCompanyList() {
     }
 }
 
+function markCheckboxChecked(id) {
+    console.log("Selected checkbox with id: " + id);
+    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
+    careerFairData.entries[id].checked = false;
+    console.log(highlightedTables.removeFromOrderedList(id));
+}
+
+function markCheckboxUnchecked(id) {
+    console.log("Unselected checkbox with id: " + id);
+    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
+    careerFairData.entries[id].checked = true;
+    console.log(highlightedTables.addToOrderedList(id));
+}
+
 function toggleCheckbox(id) {
-    console.log("Toggling checkbox with id: " + id);
     if (careerFairData.entries[id].checked) {
-        $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
-        careerFairData.entries[id].checked = false;
-        console.log(highlightedTables.removeFromOrderedList(id));
+        markCheckboxUnchecked(id);
     } else {
-        $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
-        careerFairData.entries[id].checked = true;
-        console.log(highlightedTables.addToOrderedList(id));
+        markCheckboxChecked(id);
     }
 }
 //draw tables and table numbers
@@ -238,13 +248,16 @@ Array.prototype.addToOrderedList = function(item) {
     }
     this.insertAtIndex(item, insertIndex);
 }
+Array.prototype.addArrayToOrderedList = function(array) {
+    this.push.
+    this.sort();
+}
 Array.prototype.findInOrderedList = function(item) {
     var low = 0;
     var high = this.length - 1;
     var mid = Math.floor(this.length / 2);
-
-    if(this.length == 0){
-      return -1;
+    if (this.length == 0) {
+        return -1;
     }
     while (low >= 0 && high < this.length && low <= high) {
         if (item.toString().toLowerCase() == this[mid].toString().toLowerCase()) {
@@ -263,8 +276,8 @@ Array.prototype.findInOrderedList = function(item) {
 }
 Array.prototype.removeFromOrderedList = function(item) {
     var index = this.findInOrderedList(item);
-    if(index > -1){
-      return this.splice(index, 1);
+    if (index > -1) {
+        return this.splice(index, 1);
     }
     return [];
 }
