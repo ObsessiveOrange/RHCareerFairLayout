@@ -253,10 +253,10 @@ Array.prototype.findInOrderedList = function(item) {
             return -1;
         } else if (item.toString().toLowerCase() < this[mid].toString().toLowerCase()) {
             high = mid - 1;
-            mid = (low + high) / 2;
+            mid = Math.floor((low + high) / 2);
         } else {
             low = mid + 1
-            mid = (low + high) / 2;
+            mid = Math.floor((low + high) / 2);
         }
     }
     return -1;
