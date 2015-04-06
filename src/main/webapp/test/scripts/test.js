@@ -27,6 +27,7 @@ function getInitialRequest() {
             });
             generateTableLocations();
             drawTables($("#mapCanvasTables"));
+            highlightTables("#0F0");
         }
     });
 }
@@ -48,21 +49,23 @@ function markCheckboxChecked(id) {
     console.log("Checked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
     careerFairData.entries[id].checked = true;
-    console.log(highlightedTables.addToOrderedList(id));
+    console.log(highlightedTables.addToOrderedList(careerFairData.entries[itemID].parameters.table));
 }
 
 function markCheckboxUnchecked(id) {
     console.log("Unchecked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
     careerFairData.entries[id].checked = false;
-    console.log(highlightedTables.removeFromOrderedList(id));
+    console.log(highlightedTables.removeFromOrderedList(careerFairData.entries[itemID].parameters.table));
 }
 
 function toggleCheckbox(id) {
     if (careerFairData.entries[id].checked) {
         markCheckboxUnchecked(id);
+        highlightTable(id, "#EEE");
     } else {
         markCheckboxChecked(id);
+        highlightTable(id, "#0F0");
     }
 }
 //draw tables and table numbers
@@ -194,7 +197,8 @@ function drawTables($canvas) {
 function highlightTables(color) {
     var $canvas = $("#mapCanvasHighlights");
     $canvas.clearCanvas();
-    highlightTables.forEach(function(table) {
+    highlightedTables.forEach(function(table) {
+        console.log("Drawing table" + table);
         highlightTable($canvas, table, color);
     });
 }
