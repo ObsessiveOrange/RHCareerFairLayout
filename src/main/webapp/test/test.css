@@ -88,7 +88,7 @@ tr {
     background-color: #EEE;
     color: #000;
 }
-th, td {
+td {
     padding: 30px 10px;
     border-top: solid 1px #AAA;
     border-left: solid 1px #CCC;
@@ -96,28 +96,28 @@ th, td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-th: last-child, td: last-child {
+td: last-child {
     border-right: solid 1px #AAA;
 }
 tr: last-child td {
     border-bottom: solid 1px #CCC;
 }
 #companyListHighlightColumn {
-    width: 100px;
+    width: 50px;
 }
 #companyListCompanyColumn {
     width: calc(100% - 200px);
 }
 #companyListTableColumn {
-    width: 150px;
-}
-#companyListInfoColumn {
     width: 100px;
 }
-.roundTableTopLeft thead:first-child th:first-child, .roundTableAllCorners thead:first-child th:first-child {
+#companyListInfoColumn {
+    width: 50px;
+}
+.roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
     border-top-left-radius: 10px;
 }
-.roundTableTopRight thead:first-child th:last-child, .roundTableAllCorners thead:first-child th:last-child {
+.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child {
     border-top-right-radius: 10px;
 }
 .roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
