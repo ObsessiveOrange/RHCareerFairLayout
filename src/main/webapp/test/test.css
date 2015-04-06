@@ -103,16 +103,16 @@ td: last-child {
 tr: last-child td {
     border-bottom: solid 1px #CCC;
 }
-#companyListHighlightColumn {
+.companyListHighlightColumn {
     width: 50px;
 }
-#companyListCompanyColumn {
+.companyListCompanyColumn {
     width: calc(100% - 200px);
 }
-#companyListTableColumn {
+.companyListTableColumn {
     width: 100px;
 }
-#companyListInfoColumn {
+.companyListInfoColumn {
     width: 50px;
 }
 .roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
