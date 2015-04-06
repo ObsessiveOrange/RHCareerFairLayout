@@ -5,7 +5,9 @@ var highlightedTables = [];
 var companiesShown = [];
 var $mapCanvasTables;
 var $mapCanvasHighlights;
+
 $(document).ready(function() {
+
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
@@ -13,7 +15,7 @@ $(document).ready(function() {
     var containerHeight = $container.height() * 2;
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-    getInitialRequest();
+    //getInitialRequest();
 });
 
 function test() {
@@ -23,7 +25,6 @@ function test() {
 function getInitialRequest() {
     sendGetRequest({
         url: "/api/data?method=getData",
-        //url: "https://rhcareerfairlayout-wongbenedict.rhcloud.com/api/data?method=getData",
         successHandler: function(data) {
             careerFairData = $.parseJSON(data);
             $("span.careerFairDescription").html(careerFairData.title);
