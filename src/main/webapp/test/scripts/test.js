@@ -3,7 +3,18 @@ var companyList;
 var tableLocations = [];
 var highlightedTables = [];
 var companiesShown = [];
+var $mapCanvasTables;
+var $mapCanvasHighlights;
+
 $(document).ready(function() {
+
+    $mapCanvasTables = $("#mapCanvasTables");
+    $mapCanvasHighlights = $("#mapCanvasHighlights");
+    var $container = $("#canvasMapContainer");
+    var containerWidth = $container.width();
+    var containerHeight = $container.height();
+    $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
+    $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
     getInitialRequest();
 });
 
@@ -26,7 +37,7 @@ function getInitialRequest() {
                 order: "asc"
             });
             generateTableLocations();
-            drawTables($("#mapCanvasTables"));
+            drawTables($mapCanvasTables);
             highlightTables("#0F0");
         }
     });
@@ -69,8 +80,8 @@ function toggleCheckbox(id) {
     }
 }
 //draw tables and table numbers
-function drawRect($canvas, tableNumber, x, y, width, height) {
-    $canvas.drawLine({
+function drawRect(tableNumber, x, y, width, height) {
+    $mapCanvasTables.drawLine({
         //    layer: true,
         strokeStyle: '#000',
         strokeWidth: 1,
@@ -88,7 +99,7 @@ function drawRect($canvas, tableNumber, x, y, width, height) {
         //    } //Box and text both need to be a layer for this to work.
     });
     if (tableNumber != 0) {
-        $canvas.drawText({
+        $mapCanvasTables.drawText({
             //      layer: true,
             fillStyle: '#000000',
             x: x + width / 2,
@@ -101,17 +112,12 @@ function drawRect($canvas, tableNumber, x, y, width, height) {
 }
 //generate positions of all tables.
 function generateTableLocations() {
-    var $container = $("#canvasMapContainer");
-    var containerWidth = $container.width();
-    var containerHeight = $container.height();
-    $("#mapCanvasTables").prop("width", containerWidth).prop("height", containerHeight);
-    $("#mapCanvasHighlights").prop("width", containerWidth).prop("height", containerHeight);
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
-    unitX = $container.width() / 100;
+    unitX = $mapCanvasTables.width() / 100;
     tableWidth = unitX * 80 / hrzCount;
-    unitY = $container.width() / 2 / 100;
+    unitY = $mapCanvasTables.width() / 2 / 100;
     tableHeight = unitY * 70 / vrtCount;
     var s1 = careerFairData.layout.section1;
     var s2 = careerFairData.layout.section2;
@@ -165,15 +171,15 @@ function generateTableLocations() {
     }
 }
 //draw actual tables, then draw registration and rest areas
-function drawTables($canvas) {
+function drawTables($mapCanvasTables) {
     for (var i = 0; i < tableLocations.length; i++) {
         var locationX = tableLocations[i].x;
         var locationY = tableLocations[i].y;
-        drawRect($canvas, i + 1, locationX, locationY, tableWidth, tableHeight);
+        drawRect(i + 1, locationX, locationY, tableWidth, tableHeight);
     }
     // rest & registration areas
-    drawRect($canvas, 0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $canvas.drawText({
+    drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
+    $mapCanvasTables.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
@@ -182,8 +188,8 @@ function drawTables($canvas) {
         fontFamily: 'Verdana, sans-serif',
         text: 'Rest Area'
     });
-    drawRect($canvas, 0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $canvas.drawText({
+    drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
+    $mapCanvasTables.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
@@ -195,18 +201,17 @@ function drawTables($canvas) {
 }
 //Highlight tables in array
 function highlightTables(color) {
-    var $canvas = $("#mapCanvasHighlights");
-    $canvas.clearCanvas();
+    $mapCanvasHighlights.clearCanvas();
     highlightedTables.forEach(function(table) {
         console.log("Drawing table" + table);
-        highlightTable($canvas, table, color);
+        highlightTable(table, color);
     });
 }
 
-function highlightTable($canvas, id, color) {
+function highlightTable(id, color) {
     var x = tableLocations[id - 1].x;
     var y = tableLocations[id - 1].y;
-    $canvas.drawRect({
+    $mapCanvasHighlights.drawRect({
         fillStyle: color,
         x: x,
         y: y,
