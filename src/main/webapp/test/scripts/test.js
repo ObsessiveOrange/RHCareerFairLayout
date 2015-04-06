@@ -223,7 +223,6 @@ function highlightTable(id, color) {
 function sendGetRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
-        dataType: 'jsonp',
         type: "GET",
         headers: requestObject.headers,
         data: requestObject.data,
@@ -234,7 +233,6 @@ function sendGetRequest(requestObject) {
 function sendPostRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
-        dataType: 'jsonp',
         type: "POST",
         headers: requestObject.headers,
         data: requestObject.data,
