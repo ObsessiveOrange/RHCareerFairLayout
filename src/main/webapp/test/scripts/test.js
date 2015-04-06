@@ -86,7 +86,7 @@ function drawRect(tableNumber, x, y, width, height) {
     $mapCanvasTables.drawLine({
         //    layer: true,
         strokeStyle: '#000',
-        strokeWidth: 1,
+        strokeWidth: scaling,
         x1: x,
         y1: y,
         x2: x + width,
