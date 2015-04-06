@@ -241,7 +241,7 @@ Array.prototype.addToOrderedList = function(item) {
 Array.prototype.findInOrderedList = function(item) {
     var low = 0;
     var high = this.length - 1;
-    var mid = this.length / 2;
+    var mid = Math.floor(this.length / 2);
 
     if(this.length == 0){
       return -1;
