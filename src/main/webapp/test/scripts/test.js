@@ -241,7 +241,7 @@ Array.prototype.insertAtIndex = function(item, index) {
 Array.prototype.addToOrderedList = function(item) {
     var insertIndex;
     for (insertIndex = 0; insertIndex < this.length; insertIndex++) {
-        if (item.toString().toLowerCase() < this[insertIndex].toString().toLowerCase()) {
+        if (item < this[insertIndex]) {
             break;
         }
     }
@@ -259,11 +259,11 @@ Array.prototype.findInOrderedList = function(item) {
         return -1;
     }
     while (low >= 0 && high < this.length && low <= high) {
-        if (item.toString().toLowerCase() == this[mid].toString().toLowerCase()) {
+        if (item == this[mid]) {
             return mid;
         } else if (low == high) {
             return -1;
-        } else if (item.toString().toLowerCase() < this[mid].toString().toLowerCase()) {
+        } else if (item < this[mid]) {
             high = mid - 1;
             mid = Math.floor((low + high) / 2);
         } else {
