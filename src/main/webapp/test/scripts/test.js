@@ -12,7 +12,8 @@ $(document).ready(function() {
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
     var containerWidth = $container.width() * 2;
-    var containerHeight = $container.height() * 2;
+    var containerHeight = $container.width();
+    $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
     getInitialRequest();
