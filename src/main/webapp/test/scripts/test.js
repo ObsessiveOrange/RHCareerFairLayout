@@ -246,7 +246,7 @@ Array.prototype.findInOrderedList = function(item) {
     if(this.length == 0){
       return -1;
     }
-    while (low >= 0 && high < this.length) {
+    while (low >= 0 && high < this.length && low <= high) {
         if (item.toString().toLowerCase() == this[mid].toString().toLowerCase()) {
             return mid;
         } else if (low == high) {
@@ -264,7 +264,7 @@ Array.prototype.findInOrderedList = function(item) {
 Array.prototype.removeFromOrderedList = function(item) {
     var index = this.findInOrderedList(item);
     if(index > -1){
-      return array.splice(index, 1);
+      return this.splice(index, 1);
     }
     return [];
 }
