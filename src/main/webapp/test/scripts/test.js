@@ -11,11 +11,11 @@ $(document).ready(function() {
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
-    var containerWidth = $container.width();
-    var containerHeight = $container.height();
+    var containerWidth = $container.width() * 2;
+    var containerHeight = $container.height() * 2;
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-    getInitialRequest();
+    //getInitialRequest();
 });
 
 function test() {
