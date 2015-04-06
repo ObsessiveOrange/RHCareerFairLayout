@@ -258,7 +258,7 @@ Array.prototype.findInOrderedList = function(item) {
     return -1;
 }
 Array.prototype.removeFromOrderedList = function(item) {
-    var index = findInOrderedList(item);
+    var index = this.findInOrderedList(item);
     if(index > -1){
       return array.splice(index, 1);
     }
