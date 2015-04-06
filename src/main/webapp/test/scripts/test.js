@@ -5,9 +5,7 @@ var highlightedTables = [];
 var companiesShown = [];
 var $mapCanvasTables;
 var $mapCanvasHighlights;
-
 $(document).ready(function() {
-
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
@@ -25,6 +23,7 @@ function test() {
 function getInitialRequest() {
     sendGetRequest({
         url: "/api/data?method=getData",
+        //url: "https://rhcareerfairlayout-wongbenedict.rhcloud.com/api/data?method=getData",
         successHandler: function(data) {
             careerFairData = $.parseJSON(data);
             $("span.careerFairDescription").html(careerFairData.title);
@@ -115,9 +114,9 @@ function generateTableLocations() {
     tableLocations = [];
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
-    unitX = $mapCanvasTables.width() / 100;
+    unitX = $mapCanvasTables.prop("width") / 100;
     tableWidth = unitX * 80 / hrzCount;
-    unitY = $mapCanvasTables.width() / 2 / 100;
+    unitY = $mapCanvasTables.prop("width") / 2 / 100;
     tableHeight = unitY * 70 / vrtCount;
     var s1 = careerFairData.layout.section1;
     var s2 = careerFairData.layout.section2;
@@ -224,6 +223,7 @@ function highlightTable(id, color) {
 function sendGetRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
+        dataType: 'jsonp',
         type: "GET",
         headers: requestObject.headers,
         data: requestObject.data,
@@ -234,6 +234,7 @@ function sendGetRequest(requestObject) {
 function sendPostRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
+        dataType: 'jsonp',
         type: "POST",
         headers: requestObject.headers,
         data: requestObject.data,
