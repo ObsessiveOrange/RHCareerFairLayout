@@ -15,7 +15,7 @@ $(document).ready(function() {
     var containerHeight = $container.height() * 2;
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-    //getInitialRequest();
+    getInitialRequest();
 });
 
 function test() {
