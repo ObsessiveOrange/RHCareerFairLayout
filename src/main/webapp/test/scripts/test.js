@@ -1,5 +1,8 @@
 var careerFairData;
 var companyList;
+var tableLocations = [];
+var highlightedTables = [];
+var companiesShown = [];
 $(document).ready(function() {
     getInitialRequest();
 });
@@ -50,9 +53,11 @@ function toggleCheckbox(id) {
     if (careerFairData.entries[id].checked) {
         $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
         careerFairData.entries[id].checked = false;
+        console.log(highlightedTables.removeFromOrderedList(id));
     } else {
         $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
         careerFairData.entries[id].checked = true;
+        console.log(highlightedTables.addToOrderedList(id));
     }
 }
 //draw tables and table numbers
@@ -91,7 +96,6 @@ function generateTableLocations() {
     var $container = $("#canvasMapContainer");
     var containerWidth = $container.width();
     var containerHeight = $container.height();
-
     $("#mapCanvasTables").prop("width", containerWidth).prop("height", containerHeight);
     $("#mapCanvasHighlights").prop("width", containerWidth).prop("height", containerHeight);
     tableLocations = [];
@@ -181,6 +185,27 @@ function drawTables($canvas) {
         text: 'Registration'
     });
 }
+//Highlight tables in array
+function highlightTables(color) {
+    var $canvas = $("#mapCanvasHighlights");
+    $canvas.clearCanvas();
+    highlightTables.forEach(function(table) {
+        highlightTable($canvas, table, color);
+    });
+}
+
+function highlightTable($canvas, id, color) {
+    var x = tableLocations[id - 1].x;
+    var y = tableLocations[id - 1].y;
+    $canvas.drawRect({
+        fillStyle: color,
+        x: x,
+        y: y,
+        width: tableWidth,
+        height: tableHeight,
+        fromCenter: false
+    });
+}
 
 function sendGetRequest(requestObject) {
     $.ajax({
@@ -200,4 +225,42 @@ function sendPostRequest(requestObject) {
         data: requestObject.data,
         success: requestObject.successHandler
     });
+}
+Array.prototype.insertAtIndex = function(item, index) {
+    this.splice(index, 0, item);
+};
+Array.prototype.addToOrderedList = function(item) {
+    var insertIndex;
+    for (insertIndex = 0; insertIndex < this.length; insertIndex++) {
+        if (item.toString().toLowerCase() < this[insertIndex].toString().toLowerCase()) {
+            break;
+        }
+    }
+    this.insertAtIndex(item, insertIndex);
+}
+Array.prototype.findInOrderedList = function(item) {
+    var low = 0;
+    var high = this.length - 1;
+    var mid = this.length / 2;
+    while (low >= 0 && high < this.length) {
+        if (item.toString().toLowerCase() == this[mid].toString().toLowerCase()) {
+            return mid;
+        } else if (low == high) {
+            return -1;
+        } else if (item.toString().toLowerCase() < this[mid].toString().toLowerCase()) {
+            high = mid - 1;
+            mid = (low + high) / 2;
+        } else {
+            low = mid + 1
+            mid = (low + high) / 2;
+        }
+    }
+    return -1;
+}
+Array.prototype.removeFromOrderedList = function(item) {
+    var index = findInOrderedList(item);
+    if(index > -1){
+      return array.splice(index, 1);
+    }
+    return [];
 }
