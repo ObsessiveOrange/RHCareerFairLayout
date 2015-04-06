@@ -38,13 +38,7 @@ function updateCompanyList() {
             var entry = careerFairData.entries[key];
             companyListBody.append("<tr><td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='table center'>" + entry.parameters.table + "</td><td class='info center'>[i]</td></tr>");
             markCheckboxChecked(key);
-            careerFairData.entries[id].checked = true;
-            // companyList.add({
-            //     show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
-            //     company: entry.title,
-            //     table: entry.parameters.table,
-            //     info: "{i}"
-            // });
+            careerFairData.entries[key].checked = true;
             entry.checked = true;
         }
     }
