@@ -38,6 +38,7 @@ function updateCompanyList() {
             var entry = careerFairData.entries[key];
             companyListBody.append("<tr><td class='show center'  onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='company' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='table center'>" + entry.parameters.table + "</td><td class='info center'>[i]</td></tr>");
             markCheckboxChecked(key);
+            careerFairData.entries[id].checked = true;
             // companyList.add({
             //     show: "<img src='images/checkboxChecked.png' class='checkbox'/>",
             //     company: entry.title,
@@ -50,17 +51,17 @@ function updateCompanyList() {
 }
 
 function markCheckboxChecked(id) {
-    console.log("Selected checkbox with id: " + id);
-    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
-    careerFairData.entries[id].checked = false;
-    console.log(highlightedTables.removeFromOrderedList(id));
-}
-
-function markCheckboxUnchecked(id) {
-    console.log("Unselected checkbox with id: " + id);
+    console.log("Checked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
     careerFairData.entries[id].checked = true;
     console.log(highlightedTables.addToOrderedList(id));
+}
+
+function markCheckboxUnchecked(id) {
+    console.log("Unchecked checkbox with id: " + id);
+    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
+    careerFairData.entries[id].checked = false;
+    console.log(highlightedTables.removeFromOrderedList(id));
 }
 
 function toggleCheckbox(id) {
