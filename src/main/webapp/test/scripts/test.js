@@ -242,6 +242,10 @@ Array.prototype.findInOrderedList = function(item) {
     var low = 0;
     var high = this.length - 1;
     var mid = this.length / 2;
+
+    if(this.length == 0){
+      return -1;
+    }
     while (low >= 0 && high < this.length) {
         if (item.toString().toLowerCase() == this[mid].toString().toLowerCase()) {
             return mid;
