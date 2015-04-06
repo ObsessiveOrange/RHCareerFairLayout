@@ -5,14 +5,15 @@ var highlightedTables = [];
 var companiesShown = [];
 var $mapCanvasTables;
 var $mapCanvasHighlights;
+var scaling = 2;
 
 $(document).ready(function() {
 
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
-    var containerWidth = $container.width() * 2;
-    var containerHeight = $container.width();
+    var containerWidth = $container.width() * scaling;
+    var containerHeight = $container.width() * (scaling/2);
     $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
@@ -185,7 +186,7 @@ function drawTables($mapCanvasTables) {
         fillStyle: '#000000',
         x: 62.5 * unitX,
         y: 87.5 * unitY,
-        fontSize: 20,
+        fontSize: 20 * scaling,
         fontFamily: 'Verdana, sans-serif',
         text: 'Rest Area'
     });
@@ -195,7 +196,7 @@ function drawTables($mapCanvasTables) {
         fillStyle: '#000000',
         x: 20 * unitX,
         y: 87.5 * unitY,
-        fontSize: 20,
+        fontSize: 20 * scaling,
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
