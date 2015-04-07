@@ -51,7 +51,7 @@ function showFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▲");
     $(".filterGroup" + groupID + "Element").show();
     if(groupID == Object.keys(careerFairData.categories).length){
-        $(".filtersListGroup" + filterGroupID + "Row").removeClass("tableLastRow");
+        $(".filtersListGroup" + groupID + "Row").removeClass("tableLastRow");
     }
 }
 
@@ -59,7 +59,7 @@ function hideFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▼");
     $(".filterGroup" + groupID + "Element").hide();
     if(groupID == Object.keys(careerFairData.categories).length){
-        $(".filtersListGroup" + filterGroupID + "Row").addClass("tableLastRow");
+        $(".filtersListGroup" + groupID + "Row").addClass("tableLastRow");
     }
 }
 
