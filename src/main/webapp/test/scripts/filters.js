@@ -36,36 +36,32 @@ function createFilterList() {
     var types = [];
     var filterGroupID = 0;
     var $filtersListContainer = $("#filtersListContainer");
-    for (var filterGroup in careerFairData.categories) {
-        if (careerFairData.categories.hasOwnProperty(filterGroup)) {
-            types.push(filterGroup);
-            var filterGroupID = types.length;
-            $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'>" + filterGroup + "</td></tr></table>");
-            for (var filterID in careerFairData.categories[filterGroup]) {
-                if (careerFairData.categories[filterGroup].hasOwnProperty(filterID)) {
-                    $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
-                }
-            }
-        }
-    }
+    Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
+        types.push(filterGroup);
+        var filterGroupID = types.length;
+        $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'>" + filterGroup + "</td></tr></table>");
+        Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
+            $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
+        });
+    });
 }
 
-function showfilterGroupID(groupID) {
+function showFilterGroup(groupID) {
     $("#showOnMapCheckbox_" + groupID).text("▲");
     $(".filterGroup" + groupID + "Element").css("display", "table-row");
 }
 
-function hidefilterGroupID(groupID) {
+function hideFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).text("▼");
     $(".filterGroup" + groupID + "Element").css("display", "hidden");
     highlightedTables.removeFromOrderedList(careerFairData.entries[groupID].parameters.table);
 }
 
-function togglefilterGroupID(groupID) {
+function toggleFilterGroupID(groupID) {
     if ($("#filtersListExpand_" + groupID).text() == "▼") {
-        showfilterGroupID(groupID);
+        showfilterGroup(groupID);
     } else {
-        hidefilterGroupID(groupID);
+        hidefilterGroup(groupID);
     }
 }
 //draw tables and table numbers
