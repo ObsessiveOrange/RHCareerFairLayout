@@ -58,7 +58,8 @@ html, body {
 .bulkSelectionButton{
     display:inline-block;
     float:right;
-    border-right: solid 1px;
+    border-left: solid 1px #CCC;
+    border-bottom: solid 1px #CCC;
     padding: 10px 10px;
     width: 175px;
     background-color: #EEE;
