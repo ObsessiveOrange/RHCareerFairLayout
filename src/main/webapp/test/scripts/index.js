@@ -42,7 +42,7 @@ $(document).ready(function() {
 });
 //save data when link out of page clicked.
 window.onbeforeunload = function(event) {
-    if (!clearCache) {
+    if (typeof clearCache === 'undefined' || !clearCache) {
         prepareForPageSwitch();
     } else {
         SessionVars.clear();
