@@ -48,20 +48,19 @@ function createFilterList() {
 
 function showFilterGroup(groupID) {
     $("#showOnMapCheckbox_" + groupID).text("▲");
-    $(".filterGroup" + groupID + "Element").css("display", "table-row");
+    $(".filterGroup" + groupID + "Element").show();
 }
 
 function hideFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).text("▼");
-    $(".filterGroup" + groupID + "Element").css("display", "hidden");
-    highlightedTables.removeFromOrderedList(careerFairData.entries[groupID].parameters.table);
+    $(".filterGroup" + groupID + "Element").hide();
 }
 
 function toggleFilterGroupID(groupID) {
     if ($("#filtersListExpand_" + groupID).text() == "▼") {
-        showfilterGroup(groupID);
+        showFilterGroup(groupID);
     } else {
-        hidefilterGroup(groupID);
+        hideFilterGroup(groupID);
     }
 }
 //draw tables and table numbers
