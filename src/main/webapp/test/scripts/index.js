@@ -32,11 +32,6 @@ $(document).ready(function() {
     }
     //else, if careerFairData has been loaded, just setup the page using cached data
     else {
-        //if the filters have been modified, reset the highlighted tables.
-        if (filters.changed) {
-            highlightedTables = [];
-        }
-        //setup the page
         setupPage();
     }
 });
@@ -94,26 +89,31 @@ function setupPage() {
 
 function updateCompanyList() {
     var companyListBody = $("#companyListBody");
-    Object.keys(careerFairData.companies).forEach(function(companyID) {
-        var company = careerFairData.companies[companyID];
-        var showCompany = true;
-        Object.keys(filters).forEach(function(filterType) {
-            if (Array.isArray(filters[filterType])) {
-                console.log(_.intersection(filters[filterType], company.categories[filterType]).length);
-                if (filters[filterType].length == 0) {
-                    return true;
-                } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
-                    showCompany = false;
+    if (filters.changed) {
+        filteredCompanyIDs = [];
+        Object.keys(careerFairData.companies).forEach(function(companyID) {
+            var company = careerFairData.companies[companyID];
+            var showCompany = true;
+            Object.keys(filters).forEach(function(filterType) {
+                if (Array.isArray(filters[filterType])) {
+                    if (filters[filterType].length == 0) {
+                        return true;
+                    } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
+                        showCompany = false;
+                    }
                 }
+            });
+            if (showCompany) {
+                filteredCompanyIDs.addToOrderedSet(companyID);
             }
         });
-        if (showCompany) {
-            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
-            markCheckboxChecked(companyID);
-            filteredCompanyIDs.addToOrderedSet(companyID);
-        }
-    });
-    filters.changed = false;
+        filters.changed = false;
+    }
+    filteredCompanyIDs.forEach(function(companyID)) {
+        var company = careerFairData.companies[companyID];
+        companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+        markCheckboxChecked(companyID);
+    }
 }
 
 function markCheckboxChecked(id) {
