@@ -156,8 +156,6 @@ public class DataServlet extends HttpServlet {
             parameters.put("table", Integer.toString(newEntity.getID() - 99));
             
             entryMap.put(newEntity.getID(), newEntity);
-            
-            DataVars.addToIDLookupTable(title, "company", newEntity.getID());
         }
     }
 }
