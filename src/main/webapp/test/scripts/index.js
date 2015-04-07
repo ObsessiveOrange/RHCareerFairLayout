@@ -99,10 +99,11 @@ function updateCompanyList() {
         var showCompany = true;
         Object.keys(filters).forEach(function(filterType) {
             if (Array.isArray(filters[filterType])) {
+                console.log(_.intersection(filters[filterType], company.categories));
                 if (filters[filterType].length == 0) {
                     return true;
                 } else if (_.intersection(filters[filterType], company.categories).length == 0) {
-                    showComapny = false;
+                    showCompany = false;
                 }
             }
         });
@@ -112,6 +113,7 @@ function updateCompanyList() {
             filteredCompanyIDs.addToOrderedSet(companyID);
         }
     });
+    filters.changed = false;
 }
 
 function markCheckboxChecked(id) {
