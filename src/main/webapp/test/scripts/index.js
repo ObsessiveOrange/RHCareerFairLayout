@@ -63,14 +63,17 @@ function updateCompanyList() {
     }
 }
 
+
 function markCheckboxChecked(id) {
-    $("#showOnMapCheckbox_" + id).text("☐");
+    $("#showOnMapCheckbox_" + id).text("☑");
     careerFairData.entries[id].checked = true;
+    highlightedTables.addToOrderedList(careerFairData.entries[id].parameters.table);
 }
 
 function markCheckboxUnchecked(id) {
-    $("#showOnMapCheckbox_" + id).text("☑");
+    $("#showOnMapCheckbox_" + id).text("☐");
     careerFairData.entries[id].checked = false;
+    highlightedTables.removeFromOrderedList(careerFairData.entries[id].parameters.table);
 }
 
 function toggleCheckbox(id) {

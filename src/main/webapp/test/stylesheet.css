@@ -105,6 +105,7 @@ tr: last-child td {
 }
 .companyListHighlightColumn {
     width: 50px;
+    font-weight: bold;
 }
 .companyListCompanyColumn {
     width: calc(100% - 200px);
