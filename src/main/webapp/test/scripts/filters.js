@@ -7,7 +7,7 @@ $(document).ready(function() {
     $("#backBtn").click(function(event){
         prepareForPageSwitch();
         event.stopPropagation();
-    }
+    });
 });
 
 function loadAfterPageSwitch() {

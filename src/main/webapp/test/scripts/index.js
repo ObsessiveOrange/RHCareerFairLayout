@@ -23,7 +23,7 @@ $(document).ready(function() {
     $("#filterBtn").click(function(event){
         prepareForPageSwitch();
         event.stopPropagation();
-    }
+    });
 });
 
 function prepareForPageSwitch() {
