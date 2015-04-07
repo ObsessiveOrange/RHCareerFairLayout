@@ -17,7 +17,7 @@ public class DataRequestHandler {
     public static Response handleGetDataRequest(HttpServletRequest request) throws IOException {
     
         HashMap<String, HashMap<Integer, Category>> categoryMap = new HashMap<String, HashMap<Integer, Category>>();
-        HashMap<Integer, Company> entryMap = DataServlet.entryMap;
+        HashMap<Integer, Company> companyMap = DataServlet.companyMap;
         LayoutVars layout = DataServlet.layoutVars;
         
         for (String type : DataVars.getAllTypes()) {
@@ -32,7 +32,7 @@ public class DataRequestHandler {
         response.addToReturnData("title", "Career Fair " + DataVars.getQuarter() + " "
                 + DataVars.getYear());
         response.addToReturnData("categories", categoryMap);
-        response.addToReturnData("entries", entryMap);
+        response.addToReturnData("companies", companyMap);
         response.addToReturnData("layout", layout);
         
         return response;

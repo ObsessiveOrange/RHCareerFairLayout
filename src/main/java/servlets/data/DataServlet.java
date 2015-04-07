@@ -28,7 +28,7 @@ public class DataServlet extends HttpServlet {
     public static LayoutVars                 layoutVars;
     public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
-    public static HashMap<Integer, Company>  entryMap         = new HashMap<Integer, Company>();
+    public static HashMap<Integer, Company>  companyMap       = new HashMap<Integer, Company>();
     
     /** Getter & Setter Methods **/
     
@@ -152,10 +152,10 @@ public class DataServlet extends HttpServlet {
             categories.put("Position Types", posTypeList);
             HashMap<String, String> parameters = new HashMap<String, String>();
             
-            Company newEntity = new Company(title, categories, null, parameters);
-            parameters.put("table", Integer.toString(newEntity.getID() - 99));
+            Company newCompany = new Company(title, categories, null, parameters);
+            parameters.put("table", Integer.toString(newCompany.getID() - 99));
             
-            entryMap.put(newEntity.getID(), newEntity);
+            companyMap.put(newCompany.getID(), newCompany);
         }
     }
 }
