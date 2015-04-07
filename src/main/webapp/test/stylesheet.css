@@ -55,13 +55,14 @@ html, body {
     border-spacing: 0;
     table-layout: fixed;
 }
-.bulkSelectionButton{
+.button{
     display:inline-block;
     float:right;
     border-left: solid 1px #CCC;
     border-bottom: solid 1px #CCC;
     padding: 10px 10px;
     width: 175px;
+    cursor: pointer;
     background-color: #EEE;
     color:#000;
 }
