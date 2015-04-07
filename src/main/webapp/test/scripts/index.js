@@ -98,10 +98,12 @@ function updateCompanyList() {
         var company = careerFairData.companies[companyID];
         var showCompany = true;
         Object.keys(filters).forEach(function(filterType) {
-            if (filters[filterType].length == 0) {
-                return true;
-            } else if (_.intersection(filters[filterType], company.categories).length == 0) {
-                showComapny = false;
+            if (Array.isArray(filters[filterType])) {
+                if (filters[filterType].length == 0) {
+                    return true;
+                } else if (_.intersection(filters[filterType], company.categories).length == 0) {
+                    showComapny = false;
+                }
             }
         });
         if (showCompany) {
