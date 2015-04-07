@@ -34,15 +34,18 @@ $(document).ready(function() {
     else {
         //if the filters have been modified, reset the highlighted tables.
         if (filters.changed) {
-            highlightTables = [];
+            highlightedTables = [];
         }
         //setup the page
         setupPage();
     }
 });
-//save data when link clicked.
+//save data when link out of page clicked.
 window.onbeforeunload = function(event) {
-    prepareForPageSwitch();
+    if (!clearCache) {
+        prepareForPageSwitch();
+    }
+    else{SessionVars.clear();}
 }
 
 function loadAfterPageSwitch() {
