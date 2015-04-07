@@ -42,7 +42,7 @@ function createFilterList() {
         var filterGroupID = types.length;
         $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
-            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td class='center filtersListSelectColumn' onclick='toggleCheckbox(" + filterGroup + ", " + filterID + ")' id='selectFilterCheckbox_" + filterGroup + ", " + filterID + "'>☐</td><td class='filtersListFilterColumn' onclick='toggleCheckbox(" + filterGroup + ", " + filterID + ")'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
+            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td class='center filtersListSelectColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")' id='selectFilterCheckbox_" + '"' + filterGroup + '", ' + filterID + "'>☐</td><td class='filtersListFilterColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
         hideFilterGroup(filterGroupID);
     });
