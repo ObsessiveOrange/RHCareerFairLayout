@@ -61,18 +61,14 @@ tr {
 }
 td {
     padding: 30px 10px;
-    border-top: solid 1px #AAA;
-    border-left: solid 1px #CCC;
+    border-bottom: solid 1px #CCC;
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-td: last-child {
-    border-right: solid 1px #AAA;
-}
-tr: last-child td {
-    border-bottom: solid 1px #CCC;
+tr:last-child td{
+    border-bottom: none;
 }
 .roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
     border-top-left-radius: 10px;
