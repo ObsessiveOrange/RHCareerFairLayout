@@ -141,14 +141,13 @@ tr: last-child td {
  */
 .filtersListExpandColumn {
     width: 100px;
-    color: #38C;
 }
 .filtersListFilterColumn {
     width: calc(100% - 100px);
 }
 .filtersListGroupRow {
     font-weight: bold;
-    background-color: #AAA;
+    background-color: #38C;
 }
 
 /**

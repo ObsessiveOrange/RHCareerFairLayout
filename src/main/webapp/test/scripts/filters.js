@@ -35,11 +35,11 @@ function getInitialRequest() {
 function createFilterList() {
     var types = [];
     var filterGroupID = 0;
-    var $filtersListContainer = $("#filtersListContainer");
+    var $filtersListBody = $("#filtersListBody");
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
         var filterGroupID = types.length;
-        $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr class='filtersListGroupRow' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td></tr></table>");
+        $filtersListBody.append("<tr class='filtersListGroupRow' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
