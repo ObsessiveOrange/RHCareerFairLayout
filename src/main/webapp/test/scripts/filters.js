@@ -3,8 +3,7 @@ var filters = {};
 $(document).ready(function() {
     loadAfterPageSwitch();
     createFilterList();
-
-    $("#backBtn").click(function(event){
+    $("#backBtn").click(function(event) {
         prepareForPageSwitch();
         event.stopPropagation();
     });
@@ -43,11 +42,16 @@ function createFilterList() {
     var $filtersListBody = $("#filtersListBody");
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
-        filters[filterGroup] = [];
+        if (typeof filters[filterGroup] === 'undefined') {
+            filters[filterGroup] = [];
+        }
         var filterGroupID = types.length;
         $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td class='center filtersListSelectColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")' id='selectFilterCheckbox_" + filterID + "'>☐</td><td class='filtersListFilterColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
+            if(filters[filterGroup].indexOf(filterID) != -1){
+                markCheckboxChecked(filterGroup, filterID);
+            }
         });
         hideFilterGroup(filterGroupID);
     });
@@ -56,7 +60,7 @@ function createFilterList() {
 function showFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▲");
     $(".filterGroup" + groupID + "Element").show();
-    if(groupID == Object.keys(careerFairData.categories).length){
+    if (groupID == Object.keys(careerFairData.categories).length) {
         $("#filtersListGroup" + groupID + "Row").removeClass("tableLastRow");
     }
 }
@@ -64,7 +68,7 @@ function showFilterGroup(groupID) {
 function hideFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▼");
     $(".filterGroup" + groupID + "Element").hide();
-    if(groupID == Object.keys(careerFairData.categories).length){
+    if (groupID == Object.keys(careerFairData.categories).length) {
         $("#filtersListGroup" + groupID + "Row").addClass("tableLastRow");
     }
 }
@@ -76,7 +80,6 @@ function toggleFilterGroupID(groupID) {
         hideFilterGroup(groupID);
     }
 }
-
 
 function markCheckboxChecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☑");
