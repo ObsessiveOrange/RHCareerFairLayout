@@ -38,10 +38,11 @@ function createFilterList() {
     var $filtersListBody = $("#filtersListBody");
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
+        filters.filterGroup = [];
         var filterGroupID = types.length;
         $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
-            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
+            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td class='center filtersListSelectColumn' onclick='toggleCheckbox(" + filterGroup + ", " + filterID + ")' id='selectFilterCheckbox_" + filterGroup + ", " + filterID + "'>☐</td><td class='filtersListFilterColumn' onclick='toggleCheckbox(" + filterGroup + ", " + filterID + ")'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
         hideFilterGroup(filterGroupID);
     });
@@ -68,6 +69,25 @@ function toggleFilterGroupID(groupID) {
         showFilterGroup(groupID);
     } else {
         hideFilterGroup(groupID);
+    }
+}
+
+
+function markCheckboxChecked(groupName, filterID) {
+    $("#selectFilterCheckbox_" + filterID).text("☑");
+    filters.groupName.addToOrderedList(filterID);
+}
+
+function markCheckboxUnchecked(groupName, filterID) {
+    $("#selectFilterCheckbox_" + filterID).text("☐");
+    filters.groupName.removeFromOrderedList(filterID);
+}
+
+function toggleCheckbox(groupName, filterID) {
+    if ($("#selectFilterCheckbox_" + filterID).html() == "☑") {
+        markCheckboxUnchecked(groupName, filterID);
+    } else {
+        markCheckboxChecked(groupName, filterID);
     }
 }
 //draw tables and table numbers

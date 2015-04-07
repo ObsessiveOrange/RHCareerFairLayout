@@ -55,7 +55,7 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")' id='showOnMapCheckbox_" + entry.id + "'>☐</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")' id='showOnMapCheckbox_" + entry.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
             markCheckboxChecked(key);
             careerFairData.entries[key].checked = true;
             entry.checked = true;
