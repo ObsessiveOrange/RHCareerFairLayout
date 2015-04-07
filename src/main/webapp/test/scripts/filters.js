@@ -1,7 +1,12 @@
 var careerFairData;
-var filters = {};
+var filters;
 $(document).ready(function() {
     loadAfterPageSwitch();
+
+    if(typeof careerFairData === 'undefined' || typeof filters === 'undefined'){
+        window.location = "index.html";
+    }
+
     createFilterList();
     $("#backBtn").click(function(event) {
         prepareForPageSwitch();
