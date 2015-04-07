@@ -1,7 +1,7 @@
 var careerFairData;
 var companyList;
-var tableLocations = [];
-var highlightedTables = [];
+var tableLocations;
+var highlightedTables
 var companiesShown = [];
 var filters = {};
 var $mapCanvasTables;
@@ -18,6 +18,9 @@ $(document).ready(function() {
     $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
+
+    //setup variables:
+    highlightedTables = [];
     getInitialRequest();
 
     $("#filterBtn").click(function(event){
@@ -26,6 +29,13 @@ $(document).ready(function() {
     });
 });
 
+function loadAfterPageSwitch() {
+    careerFairData = SessionVars.retrieveObject("careerFairData");
+    tableLocations = SessionVars.retrieveObject("tableLocations");
+    highlightedTables = SessionVars.retrieveObject("highlightedTables");
+    companiesShown = SessionVars.retrieveObject("companiesShown");
+    filters = SessionVars.retrieveObject("filters");
+}
 function prepareForPageSwitch() {
     SessionVars.storeObject("careerFairData", careerFairData);
     SessionVars.storeObject("tableLocations", tableLocations);

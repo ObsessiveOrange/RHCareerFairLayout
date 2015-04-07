@@ -3,7 +3,7 @@ var filters;
 $(document).ready(function() {
     loadAfterPageSwitch();
 
-    if(typeof careerFairData === 'undefined' || typeof filters === 'undefined'){
+    if(!careerFairData || !filters){
         window.location = "index.html";
     }
 
@@ -47,7 +47,7 @@ function createFilterList() {
     var $filtersListBody = $("#filtersListBody");
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
-        if (typeof filters[filterGroup] === 'undefined') {
+        if (!filters[filterGroup]) {
             filters[filterGroup] = [];
         }
         var filterGroupID = types.length;
