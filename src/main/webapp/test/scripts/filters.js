@@ -48,7 +48,7 @@ function createFilterList() {
 }
 
 function showFilterGroup(groupID) {
-    $("#showOnMapCheckbox_" + groupID).html("▲");
+    $("#filtersListExpand_" + groupID).html("▲");
     $(".filterGroup" + groupID + "Element").show();
 }
 
