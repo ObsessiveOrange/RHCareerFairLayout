@@ -106,29 +106,10 @@ function updateCompanyList() {
         });
         if (showCompany) {
             companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
-            markCheckboxChecked(key);
-            filteredCompanyIDs.addToOrderedSet(company.id);
+            markCheckboxChecked(companyID);
+            filteredCompanyIDs.addToOrderedSet(companyID);
         }
     });
-    // if(filters)
-    // var filteredCompanyIDsByCategory = [];
-    // Object.keys(filters).forEach(function(category) {
-    //     var categoryID = filteredCompanyIDsByCategory.length;
-    //     filteredCompanyIDsByCategory.push([]);
-    //     Object.keys(filters[category]).forEach(function(filterID) {
-    //         filteredCompanyIDsByCategory[categoryID] = _.union(filteredCompanyIDsByCategory[categoryID], careerFairData.companies);
-    //     });
-    // });
-    // filteredCompanyIDs = filteredCompanyIDsByCategory[0];
-    // for (var i = 1; i < filteredCompanyIDsByCategory.length; i++) {
-    //     filteredCompanyIDs = _.intersection(filteredCompanyIDs, filteredCompanyIDsByCategory[i]);
-    // }
-    // filteredCompanyIDs.forEach(function(companyID) {
-    //     var company = careerFairData.companies[key];
-    //     companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
-    //     markCheckboxChecked(key);
-    //     filteredCompanyIDs.push(company.id);
-    // });
 }
 
 function markCheckboxChecked(id) {
