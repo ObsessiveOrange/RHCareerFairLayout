@@ -6,8 +6,8 @@ $(document).ready(function() {
 });
 
 function loadAfterPageSwitch() {
-    careerFairData = SessionVars.retreiveObject("careerFairData");
-    filters = SessionVars.retreiveObject("filters");
+    careerFairData = SessionVars.retrieveObject("careerFairData");
+    filters = SessionVars.retrieveObject("filters");
 }
 
 function prepareForPageSwitch() {
