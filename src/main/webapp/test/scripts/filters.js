@@ -12,8 +12,12 @@ $(document).ready(function() {
 });
 //save data when link out of page clicked.
 window.onbeforeunload = function(event) {
-    prepareForPageSwitch();
+    if (!clearCache) {
+        prepareForPageSwitch();
+    }
+    else{SessionVars.clear();}
 }
+
 
 function loadAfterPageSwitch() {
     careerFairData = SessionVars.retrieveObject("careerFairData");
@@ -24,7 +28,7 @@ function prepareForPageSwitch() {
     SessionVars.storeObject("careerFairData", careerFairData);
     SessionVars.storeObject("filters", filters);
 }
-//Get data from server, call first round of updates ///▲▼
+//Get data from server, call first round of updates
 function getInitialRequest() {
     sendGetRequest({
         url: "/api/data?method=getData",

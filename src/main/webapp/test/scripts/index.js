@@ -44,8 +44,9 @@ $(document).ready(function() {
 window.onbeforeunload = function(event) {
     if (!clearCache) {
         prepareForPageSwitch();
+    } else {
+        SessionVars.clear();
     }
-    else{SessionVars.clear();}
 }
 
 function loadAfterPageSwitch() {
@@ -95,28 +96,46 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")' id='showOnMapCheckbox_" + entry.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
-            markCheckboxChecked(key);
-            careerFairData.entries[key].checked = true;
-            entry.checked = true;
+            var showElement = true;
+            //check if included in filtered selection
+            checkFilters: for (var type in filters) {
+                if (entry.categories.hasOwnProperty(type) && filters.hasOwnProperty(type)) {
+                    var typeIDs = {};
+                    var contains = false;
+                    for (var i = 0; i < filters[type].length; i++) {
+                        typeIDs[filters[type][i]] = true;
+                    }
+                    for (var i = 0; i < entry.categories[type].length; i++) {
+                        if (typeIDs[entry.categories[type][i]] != null) {
+                            continue checkFilters;
+                        }
+                    }
+                    showElement = false;
+                    break checkFilters;
+                }
+            }
+            //show/hide
+            if (showElement) {
+                companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")' id='showOnMapCheckbox_" + entry.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+                markCheckboxChecked(key);
+                companiesShown.push(entry.id);
+            }
         }
     }
 }
 
 function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");
-    careerFairData.entries[id].checked = true;
     highlightedTables.addToOrderedSet(careerFairData.entries[id].parameters.table);
 }
 
 function markCheckboxUnchecked(id) {
     $("#showOnMapCheckbox_" + id).text("☐");
-    careerFairData.entries[id].checked = false;
     highlightedTables.removeFromOrderedSet(careerFairData.entries[id].parameters.table);
 }
 
 function toggleCheckbox(id) {
-    if (careerFairData.entries[id].checked) {
+    if ($("#showOnMapCheckbox_" + id).html() == "☑") {
         markCheckboxUnchecked(id);
         highlightTable(careerFairData.entries[id].parameters.table, "#EEE");
     } else {
