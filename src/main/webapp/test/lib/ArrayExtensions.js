@@ -4,7 +4,6 @@ Array.prototype.insertAtIndex = function(item, index) {
 Array.prototype.addToOrderedSet = function(item) {
     var insertIndex;
     for (insertIndex = 0; insertIndex < this.length; insertIndex++) {
-        console.log(item + ":" + this[insertIndex]);
         if (item == this[insertIndex]) {
             return;
         }
