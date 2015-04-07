@@ -209,7 +209,6 @@ function drawTables($mapCanvasTables) {
 function highlightTables(color) {
     $mapCanvasHighlights.clearCanvas();
     highlightedTables.forEach(function(table) {
-        console.log("Drawing table" + table);
         highlightTable(table, color);
     });
 }
