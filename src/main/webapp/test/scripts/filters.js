@@ -11,11 +11,13 @@ $(document).ready(function() {
     createFilterList();
 });
 //save data when link out of page clicked.
+var clearCache;
 window.onbeforeunload = function(event) {
-    if (typeof clearCache != 'undefined' || !clearCache) {
+    if (typeof clearCache === 'undefined' || !clearCache) {
         prepareForPageSwitch();
+    } else {
+        SessionVars.clear();
     }
-    else{SessionVars.clear();}
 }
 
 

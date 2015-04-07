@@ -41,6 +41,7 @@ $(document).ready(function() {
     }
 });
 //save data when link out of page clicked.
+var clearCache;
 window.onbeforeunload = function(event) {
     if (typeof clearCache === 'undefined' || !clearCache) {
         prepareForPageSwitch();
