@@ -91,6 +91,7 @@ function updateCompanyList() {
     var companyListBody = $("#companyListBody");
     if (filters.changed) {
         filteredCompanyIDs = [];
+        highlightedTables = [];
         Object.keys(careerFairData.companies).forEach(function(companyID) {
             var company = careerFairData.companies[companyID];
             var showCompany = true;
