@@ -14,7 +14,7 @@ Array.prototype.addToOrderedSet = function(item) {
     this.insertAtIndex(item, insertIndex);
 }
 Array.prototype.addArrayToOrderedSet = function(array) {
-    array.forEach(addToOrderedSet(element));
+    array.forEach(this.addToOrderedSet(element));
 }
 Array.prototype.findInOrderedList = function(item) {
     var low = 0;
