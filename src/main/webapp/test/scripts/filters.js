@@ -39,7 +39,7 @@ function createFilterList() {
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
         var filterGroupID = types.length;
-        $filtersListBody.append("<tr class='filtersListGroupRow' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
+        $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
@@ -50,11 +50,17 @@ function createFilterList() {
 function showFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▲");
     $(".filterGroup" + groupID + "Element").show();
+    if(groupID == Object.keys(careerFairData.categories).length){
+        $(".filtersListGroup" + filterGroupID + "Row").removeClass("tableLastRow");
+    }
 }
 
 function hideFilterGroup(groupID) {
     $("#filtersListExpand_" + groupID).html("▼");
     $(".filterGroup" + groupID + "Element").hide();
+    if(groupID == Object.keys(careerFairData.categories).length){
+        $(".filtersListGroup" + filterGroupID + "Row").addClass("tableLastRow");
+    }
 }
 
 function toggleFilterGroupID(groupID) {
