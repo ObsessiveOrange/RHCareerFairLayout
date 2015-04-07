@@ -6,23 +6,23 @@ import java.util.Map;
 
 public class DataVars {
     
-    private int                               categoryIDCounter = 1;
-    private int                               entryIDCounter    = 100;
-    private Map<String, Map<String, Integer>> idLookupTable     = new HashMap<String, Map<String, Integer>>();
-    private int                               year              = 0;
-    private String                            quarter           = "";
+    private static int                               categoryIDCounter = 1;
+    private static int                               entryIDCounter    = 100;
+    private static Map<String, Map<String, Integer>> idLookupTable     = new HashMap<String, Map<String, Integer>>();
+    private static int                               year              = 0;
+    private static String                            quarter           = "";
     
-    public synchronized int getNextCategoryID() {
+    public static synchronized int getNextCategoryID() {
     
         return categoryIDCounter++;
     }
     
-    public synchronized int getNextEntryID() {
+    public static synchronized int getNextEntryID() {
     
         return entryIDCounter++;
     }
     
-    public void addToIDLookupTable(String title, String type, Integer id) {
+    public static void addToIDLookupTable(String title, String type, Integer id) {
     
         if (idLookupTable.get(type) == null) {
             idLookupTable.put(type, new HashMap<String, Integer>());
@@ -31,33 +31,38 @@ public class DataVars {
         idLookupTable.get(type).put(title.toLowerCase().trim(), id);
     }
     
-    public Collection<Integer> getAllOfType(String type) {
+    public static Collection<String> getAllTypes() {
+    
+        return idLookupTable.keySet();
+    }
+    
+    public static Collection<Integer> getAllOfType(String type) {
     
         return idLookupTable.get(type).values();
     }
     
-    public Integer getFromIDLookupTable(String type, String title) {
+    public static Integer getFromIDLookupTable(String type, String title) {
     
         return idLookupTable.get(type).get(title.toLowerCase().trim());
     }
     
-    public int getYear() {
+    public static int getYear() {
     
         return year;
     }
     
-    public void setYear(int year) {
+    public static void setYear(int year) {
     
-        this.year = year;
+        DataVars.year = year;
     }
     
-    public String getQuarter() {
+    public static String getQuarter() {
     
         return quarter;
     }
     
-    public void setQuarter(String quarter) {
+    public static void setQuarter(String quarter) {
     
-        this.quarter = quarter;
+        DataVars.quarter = quarter;
     }
 }

@@ -23,7 +23,7 @@ public class Company extends Item implements Comparable<Company> {
     
     public Company(String title, Map<String, List<Integer>> categories, String description, Map<String, String> parameters) {
     
-        super(DataServlet.dataVars.getNextEntryID());
+        super(DataVars.getNextEntryID());
         this.title = title;
         this.categories = categories;
         this.description = description;

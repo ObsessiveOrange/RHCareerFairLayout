@@ -25,7 +25,6 @@ public class DataServlet extends HttpServlet {
      */
     private static final long                serialVersionUID = -5982008108929904358L;
     
-    public static DataVars                   dataVars;
     public static LayoutVars                 layoutVars;
     public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
@@ -36,7 +35,6 @@ public class DataServlet extends HttpServlet {
     public DataServlet() throws IOException {
     
         super();
-        dataVars = new DataVars();
         
         setupTestData();
     }
@@ -73,8 +71,8 @@ public class DataServlet extends HttpServlet {
     
         ArrayList2D basicData = new ArrayList2D();
         basicData.importFromResourceFile("BasicData.txt", "\t", true);
-        dataVars.setYear(basicData.getItem("Year", "Value", Integer.class));
-        dataVars.setQuarter(basicData.getItem("Quarter", "Value", String.class));
+        DataVars.setYear(basicData.getItem("Year", "Value", Integer.class));
+        DataVars.setQuarter(basicData.getItem("Quarter", "Value", String.class));
         
         layoutVars = new LayoutVars();
         layoutVars.setSection1(basicData.getItem("Layout_Section1", "Value", Integer.class));
@@ -96,7 +94,7 @@ public class DataServlet extends HttpServlet {
             Category newCategory = new Category(title, type);
             categoryMap.put(newCategory.getID(), newCategory);
             
-            dataVars.addToIDLookupTable(title, type, newCategory.getID());
+            DataVars.addToIDLookupTable(title, type, newCategory.getID());
         }
     }
     
@@ -118,34 +116,34 @@ public class DataServlet extends HttpServlet {
             ArrayList<Integer> posTypeList = new ArrayList<Integer>();
             
             for (String major : majors) {
-                Integer id = dataVars.getFromIDLookupTable("Majors", major);
+                Integer id = DataVars.getFromIDLookupTable("Majors", major);
                 if (id != null) {
-                    majorsList.add(dataVars.getFromIDLookupTable("Majors", major));
+                    majorsList.add(DataVars.getFromIDLookupTable("Majors", major));
                 }
             }
             
             for (String workAuth : workAuths) {
-                Integer id = dataVars.getFromIDLookupTable("Work Authorizations", workAuth);
+                Integer id = DataVars.getFromIDLookupTable("Work Authorizations", workAuth);
                 if (id != null) {
-                    workAuthList.add(dataVars.getFromIDLookupTable("Work Authorizations", workAuth));
+                    workAuthList.add(DataVars.getFromIDLookupTable("Work Authorizations", workAuth));
                 }
             }
             
             for (String posType : posTypes) {
-                Integer id = dataVars.getFromIDLookupTable("Position Types", posType);
+                Integer id = DataVars.getFromIDLookupTable("Position Types", posType);
                 if (id != null) {
-                    posTypeList.add(dataVars.getFromIDLookupTable("Position Types", posType));
+                    posTypeList.add(DataVars.getFromIDLookupTable("Position Types", posType));
                 }
             }
             
             if (majorsList.isEmpty()) {
-                majorsList.addAll(dataVars.getAllOfType("Majors"));
+                majorsList.addAll(DataVars.getAllOfType("Majors"));
             }
             if (workAuthList.isEmpty()) {
-                workAuthList.addAll(dataVars.getAllOfType("Work Authorizations"));
+                workAuthList.addAll(DataVars.getAllOfType("Work Authorizations"));
             }
             if (posTypeList.isEmpty()) {
-                posTypeList.addAll(dataVars.getAllOfType("Position Types"));
+                posTypeList.addAll(DataVars.getAllOfType("Position Types"));
             }
             
             HashMap<String, List<Integer>> categories = new HashMap<String, List<Integer>>();
@@ -159,9 +157,7 @@ public class DataServlet extends HttpServlet {
             
             entryMap.put(newEntity.getID(), newEntity);
             
-            synchronized (dataVars) {
-                dataVars.addToIDLookupTable(title, "company", newEntity.getID());
-            }
+            DataVars.addToIDLookupTable(title, "company", newEntity.getID());
         }
     }
 }

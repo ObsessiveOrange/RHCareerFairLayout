@@ -2,8 +2,6 @@ package adt;
 
 import java.util.ArrayList;
 
-import servlets.data.DataServlet;
-
 public class Category extends Item implements Comparable<Category> {
     
     /**
@@ -16,7 +14,7 @@ public class Category extends Item implements Comparable<Category> {
     
     public Category(String title, String type) {
     
-        super(DataServlet.dataVars.getNextCategoryID());
+        super(DataVars.getNextCategoryID());
         
         this.title = title;
         this.type = type;
@@ -27,6 +25,11 @@ public class Category extends Item implements Comparable<Category> {
     public String getTitle() {
     
         return title;
+    }
+    
+    public String getType() {
+    
+        return type;
     }
     
     public ArrayList<Integer> getEntries() {
