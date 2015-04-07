@@ -43,6 +43,7 @@ function createFilterList() {
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
+        hideFilterGroup(filterGroupID);
     });
 }
 
