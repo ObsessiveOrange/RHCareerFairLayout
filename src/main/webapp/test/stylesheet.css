@@ -29,13 +29,13 @@ html, body {
     float: left;
     height: 100%;
 }
-.backBtn {
+#backBtn {
     float: left;
     cursor: pointer;
     padding-right: 30px;
     height: 100%;
 }
-.filterBtn {
+#filterBtn {
     float: right;
     cursor: pointer;
     height: 100%;

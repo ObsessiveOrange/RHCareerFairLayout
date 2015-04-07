@@ -19,6 +19,11 @@ $(document).ready(function() {
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
     getInitialRequest();
+
+    $("#filterBtn").click(function(event){
+        prepareForPageSwitch();
+        event.stopPropagation();
+    }
 });
 
 function prepareForPageSwitch() {

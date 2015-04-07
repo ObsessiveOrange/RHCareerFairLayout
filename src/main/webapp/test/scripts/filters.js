@@ -3,6 +3,11 @@ var filters = {};
 $(document).ready(function() {
     loadAfterPageSwitch();
     createFilterList();
+
+    $("#backBtn").click(function(event){
+        prepareForPageSwitch();
+        event.stopPropagation();
+    }
 });
 
 function loadAfterPageSwitch() {
