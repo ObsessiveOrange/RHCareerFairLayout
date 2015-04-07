@@ -99,10 +99,10 @@ function updateCompanyList() {
         var showCompany = true;
         Object.keys(filters).forEach(function(filterType) {
             if (Array.isArray(filters[filterType])) {
-                console.log(_.intersection(filters[filterType], company.categories));
+                console.log(_.intersection(filters[filterType], company.categories[filterType]).length);
                 if (filters[filterType].length == 0) {
                     return true;
-                } else if (_.intersection(filters[filterType], company.categories).length == 0) {
+                } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
                     showCompany = false;
                 }
             }
