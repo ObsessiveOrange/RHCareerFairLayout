@@ -3,6 +3,7 @@ var companyList;
 var tableLocations = [];
 var highlightedTables = [];
 var companiesShown = [];
+var filters = {};
 var $mapCanvasTables;
 var $mapCanvasHighlights;
 var scaling = 2;
@@ -20,8 +21,12 @@ $(document).ready(function() {
     getInitialRequest();
 });
 
-function test() {
-    // console.log("Success");
+function prepareForPageSwitch() {
+    SessionVars.storeObject("careerFairData", careerFairData);
+    SessionVars.storeObject("tableLocations", tableLocations);
+    SessionVars.storeObject("highlightedTables", highlightedTables);
+    SessionVars.storeObject("companiesShown", companiesShown);
+    SessionVars.storeObject("filters", filters);
 }
 //Get data from server, call first round of updates
 function getInitialRequest() {
@@ -50,7 +55,7 @@ function updateCompanyList() {
     for (var key in careerFairData.entries) {
         if (careerFairData.entries.hasOwnProperty(key)) {
             var entry = careerFairData.entries[key];
-            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")'><img src='images/checkboxChecked.png' class='checkbox' id='showOnMapCheckbox_" + entry.id + "'/></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+            companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + entry.id + ")' id='showOnMapCheckbox_" + entry.id + "'>☐</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + entry.id + ")'>" + entry.title + "</td><td class='center companyListTableColumn'>" + entry.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
             markCheckboxChecked(key);
             careerFairData.entries[key].checked = true;
             entry.checked = true;
@@ -60,14 +65,14 @@ function updateCompanyList() {
 
 function markCheckboxChecked(id) {
     console.log("Checked checkbox with id: " + id);
-    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxChecked.png");
+    $("#showOnMapCheckbox_" + id).text("☐");
     careerFairData.entries[id].checked = true;
     console.log(highlightedTables.addToOrderedList(careerFairData.entries[id].parameters.table));
 }
 
 function markCheckboxUnchecked(id) {
     console.log("Unchecked checkbox with id: " + id);
-    $("#showOnMapCheckbox_" + id).attr("src", "images/checkboxUnchecked.png");
+    $("#showOnMapCheckbox_" + id).text("☑");
     careerFairData.entries[id].checked = false;
     console.log(highlightedTables.removeFromOrderedList(careerFairData.entries[id].parameters.table));
 }

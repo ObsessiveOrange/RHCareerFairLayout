@@ -127,10 +127,6 @@ tr: last-child td {
 .roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
 }
-.checkbox {
-    width: 35px;
-    height: 35px;
-}
 /**
  *
  * Modification classes
