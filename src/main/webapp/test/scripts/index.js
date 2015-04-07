@@ -64,17 +64,13 @@ function updateCompanyList() {
 }
 
 function markCheckboxChecked(id) {
-    console.log("Checked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).text("☐");
     careerFairData.entries[id].checked = true;
-    console.log(highlightedTables.addToOrderedList(careerFairData.entries[id].parameters.table));
 }
 
 function markCheckboxUnchecked(id) {
-    console.log("Unchecked checkbox with id: " + id);
     $("#showOnMapCheckbox_" + id).text("☑");
     careerFairData.entries[id].checked = false;
-    console.log(highlightedTables.removeFromOrderedList(careerFairData.entries[id].parameters.table));
 }
 
 function toggleCheckbox(id) {
