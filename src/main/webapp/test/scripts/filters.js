@@ -38,13 +38,12 @@ function createFilterList() {
     var $filtersListContainer = $("#filtersListContainer");
     for (var filterGroup in careerFairData.categories) {
         if (careerFairData.categories.hasOwnProperty(filterGroup)) {
-            var category = careerFairData.categories[filterGroup];
             types.push(filterGroup);
             var filterGroupID = types.length;
-            $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'>" + category.type + "</td></tr></table>");
-            for (var filterName in careerFairData.categories[filterGroup]) {
-                if (careerFairData.categories[filterGroup].hasOwnProperty(filterName)) {
-                    $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + filterName + "</td></tr>");
+            $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'>" + filterGroup + "</td></tr></table>");
+            for (var filterID in careerFairData.categories[filterGroup]) {
+                if (careerFairData.categories[filterGroup].hasOwnProperty(filterID)) {
+                    $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
                 }
             }
         }
