@@ -83,12 +83,12 @@ function toggleFilterGroupID(groupID) {
 
 function markCheckboxChecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☑");
-    filters[groupName].addToOrderedList(filterID.toString());
+    filters[groupName].addToOrderedSet(filterID.toString());
 }
 
 function markCheckboxUnchecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☐");
-    filters[groupName].removeFromOrderedList(filterID.toString());
+    filters[groupName].removeFromOrderedSet(filterID.toString());
 }
 
 function toggleCheckbox(groupName, filterID) {
@@ -261,7 +261,7 @@ function sendPostRequest(requestObject) {
 Array.prototype.insertAtIndex = function(item, index) {
     this.splice(index, 0, item);
 };
-Array.prototype.addToOrderedList = function(item) {
+Array.prototype.addToOrderedSet = function(item) {
     var insertIndex;
     for (insertIndex = 0; insertIndex < this.length; insertIndex++) {
         if (item < this[insertIndex]) {
@@ -270,11 +270,11 @@ Array.prototype.addToOrderedList = function(item) {
     }
     this.insertAtIndex(item, insertIndex);
 }
-Array.prototype.addArrayToOrderedList = function(array) {
+Array.prototype.addArrayToOrderedSet = function(array) {
     this.push.
     this.sort();
 }
-Array.prototype.findInOrderedList = function(item) {
+Array.prototype.findInOrderedSet = function(item) {
     var low = 0;
     var high = this.length - 1;
     var mid = Math.floor(this.length / 2);
@@ -296,8 +296,8 @@ Array.prototype.findInOrderedList = function(item) {
     }
     return -1;
 }
-Array.prototype.removeFromOrderedList = function(item) {
-    var index = this.findInOrderedList(item);
+Array.prototype.removeFromOrderedSet = function(item) {
+    var index = this.findInOrderedSet(item);
     if (index > -1) {
         return this.splice(index, 1);
     }

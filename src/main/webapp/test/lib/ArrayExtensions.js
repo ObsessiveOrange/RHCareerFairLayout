@@ -16,7 +16,7 @@ Array.prototype.addToOrderedSet = function(item) {
 Array.prototype.addArrayToOrderedSet = function(array) {
     array.forEach(this.addToOrderedSet(element));
 }
-Array.prototype.findInOrderedList = function(item) {
+Array.prototype.findInOrderedSet = function(item) {
     var low = 0;
     var high = this.length - 1;
     var mid = Math.floor(this.length / 2);
@@ -38,8 +38,8 @@ Array.prototype.findInOrderedList = function(item) {
     }
     return -1;
 }
-Array.prototype.removeFromOrderedList = function(item) {
-    var index = this.findInOrderedList(item);
+Array.prototype.removeFromOrderedSet = function(item) {
+    var index = this.findInOrderedSet(item);
     if (index > -1) {
         return this.splice(index, 1);
     }
