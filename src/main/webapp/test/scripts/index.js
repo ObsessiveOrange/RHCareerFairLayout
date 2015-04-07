@@ -23,14 +23,14 @@ $(document).ready(function() {
         //if other variables have not been created/set, do it now.
         if (!tableLocations || !highlightTables || !companiesShown || !filters) {
             tableLocations = [];
-            highlightTables = [];
+            highlightedTables = [];
             companiesShown = [];
             filters = {};
         }
         //get careerFairData - calls setupPage();
         getNewData();
-    } 
-//else, if careerFairData has been loaded, just setup the page using cached data
+    }
+    //else, if careerFairData has been loaded, just setup the page using cached data
     else {
         //if the filters have been modified, reset the highlighted tables.
         if (filters.changed) {
@@ -39,12 +39,11 @@ $(document).ready(function() {
         //setup the page
         setupPage();
     }
-    //save data when link clicked.
-    $("#filterBtn").click(function(event) {
-        prepareForPageSwitch();
-        event.stopPropagation();
-    });
 });
+//save data when link clicked.
+window.onbeforeunload = function(event) {
+    prepareForPageSwitch();
+}
 
 function loadAfterPageSwitch() {
     careerFairData = SessionVars.retrieveObject("careerFairData");

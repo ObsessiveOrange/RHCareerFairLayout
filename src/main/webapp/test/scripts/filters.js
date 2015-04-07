@@ -9,11 +9,11 @@ $(document).ready(function() {
     }
 
     createFilterList();
-    $("#backBtn").click(function(event) {
-        prepareForPageSwitch();
-        event.stopPropagation();
-    });
 });
+//save data when link out of page clicked.
+window.onbeforeunload = function(event) {
+    prepareForPageSwitch();
+}
 
 function loadAfterPageSwitch() {
     careerFairData = SessionVars.retrieveObject("careerFairData");
