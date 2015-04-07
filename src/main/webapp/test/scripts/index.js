@@ -3,27 +3,35 @@ var companyList;
 var tableLocations;
 var highlightedTables
 var companiesShown = [];
-var filters = {};
+var filters;
 var $mapCanvasTables;
 var $mapCanvasHighlights;
 var scaling = 2;
-
 $(document).ready(function() {
-
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
     var containerWidth = $container.width() * scaling;
-    var containerHeight = $container.width() * (scaling/2);
+    var containerHeight = $container.width() * (scaling / 2);
     $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-
-    //setup variables:
-    highlightedTables = [];
-    getInitialRequest();
-
-    $("#filterBtn").click(function(event){
+    //try to retrieve data;
+    loadAfterPageSwitch();
+    if (!careerFairData || !companyList || !tableLocations || !highlightTables || !companiesShown || !filters) {
+        careerFairData = {};
+        highlightTables = [];
+        companiesShown = [];
+        filters = {};
+    getNewData();
+    } else if (filters.changed) {
+        highlightTables = [];
+    }
+    if((new Date().getTime() - careerFairData.lastFetchTime) > 30*60*1000){
+        getNewData();
+    }
+    setupPage();
+    $("#filterBtn").click(function(event) {
         prepareForPageSwitch();
         event.stopPropagation();
     });
@@ -36,6 +44,7 @@ function loadAfterPageSwitch() {
     companiesShown = SessionVars.retrieveObject("companiesShown");
     filters = SessionVars.retrieveObject("filters");
 }
+
 function prepareForPageSwitch() {
     SessionVars.storeObject("careerFairData", careerFairData);
     SessionVars.storeObject("tableLocations", tableLocations);
@@ -44,25 +53,30 @@ function prepareForPageSwitch() {
     SessionVars.storeObject("filters", filters);
 }
 //Get data from server, call first round of updates
-function getInitialRequest() {
+function getNewData() {
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
             careerFairData = $.parseJSON(data);
-            $("span.careerFairDescription").html(careerFairData.title);
-            updateCompanyList();
-            var options = {
-                valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn']
-            };
-            companyList = new List('companyListContainer', options);
-            companyList.sort('companyListCompanyColumn', {
-                order: "asc"
-            });
-            generateTableLocations();
-            drawTables($mapCanvasTables);
-            highlightTables("#0F0");
+            careerFairData.lastFetchTime = new Date().getTime();
+            setupPage();
         }
     });
+}
+
+function setupPage() {
+    $("span.careerFairDescription").html(careerFairData.title);
+    updateCompanyList();
+    var options = {
+        valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn']
+    };
+    companyList = new List('companyListContainer', options);
+    companyList.sort('companyListCompanyColumn', {
+        order: "asc"
+    });
+    generateTableLocations();
+    drawTables($mapCanvasTables);
+    highlightTables("#0F0");
 }
 
 function updateCompanyList() {
@@ -77,7 +91,6 @@ function updateCompanyList() {
         }
     }
 }
-
 
 function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");

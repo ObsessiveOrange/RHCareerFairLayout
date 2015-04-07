@@ -5,6 +5,7 @@ $(document).ready(function() {
 
     if(!careerFairData || !filters){
         window.location = "index.html";
+        return;
     }
 
     createFilterList();
@@ -89,11 +90,13 @@ function toggleFilterGroupID(groupID) {
 function markCheckboxChecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☑");
     filters[groupName].addToOrderedSet(filterID.toString());
+    filters.changed = true;
 }
 
 function markCheckboxUnchecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☐");
     filters[groupName].removeFromOrderedSet(filterID.toString());
+    filters.changed = true;
 }
 
 function toggleCheckbox(groupName, filterID) {
