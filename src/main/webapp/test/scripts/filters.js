@@ -75,12 +75,12 @@ function toggleFilterGroupID(groupID) {
 
 function markCheckboxChecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☑");
-    filters.groupName.addToOrderedList(filterID);
+    filters[groupName].addToOrderedList(filterID);
 }
 
 function markCheckboxUnchecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☐");
-    filters.groupName.removeFromOrderedList(filterID);
+    filters[groupName].removeFromOrderedList(filterID);
 }
 
 function toggleCheckbox(groupName, filterID) {
