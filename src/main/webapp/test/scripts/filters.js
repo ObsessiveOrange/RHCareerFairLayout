@@ -39,7 +39,7 @@ function createFilterList() {
     Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
         types.push(filterGroup);
         var filterGroupID = types.length;
-        $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'>" + filterGroup + "</td></tr></table>");
+        $filtersListContainer.append("<table class='tableList roundTableAllCorners' id='filtersList" + filterGroupID + "Table'><tbody class='list' id='filtersList" + filterGroupID + "Body'><tr onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn filtersListGroup'><b>" + filterGroup + "</b></td></tr></table>");
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             $("#filtersList" + filterGroupID + "Body").append("<tr class='filterGroup" + filterGroupID + "Element'><td></td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
         });
@@ -48,17 +48,17 @@ function createFilterList() {
 }
 
 function showFilterGroup(groupID) {
-    $("#showOnMapCheckbox_" + groupID).text("▲");
+    $("#showOnMapCheckbox_" + groupID).html("▲");
     $(".filterGroup" + groupID + "Element").show();
 }
 
 function hideFilterGroup(groupID) {
-    $("#filtersListExpand_" + groupID).text("▼");
+    $("#filtersListExpand_" + groupID).html("▼");
     $(".filterGroup" + groupID + "Element").hide();
 }
 
 function toggleFilterGroupID(groupID) {
-    if ($("#filtersListExpand_" + groupID).text() == "▼") {
+    if ($("#filtersListExpand_" + groupID).html() == "▼") {
         showFilterGroup(groupID);
     } else {
         hideFilterGroup(groupID);

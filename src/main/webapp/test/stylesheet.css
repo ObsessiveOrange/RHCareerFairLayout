@@ -41,13 +41,56 @@ html, body {
     height: 100%;
 }
 /*
- *
+ * 
  * Body Customization:
  */
 
 .bodyContent {
     font-size: 2.0em;
 }
+.tableList {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+tr {
+    background-color: #EEE;
+    color: #000;
+}
+td {
+    padding: 30px 10px;
+    border-top: solid 1px #AAA;
+    border-left: solid 1px #CCC;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+td: last-child {
+    border-right: solid 1px #AAA;
+}
+tr: last-child td {
+    border-bottom: solid 1px #CCC;
+}
+.roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/**
+ * INDEX
+ * Body customization
+ */
 .canvasMapContainer {
     position: relative;
     width: 100%;
@@ -77,32 +120,6 @@ html, body {
     border: solid 2px #5555FF;
     background-color: #FDFFD6;
 }
-.tableList {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    border-spacing: 0;
-    table-layout: fixed;
-}
-tr {
-    background-color: #EEE;
-    color: #000;
-}
-td {
-    padding: 30px 10px;
-    border-top: solid 1px #AAA;
-    border-left: solid 1px #CCC;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-td: last-child {
-    border-right: solid 1px #AAA;
-}
-tr: last-child td {
-    border-bottom: solid 1px #CCC;
-}
 .companyListHighlightColumn {
     width: 50px;
     font-weight: bold;
@@ -117,18 +134,21 @@ tr: last-child td {
 .companyListInfoColumn {
     width: 50px;
 }
-.roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child {
-    border-top-left-radius: 10px;
+
+/**
+ * FILTERS
+ * Body customization
+ */
+.filtersListExpandColumn {
+    width: 100px;
 }
-.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child {
-    border-top-right-radius: 10px;
+.filtersListFilterColumn {
+    width: calc(100% - 100px);
 }
-.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child {
-    border-bottom-left-radius: 10px;
+.filtersListGroup {
+    font-weight: bold;
 }
-.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child {
-    border-bottom-right-radius: 10px;
-}
+
 /**
  *
  * Modification classes
