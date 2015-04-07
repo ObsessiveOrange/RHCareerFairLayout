@@ -18,7 +18,7 @@ $(document).ready(function() {
     $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-    //getInitialRequest();
+    getInitialRequest();
 
     $("#filterBtn").click(function(event){
         prepareForPageSwitch();
