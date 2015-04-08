@@ -6,9 +6,13 @@ $(document).ready(function(){
 
 });
 
-window.onbeforeunload = function(event) {
-    alert("Unloading");
+
+document.onbeforeunload = exit("document.onBeforeUnload");
+document.pagehide = exit("document.pagehide");
+window.onbeforeunload = exit("window.onBeforeUnload");
+function exit(string){
+
+    alert("Unloading from: " + string);
     alert("storing testKey:testValue");
     SessionVars.storeString("testKey", "testValue");
-    
 }
