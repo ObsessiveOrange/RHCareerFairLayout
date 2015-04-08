@@ -1,6 +1,6 @@
 html, body {
     margin: 0;
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 40px 20px;
     width: calc(100% - 40px);
     background-color: #222;
     -webkit-overflow-scrolling: touch;
@@ -156,6 +156,26 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-weight: bold;
     background-color: #38C;
 }
+
+/**
+ *
+ * Footer customization
+ */
+ .footer{
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    bottom:0;
+    left:40px;
+    width: calc(100% - 120px);
+    text-align: center;
+    height: 40px;
+    padding: 10px 20px 5px 20px;
+    background-color: #800000;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #FFF;
+ }
 
 /**
  *
