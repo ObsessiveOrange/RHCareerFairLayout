@@ -110,7 +110,7 @@ function updateCompanyList() {
         });
         filters.changed = false;
     } else {
-        filteredCompanyIDs = careerFairData.companies;
+        filteredCompanyIDs = Object.keys(careerFairData.companies);
     }
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
