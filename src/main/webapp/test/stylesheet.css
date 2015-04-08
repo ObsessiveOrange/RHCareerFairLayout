@@ -177,6 +177,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     text-align: center;
     font-size: 16px;
     color: #FFF;
+    z-index: -1;
  }
 
 /**

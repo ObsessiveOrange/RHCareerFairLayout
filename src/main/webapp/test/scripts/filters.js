@@ -27,19 +27,17 @@ $(document).ready(function() {
     $("#filterButtons").on('click', '.button', function(event) {
         switch ($(this).attr('data-btnAction')) {
             case "cancel":
-                window.location = "index.html";
                 break;
             case "clear":
                 filters = {
                     changed: true
                 }
-                window.location = "index.html";
                 break;
             case "apply":
                 prepareForPageSwitch();
-                window.location = "index.html";
                 break;
         }
+        window.location = "index.html";
     });
 });
 //load data saved in persistent storage
