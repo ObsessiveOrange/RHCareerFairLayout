@@ -34,6 +34,29 @@ $(document).ready(function() {
     else {
         setupPage();
     }
+    $("#selectionButtons").on('click', '.button', function(event) {
+        switch ($(this).attr('data-btnAction')) {
+            case select:
+                filteredCompanyIDs.forEach(function(id) {
+                    if ($("#showOnMapCheckbox_" + id).html() == "☐") {
+                        markCheckboxChecked(id);
+                    }
+                })
+                break;
+            case invert:
+                filteredCompanyIDs.forEach(function(id) {
+                        toggleCheckbox(id);
+                })
+                break;
+            case deselect:
+                filteredCompanyIDs.forEach(function(id) {
+                    if ($("#showOnMapCheckbox_" + id).html() == "☑") {
+                        markCheckboxUnchecked(id);
+                    }
+                })
+                break;
+        }
+    });
 });
 //save data when link out of page clicked.
 var clearCache;
