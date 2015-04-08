@@ -11,7 +11,7 @@
             window.localStorage.setItem(key, value);
         }
         SessionVars.retrieveObject = function(key) {
-            return window.JSON.parse(retreiveString(key));
+            return window.JSON.parse(this.retreiveString(key));
         }
         SessionVars.retreiveString = function(key) {
             return window.localStorage.getItem(key);
