@@ -144,7 +144,8 @@ function setupPage() {
     //
     //Create options, generate List.js object for searching
     var options = {
-        valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn']
+        valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn'],
+        page: filteredCompanyIDs.length
     };
     companyList = new List('companyListContainer', options);
     //
