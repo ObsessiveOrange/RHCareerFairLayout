@@ -60,6 +60,7 @@ html, body {
     float:right;
     border-left: solid 1px #CCC;
     border-bottom: solid 1px #CCC;
+    border-top: solid 1px #CCC;
     padding: 10px 15px;
     cursor: pointer;
     background-color: #EEE;
