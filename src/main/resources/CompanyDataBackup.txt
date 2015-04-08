@@ -296,3 +296,24 @@ RINCON RESEARCH CORPORATION	"Computer Science, Electrical Engineering, Computer 
 Rockwell Collins	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"
 Rolls-Royce North America	"Electrical Engineering, Mechanical Engineering"	US Citizen	Internship/Externship
 Rose-Hulman Ventures			
+Samtec	"Electrical Engineering, Mechanical Engineering, Optical Engineering"	US Citizen	Co-op
+Schreiber Foods	"Economics, Computer Science, Biology, Chemical Engineering, Chemistry, Engineering Management-GR Only, Biochemistry & Molecular Biology, Biochemistry, Computational Science, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"
+Scientia LLC	"Computer Science, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"
+"Skyworks Solutions, Inc."	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"
+SmartFile	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"
+"Software Engineering Professionals, Inc. (SEP)"	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"
+"SonaCare Medical, LLC."	"Electrical Engineering, Mechanical Engineering, Biomedical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"
+Southwest Research Institute	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Computational Science"	"US Citizen, Permanent Resident, H-1 Visa"	"Internship/Externship, Full Time"
+STIMULUS Engineering	"Computer Science, Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"
+Tarlton Corporation	Civil Engineering	US Citizen	"Internship/Externship, Full Time"
+Texas Instruments	"Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"
+Textron (Dixie Chopper & Textron Aviation)	All Majors	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"
+Tipmont REMC	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"
+TOC Logistics	"Electrical Engineering, Mechanical Engineering"	US Citizen	
+"Torax Medical, Inc"	"Mechanical Engineering, Biomedical Engineering"		
+Turner Construction Company	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Part Time, Co-op"
+U.S.Army Recruiting		US Citizen	Full Time
+Valeo Lighting Systems North America	"Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"
+Wolf Technical Services	"Mechanical Engineering, Biomedical Engineering"	US Citizen	"Internship/Externship, Full Time"
+"WSI Engineering / WSI, Inc."	Civil Engineering		Full Time
+"X by 2, LLC."	"Computer Science, Software Engineering"	US Citizen	
