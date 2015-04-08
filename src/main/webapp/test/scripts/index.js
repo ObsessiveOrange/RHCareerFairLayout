@@ -151,12 +151,12 @@ function updateCompanyList() {
 
 function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");
-    highlightedTables.addToOrderedSet(careerFairData.companies[id].parameters.table);
+    highlightedTables.addToOrderedSet(careerFairData.companies[id]);
 }
 
 function markCheckboxUnchecked(id) {
     $("#showOnMapCheckbox_" + id).text("☐");
-    highlightedTables.removeFromOrderedSet(careerFairData.companies[id].parameters.table);
+    highlightedTables.removeFromOrderedSet(careerFairData.companies[id]);
 }
 
 function toggleCheckbox(id) {
@@ -291,14 +291,15 @@ function drawTables($mapCanvasTables) {
 //Highlight tables in array
 function highlightTables(color) {
     $mapCanvasHighlights.clearCanvas();
-    highlightedTables.forEach(function(table) {
-        highlightTable(table, color);
+    highlightedTables.forEach(function(id) {
+        highlightTable(careerFairData.companies[id].parameters.table, color);
     });
 }
 
 function highlightTable(id, color) {
-    var x = tableLocations[id - 1].x;
-    var y = tableLocations[id - 1].y;
+    var table = careerFairData.companies[id].parameters.table
+    var x = tableLocations[table - 1].x;
+    var y = tableLocations[table - 1].y;
     $mapCanvasHighlights.drawRect({
         fillStyle: color,
         x: x,
