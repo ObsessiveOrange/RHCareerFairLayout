@@ -33,6 +33,7 @@ $(document).ready(function() {
                 filters = {
                     changed: true
                 }
+                window.location = "index.html";
                 break;
             case "apply":
                 prepareForPageSwitch();
