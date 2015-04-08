@@ -104,13 +104,11 @@ function toggleFilterGroupID(groupID) {
 function markCheckboxChecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☑");
     filters[groupName].addToOrderedSet(filterID);
-    filters.changed = true;
 }
 
 function markCheckboxUnchecked(groupName, filterID) {
     $("#selectFilterCheckbox_" + filterID).text("☐");
     filters[groupName].removeFromOrderedSet(filterID);
-    filters.changed = true;
 }
 
 function toggleCheckbox(groupName, filterID) {
@@ -119,4 +117,5 @@ function toggleCheckbox(groupName, filterID) {
     } else {
         markCheckboxChecked(groupName, filterID);
     }
+    filters.changed = true;
 }

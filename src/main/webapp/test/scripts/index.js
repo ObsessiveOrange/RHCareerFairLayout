@@ -37,7 +37,6 @@ $(document).ready(function() {
     }
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
-        alert("Switching Pages");
         if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
             prepareForPageSwitch();
         } else {
@@ -120,32 +119,37 @@ function setupPage() {
 
 function updateCompanyList() {
     var companyListBody = $("#companyListBody");
-    if (filters.changed) {
-        filteredCompanyIDs = [];
-        selectedCompanyIDs = [];
-        Object.keys(careerFairData.companies).forEach(function(companyID) {
-            var company = careerFairData.companies[companyID];
-            var showCompany = true;
-            Object.keys(filters).forEach(function(filterType) {
-                if (Array.isArray(filters[filterType])) {
-                    if (filters[filterType].length == 0) {
-                        return true;
-                    } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
-                        showCompany = false;
+    if (Object.keys(filters).length == 0) {
+        filteredCompanyIDs = Object.keys(careerFairData.companies);
+        selectedCompanyIDs = filteredCompanyIDs;
+    } else {
+        if (filters.changed) {
+            filteredCompanyIDs = [];
+            Object.keys(careerFairData.companies).forEach(function(companyID) {
+                var company = careerFairData.companies[companyID];
+                var showCompany = true;
+                Object.keys(filters).forEach(function(filterType) {
+                    if (Array.isArray(filters[filterType])) {
+                        if (filters[filterType].length == 0) {
+                            return true;
+                        } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
+                            showCompany = false;
+                        }
                     }
+                });
+                if (showCompany) {
+                    filteredCompanyIDs.addToOrderedSet(companyID);
                 }
             });
-            if (showCompany) {
-                filteredCompanyIDs.addToOrderedSet(companyID);
-            }
-        });
-        filters.changed = false;
-    } else {
-        filteredCompanyIDs = Object.keys(careerFairData.companies);
+            filters.changed = false;
+            selectedCompanyIDs = filteredCompanyIDs;
+        }
     }
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'></td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+    });
+    selectedCompanyIDs.forEach(function(companyID) {
         markCheckboxChecked(companyID);
     });
 }
