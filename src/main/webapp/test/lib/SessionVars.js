@@ -36,7 +36,5 @@
     }
     var LSsupport = !(typeof window.localStorage == 'undefined');
     var SSsupport = !(typeof window.sessionStorage == 'undefined');
-    if (LSsupport & amp; & amp; SSsupport) {
-        alert("localStorage: " + LSsupport + "; sessionStorage:" + SSsupport);
-    }
+    alert("localStorage: " + LSsupport + "; sessionStorage:" + SSsupport);
 })(window);
