@@ -36,19 +36,19 @@ $(document).ready(function() {
     }
     $("#selectionButtons").on('click', '.button', function(event) {
         switch ($(this).attr('data-btnAction')) {
-            case select:
+            case "select":
                 filteredCompanyIDs.forEach(function(id) {
                     if ($("#showOnMapCheckbox_" + id).html() == "☐") {
                         markCheckboxChecked(id);
                     }
                 })
                 break;
-            case invert:
+            case "invert":
                 filteredCompanyIDs.forEach(function(id) {
-                        toggleCheckbox(id);
+                    toggleCheckbox(id);
                 })
                 break;
-            case deselect:
+            case "deselect":
                 filteredCompanyIDs.forEach(function(id) {
                     if ($("#showOnMapCheckbox_" + id).html() == "☑") {
                         markCheckboxUnchecked(id);
