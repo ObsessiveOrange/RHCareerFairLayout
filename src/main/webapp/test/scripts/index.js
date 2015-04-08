@@ -352,7 +352,7 @@ function generateTableLocations() {
         //inner rows need to have walkway halfway through
         else {
             var leftTables = Math.floor((s2 - s2PathWidth) / 2);
-            var rightTables = s2 - 2 - leftTables;
+            var rightTables = s2 - s2PathWidth - leftTables;
             for (var j = 0; j < leftTables; j++) {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + j) * tableWidth),
