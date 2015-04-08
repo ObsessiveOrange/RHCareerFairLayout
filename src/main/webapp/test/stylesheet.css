@@ -77,7 +77,7 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-tr:last-child td, .tableLastRow td{
+tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight td{
     border-bottom: none;
 }
 .roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child, .roundTopLeft{
@@ -86,10 +86,10 @@ tr:last-child td, .tableLastRow td{
 .roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child, .roundTopRight{
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRow td:first-child, .roundBottomLeft{
+.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft{
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRow td:last-child, .roundBottomRight{
+.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight{
     border-bottom-right-radius: 10px;
 }
 

@@ -111,7 +111,7 @@ function showFilterGroup(groupID) {
     //
     //for last category, toggle the rounded corners.
     if (groupID == Object.keys(careerFairData.categories).length) {
-        $("#filtersListGroup" + groupID + "Row").removeClass("tableLastRow");
+        $("#filtersListGroup" + groupID + "Row").removeClass("tableLastRowRoundBottomLeft");
     }
 }
 //hides filter groups
@@ -125,7 +125,7 @@ function hideFilterGroup(groupID) {
     //
     //for last category, toggle the rounded corners.
     if (groupID == Object.keys(careerFairData.categories).length) {
-        $("#filtersListGroup" + groupID + "Row").addClass("tableLastRow");
+        $("#filtersListGroup" + groupID + "Row").addClass("tableLastRowRoundBottomLeft");
     }
 }
 //toggles the selected group
