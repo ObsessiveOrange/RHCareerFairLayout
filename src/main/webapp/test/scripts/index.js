@@ -361,7 +361,7 @@ function generateTableLocations() {
             }
             for (var j = 0; j < rightTables; j++) {
                 tableLocations.push({
-                    x: (10 * unitX) + ((1 + leftTables + 2 + j) * tableWidth),
+                    x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
                 });
             }
