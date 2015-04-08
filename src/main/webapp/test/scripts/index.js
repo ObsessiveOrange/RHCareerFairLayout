@@ -42,7 +42,7 @@ $(document).ready(function() {
         } else {
             SessionVars.clear();
         }
-        event.stopPropogation();
+        event.stopPropagation();
     });
     $("#selectionButtons").on('click', '.button', function(event) {
         switch ($(this).attr('data-btnAction')) {
@@ -121,7 +121,7 @@ function updateCompanyList() {
     var companyListBody = $("#companyListBody");
     if (Object.keys(filters).length == 0) {
         filteredCompanyIDs = Object.keys(careerFairData.companies);
-        selectedCompanyIDs = filteredCompanyIDs;
+        selectedCompanyIDs = filteredCompanyIDs.slice();
     } else {
         if (filters.changed) {
             filteredCompanyIDs = [];
@@ -142,7 +142,7 @@ function updateCompanyList() {
                 }
             });
             filters.changed = false;
-            selectedCompanyIDs = filteredCompanyIDs;
+            selectedCompanyIDs = filteredCompanyIDs.slice();
         }
     }
     filteredCompanyIDs.forEach(function(companyID) {
