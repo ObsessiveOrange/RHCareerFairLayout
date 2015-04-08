@@ -41,21 +41,22 @@ $(document).ready(function() {
                     if ($("#showOnMapCheckbox_" + id).html() == "☐") {
                         markCheckboxChecked(id);
                     }
-                })
+                });
                 break;
             case "invert":
                 filteredCompanyIDs.forEach(function(id) {
                     toggleCheckbox(id);
-                })
+                });
                 break;
             case "deselect":
                 filteredCompanyIDs.forEach(function(id) {
                     if ($("#showOnMapCheckbox_" + id).html() == "☑") {
                         markCheckboxUnchecked(id);
                     }
-                })
+                });
                 break;
         }
+        highlightTables("#0F0");
     });
 });
 //save data when link out of page clicked.
