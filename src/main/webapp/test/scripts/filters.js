@@ -18,7 +18,7 @@ $(document).ready(function() {
         } else {
             SessionVars.clear();
         }
-        event.stopPropogation();
+        event.stopPropagation();
     });
 });
 
