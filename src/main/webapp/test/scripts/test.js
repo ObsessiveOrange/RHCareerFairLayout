@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    alert(SessionVars.retreiveString("testKey"));
+    alert(PersistentStorage.retreiveString("testKey"));
 
-    SessionVars.clear();
+    PersistentStorage.clear();
 
 
 });
@@ -14,5 +14,5 @@ function exit(string){
 
     alert("Unloading from: " + string);
     alert("storing testKey:testValue");
-    SessionVars.storeString("testKey", "testValue");
+    PersistentStorage.storeString("testKey", "testValue");
 }

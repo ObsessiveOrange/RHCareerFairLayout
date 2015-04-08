@@ -1,3 +1,8 @@
+/**
+ * Javascript to get, process and display dynamic data for Career Fair Layout
+ *
+ * Creator: Benedict Wong, 2015
+ */
 var careerFairData;
 var companyList;
 var tableLocations;
@@ -9,6 +14,8 @@ var $mapCanvasHighlights;
 var scaling = 2;
 var clearCacheFlag;
 $(document).ready(function() {
+    //
+    //set size and width of canvas elements and containing div
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
     var $container = $("#canvasMapContainer");
@@ -17,36 +24,46 @@ $(document).ready(function() {
     $container.prop("height", containerHeight);
     $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
     $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
-    //try to retrieve data;
+    //
+    //try to retrieve data from persistent storage
     loadAfterPageSwitch();
+    //
     //if CareerFairData has not been loaded, or it's date is too long ago, reload it.
     if (!careerFairData || (new Date().getTime() - careerFairData.lastFetchTime) > 30 * 60 * 1000) {
+        //
         //if other variables have not been created/set, do it now.
-        if (!tableLocations || !highlightTables || !filteredCompanyIDs || !filters) {
+        if (!tableLocations || !selectedCompanyIDs || !filteredCompanyIDs || !filters) {
             tableLocations = [];
             selectedCompanyIDs = [];
             filteredCompanyIDs = [];
             filters = {};
         }
+        //
         //get careerFairData - calls setupPage();
         getNewData();
     }
+    //
     //else, if careerFairData has been loaded, just setup the page using cached data
     else {
         setupPage();
     }
+    //
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
         if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
             prepareForPageSwitch();
         } else {
-            SessionVars.clear();
+            PersistentStorage.clear();
         }
         event.stopPropagation();
     });
+    //
+    //handle bulk-selector buttons
     $("#selectionButtons").on('click', '.button', function(event) {
         switch ($(this).attr('data-btnAction')) {
             case "select":
+                //
+                //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIDs.forEach(function(id) {
                     if ($("#showOnMapCheckbox_" + id).html() == "☐") {
                         markCheckboxChecked(id);
@@ -54,11 +71,15 @@ $(document).ready(function() {
                 });
                 break;
             case "invert":
+                //
+                //just call toggleCheckbox; will automatically invert.
                 filteredCompanyIDs.forEach(function(id) {
                     toggleCheckbox(id);
                 });
                 break;
             case "deselect":
+                //
+                //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIDs.forEach(function(id) {
                     if ($("#showOnMapCheckbox_" + id).html() == "☑") {
                         markCheckboxUnchecked(id);
@@ -66,114 +87,187 @@ $(document).ready(function() {
                 });
                 break;
         }
+        //
+        //finally, remember to update the map
+        highlightTables();
     });
 });
-
+//
+//kinda a debug function for use while active development in progress
 function clearCache() {
     clearCache = true;
-    SessionVars.clear();
+    PersistentStorage.clear();
 }
-
+//
+//load data from persistent storage
 function loadAfterPageSwitch() {
-    careerFairData = SessionVars.retrieveObject("careerFairData");
-    tableLocations = SessionVars.retrieveObject("tableLocations");
-    selectedCompanyIDs = SessionVars.retrieveObject("selectedCompanyIDs");
-    filteredCompanyIDs = SessionVars.retrieveObject("filteredCompanyIDs");
-    filters = SessionVars.retrieveObject("filters");
+    careerFairData = PersistentStorage.retrieveObject("careerFairData");
+    tableLocations = PersistentStorage.retrieveObject("tableLocations");
+    selectedCompanyIDs = PersistentStorage.retrieveObject("selectedCompanyIDs");
+    filteredCompanyIDs = PersistentStorage.retrieveObject("filteredCompanyIDs");
+    filters = PersistentStorage.retrieveObject("filters");
 }
-
+//
+//save data to persistent storage
 function prepareForPageSwitch() {
-    SessionVars.storeObject("careerFairData", careerFairData);
-    SessionVars.storeObject("tableLocations", tableLocations);
-    SessionVars.storeObject("selectedCompanyIDs", selectedCompanyIDs);
-    SessionVars.storeObject("filteredCompanyIDs", filteredCompanyIDs);
-    SessionVars.storeObject("filters", filters);
+    PersistentStorage.storeObject("careerFairData", careerFairData);
+    PersistentStorage.storeObject("tableLocations", tableLocations);
+    PersistentStorage.storeObject("selectedCompanyIDs", selectedCompanyIDs);
+    PersistentStorage.storeObject("filteredCompanyIDs", filteredCompanyIDs);
+    PersistentStorage.storeObject("filters", filters);
 }
-//Get data from server, call first round of updates
+//
+//Get data from server, setup page
 function getNewData() {
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
+            //
+            //parse the data from JSON (may switch to JSONP eventually... how does that affect this?)
             careerFairData = $.parseJSON(data);
+            //
+            //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
             setupPage();
         }
     });
 }
-
+//
+//setup the page
 function setupPage() {
-    $("span.careerFairDescription").html(careerFairData.title);
+    //
+    //update the title
+    $("span#careerFairDescription").html(careerFairData.title);
+    //
+    //setup company list    
     updateCompanyList();
+    //
+    //Create options, generate List.js object for searching
     var options = {
         valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn']
     };
     companyList = new List('companyListContainer', options);
+    //
+    //sort list (may come unsorted due to it being transmitted as a map);
     companyList.sort('companyListCompanyColumn', {
         order: "asc"
     });
+    //
+    //setup the map for the first time
     generateTableLocations();
     drawTables($mapCanvasTables);
-    highlightTables("#0F0");
+    highlightTables();
 }
 
 function updateCompanyList() {
+    //
+    //cache the element we are appending to, so that it doesn't have to be created multiple times
     var companyListBody = $("#companyListBody");
-    if (Object.keys(filters).length == 0) {
+    //
+    //if no filters applied or only has "changed" flag, skip all the checks for performance reasons.
+    //will have either 0, 1, or n+1 elements, where n is the number of types of filters.
+    if (Object.keys(filters).length < 2) {
         filteredCompanyIDs = Object.keys(careerFairData.companies);
         selectedCompanyIDs = filteredCompanyIDs.slice();
-    } else {
+    }
+    //
+    //otherwise, make sure all companies conform to filters
+    else {
+        //
+        //Only recompute this if filters have changed. Otherwise, just use previous data
         if (filters.changed) {
+            //
+            //clear filteredCompanyIDs
             filteredCompanyIDs = [];
+            //
+            //Iterate through all the companies,
             Object.keys(careerFairData.companies).forEach(function(companyID) {
+                //
+                //get the actual company object,
                 var company = careerFairData.companies[companyID];
                 var showCompany = true;
+                //
+                //check if companies are in at least one of the filters in each type
                 Object.keys(filters).forEach(function(filterType) {
+                    //
+                    //ignore the changed flag - only do the ones that are arrays.
                     if (Array.isArray(filters[filterType])) {
+                        //
+                        //if the filter length is 0, no filters are applied in that type group - automatically true.
                         if (filters[filterType].length == 0) {
                             return true;
+                            //
+                            //else, make sure the intersection of the filters in the type group and the categories the company is in overlap 
+                            //otherwise, set it to false
                         } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
                             showCompany = false;
                         }
                     }
                 });
+                //
+                //if the company is valid in the context of all the filters, then add it to the filtered company list
                 if (showCompany) {
                     filteredCompanyIDs.addToOrderedSet(companyID);
                 }
             });
+            //
+            //reset the changed flag
             filters.changed = false;
+            //
+            //default behavior on filter change is to select all of the companies.
             selectedCompanyIDs = filteredCompanyIDs.slice();
         }
     }
+    //
+    //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
     });
+    //
+    //Check the ones that are in the list - if no filter change, will check previously selected entries only.
     selectedCompanyIDs.forEach(function(companyID) {
         markCheckboxChecked(companyID);
     });
 }
-
+//
+//select the checkbox for compnay with given id
 function markCheckboxChecked(id) {
+    //change icon to checked
     $("#showOnMapCheckbox_" + id).text("☑");
+    //add to set of selected companies
     selectedCompanyIDs.addToOrderedSet(id);
 }
-
+//
+//deselect the checkbox for compnay with given id
 function markCheckboxUnchecked(id) {
+    //change icon to unchecked
     $("#showOnMapCheckbox_" + id).text("☐");
+    //remove from set of selected companies
     selectedCompanyIDs.removeFromOrderedSet(id);
 }
-
+//
+//toggle the checkbox
 function toggleCheckbox(id) {
+    //
+    //toggle based on current text value
     if ($("#showOnMapCheckbox_" + id).html() == "☑") {
         markCheckboxUnchecked(id);
+        //
+        //highlight newly checked checkbox
         highlightTable(id, "#EEE");
     } else {
         markCheckboxChecked(id);
+        //
+        //un-highlight newly checked checkbox
         highlightTable(id, "#0F0");
     }
 }
+//
 //draw tables and table numbers
 function drawRect(tableNumber, x, y, width, height) {
+    //
+    //draw unfilled rectangle - fill is on bottom "highlights" layer
     $mapCanvasTables.drawLine({
         //    layer: true,
         strokeStyle: '#000',
@@ -189,8 +283,10 @@ function drawRect(tableNumber, x, y, width, height) {
         closed: true,
         //    click : function(layer) {
         //      alert("You clicked an area!");
-        //    } //Box and text both need to be a layer for this to work.
+        //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
     });
+    //
+    //draw tablenumber in box for easy reading.
     if (tableNumber != 0) {
         $mapCanvasTables.drawText({
             //      layer: true,
@@ -203,20 +299,32 @@ function drawRect(tableNumber, x, y, width, height) {
         });
     }
 }
+//
 //generate positions of all tables.
 function generateTableLocations() {
+    //
+    //reset tableLocations variable - may have changed
     tableLocations = [];
+    //
+    //count number of vertical and horizontal tables there are
     var hrzCount = careerFairData.layout.section2 + 2;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
+    //
+    //calculate width and height of tables based on width of the canvas
     unitX = $mapCanvasTables.prop("width") / 100;
+    //20% of space allocated to (vertical) walkways
     tableWidth = unitX * 80 / hrzCount;
     unitY = $mapCanvasTables.prop("width") / 2 / 100;
+    //30% of space allocated to registration and rest area.
     tableHeight = unitY * 70 / vrtCount;
+    //
+    //convenience assignments
     var s1 = careerFairData.layout.section1;
     var s2 = careerFairData.layout.section2;
     var s2Rows = careerFairData.layout.section2Rows;
     var s2PathWidth = careerFairData.layout.section2PathWidth;
     var s3 = careerFairData.layout.section3;
+    //
     // section 1
     for (var i = 0; i < s1; i++) {
         tableLocations.push({
@@ -224,10 +332,13 @@ function generateTableLocations() {
             y: 5 * unitY + i * tableHeight
         });
     }
+    //
     // section 2
     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+    //
     //rows
     for (var i = 0; i < s2Rows; i++) {
+        //
         //outer rows have no walkway
         if (i == 0 || i == s2Rows - 1) {
             for (var j = 0; j < s2; j++) {
@@ -237,6 +348,7 @@ function generateTableLocations() {
                 });
             }
         }
+        //
         //inner rows need to have walkway halfway through
         else {
             var leftTables = Math.floor((s2 - s2PathWidth) / 2);
@@ -255,6 +367,7 @@ function generateTableLocations() {
             }
         }
     }
+    //
     // section 3
     for (var i = 0; i < s3; i++) {
         tableLocations.push({
@@ -263,13 +376,17 @@ function generateTableLocations() {
         });
     }
 }
+//
 //draw actual tables, then draw registration and rest areas
 function drawTables($mapCanvasTables) {
+    //
+    //draw company tables based on generated locations
     for (var i = 0; i < tableLocations.length; i++) {
         var locationX = tableLocations[i].x;
         var locationY = tableLocations[i].y;
         drawRect(i + 1, locationX, locationY, tableWidth, tableHeight);
     }
+    //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
     $mapCanvasTables.drawText({
@@ -292,15 +409,19 @@ function drawTables($mapCanvasTables) {
         text: 'Registration'
     });
 }
-//Highlight tables in array
-function highlightTables(color) {
+//
+//Highlight all tables in selected companies array
+function highlightTables() {
     $mapCanvasHighlights.clearCanvas();
     selectedCompanyIDs.forEach(function(id) {
-        highlightTable(id, color);
+        highlightTable(id, "#0F0");
     });
 }
-
+//
+//highlight a specific table (used to minimize redrawing for toggling company selected)
 function highlightTable(id, color) {
+    //
+    //get the actual table we need to highlight, not the  company'sid.
     var table = careerFairData.companies[id].parameters.table
     var x = tableLocations[table - 1].x;
     var y = tableLocations[table - 1].y;
@@ -313,7 +434,8 @@ function highlightTable(id, color) {
         fromCenter: false
     });
 }
-
+//
+//send get request
 function sendGetRequest(requestObject) {
     $.ajax({
         url: requestObject.url,
@@ -323,7 +445,8 @@ function sendGetRequest(requestObject) {
         success: requestObject.successHandler
     });
 };
-
+//
+//send post request
 function sendPostRequest(requestObject) {
     $.ajax({
         url: requestObject.url,

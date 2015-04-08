@@ -5,32 +5,35 @@
         <script src="lib/jCanvas.min.js"></script>
         <script src="lib/underscore-min.js"></script>
         <script src="lib/List.min.js"></script>
-        <script src="lib/SessionVars.js"></script>
+        <script src="lib/PersistentStorage.js"></script>
         <script src="lib/ArrayExtensions.js"></script>
         <script src="scripts/index.js"></script>
         <link rel="stylesheet" href="stylesheet.css" />
         <meta charset=utf-8 />
+        <meta name="author" content="Benedict Wong" />
+        <meta name="created" content="2015" />
         <title>Rose Hulman Career Fair Layout</title>
         <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     </head>
     <body>
+        <!-- navigation bar -->
         <div class="navBarContainer">
             <img src="images/rhLogo.png" class="rhLogo" alt="RH Logo" />
-            <span class="careerFairDescription verticalAlignBottom">Career Fair Spring 2015</span>
+            <span class="verticalAlignBottom" id="careerFairDescription">Career Fair Spring 2015</span>
             <a href="filters.html"><img
             src="images/filterBtn.png" id="filterBtn" alt="Filter" /></a>
         </div>
+        <!-- canvases, one overlayed on another for easier updating -->
         <div class="canvasMapContainer" id="canvasMapContainer">
             <canvas id="mapCanvasTables" class="canvasMap" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
             <canvas id="mapCanvasHighlights" class="canvasMap" style="position: relative; top: 0; left: 0; z-index: 0; background-color: #EEE;"></canvas>
         </div>
+        <!-- company list, related search bars and buttons -->
         <div class="bodyContent">
             <div id="companyListContainer">
                 <input class="search searchBar" id="companySearchBar" placeholder="Search" /><br /><br />
                 <div id="selectionButtons"><div class="button center roundTopRight" data-btnAction="deselect">Deselect all</div><div class="button center" data-btnAction="invert">Invert all</div><div class="button center roundTopLeft" data-btnAction="select">Select all</div></div>
                 <table class="tableList roundTableTopLeft roundTableBottomLeft roundTableBottomRight" id="companyListTable">
-                    <!-- <thead><th id="companyListHighlightColumn">Show</th><th id="companyListCompanyColumn">Company Name</th>
-                    <th id="companyListTableColumn">Table Number</th><th id="companyListInfoColumn">Info</th></thead> -->
                     <tbody class="list" id="companyListBody">
                     </tbody>
                 </table>

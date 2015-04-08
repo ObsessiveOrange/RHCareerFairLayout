@@ -2,38 +2,38 @@
     //I recommend this
     'use strict';
 
-    function define_sessionVars() {
-        var SessionVars = {};
-        SessionVars.storeObject = function(key, object) {
+    function define_PersistentStorage() {
+        var PersistentStorage = {};
+        PersistentStorage.storeObject = function(key, object) {
             this.storeString(key, JSON.stringify(object));
         }
-        SessionVars.storeString = function(key, value) {
+        PersistentStorage.storeString = function(key, value) {
             window.localStorage.setItem(key, value);
         }
-        SessionVars.retrieveObject = function(key) {
+        PersistentStorage.retrieveObject = function(key) {
             return window.JSON.parse(this.retreiveString(key));
         }
-        SessionVars.retreiveString = function(key) {
+        PersistentStorage.retreiveString = function(key) {
             return window.localStorage.getItem(key);
         }
-        SessionVars.removeItem = function(key) {
+        PersistentStorage.removeItem = function(key) {
             return window.localStorage.removeItem(key);
         }
-        SessionVars.getKey = function(position) {
+        PersistentStorage.getKey = function(position) {
             return window.localStorage.key(position);
         }
-        SessionVars.clear = function() {
+        PersistentStorage.clear = function() {
             return window.localStorage.clear();
         }
-        SessionVars.length = function() {
+        PersistentStorage.length = function() {
             return window.localStorage.length;
         }
-        return SessionVars;
+        return PersistentStorage;
     }
     var LSsupport = !(typeof window.localStorage == 'undefined');
     var SSsupport = !(typeof window.sessionStorage == 'undefined');
     //define globally if it doesn't already exist
-    if (typeof(SessionVars) === 'undefined') {
-        window.SessionVars = define_sessionVars();
+    if (typeof(PersistentStorage) === 'undefined') {
+        window.PersistentStorage = define_PersistentStorage();
     }
 })(window);

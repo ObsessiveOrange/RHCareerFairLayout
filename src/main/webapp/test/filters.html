@@ -3,24 +3,26 @@
     <head>
         <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
         <script src="lib/List.min.js"></script>
-        <script src="lib/SessionVars.js"></script>
+        <script src="lib/PersistentStorage.js"></script>
         <script src="lib/ArrayExtensions.js"></script>
         <script src="scripts/filters.js"></script>
         <link rel="stylesheet" href="stylesheet.css" />
         <meta charset=utf-8 />
+        <meta name="author" content="Benedict Wong" />
+        <meta name="created" content="2015" />
         <title>Rose Hulman Career Fair Layout - Filters</title>
         <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     </head>
     <body>
+        <!-- navigation bar -->
         <div class="navBarContainer">
             <a href="index.html"><img src="images/backBtn.png" id="backBtn" alt="Back to Map page" /></a><img src="images/rhLogo.png" class="rhLogo" alt="RH Logo" />
-            <span class="careerFairDescription verticalAlignBottom">Career Fair Spring 2015 - Filters</span>
+            <span class="verticalAlignBottom" id="careerFairDescription">Career Fair Spring 2015 - Filters</span>
         </div>
+        <!-- company list, and related buttons -->
         <div class="bodyContent">
             <div id="filtersListContainer">
                 <table class="tableList roundTableTopLeft roundTableTopRight roundTableBottomLeft" id="filtersListTable">
-                    <!-- <thead><th id="companyListHighlightColumn">Show</th><th id="companyListCompanyColumn">Company Name</th>
-                    <th id="companyListTableColumn">Table Number</th><th id="companyListInfoColumn">Info</th></thead> -->
                     <tbody class="list" id="filtersListBody">
                     </tbody>
                 </table>
