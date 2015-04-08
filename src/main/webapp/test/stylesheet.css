@@ -170,11 +170,12 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     bottom:0;
     left:40px;
     width: calc(100% - 120px);
-    text-align: center;
     padding: 10px 20px 5px 20px;
     background-color: #800000;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    text-align: center;
+    font-size: 16px;
     color: #FFF;
  }
 
