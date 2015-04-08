@@ -1,7 +1,7 @@
 var careerFairData;
 var companyList;
 var tableLocations;
-var highlightedTables
+var selectedCompanyIDs
 var filteredCompanyIDs = [];
 var filters;
 var $mapCanvasTables;
@@ -24,7 +24,7 @@ $(document).ready(function() {
         //if other variables have not been created/set, do it now.
         if (!tableLocations || !highlightTables || !filteredCompanyIDs || !filters) {
             tableLocations = [];
-            highlightedTables = [];
+            selectedCompanyIDs = [];
             filteredCompanyIDs = [];
             filters = {};
         }
@@ -78,7 +78,7 @@ function clearCache() {
 function loadAfterPageSwitch() {
     careerFairData = SessionVars.retrieveObject("careerFairData");
     tableLocations = SessionVars.retrieveObject("tableLocations");
-    highlightedTables = SessionVars.retrieveObject("highlightedTables");
+    selectedCompanyIDs = SessionVars.retrieveObject("selectedCompanyIDs");
     filteredCompanyIDs = SessionVars.retrieveObject("filteredCompanyIDs");
     filters = SessionVars.retrieveObject("filters");
 }
@@ -86,7 +86,7 @@ function loadAfterPageSwitch() {
 function prepareForPageSwitch() {
     SessionVars.storeObject("careerFairData", careerFairData);
     SessionVars.storeObject("tableLocations", tableLocations);
-    SessionVars.storeObject("highlightedTables", highlightedTables);
+    SessionVars.storeObject("selectedCompanyIDs", selectedCompanyIDs);
     SessionVars.storeObject("filteredCompanyIDs", filteredCompanyIDs);
     SessionVars.storeObject("filters", filters);
 }
@@ -121,7 +121,7 @@ function updateCompanyList() {
     var companyListBody = $("#companyListBody");
     if (filters.changed) {
         filteredCompanyIDs = [];
-        highlightedTables = [];
+        selectedCompanyIDs = [];
         Object.keys(careerFairData.companies).forEach(function(companyID) {
             var company = careerFairData.companies[companyID];
             var showCompany = true;
@@ -151,21 +151,21 @@ function updateCompanyList() {
 
 function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");
-    highlightedTables.addToOrderedSet(careerFairData.companies[id]);
+    selectedCompanyIDs.addToOrderedSet(id);
 }
 
 function markCheckboxUnchecked(id) {
     $("#showOnMapCheckbox_" + id).text("☐");
-    highlightedTables.removeFromOrderedSet(careerFairData.companies[id]);
+    selectedCompanyIDs.removeFromOrderedSet(id);
 }
 
 function toggleCheckbox(id) {
     if ($("#showOnMapCheckbox_" + id).html() == "☑") {
         markCheckboxUnchecked(id);
-        highlightTable(careerFairData.companies[id].parameters.table, "#EEE");
+        highlightTable(id, "#EEE");
     } else {
         markCheckboxChecked(id);
-        highlightTable(careerFairData.companies[id].parameters.table, "#0F0");
+        highlightTable(id, "#0F0");
     }
 }
 //draw tables and table numbers
@@ -291,7 +291,7 @@ function drawTables($mapCanvasTables) {
 //Highlight tables in array
 function highlightTables(color) {
     $mapCanvasHighlights.clearCanvas();
-    highlightedTables.forEach(function(id) {
+    selectedCompanyIDs.forEach(function(id) {
         highlightTable(careerFairData.companies[id].parameters.table, color);
     });
 }
