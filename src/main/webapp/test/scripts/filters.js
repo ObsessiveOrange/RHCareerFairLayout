@@ -1,6 +1,6 @@
 var careerFairData;
 var filters;
-var clearCache;
+var clearCacheFlag;
 $(document).ready(function() {
     loadAfterPageSwitch();
 
@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
-        if (typeof clearCache === 'undefined' || !clearCache) {
+        if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
             prepareForPageSwitch();
         } else {
             SessionVars.clear();

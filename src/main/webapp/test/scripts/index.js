@@ -7,7 +7,7 @@ var filters;
 var $mapCanvasTables;
 var $mapCanvasHighlights;
 var scaling = 2;
-var clearCache;
+var clearCacheFlag;
 $(document).ready(function() {
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
@@ -38,7 +38,7 @@ $(document).ready(function() {
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
         alert("Switching Pages");
-        if (typeof clearCache === 'undefined' || !clearCache) {
+        if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
             prepareForPageSwitch();
         } else {
             SessionVars.clear();
