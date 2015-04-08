@@ -18,7 +18,7 @@ $(document).ready(function() {
     }
     //
     //update name in navigation bar
-    $("span#careerFairDescription").html(careerFairData.title + " - filters");
+    $("span#careerFairDescription").html(careerFairData.title + " - Filters");
     //
     //create the filters list
     createFilterList();
