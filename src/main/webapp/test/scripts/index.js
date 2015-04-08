@@ -37,6 +37,7 @@ $(document).ready(function() {
     }
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
+        alert("Switching Pages");
         if (typeof clearCache === 'undefined' || !clearCache) {
             prepareForPageSwitch();
         } else {
