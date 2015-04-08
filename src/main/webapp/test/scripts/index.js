@@ -219,8 +219,8 @@ function updateCompanyList() {
     filteredCompanyIDs.sort(function(a, b) {
         var o1 = careerFairData.companies[a].title.toLowerCase();
         var o2 = careerFairData.companies[b].title.toLowerCase();
-        var p1 = careerFairData.companies[a].parameters.table;
-        var p2 = careerFairData.companies[b].parameters.table;
+        var p1 = Number(careerFairData.companies[a].parameters.table);
+        var p2 = Number(careerFairData.companies[b].parameters.table);
         if (o1 < o2) return -1;
         if (o1 > o2) return 1;
         if (p1 < p2) return -1;
