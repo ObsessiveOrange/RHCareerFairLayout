@@ -60,7 +60,8 @@ html, body {
     float:right;
     border-left: solid 1px #CCC;
     border-bottom: solid 1px #CCC;
-    padding: 25px 25px;
+    padding: 10px 10px;
+    width: 175px;
     cursor: pointer;
     background-color: #EEE;
     color:#000;
