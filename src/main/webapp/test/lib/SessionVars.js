@@ -8,30 +8,35 @@
             this.storeString(key, JSON.stringify(object));
         }
         SessionVars.storeString = function(key, value) {
-            localStorage.setItem(key, value);
+            window.localStorage.setItem(key, value);
         }
         SessionVars.retrieveObject = function(key) {
-            return JSON.parse(localStorage.getItem(key));
+            return window.JSON.parse(retreiveString(key));
         }
         SessionVars.retreiveString = function(key) {
-            return localStorage.getItem(key);
+            return window.localStorage.getItem(key);
         }
         SessionVars.removeItem = function(key) {
-            return localStorage.removeItem(key);
+            return window.localStorage.removeItem(key);
         }
         SessionVars.getKey = function(position) {
-            return localStorage.key(position);
+            return window.localStorage.key(position);
         }
         SessionVars.clear = function() {
-            return localStorage.clear();
+            return window.localStorage.clear();
         }
         SessionVars.length = function() {
-            return localStorage.length;
+            return window.localStorage.length;
         }
         return SessionVars;
     }
     //define globally if it doesn't already exist
     if (typeof(SessionVars) === 'undefined') {
         window.SessionVars = define_sessionVars();
+    }
+    var LSsupport = !(typeof window.localStorage == 'undefined');
+    var SSsupport = !(typeof window.sessionStorage == 'undefined');
+    if (LSsupport & amp; & amp; SSsupport) {
+        alert("localStorage: " + LSsupport + "; sessionStorage:" + SSsupport);
     }
 })(window);
