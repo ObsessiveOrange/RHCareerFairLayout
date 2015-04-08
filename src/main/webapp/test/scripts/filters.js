@@ -1,5 +1,6 @@
 var careerFairData;
 var filters;
+var clearCache;
 $(document).ready(function() {
     loadAfterPageSwitch();
 
@@ -9,15 +10,20 @@ $(document).ready(function() {
     }
 
     createFilterList();
+
+    //save data when link out of page clicked.
+    $("#filterBtn").on("click", function(event) {
+        if (typeof clearCache === 'undefined' || !clearCache) {
+            prepareForPageSwitch();
+        } else {
+            SessionVars.clear();
+        }
+        event.stopPropogation();
+    });
 });
-//save data when link out of page clicked.
-var clearCache;
-window.onbeforeunload = function(event) {
-    if (typeof clearCache === 'undefined' || !clearCache) {
-        prepareForPageSwitch();
-    } else {
-        SessionVars.clear();
-    }
+
+function clearCache() {
+    clearCache = true;
 }
 
 

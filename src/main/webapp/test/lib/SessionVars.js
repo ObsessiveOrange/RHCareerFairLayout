@@ -30,11 +30,10 @@
         }
         return SessionVars;
     }
+    var LSsupport = !(typeof window.localStorage == 'undefined');
+    var SSsupport = !(typeof window.sessionStorage == 'undefined');
     //define globally if it doesn't already exist
     if (typeof(SessionVars) === 'undefined') {
         window.SessionVars = define_sessionVars();
     }
-    var LSsupport = !(typeof window.localStorage == 'undefined');
-    var SSsupport = !(typeof window.sessionStorage == 'undefined');
-    alert("localStorage: " + LSsupport + "; sessionStorage: " + SSsupport);
 })(window);

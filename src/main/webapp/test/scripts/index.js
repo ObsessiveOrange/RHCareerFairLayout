@@ -7,6 +7,7 @@ var filters;
 var $mapCanvasTables;
 var $mapCanvasHighlights;
 var scaling = 2;
+var clearCache;
 $(document).ready(function() {
     $mapCanvasTables = $("#mapCanvasTables");
     $mapCanvasHighlights = $("#mapCanvasHighlights");
@@ -34,6 +35,15 @@ $(document).ready(function() {
     else {
         setupPage();
     }
+    //save data when link out of page clicked.
+    $("#filterBtn").on("click", function(event) {
+        if (typeof clearCache === 'undefined' || !clearCache) {
+            prepareForPageSwitch();
+        } else {
+            SessionVars.clear();
+        }
+        event.stopPropogation();
+    });
     $("#selectionButtons").on('click', '.button', function(event) {
         switch ($(this).attr('data-btnAction')) {
             case "select":
@@ -59,14 +69,9 @@ $(document).ready(function() {
         highlightTables("#0F0");
     });
 });
-//save data when link out of page clicked.
-var clearCache;
-window.onbeforeunload = function(event) {
-    if (typeof clearCache === 'undefined' || !clearCache) {
-        prepareForPageSwitch();
-    } else {
-        SessionVars.clear();
-    }
+
+function clearCache() {
+    clearCache = true;
 }
 
 function loadAfterPageSwitch() {
