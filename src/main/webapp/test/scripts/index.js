@@ -149,11 +149,6 @@ function setupPage() {
     };
     companyList = new List('companyListContainer', options);
     //
-    //sort list (may come unsorted due to it being transmitted as a map);
-    companyList.sort('companyListCompanyColumn', {
-        order: "asc"
-    });
-    //
     //setup the map for the first time
     generateTableLocations();
     drawTables($mapCanvasTables);
@@ -219,6 +214,19 @@ function updateCompanyList() {
             selectedCompanyIDs = filteredCompanyIDs.slice();
         }
     }
+    //
+    //sort filteredCompanyIDs before creating the array
+    filteredCompanyIDs.sort(function(a, b) {
+        var o1 = careerFairData.companies[a].title.toLowerCase();
+        var o2 = careerFairData.companies[b].title.toLowerCase();
+        var p1 = careerFairData.companies[a].parameters.table;
+        var p2 = careerFairData.companies[b].parameters.table;
+        if (o1 < o2) return -1;
+        if (o1 > o2) return 1;
+        if (p1 < p2) return -1;
+        if (p1 > p2) return 1;
+        return 0;
+    });
     //
     //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIDs.forEach(function(companyID) {
