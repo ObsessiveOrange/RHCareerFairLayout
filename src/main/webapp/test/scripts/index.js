@@ -73,6 +73,7 @@ $(document).ready(function() {
 
 function clearCache() {
     clearCache = true;
+    SessionVars.clear();
 }
 
 function loadAfterPageSwitch() {
@@ -292,7 +293,7 @@ function drawTables($mapCanvasTables) {
 function highlightTables(color) {
     $mapCanvasHighlights.clearCanvas();
     selectedCompanyIDs.forEach(function(id) {
-        highlightTable(careerFairData.companies[id].parameters.table, color);
+        highlightTable(id, color);
     });
 }
 

@@ -24,6 +24,7 @@ $(document).ready(function() {
 
 function clearCache() {
     clearCache = true;
+    SessionVars.clear();
 }
 
 
