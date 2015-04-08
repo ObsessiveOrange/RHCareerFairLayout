@@ -12,7 +12,7 @@ $(document).ready(function() {
     createFilterList();
 
     //save data when link out of page clicked.
-    $("#filterBtn").on("click", function(event) {
+    $("#backBtn").on("click", function(event) {
         if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
             prepareForPageSwitch();
         } else {
