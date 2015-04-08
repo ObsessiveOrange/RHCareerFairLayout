@@ -3,22 +3,27 @@ var filters;
 var clearCacheFlag;
 $(document).ready(function() {
     loadAfterPageSwitch();
-
-    if(!careerFairData || !filters){
+    if (!careerFairData || !filters) {
         window.location = "index.html";
         return;
     }
-
     createFilterList();
-
-    //save data when link out of page clicked.
-    $("#backBtn").on("click", function(event) {
-        if (typeof clearCacheFlag === 'undefined' || !clearCacheFlag) {
-            prepareForPageSwitch();
-        } else {
-            SessionVars.clear();
+    $("#filterButtons").on('click', '.button', function(event) {
+        switch ($(this).attr('data-btnAction')) {
+            case "cancel":
+                window.location = "index.html";
+                break;
+            case "clear":
+                filters = {
+                    changed: true
+                }
+                break;
+            case "apply":
+                prepareForPageSwitch();
+                window.location = "index.html";
+                break;
         }
-        event.stopPropagation();
+        highlightTables("#0F0");
     });
 });
 
@@ -26,7 +31,6 @@ function clearCache() {
     clearCache = true;
     SessionVars.clear();
 }
-
 
 function loadAfterPageSwitch() {
     careerFairData = SessionVars.retrieveObject("careerFairData");
@@ -69,7 +73,7 @@ function createFilterList() {
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
             filterID = Number(filterID);
             $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element'><td class='center filtersListSelectColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")' id='selectFilterCheckbox_" + filterID + "'>☐</td><td class='filtersListFilterColumn' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
-            if(filters[filterGroup].indexOf(filterID) != -1){
+            if (filters[filterGroup].indexOf(filterID) != -1) {
                 markCheckboxChecked(filterGroup, filterID);
             }
         });
