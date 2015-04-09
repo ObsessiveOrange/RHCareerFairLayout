@@ -14,7 +14,7 @@ import managers.AuthManager;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(urlPatterns = "/api/users/*")
+@WebServlet(urlPatterns = { "/api/users/*" })
 @ServletSecurity(value = @HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 public class UsersServlet extends HttpServlet {
     
