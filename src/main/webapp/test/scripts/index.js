@@ -129,7 +129,6 @@ function getNewData() {
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
             setupPage();
-            $("#tutorialShading").css("height", $("body").height());
         }
     });
 }
@@ -154,6 +153,12 @@ function setupPage() {
     generateTableLocations();
     drawTables($mapCanvasTables);
     highlightTables();
+    $("#tutorialShading").css("height", $("body").height());
+    var $tutorial = $("#tutorial");
+    $tutorial.css("height", $("body").height());
+    $tutorial.prop("width", $tutorial.width());
+    $tutorial.prop("height", $tutorial.height());
+    drawTutorial();
 }
 
 function updateCompanyList() {
@@ -272,6 +277,21 @@ function toggleCheckbox(id) {
         //un-highlight newly checked checkbox
         highlightTable(id, "#0F0");
     }
+}
+//
+//draw tutorial page
+function drawTutorial() {
+    var $canvas = $("#tutorial");
+    $canvas.drawArc({
+        strokeStyle: '#F00',
+        strokeWidth: 5,
+        x: $("#filterBtn").parent().offset().left - $("body").offset().left,
+        y: $("#filterBtn").parent().offset().top - $("body").offset().top,
+        radius: 50,
+        // start and end angles in degrees
+        start: 0,
+        end: 90
+    });
 }
 //
 //draw tables and table numbers
