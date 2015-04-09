@@ -3,6 +3,10 @@ package servlets.admin;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
+import javax.servlet.annotation.ServletSecurity.TransportGuarantee;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +20,8 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
+@WebServlet(urlPatterns = "/api/users/")
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 public class AdminServlet extends HttpServlet {
     
     /**
