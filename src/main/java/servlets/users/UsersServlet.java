@@ -2,9 +2,6 @@ package servlets.users;
 
 import java.io.IOException;
 
-import javax.servlet.annotation.HttpConstraint;
-import javax.servlet.annotation.ServletSecurity;
-import javax.servlet.annotation.ServletSecurity.TransportGuarantee;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +11,7 @@ import managers.AuthManager;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(urlPatterns = { "/api/users/*" })
-@ServletSecurity(value = @HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
+@WebServlet(name = "UsersServlet", urlPatterns = { "/api/users/*" })
 public class UsersServlet extends HttpServlet {
     
     /**
