@@ -292,23 +292,21 @@ function drawTutorial() {
         start: 90,
         end: 135
     });
-    $mapCanvasTables.drawLine({
-        //    layer: true,
-        strokeStyle: '#000',
-        strokeWidth: scaling,
+    $canvas.drawLine({
+        strokeStyle: '#00F',
+        strokeWidth: 5,
         x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 50,
-        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 100
+        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 25,
+        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
     });
-    $mapCanvasTables.drawLine({
-        //    layer: true,
-        strokeStyle: '#000',
-        strokeWidth: scaling,
+    $canvas.drawLine({
+        strokeStyle: '#00F',
+        strokeWidth: 5,
         x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 50,
-        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 100
+        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 25,
+        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
     });
     $canvas.drawEllipse({
         strokeStyle: '#F00',
