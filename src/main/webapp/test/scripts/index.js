@@ -283,14 +283,40 @@ function toggleCheckbox(id) {
 function drawTutorial() {
     var $canvas = $("#tutorial");
     $canvas.drawArc({
-        strokeStyle: '#F00',
+        strokeStyle: '#00F',
         strokeWidth: 5,
-        x: $("#filterBtn").parent().offset().left - $("body").offset().left,
-        y: $("#filterBtn").parent().offset().top - $("body").offset().top,
-        radius: 50,
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
+        radius: 200,
         // start and end angles in degrees
-        start: 0,
-        end: 90
+        start: 90,
+        end: 135
+    });
+    $mapCanvasTables.drawLine({
+        //    layer: true,
+        strokeStyle: '#000',
+        strokeWidth: scaling,
+        x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
+        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 50,
+        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 100
+    });
+    $mapCanvasTables.drawLine({
+        //    layer: true,
+        strokeStyle: '#000',
+        strokeWidth: scaling,
+        x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
+        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 50,
+        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 100
+    });
+    $canvas.drawEllipse({
+        strokeStyle: '#F00',
+        strokeWidth: 2,
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
+        width: 100,
+        height: 100
     });
 }
 //
