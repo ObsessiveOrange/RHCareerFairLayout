@@ -47,8 +47,6 @@ $(document).ready(function() {
     else {
         setupPage();
     }
-
-    $("#tutorialShading").css("height", $("body").height());
     //
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
@@ -131,6 +129,7 @@ function getNewData() {
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
             setupPage();
+            $("#tutorialShading").css("height", $("body").height());
         }
     });
 }
