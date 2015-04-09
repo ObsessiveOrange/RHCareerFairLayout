@@ -47,6 +47,8 @@ $(document).ready(function() {
     else {
         setupPage();
     }
+
+    #("tutorial").css("height", $(body).height());
     //
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
