@@ -17,7 +17,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(name = "AdminServlet", urlPatterns = { "/api/users/*" })
+@WebServlet(name = "AdminServlet", urlPatterns = { "/api/users" })
 public class AdminServlet extends HttpServlet {
     
     /**

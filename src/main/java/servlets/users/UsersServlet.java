@@ -11,7 +11,7 @@ import managers.AuthManager;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(name = "UsersServlet", urlPatterns = { "/api/users/*" })
+@WebServlet(name = "UsersServlet", urlPatterns = { "/api/users" })
 public class UsersServlet extends HttpServlet {
     
     /**
