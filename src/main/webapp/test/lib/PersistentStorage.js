@@ -8,25 +8,25 @@
             this.storeString(key, JSON.stringify(object));
         }
         PersistentStorage.storeString = function(key, value) {
-            window.localStorage.setItem(key, value);
+            window.sessionStorage.setItem(key, value);
         }
         PersistentStorage.retrieveObject = function(key) {
             return window.JSON.parse(this.retreiveString(key));
         }
         PersistentStorage.retreiveString = function(key) {
-            return window.localStorage.getItem(key);
+            return window.sessionStorage.getItem(key);
         }
         PersistentStorage.removeItem = function(key) {
-            return window.localStorage.removeItem(key);
+            return window.sessionStorage.removeItem(key);
         }
         PersistentStorage.getKey = function(position) {
-            return window.localStorage.key(position);
+            return window.sessionStorage.key(position);
         }
         PersistentStorage.clear = function() {
-            return window.localStorage.clear();
+            return window.sessionStorage.clear();
         }
         PersistentStorage.length = function() {
-            return window.localStorage.length;
+            return window.sessionStorage.length;
         }
         return PersistentStorage;
     }
