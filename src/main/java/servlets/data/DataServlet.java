@@ -22,7 +22,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(urlPatterns = { "/api/data/*" })
+@WebServlet(name = "DataServlet", urlPatterns = { "/api/data/*" })
 @ServletSecurity(value = @HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 public class DataServlet extends HttpServlet {
     
