@@ -31,9 +31,6 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
 
-    <Valve className="org.apache.catalina.valves.RemoteIpValve"
-       protocolHeader="x-forwarded-proto"></Valve>
-
     <Resource name="jdbc/MySQLDS"
               url="jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME}"
               driverClassName="com.mysql.jdbc.Driver"
