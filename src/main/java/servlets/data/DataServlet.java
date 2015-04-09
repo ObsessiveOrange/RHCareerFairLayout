@@ -19,7 +19,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet(name = "DataServlet", urlPatterns = { "/api/data" })
+@WebServlet("/api/data")
 public class DataServlet extends HttpServlet {
     
     /**
