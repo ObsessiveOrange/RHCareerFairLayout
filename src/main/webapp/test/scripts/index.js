@@ -48,7 +48,7 @@ $(document).ready(function() {
         setupPage();
     }
 
-    #("tutorialShading").css("height", $("body").height());
+    $("#tutorialShading").css("height", $("body").height());
     //
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
