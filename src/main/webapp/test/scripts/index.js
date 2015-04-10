@@ -299,7 +299,11 @@ function drawTutorial() {
         y: 0,
         width: $canvas.width(),
         height: $canvas.height(),
-        fromCenter: false
+        fromCenter: false,
+        click: function(){
+            var top = $("#canvasMapContainer").offset().top;
+            $("html, body").animate({ scrollTop: top }, 1000);
+        }
     })
     $canvas.restoreCanvas();
     $canvas.drawArc({
