@@ -2,13 +2,12 @@ var $canvas;
 var page;
 var slideCounter;
 var top;
-var left;
 
 function initTutorials(currentPage) {
     $canvas = $("#tutorial");
     page = currentPage;
     slideCounter = 0;
-    lockScrolling();
+    lockScrolling($(window).scrollTop());
     hideScrollbars();
     $canvas.prop("width", $canvas.width());
     $canvas.prop("height", $canvas.height());
@@ -37,11 +36,9 @@ function endTutorial() {
     showScrollbars();
 }
 
-function lockScrolling() {
-    top = $(window).scrollTop();
-    left = $(window).scrollLeft();
+function lockScrolling(top) {
     $(window).on("scroll touchmove mousewheel", function() {
-        $(this).scrollTop(top).scrollLeft(left);
+        $(this).scrollTop(top);
     });
 }
 
@@ -184,14 +181,12 @@ var tutorialObjects = {
     //draw tutorial page
     drawMainTutorialSlide2: function() {
         unlockScrolling();
-        top = $("#canvasMapContainer").offset().top;
-        left = $("#canvasMapContainer").offset().left;
         $('html, body').animate({
             scrollTop: $("#canvasMapContainer").offset().top
         }, 1000);
         setTimeout(function() {
-            lockScrolling()
-        }, 1500);
+            lockScrolling($("#canvasMapContainer").offset().top)
+        }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
