@@ -247,7 +247,7 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
-            y: $("#mapTables").position().top + $("#mapTables").height() / 2,
+            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height()/2),
             width: 500,
             height: 100,
             cornerRadius: 10
@@ -255,7 +255,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
-            y: $("#mapTables").position().top + $("#mapTables").height() / 2,
+            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height()/2),
             text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
             fontSize: '20pt',
             fontStyle: 'bold',
