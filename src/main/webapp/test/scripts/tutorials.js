@@ -261,7 +261,7 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-    }
+    },
     //
     //draw tutorial page
     drawMainTutorialSlide3: function() {
