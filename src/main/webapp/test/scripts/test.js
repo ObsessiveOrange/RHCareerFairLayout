@@ -3,6 +3,8 @@ $(document).ready(function() {
     $tutorial.prop("width", $tutorial.width());
     $tutorial.prop("height", $tutorial.height());
     drawTutorial();
+    lockScrolling();
+    setTimeout(function(){unlockScrolling()}, 5000);
 });
 //
 //draw tutorial page
@@ -32,4 +34,21 @@ function drawTutorial() {
         fromCenter: false
     })
     $canvas.restoreCanvas();
+}
+
+var top;
+var left;
+
+function lockScrolling() {
+    top = $(window).scrollTop();
+    left = $(window).scrollLeft();
+    $('body').css('overflow', 'hidden');
+    $(window).scroll(function() {
+        $(this).scrollTop(top).scrollLeft(left);
+    });
+}
+
+function unlockScrolling() {
+    $('body').css('overflow', 'auto');
+    $(window).off('scroll');
 }
