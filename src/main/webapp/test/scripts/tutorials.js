@@ -50,9 +50,9 @@ function hideScrollbars() {
 }
 
 function unlockScrolling() {
-    $(window).off('scroll');
-    $(window).off('touchmove');
-    $(window).off('mousewheel');
+    $(window).unbind('scroll');
+    $(window).unbind('touchmove');
+    $(window).unbind('mousewheel');
 }
 
 function showScrollbars() {
@@ -186,7 +186,9 @@ var tutorialObjects = {
         unlockScrolling();
         top = $("#canvasMapContainer").offset().top;
         left = $("#canvasMapContainer").offset().left;
-        lockScrolling();
+        setTimeout(function() {
+            lockScrolling()
+        }, 1000);
         $('html, body').animate({
             scrollTop: $("#canvasMapContainer").offset().top
         }, 1000);
