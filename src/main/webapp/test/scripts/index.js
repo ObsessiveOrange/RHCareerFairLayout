@@ -290,7 +290,7 @@ function drawTutorial() {
         radius: 200,
         // start and end angles in degrees
         start: 90,
-        end: 135
+        end: 135,
     });
     $canvas.drawLine({
         strokeStyle: '#0AF',
@@ -309,7 +309,7 @@ function drawTutorial() {
         x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
         width: 100,
-        height: 100
+        height: 100,
     });
     $canvas.drawText({
         fillStyle: '#0AF',
@@ -319,7 +319,7 @@ function drawTutorial() {
         respectAlign: true,
         text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
         fontSize: '20pt',
-        fontStyle: 'bold'
+        fontStyle: 'bold',
         fontFamily: 'Verdana, sans-serif',
     });
 }
