@@ -313,14 +313,14 @@ var tutorialObjects = {
             x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
             y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
             width: 500,
-            height: 100,
+            height: 80,
             cornerRadius: 10
         });
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
             y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
-            text: "This is the search bar.\nType a company name or table number to search.",
+            text: "This is the search bar.\nType a company name or\ntable number to search.",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
