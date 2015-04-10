@@ -93,7 +93,8 @@ var tutorialObjects = {
             height: $canvas.height(),
             holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
             holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
-            holeRadius: 50,
+            holeWidth: 100,
+            holeHeight: 100,
             fromCenter: false,
             holeFromCenter: true,
             mask: true
@@ -186,6 +187,7 @@ var tutorialObjects = {
             width: $("#canvasMapContainer").width(),
             height: $("#canvasMapContainer").height(),
             cornerRadius: 10
+            fromCenter: false,
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
