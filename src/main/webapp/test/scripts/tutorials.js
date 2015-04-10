@@ -205,7 +205,7 @@ var tutorialObjects = {
         $('html, body').animate({
             scrollTop: $("#mapContainer").offset().top
         }, 1000);
-        timeoutEvent = 41setTimeout(function() {
+        timeoutEvent = setTimeout(function() {
             lockScrolling($("#mapContainer").offset().top)
         }, 1000);
         $canvas.drawInvertedRectangle({
