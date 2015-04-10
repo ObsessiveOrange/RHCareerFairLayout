@@ -7,7 +7,6 @@ function initTutorials(currentPage) {
     $canvas = $("#tutorial");
     page = currentPage;
     slideCounter = 0;
-    lockScrolling($(window).scrollTop());
     hideScrollbars();
     $canvas.prop("width", $canvas.width());
     $canvas.prop("height", $canvas.height());
@@ -62,7 +61,7 @@ var tutorialObjects = {
             scrollTop: $("#navBarContainer").offset().top
         }, 1000);
         setTimeout(function() {
-            lockScrolling($("#mapContainer").offset().top)
+            lockScrolling($("#navBarContainer").offset().top);
         }, 1000);
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.75)',
