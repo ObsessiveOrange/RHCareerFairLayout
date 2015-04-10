@@ -61,7 +61,6 @@ var tutorialObjects = {
             height: $canvas.height(),
             fromCenter: false
         });
-        alert($canvas.width() + " x " + $canvas.height());
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $(window).width() / 2,
