@@ -157,7 +157,7 @@ function setupPage() {
     $tutorial.css("height", $("body").height());
     $tutorial.prop("width", $tutorial.width());
     $tutorial.prop("height", $tutorial.height());
-    drawTutorial();
+    initTutorials("Main");
 }
 
 function updateCompanyList() {
@@ -276,76 +276,6 @@ function toggleCheckbox(id) {
         //un-highlight newly checked checkbox
         highlightTable(id, "#0F0");
     }
-}
-//
-//draw tutorial page
-function drawTutorial() {
-    var $canvas = $("#tutorial");
-    $canvas.drawInverted({
-        x: 0,
-        y: 0,
-        width: $canvas.width(),
-        height: $canvas.height(),
-        holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-        holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
-        holeRadius: 50,
-        fromCenter: false,
-        mask: true
-    });
-    // This shape is being masked
-    $canvas.drawRect({
-        fillStyle: 'rgba(0, 0, 0, 0.75)',
-        x: 0,
-        y: 0,
-        width: $canvas.width(),
-        height: $canvas.height(),
-        fromCenter: false,
-        click: function(){
-            var top = $("#canvasMapContainer").offset().top;
-            $("html, body").animate({ scrollTop: top }, 1000);
-        }
-    })
-    $canvas.restoreCanvas();
-    $canvas.drawArc({
-        strokeStyle: '#0AF',
-        strokeWidth: 5,
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        radius: 200,
-        // start and end angles in degrees
-        start: 90,
-        end: 135,
-    });
-    $canvas.drawLine({
-        strokeStyle: '#0AF',
-        strokeWidth: 5,
-        x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-        y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 15,
-        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
-        x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
-        y3: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
-        closed: true,
-    });
-    $canvas.drawEllipse({
-        strokeStyle: '#0AF',
-        strokeWidth: 2,
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
-        width: 100,
-        height: 100,
-    });
-    $canvas.drawText({
-        fillStyle: '#0AF',
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
-        align: 'right',
-        respectAlign: true,
-        text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
-        fontSize: '20pt',
-        fontStyle: 'bold',
-        fontFamily: 'Verdana, sans-serif',
-    });
 }
 //
 //draw tables and table numbers
