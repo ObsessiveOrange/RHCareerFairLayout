@@ -2,6 +2,7 @@ var $canvas;
 var page;
 var slideCounter;
 var top;
+var timeoutEvent;
 
 function initTutorials(currentPage) {
     $canvas = $("#tutorial");
@@ -46,6 +47,7 @@ function hideScrollbars() {
 }
 
 function unlockScrolling() {
+    clearTimeout(timeoutEvent);
     $(window).unbind('scroll');
     $(window).unbind('touchmove');
     $(window).unbind('mousewheel');
@@ -60,7 +62,7 @@ var tutorialObjects = {
         $('html, body').animate({
             scrollTop: $("#navBarContainer").offset().top
         }, 1000);
-        setTimeout(function() {
+        timeoutEvent = setTimeout(function() {
             lockScrolling($("#navBarContainer").offset().top);
         }, 1000);
         $canvas.drawRect({
@@ -203,7 +205,7 @@ var tutorialObjects = {
         $('html, body').animate({
             scrollTop: $("#mapContainer").offset().top
         }, 1000);
-        setTimeout(function() {
+        timeoutEvent = 41setTimeout(function() {
             lockScrolling($("#mapContainer").offset().top)
         }, 1000);
         $canvas.drawInvertedRectangle({
