@@ -183,8 +183,10 @@ var tutorialObjects = {
     //
     //draw tutorial page
     drawMainTutorialSlide2: function() {
+        unlockScrolling();
         top = $("#canvasMapContainer").offset().top;
         left = $("#canvasMapContainer").offset().left;
+        lockScrolling();
         $('html, body').animate({
             scrollTop: $("#canvasMapContainer").offset().top
         }, 1000);
