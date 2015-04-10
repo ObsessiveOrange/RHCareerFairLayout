@@ -283,7 +283,7 @@ function toggleCheckbox(id) {
 function drawTutorial() {
     var $canvas = $("#tutorial");
     $canvas.drawArc({
-        strokeStyle: '#00F',
+        strokeStyle: '#0AF',
         strokeWidth: 5,
         x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
         y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
@@ -293,23 +293,18 @@ function drawTutorial() {
         end: 135
     });
     $canvas.drawLine({
-        strokeStyle: '#00F',
+        strokeStyle: '#0AF',
         strokeWidth: 5,
         x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 25,
+        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 15,
         y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
-    });
-    $canvas.drawLine({
-        strokeStyle: '#00F',
-        strokeWidth: 5,
-        x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-        y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
-        x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 25,
-        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
+        x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
+        y3: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
+        closed: true,
     });
     $canvas.drawEllipse({
-        strokeStyle: '#F00',
+        strokeStyle: '#0AF',
         strokeWidth: 2,
         x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
@@ -317,12 +312,15 @@ function drawTutorial() {
         height: 100
     });
     $canvas.drawText({
-        fillStyle: '#00F',
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2),
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
+        fillStyle: '#0AF',
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
         align: 'right',
         respectAlign: true,
-        text: "This is the filter button.\nClick it to filter the companies"
+        text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
+        fontSize: '20pt',
+  fontStyle: 'bold'
+        fontFamily: 'Verdana, sans-serif',
     });
 }
 //
