@@ -6,11 +6,11 @@ var left;
 
 function initTutorials(currentPage) {
     $canvas = $("#tutorial");
-    $canvas.prop("width", $canvas.width());
-    $canvas.prop("height", $canvas.height());
     page = currentPage;
     slideCounter = 0;
     lockScrolling();
+    $canvas.prop("width", $canvas.width());
+    $canvas.prop("height", $canvas.height());
     $canvas.click(function(event) {
         goToNextSlide();
         event.stopPropagation();
