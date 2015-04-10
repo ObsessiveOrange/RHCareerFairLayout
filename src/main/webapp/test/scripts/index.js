@@ -153,7 +153,6 @@ function setupPage() {
     generateTableLocations();
     drawTables($mapCanvasTables);
     highlightTables();
-    $("#tutorialShading").css("height", $("body").height());
     var $tutorial = $("#tutorial");
     $tutorial.css("height", $("body").height());
     $tutorial.prop("width", $tutorial.width());
