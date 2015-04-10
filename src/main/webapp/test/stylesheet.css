@@ -46,9 +46,13 @@ html, body {
  */
 
 .bodyContent {
+    position: relative;
     font-size: 2.0em;
-    margin-bottom:60px;
+    margin-bottom: 60px;
     overflow: auto;
+}
+.container {
+    position: relative;
 }
 .tableList {
     width: 100%;
@@ -57,16 +61,16 @@ html, body {
     border-spacing: 0;
     table-layout: fixed;
 }
-.button{
-    display:inline-block;
-    float:right;
+.button {
+    display: inline-block;
+    float: right;
     border-left: solid 1px #CCC;
     border-bottom: solid 1px #CCC;
     border-top: solid 1px #CCC;
     padding: 10px 15px;
     cursor: pointer;
     background-color: #EEE;
-    color:#000;
+    color: #000;
 }
 tr {
     background-color: #EEE;
@@ -80,26 +84,26 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight td{
+tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight td {
     border-bottom: none;
 }
-.roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child, .roundTopLeft{
+.roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child, .roundTopLeft {
     border-top-left-radius: 10px;
 }
-.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child, .roundTopRight{
+.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child, .roundTopRight {
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft{
+.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft {
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight{
+.roundTableBottomRight tr: last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight {
     border-bottom-right-radius: 10px;
 }
-
 /**
  * INDEX
  * Body customization
  */
+
 .mapContainer {
     position: relative;
     width: 100%;
@@ -134,8 +138,8 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-weight: bold;
     color: #38C;
 }
-.companyListCompanyID{
-    width:0;
+.companyListCompanyID {
+    width: 0;
     display: none;
     visibility: hidden;
 }
@@ -148,11 +152,11 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 .companyListInfo {
     width: 50px;
 }
-
 /**
  * FILTERS
  * Body customization
  */
+
 .filtersListExpandColumn {
     width: 100px;
 }
@@ -163,17 +167,17 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-weight: bold;
     background-color: #38C;
 }
-
 /**
  *
  * Footer customization
  */
- .footer{
+
+.footer {
     display: block;
     overflow: hidden;
     position: fixed;
-    bottom:0;
-    left:40px;
+    bottom: 0;
+    left: 40px;
     width: calc(100% - 120px);
     padding: 10px 20px 5px 20px;
     background-color: #800000;
@@ -183,8 +187,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-size: 16px;
     color: #FFF;
     z-index: -1;
- }
-
+}
 /**
  *
  * Modification classes

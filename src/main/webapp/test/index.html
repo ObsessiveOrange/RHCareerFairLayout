@@ -19,20 +19,20 @@
     </head>
     <body>
         <!-- navigation bar -->
-        <div class="navBarContainer" id="navBarContainer">
+        <div class="navBarContainer container" id="navBarContainer">
             <img src="images/rhLogo.png" class="rhLogo" alt="RH Logo" />
             <span class="verticalAlignBottom" id="careerFairDescription">Career Fair Spring 2015</span>
             <a href="filters.html"><img
             src="images/filterBtn.png" id="filterBtn" alt="Filter" /></a>
         </div>
         <!-- canvases, one overlayed on another for easier updating -->
-        <div class="mapContainer" id="mapContainer">
+        <div class="mapContainer container" id="mapContainer">
             <canvas id="mapTables" class="canvasMap" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
             <canvas id="mapHighlights" class="canvasMap" style="position: relative; top: 0; left: 0; z-index: 0; background-color: #EEE;"></canvas>
         </div>
         <!-- company list, related search bars and buttons -->
-        <div class="bodyContent">
-            <div id="companyListContainer">
+        <div class="bodyContent container">
+            <div id="companyListContainer" class="container">
                 <input class="search searchBar" id="companySearchBar" placeholder="Search" /><br /><br />
                 <div id="selectionButtons"><div class="button center roundTopRight" data-btnAction="deselect">Deselect all</div><div class="button center" data-btnAction="invert">Invert all</div><div class="button center roundTopLeft" data-btnAction="select">Select all</div></div>
                 <table class="tableList roundTableTopLeft roundTableBottomLeft roundTableBottomRight" id="companyListTable">
