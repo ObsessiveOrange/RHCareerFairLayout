@@ -57,8 +57,12 @@ function showScrollbars() {
 }
 var tutorialObjects = {
     drawMainTutorialSlide0: function() {
+        unlockScrolling();
         $('html, body').animate({
             scrollTop: $("#navBarContainer").offset().top
+        }, 1000);
+        setTimeout(function() {
+            lockScrolling($("#mapContainer").offset().top)
         }, 1000);
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.75)',

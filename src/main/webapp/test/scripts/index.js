@@ -65,7 +65,7 @@ $(document).ready(function() {
                 //
                 //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIDs.forEach(function(id) {
-                    if ($("#showOnMapCheckbox_" + id).html() == "☐") {
+                    if (!careerFairData.companies[id].checked) {
                         markCheckboxChecked(id);
                     }
                 });
@@ -81,7 +81,7 @@ $(document).ready(function() {
                 //
                 //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIDs.forEach(function(id) {
-                    if ($("#showOnMapCheckbox_" + id).html() == "☑") {
+                    if (careerFairData.companies[id].checked) {
                         markCheckboxUnchecked(id);
                     }
                 });
@@ -233,6 +233,7 @@ function updateCompanyList() {
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
+        careerFairData.companies[companyID].checked = false;
     });
     //
     //Check the ones that are in the list - if no filter change, will check previously selected entries only.
@@ -247,6 +248,7 @@ function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");
     //add to set of selected companies
     selectedCompanyIDs.addToOrderedSet(id);
+    careerFairData.companies[id].checked = true;
 }
 //
 //deselect the checkbox for compnay with given id
@@ -255,13 +257,14 @@ function markCheckboxUnchecked(id) {
     $("#showOnMapCheckbox_" + id).text("☐");
     //remove from set of selected companies
     selectedCompanyIDs.removeFromOrderedSet(id);
+    careerFairData.companies[id].checked = false;
 }
 //
 //toggle the checkbox
 function toggleCheckbox(id) {
     //
     //toggle based on current text value
-    if ($("#showOnMapCheckbox_" + id).html() == "☑") {
+    if (careerFairData.companies[id].checked) {
         markCheckboxUnchecked(id);
         //
         //highlight newly checked checkbox
