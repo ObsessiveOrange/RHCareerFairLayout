@@ -290,7 +290,7 @@ function drawTutorial() {
         radius: 200,
         // start and end angles in degrees
         start: 90,
-        end: 135
+        end: 180
     });
     $canvas.drawLine({
         strokeStyle: '#00F',
@@ -315,6 +315,15 @@ function drawTutorial() {
         y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
         width: 100,
         height: 100
+    });
+    $canvas.drawText({
+        fillStyle: '#00F',
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 - $canvas.measureText('Click it to filter the companies').width / 2,
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 250,
+        maxWidth: $canvas.measureText('Click it to filter the companies').width / 2,
+        fontSize: height / 2,
+        fontFamily: 'Verdana, sans-serif',
+        text: "This is the filter button. Click it to filter the companies"
     });
 }
 //
