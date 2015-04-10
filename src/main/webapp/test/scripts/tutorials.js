@@ -37,7 +37,7 @@ function lockScrolling() {
     top = $(window).scrollTop();
     left = $(window).scrollLeft();
     $('body').css('overflow', 'hidden');
-    $(window).scroll(function() {
+    $(window).on("scroll touchmove mousewheel", function() {
         $(this).scrollTop(top).scrollLeft(left);
     });
 }
@@ -45,6 +45,8 @@ function lockScrolling() {
 function unlockScrolling() {
     $('body').css('overflow', 'auto');
     $(window).off('scroll');
+    $(window).off('touchmove');
+    $(window).off('mousewheel');
 }
 var tutorialObjects = {
     drawMainTutorialSlide0: function() {
@@ -111,7 +113,7 @@ var tutorialObjects = {
             width: $canvas.width(),
             height: $canvas.height(),
             holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
+            holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
             holeWidth: 100,
             holeHeight: 100,
             fromCenter: false,
@@ -132,7 +134,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 2,
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
+            y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
             width: 100,
             height: 100,
         });
@@ -140,7 +142,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
-            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50,
+            y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
             radius: 200,
             // start and end angles in degrees
             start: 90,
@@ -150,17 +152,17 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            y1: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50,
+            y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
             x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 15,
-            y2: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 75,
+            y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
             x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
-            y3: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 75,
+            y3: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
             closed: true,
         });
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
-            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
+            y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
             align: 'right',
             respectAlign: true,
             text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
@@ -181,7 +183,7 @@ var tutorialObjects = {
             width: $canvas.width(),
             height: $canvas.height(),
             holeX: $("#canvasMapContainer").offset().left,
-            holeY: $("#canvasMapContainer").position().top,
+            holeY: $("#canvasMapContainer").offset().top,
             holeWidth: $("#canvasMapContainer").width(),
             holeHeight: $("#canvasMapContainer").height(),
             fromCenter: false,
@@ -202,7 +204,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x: $("#canvasMapContainer").offset().left,
-            y: $("#canvasMapContainer").position().top,
+            y: $("#canvasMapContainer").offset().top,
             width: $("#canvasMapContainer").width(),
             height: $("#canvasMapContainer").height(),
             cornerRadius: 10,
@@ -212,7 +214,7 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#canvasMapContainer").offset().left + $("#canvasMapContainer").width() / 2,
-            y: $("#canvasMapContainer").position().top + $("#canvasMapContainer").height() / 2,
+            y: $("#canvasMapContainer").offset().top + $("#canvasMapContainer").height() / 2,
             width: 500,
             height: 100,
             cornerRadius: 10
@@ -220,7 +222,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#canvasMapContainer").offset().left + $("#canvasMapContainer").width() / 2,
-            y: $("#canvasMapContainer").position().top + $("#canvasMapContainer").height() / 2,
+            y: $("#canvasMapContainer").offset().top + $("#canvasMapContainer").height() / 2,
             text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
             fontSize: '20pt',
             fontStyle: 'bold',
