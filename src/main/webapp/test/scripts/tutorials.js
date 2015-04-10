@@ -8,7 +8,6 @@ function initTutorials(currentPage) {
     slideCounter = 0;
     $canvas.click(function(event) {
         goToNextSlide();
-        console.log("Next Slide!");
         event.stopPropagation();
     });
     tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
@@ -19,6 +18,7 @@ function goToNextSlide() {
     $canvas.clearCanvas();
     if (tutorialObjects.hasOwnProperty("draw" + page + "TutorialSlide" + slideCounter)) {
         tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
+        console.log("Next Slide!");
     } else {
         endTutorial();
     }
@@ -186,7 +186,7 @@ var tutorialObjects = {
             y: $("#canvasMapContainer").offset().top,
             width: $("#canvasMapContainer").width(),
             height: $("#canvasMapContainer").height(),
-            cornerRadius: 10
+            cornerRadius: 10,
             fromCenter: false,
         });
         $canvas.drawRect({

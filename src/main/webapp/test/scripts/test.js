@@ -9,7 +9,7 @@ $(document).ready(function() {
 function drawTutorial() {
     var $canvas = $("#tutorial");
     // This shape is being masked
-    $canvas.drawInvertedRectangle({
+    $canvas.drawInvertedEllipse({
         x: 300,
         y: 300,
         width: 500,
@@ -32,22 +32,4 @@ function drawTutorial() {
         fromCenter: false
     })
     $canvas.restoreCanvas();
-    // Restore mask
-    $canvas.drawRect({
-        fillStyle: 'rgba(0, 0, 0, 0.8)',
-        x: 300,
-        y: 300,
-        width: 500,
-        height: 100,
-        cornerRadius: 10
-    });
-    $canvas.drawText({
-        fillStyle: '#0AF',
-        x: 300,
-        y: 300,
-        text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
-        fontSize: '20pt',
-        fontStyle: 'bold',
-        fontFamily: 'Verdana, sans-serif',
-    });
 }
