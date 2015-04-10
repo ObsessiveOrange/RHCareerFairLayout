@@ -34,6 +34,7 @@ function endTutorial() {
     console.log("Done!");
     $canvas.remove();
     unlockScrolling();
+    showScrollbars();
 }
 
 function lockScrolling() {
@@ -54,7 +55,7 @@ function unlockScrolling() {
     $(window).off('mousewheel');
 }
 
-function showcrollbars() {
+function showScrollbars() {
     $('body').css('overflow', 'auto');
 }
 var tutorialObjects = {
@@ -182,11 +183,11 @@ var tutorialObjects = {
     //
     //draw tutorial page
     drawMainTutorialSlide2: function() {
+        window.unlockScrolling();
         $('html, body').animate({
-            unlockScrolling();
             scrollTop: $("#canvasMapContainer").offset().top
-            lockScrolling();
         }, 1000);
+        window.lockScrolling();
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
