@@ -287,10 +287,10 @@ function drawTutorial() {
         y: 0,
         width: $canvas.width(),
         height: $canvas.height(),
-        holeX: $("#filterBtn").offset().left,
-        holeY: $("#filterBtn").offset().top,
+        holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
         holeRadius: 50,
-        fromCenter: false,
+        fromCenter: false
         mask: true
     });
     // This shape is being masked
