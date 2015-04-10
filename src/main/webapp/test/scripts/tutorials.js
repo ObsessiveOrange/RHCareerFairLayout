@@ -198,20 +198,20 @@ var tutorialObjects = {
     drawMainTutorialSlide2: function() {
         unlockScrolling();
         $('html, body').animate({
-            scrollTop: $("#canvasMapContainer").offset().top
+            scrollTop: $("#mapContainer").offset().top
         }, 1000);
         setTimeout(function() {
-            lockScrolling($("#canvasMapContainer").offset().top)
+            lockScrolling($("#mapContainer").offset().top)
         }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            holeX: $("#mapCanvasTables").offset().left,
-            holeY: $("#mapCanvasTables").position().top,
-            holeWidth: $("#mapCanvasTables").width(),
-            holeHeight: $("#mapCanvasTables").height(),
+            holeX: $("#mapTables").offset().left,
+            holeY: $("#mapTables").position().top,
+            holeWidth: $("#mapTables").width(),
+            holeHeight: $("#mapTables").height(),
             cornerRadius: 10,
             holeCornerRadius: 10,
             fromCenter: false,
@@ -231,26 +231,26 @@ var tutorialObjects = {
         $canvas.drawRect({
             strokeStyle: '#0AF',
             strokeWidth: 5,
-            x: $("#mapCanvasTables").offset().left,
-            y: $("#mapCanvasTables").position().top,
-            width: $("#mapCanvasTables").width(),
-            height: $("#mapCanvasTables").height(),
+            x: $("#mapTables").offset().left,
+            y: $("#mapTables").position().top,
+            width: $("#mapTables").width(),
+            height: $("#mapTables").height(),
             cornerRadius: 10,
             fromCenter: false,
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
-            x: $("#mapCanvasTables").offset().left + $("#mapCanvasTables").width() / 2,
-            y: $("#mapCanvasTables").position().top + $("#mapCanvasTables").height() / 2,
+            x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
+            y: $("#mapTables").position().top + $("#mapTables").height() / 2,
             width: 500,
             height: 100,
             cornerRadius: 10
         });
         $canvas.drawText({
             fillStyle: '#0AF',
-            x: $("#mapCanvasTables").offset().left + $("#mapCanvasTables").width() / 2,
-            y: $("#mapCanvasTables").position().top + $("#mapCanvasTables").height() / 2,
+            x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
+            y: $("#mapTables").position().top + $("#mapTables").height() / 2,
             text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
             fontSize: '20pt',
             fontStyle: 'bold',

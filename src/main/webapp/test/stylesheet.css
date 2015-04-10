@@ -100,12 +100,12 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
  * INDEX
  * Body customization
  */
-.canvasMapContainer {
+.mapContainer {
     position: relative;
     width: 100%;
     margin-bottom: 30px;
 }
-.canvasMapContainer:before {
+.mapContainer:before {
     content="";
     display: block;
     padding-top: 50%;
@@ -129,23 +129,23 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     border: solid 2px #5555FF;
     background-color: #FDFFD6;
 }
-.companyListHighlightColumn {
+.companyListHighlight {
     width: 50px;
     font-weight: bold;
     color: #38C;
 }
-.companyListCompanyIDColumn{
+.companyListCompanyID{
     width:0;
     display: none;
     visibility: hidden;
 }
-.companyListCompanyColumn {
+.companyListCompanyName {
     width: calc(100% - 200px);
 }
-.companyListTableColumn {
+.companyListTable {
     width: 100px;
 }
-.companyListInfoColumn {
+.companyListInfo {
     width: 50px;
 }
 

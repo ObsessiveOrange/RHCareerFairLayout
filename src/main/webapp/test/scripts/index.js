@@ -9,21 +9,21 @@ var tableLocations;
 var selectedCompanyIDs
 var filteredCompanyIDs = [];
 var filters;
-var $mapCanvasTables;
-var $mapCanvasHighlights;
+var $mapTables;
+var $mapHighlights;
 var scaling = 2;
 var clearCacheFlag;
 $(document).ready(function() {
     //
     //set size and width of canvas elements and containing div
-    $mapCanvasTables = $("#mapCanvasTables");
-    $mapCanvasHighlights = $("#mapCanvasHighlights");
-    var $container = $("#canvasMapContainer");
+    $mapTables = $("#mapTables");
+    $mapHighlights = $("#mapHighlights");
+    var $container = $("#mapContainer");
     var containerWidth = $container.width() * scaling;
     var containerHeight = $container.width() * (scaling / 2);
     $container.prop("height", containerHeight);
-    $mapCanvasTables.prop("width", containerWidth).prop("height", containerHeight);
-    $mapCanvasHighlights.prop("width", containerWidth).prop("height", containerHeight);
+    $mapTables.prop("width", containerWidth).prop("height", containerHeight);
+    $mapHighlights.prop("width", containerWidth).prop("height", containerHeight);
     //
     //try to retrieve data from persistent storage
     loadAfterPageSwitch();
@@ -144,14 +144,14 @@ function setupPage() {
     //
     //Create options, generate List.js object for searching
     var options = {
-        valueNames: ['companyListHighlightColumn', 'companyID', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn'],
+        valueNames: ['companyListHighlight', 'companyListCompanyID', 'companyListCompanyName', 'companyListTable', 'companyListInfo'],
         page: filteredCompanyIDs.length
     };
     companyList = new List('companyListContainer', options);
     //
     //setup the map for the first time
     generateTableLocations();
-    drawTables($mapCanvasTables);
+    drawTables($mapTables);
     highlightTables();
     initTutorials("Main");
 }
@@ -232,7 +232,7 @@ function updateCompanyList() {
     //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
-        companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyIDColumn'>" + company.id + "</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
     });
     //
     //Check the ones that are in the list - if no filter change, will check previously selected entries only.
@@ -278,7 +278,7 @@ function toggleCheckbox(id) {
 function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $mapCanvasTables.drawLine({
+    $mapTables.drawLine({
         //    layer: true,
         strokeStyle: '#000',
         strokeWidth: scaling,
@@ -298,7 +298,7 @@ function drawRect(tableNumber, x, y, width, height) {
     //
     //draw tablenumber in box for easy reading.
     if (tableNumber != 0) {
-        $mapCanvasTables.drawText({
+        $mapTables.drawText({
             //      layer: true,
             fillStyle: '#000000',
             x: x + width / 2,
@@ -321,10 +321,10 @@ function generateTableLocations() {
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
     //
     //calculate width and height of tables based on width of the canvas
-    unitX = $mapCanvasTables.prop("width") / 100;
+    unitX = $mapTables.prop("width") / 100;
     //20% of space allocated to (vertical) walkways
     tableWidth = unitX * 80 / hrzCount;
-    unitY = $mapCanvasTables.prop("width") / 2 / 100;
+    unitY = $mapTables.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
     tableHeight = unitY * 70 / vrtCount;
     //
@@ -388,7 +388,7 @@ function generateTableLocations() {
 }
 //
 //draw actual tables, then draw registration and rest areas
-function drawTables($mapCanvasTables) {
+function drawTables($mapTables) {
     //
     //draw company tables based on generated locations
     for (var i = 0; i < tableLocations.length; i++) {
@@ -399,7 +399,7 @@ function drawTables($mapCanvasTables) {
     //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $mapCanvasTables.drawText({
+    $mapTables.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
@@ -409,7 +409,7 @@ function drawTables($mapCanvasTables) {
         text: 'Rest Area'
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $mapCanvasTables.drawText({
+    $mapTables.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
@@ -422,7 +422,7 @@ function drawTables($mapCanvasTables) {
 //
 //Highlight all tables in selected companies array
 function highlightTables() {
-    $mapCanvasHighlights.clearCanvas();
+    $mapHighlights.clearCanvas();
     selectedCompanyIDs.forEach(function(id) {
         highlightTable(id, "#0F0");
     });
@@ -435,7 +435,7 @@ function highlightTable(id, color) {
     var table = careerFairData.companies[id].parameters.table
     var x = tableLocations[table - 1].x;
     var y = tableLocations[table - 1].y;
-    $mapCanvasHighlights.drawRect({
+    $mapHighlights.drawRect({
         fillStyle: color,
         x: x,
         y: y,
