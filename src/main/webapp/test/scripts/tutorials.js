@@ -186,12 +186,12 @@ var tutorialObjects = {
         unlockScrolling();
         top = $("#canvasMapContainer").offset().top;
         left = $("#canvasMapContainer").offset().left;
-        setTimeout(function() {
-            lockScrolling()
-        }, 1000);
         $('html, body').animate({
             scrollTop: $("#canvasMapContainer").offset().top
         }, 1000);
+        setTimeout(function() {
+            lockScrolling()
+        }, 1500);
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
