@@ -290,7 +290,7 @@ function drawTutorial() {
         radius: 200,
         // start and end angles in degrees
         start: 90,
-        end: 180
+        end: 135
     });
     $canvas.drawLine({
         strokeStyle: '#00F',
@@ -318,8 +318,8 @@ function drawTutorial() {
     });
     $canvas.drawText({
         fillStyle: '#00F',
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2),
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
         align: 'right',
         respectAlign: true,
         text: "This is the filter button.\nClick it to filter the companies"
