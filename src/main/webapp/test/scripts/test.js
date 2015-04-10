@@ -18,6 +18,7 @@ function drawTutorial() {
         holeY: 250,
         holeRadius: 50,
         fromCenter: false,
+        holeFromCenter: false,
         mask: true
     });
     // This shape is being masked

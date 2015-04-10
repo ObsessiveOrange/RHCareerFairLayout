@@ -8,7 +8,8 @@
         props: {
             holeX: 0,
             holeY: 0,
-            holeRadius: 10
+            holeRadius: 10,
+            holeFromCenter: true
         },
         fn: function(ctx, params) {
             // Enable shape transformation
