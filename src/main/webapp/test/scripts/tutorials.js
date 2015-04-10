@@ -6,6 +6,7 @@ function initTutorials(currentPage) {
     $canvas = $("#tutorial");
     page = currentPage;
     slideCounter = 0;
+    $("body").scroll(function(e){ e.preventDefault()});
     $canvas.click(function(event) {
         goToNextSlide();
         event.stopPropagation();
