@@ -113,19 +113,19 @@ var tutorialObjects = {
     //
     //draw tutorial page
     drawMainTutorialSlide1: function() {
-        $canvas.drawInvertedEllipse({
-            x: 0,
-            y: 0,
-            width: $canvas.width(),
-            height: $canvas.height(),
-            holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
-            holeWidth: 100,
-            holeHeight: 100,
-            fromCenter: false,
-            holeFromCenter: true,
-            mask: true
-        });
+        // $canvas.drawInvertedEllipse({
+        //     x: 0,
+        //     y: 0,
+        //     width: $canvas.width(),
+        //     height: $canvas.height(),
+        //     holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        //     holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
+        //     holeWidth: 100,
+        //     holeHeight: 100,
+        //     fromCenter: false,
+        //     holeFromCenter: true,
+        //     mask: true
+        // });
         // This shape is being masked
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.75)',
