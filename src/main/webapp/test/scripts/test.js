@@ -4,14 +4,17 @@ $(document).ready(function() {
     $tutorial.prop("height", $tutorial.height());
     drawTutorial();
     lockScrolling();
-    setTimeout(function(){unlockScrolling()}, 5000);
+    setTimeout(function() {
+        unlockScrolling()
+    }, 5000);
 });
 //
 //draw tutorial page
 function drawTutorial() {
     var $canvas = $("#tutorial");
     // This shape is being masked
-    $canvas.drawInvertedEllipse({
+    $canvas.drawInvertedRectangle({
+        strokeStyle: 'rgb(255, 0, 0)',
         x: 300,
         y: 300,
         width: 500,
@@ -22,6 +25,8 @@ function drawTutorial() {
         holeHeight: 150,
         fromCenter: false,
         holeFromCenter: true,
+        cornerRadius: 10,
+        holeCornerRadius: 10,
         mask: true
     });
     // This shape is being masked
@@ -34,4 +39,20 @@ function drawTutorial() {
         fromCenter: false
     })
     $canvas.restoreCanvas();
+}
+var top;
+var left;
+
+function lockScrolling() {
+    top = $(window).scrollTop();
+    left = $(window).scrollLeft();
+    $('body').css('overflow', 'hidden');
+    $(window).scroll(function() {
+        $(this).scrollTop(top).scrollLeft(left);
+    });
+}
+
+function unlockScrolling() {
+    $('body').css('overflow', 'auto');
+    $(window).off('scroll');
 }
