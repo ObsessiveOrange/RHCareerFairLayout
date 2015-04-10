@@ -310,16 +310,16 @@ var tutorialObjects = {
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
-            x: $("#companySearchBar").offset().left + $("#companySearchBar").width() / 2,
-            y: $("#companySearchBar").position().top + $("#companySearchBar").height() / 2,
+            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
+            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
             width: 500,
             height: 100,
             cornerRadius: 10
         });
         $canvas.drawText({
             fillStyle: '#0AF',
-            x: $("#companySearchBar").offset().left + $("#companySearchBar").width() / 2,
-            y: $("#companySearchBar").position().top + $("#companySearchBar").height() / 2,
+            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
+            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
             text: "This is the search bar.\nType a company name or table number to search.",
             fontSize: '20pt',
             fontStyle: 'bold',
