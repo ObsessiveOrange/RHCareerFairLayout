@@ -19,7 +19,6 @@ function goToNextSlide() {
     $canvas.clearCanvas();
     tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
 }
-}
 
 function endTutorial() {
     console.log("Done!");
