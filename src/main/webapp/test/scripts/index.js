@@ -318,10 +318,11 @@ function drawTutorial() {
     });
     $canvas.drawText({
         fillStyle: '#00F',
-        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 - $canvas.measureText('Click it to filter the companies').width / 2,
-        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200/Math.sqrt(2),
-        maxWidth: $canvas.measureText('Click it to filter the companies').width,
-        text: "This is the filter button. Click it to filter the companies"
+        x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
+        y: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
+        align: 'right',
+        respectAlign: true,
+        text: "This is the filter button.\nClick it to filter the companies"
     });
 }
 //
