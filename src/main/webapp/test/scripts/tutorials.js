@@ -116,15 +116,15 @@ var tutorialObjects = {
         // $canvas.drawInvertedEllipse({
         //     x: 0,
         //     y: 0,
-            // width: $canvas.width(),
-            // height: $canvas.height(),
-            // holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            // holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
-            // holeWidth: 100,
-            // holeHeight: 100,
-            // fromCenter: false,
-            // holeFromCenter: true,
-            // mask: true
+        // width: $canvas.width(),
+        // height: $canvas.height(),
+        // holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        // holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
+        // holeWidth: 100,
+        // holeHeight: 100,
+        // fromCenter: false,
+        // holeFromCenter: true,
+        // mask: true
         // });
         $canvas.drawInvertedRectangle({
             x: 0,
@@ -135,6 +135,8 @@ var tutorialObjects = {
             holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
             holeWidth: 100,
             holeHeight: 100,
+            cornerRadius: 10,
+            holeCornerRadius: 10,
             fromCenter: false,
             holeFromCenter: true,
             mask: true
@@ -149,13 +151,15 @@ var tutorialObjects = {
             fromCenter: false,
         });
         $canvas.restoreCanvas();
-        $canvas.drawEllipse({
+        $canvas.drawRect({
             strokeStyle: '#0AF',
-            strokeWidth: 2,
+            strokeWidth: 5,
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
             y: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
             width: 100,
             height: 100,
+            cornerRadius: 10,
+            fromCenter: false,
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
@@ -209,6 +213,8 @@ var tutorialObjects = {
             holeY: $("#mapCanvasTables").position().top,
             holeWidth: $("#mapCanvasTables").width(),
             holeHeight: $("#mapCanvasTables").height(),
+            cornerRadius: 10,
+            holeCornerRadius: 10,
             fromCenter: false,
             holeFromCenter: false,
             mask: true
