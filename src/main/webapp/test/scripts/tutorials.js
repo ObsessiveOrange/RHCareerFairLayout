@@ -312,7 +312,7 @@ var tutorialObjects = {
             strokeWidth: 5,
             x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
             y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
-            width: 500,
+            width: 400,
             height: 80,
             cornerRadius: 10
         });
