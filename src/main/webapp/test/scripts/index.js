@@ -144,7 +144,7 @@ function setupPage() {
     //
     //Create options, generate List.js object for searching
     var options = {
-        valueNames: ['companyListHighlightColumn', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn'],
+        valueNames: ['companyListHighlightColumn', 'companyID', 'companyListCompanyColumn', 'companyListTableColumn', 'companyListInfoColumn'],
         page: filteredCompanyIDs.length
     };
     companyList = new List('companyListContainer', options);
@@ -232,7 +232,7 @@ function updateCompanyList() {
     //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
-        companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlightColumn' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyIDColumn'>" + company.id + "</td><td class='companyListCompanyColumn' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTableColumn'>" + company.parameters.table + "</td><td class='center companyListInfoColumn'>[i]</td></tr>");
     });
     //
     //Check the ones that are in the list - if no filter change, will check previously selected entries only.

@@ -134,6 +134,11 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-weight: bold;
     color: #38C;
 }
+.companyListCompanyIDColumn{
+    width:0;
+    display: none;
+    visibility: hidden;
+}
 .companyListCompanyColumn {
     width: calc(100% - 200px);
 }
