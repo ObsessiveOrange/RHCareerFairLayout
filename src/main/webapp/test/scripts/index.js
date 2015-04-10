@@ -290,7 +290,7 @@ function drawTutorial() {
         holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
         holeRadius: 50,
-        fromCenter: false
+        fromCenter: false,
         mask: true
     });
     // This shape is being masked
