@@ -159,7 +159,6 @@ var tutorialObjects = {
             width: 100,
             height: 100,
             cornerRadius: 10,
-            fromCenter: false,
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
