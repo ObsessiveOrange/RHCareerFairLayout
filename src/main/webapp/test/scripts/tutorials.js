@@ -1,7 +1,6 @@
 var $canvas;
 var page;
 var slideCounter;
-var end = false;
 
 function initTutorials(currentPage) {
     $canvas = $("#tutorial");
@@ -9,33 +8,28 @@ function initTutorials(currentPage) {
     slideCounter = 0;
     $canvas.click(function(event) {
         goToNextSlide();
-        alert("Next Slide!");
+        console.log("Next Slide!");
         event.stopPropagation();
     });
     tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
 }
 
 function goToNextSlide() {
-    if (end) {
-        endTutorial();
-        return;
-    } else {
-        slideCounter++;
-        $canvas.clearCanvas();
-        tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
-    }
+    slideCounter++;
+    $canvas.clearCanvas();
+    tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
+}
 }
 
 function endTutorial() {
-    alert("Done!");
+    console.log("Done!");
     $canvas.remove();
 }
 var tutorialObjects = {
     drawMainTutorialSlide0: function() {
-        
-            $('html, body').animate({
-                scrollTop: $("#navBarContainer").offset().top
-            }, 1000);
+        $('html, body').animate({
+            scrollTop: $("#navBarContainer").offset().top
+        }, 1000);
         $canvas.drawRect({
             layer: true,
             fillStyle: 'rgba(0, 0, 0, 0.75)',
@@ -74,7 +68,7 @@ var tutorialObjects = {
             width: 200,
             height: 50,
             click: function(layer) {
-                end = true;
+                endTutorial();
             }
         });
         $canvas.drawText({
@@ -87,7 +81,7 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
             click: function(layer) {
-                end = true;
+                endTutorial();
             }
         });
     },
