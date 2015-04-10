@@ -298,9 +298,9 @@ function drawTutorial() {
         x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
         y1: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 50,
         x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 15,
-        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
+        y2: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
         x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
-        y3: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75
+        y3: $("#filterBtn").offset().top + $("#filterBtn").height() / 2 + 75,
         closed: true,
     });
     $canvas.drawEllipse({
@@ -319,7 +319,7 @@ function drawTutorial() {
         respectAlign: true,
         text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
         fontSize: '20pt',
-  fontStyle: 'bold'
+        fontStyle: 'bold'
         fontFamily: 'Verdana, sans-serif',
     });
 }
