@@ -30,7 +30,6 @@ var tutorialObjects = {
             scrollTop: $("#navBarContainer").offset().top
         }, 1000);
         $canvas.drawRect({
-            layer: true,
             fillStyle: 'rgba(0, 0, 0, 0.75)',
             x: 0,
             y: 0,
@@ -39,7 +38,6 @@ var tutorialObjects = {
             fromCenter: false
         });
         $canvas.drawText({
-            layer: true,
             fillStyle: '#0AF',
             x: $(window).width() / 2,
             y: $(window).height() / 2 - 100,
@@ -49,7 +47,6 @@ var tutorialObjects = {
             fontFamily: 'Verdana, sans-serif',
         });
         $canvas.drawText({
-            layer: true,
             fillStyle: '#0AF',
             x: $(window).width() / 2,
             y: $(window).height() / 2,
@@ -59,7 +56,6 @@ var tutorialObjects = {
             fontFamily: 'Verdana, sans-serif',
         });
         $canvas.drawRect({
-            layer: true,
             strokeStyle: "#F55",
             fillStyle: '#F88',
             x: $(window).width() / 2,
@@ -71,7 +67,6 @@ var tutorialObjects = {
             }
         });
         $canvas.drawText({
-            layer: true,
             fillStyle: '#FFF',
             x: $(window).width() / 2,
             y: $(window).height() / 2 + 150,
@@ -109,11 +104,6 @@ var tutorialObjects = {
             width: $canvas.width(),
             height: $canvas.height(),
             fromCenter: false,
-            click: function() {
-                $('html, body').animate({
-                    scrollTop: $("#canvasMapContainer").offset().top
-                }, 1000);
-            }
         });
         $canvas.restoreCanvas();
         $canvas.drawArc({
