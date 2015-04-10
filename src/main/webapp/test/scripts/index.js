@@ -282,6 +282,26 @@ function toggleCheckbox(id) {
 //draw tutorial page
 function drawTutorial() {
     var $canvas = $("#tutorial");
+    $canvas.drawInverted({
+        x: 0,
+        y: 0,
+        width: $canvas.width(),
+        height: $canvas.height(),
+        holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
+        holeY: $("#filterBtn").offset().top + $("#filterBtn").height() / 2,
+        holeRadius: 100,
+        mask: true
+    });
+    // This shape is being masked
+    $canvas.drawRect({
+        fillStyle: 'rgba(0, 0, 0, 0.75)',
+        x: 0,
+        y: 0,
+        width: $canvas.width(),
+        height: $canvas.height(),
+        fromCenter: false
+    })
+    $canvas.restoreCanvas();
     $canvas.drawArc({
         strokeStyle: '#0AF',
         strokeWidth: 5,
