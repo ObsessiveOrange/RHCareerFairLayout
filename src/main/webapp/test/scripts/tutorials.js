@@ -91,29 +91,30 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-        $canvas.drawRect({
-            strokeStyle: "#F55",
-            fillStyle: '#F88',
-            x: $(window).width() / 2,
-            y: $(window).height() / 2 + 150,
-            width: 200,
-            height: 50,
-            click: function(layer) {
-                endTutorial();
-            }
-        });
-        $canvas.drawText({
-            fillStyle: '#FFF',
-            x: $(window).width() / 2,
-            y: $(window).height() / 2 + 150,
-            text: "Skip",
-            fontSize: '20pt',
-            fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
-            click: function(layer) {
-                endTutorial();
-            }
-        });
+        // $canvas.drawRect({
+        //     strokeStyle: "#F55",
+        //     fillStyle: '#F88',
+        //     x: $(window).width() / 2,
+        //     y: $(window).height() / 2 + 150,
+        //     width: 200,
+        //     height: 50,
+        //     click: function(layer) {
+        //         endTutorial();
+        //     }
+        // });
+        // $canvas.drawText({
+        //     fillStyle: '#FFF',
+        //     x: $(window).width() / 2,
+        //     y: $(window).height() / 2 + 150,
+        //     text: "Skip",
+        //     fontSize: '20pt',
+        //     fontStyle: 'bold',
+        //     fontFamily: 'Verdana, sans-serif',
+        //     click: function(layer) {
+        //         endTutorial();
+        //     }
+        // });
+        $canvas.html("<div class='tutSkipButton' onClick='endTutorial()'>Skip</div>");
     },
     //
     //draw tutorial page

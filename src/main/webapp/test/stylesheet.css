@@ -45,6 +45,18 @@ html, body {
  * Body Customization:
  */
 
+.tutSkipButton {
+    position:absolute;
+    left: calc(50% - 100px);
+    top: calc(50% - 25px);
+    width:200px;
+    height:50px;
+    z-index: 11;
+    background-color: #F55;
+    color:#FFF;
+    vertical-align: middle;
+    text-align: center;
+}
 .bodyContent {
     position: relative;
     font-size: 2.0em;
