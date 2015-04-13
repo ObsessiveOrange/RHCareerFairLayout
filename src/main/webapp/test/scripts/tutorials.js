@@ -718,11 +718,41 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#filterButtons").offset().left + $("#filterButtons").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
-            y: $("#filterButtons").offset().top + $("#filterButtons").height() + 200 / Math.sqrt(2) - 5,
+            y: $("#filterButtons").offset().top - 200 / Math.sqrt(2) - 5,
             align: 'right',
             respectAlign: true,
             text: "These buttons allow you to\ncancel your changes, clear all filters,\n and apply the selected filters, respectively.",
             fontSize: '20pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+    },
+    //
+    //draw tutorial page
+    drawFiltersTutorialSlide5: function() {
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.75)',
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            fromCenter: false,
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $canvas.width() / 2,
+            y: $canvas.height() / 2,
+            text: "That's it for this page!\n\nGood luck in the career fair!",
+            fontSize: '30pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $canvas.width() / 2,
+            y: $canvas.height() - 25,
+            text: "RHCareerFairLayout, by Benedict Wong",
+            fontSize: '15pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
