@@ -4,7 +4,6 @@ var slideCounter;
 var top;
 var timeoutEvent;
 var skipButton = null;
-
 /**
  * Setup canvas and tutorial variables.
  *
@@ -27,19 +26,35 @@ function initTutorials(currentPage) {
     //hide scrollbars
     hideScrollbars();
     //set canvas width and heights.
-    $canvas.prop("width", $canvas.width());
-    $canvas.prop("height", $canvas.height());
+    setupCanvas();
+    //
+    //setup bindings for clicks and resizes.
     $canvas.click(function(event) {
         goToNextSlide();
         event.stopPropagation();
+    });
+    //
+    //setup resize bindings
+    $(window).resize(function() {
+        //
+        //reset height and width
+        setupCanvas();
+        //
+        //redraw the same canvas slide.
+        $canvas.clearCanvas();
+        tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
     });
     //
     //call first drawTutorial method
     tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
 }
 
+function setupCanvas() {
+    $canvas.prop("width", $canvas.width());
+    $canvas.prop("height", $canvas.height());
+}
 /**
- * Go to the next slide, if no more slides, end tutorial 
+ * Go to the next slide, if no more slides, end tutorial
  *
  */
 function goToNextSlide() {
@@ -54,7 +69,6 @@ function goToNextSlide() {
         endTutorial();
     }
 }
-
 /**
  * End tutorial
  *
