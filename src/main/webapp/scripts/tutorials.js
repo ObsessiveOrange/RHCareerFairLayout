@@ -79,6 +79,7 @@ function endTutorial() {
         skipButton.remove();
         skipButton = null;
     }
+    $window.unbind('resize');
     $canvas.remove();
     unlockScrolling();
     showScrollbars();
