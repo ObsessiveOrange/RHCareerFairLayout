@@ -6,6 +6,10 @@ var timeoutEvent;
 var skipButton = null;
 
 function initTutorials(currentPage) {
+    var tutorialStatus = PersistentStorage.retreiveObject("tutorialStatus");
+    if(tutorialStatus && tutorialStatus[page]){
+        endTutorial();
+    }
     $canvas = $("#tutorial");
     page = currentPage;
     slideCounter = 0;
@@ -41,6 +45,12 @@ function endTutorial() {
     $canvas.remove();
     unlockScrolling();
     showScrollbars();
+    var tutorialStatus = PersistentStorage.retreiveObject("tutorialStatus");
+    if(!tutorialStatus){
+        tutorialStatus = {};
+    }
+    tutorialStatus[page] = true;
+    PersistentStorage.storeObject("tutorialStatus", tutorialStatus);
 }
 
 function lockScrolling(top) {
