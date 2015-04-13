@@ -45,15 +45,17 @@ html, body {
  * Body Customization:
  */
 
-.tutSkipButton {
-    position:absolute;
+#tutSkipButton {
+    position: absolute;
+    display: table-cell;
     left: calc(50% - 100px);
     top: calc(50% - 25px);
-    width:200px;
-    height:50px;
+    width: 200px;
+    height: 50px;
     z-index: 11;
     background-color: #F55;
-    color:#FFF;
+    color: #FFF;
+    font-size: 20pt;
     vertical-align: middle;
     text-align: center;
 }
@@ -73,8 +75,8 @@ html, body {
     border-spacing: 0;
     table-layout: fixed;
 }
-.buttonContainer{
-    float:right;
+.buttonContainer {
+    float: right;
 }
 .button {
     display: inline-block;
@@ -107,10 +109,10 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 .roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child, .roundTopRight {
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft {
+.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft {
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr: last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight {
+.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight {
     border-bottom-right-radius: 10px;
 }
 /**
