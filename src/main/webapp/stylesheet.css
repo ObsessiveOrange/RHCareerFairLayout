@@ -116,19 +116,19 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-tr: last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight td {
+tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight td {
     border-bottom: none;
 }
 .roundTableTopLeft tr:first-child td:first-child, .roundTableAllCorners tr:first-child td:first-child, .roundTopLeft {
     border-top-left-radius: 10px;
 }
-.roundTableTopRight tr:first-child td: last-child, .roundTableAllCorners tr:first-child td: last-child, .roundTopRight {
+.roundTableTopRight tr:first-child td:last-child, .roundTableAllCorners tr:first-child td:last-child, .roundTopRight {
     border-top-right-radius: 10px;
 }
-.roundTableBottomLeft tr: last-child td:first-child, .roundTableAllCorners tr: last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft {
+.roundTableBottomLeft tr:last-child td:first-child, .roundTableAllCorners tr:last-child td:first-child, .tableLastRowRoundBottomLeft td:first-child, .roundBottomLeft {
     border-bottom-left-radius: 10px;
 }
-.roundTableBottomRight tr: last-child td: last-child, .roundTableAllCorners tr: last-child td: last-child, .tableLastRowRoundBottomRight td: last-child, .roundBottomRight {
+.roundTableBottomRight tr:last-child td:last-child, .roundTableAllCorners tr:last-child td:last-child, .tableLastRowRoundBottomRight td:last-child, .roundBottomRight {
     border-bottom-right-radius: 10px;
 }
 /**
@@ -202,6 +202,7 @@ tr: last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRigh
 }
 .filtersListGroupRow td {
     border-bottom: solid 1px #222;
+}
 }
 /**
  *
