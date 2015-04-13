@@ -396,5 +396,62 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-    }
+    },
+    //
+    //draw tutorial page
+    drawMainTutorialSlide5: function() {
+        $canvas.drawInvertedRectangle({
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            holeX: $("#companyListTable").offset().left,
+            holeY: $("#companyListTable").position().top,
+            holeWidth: $("#companyListTable").outerWidth(),
+            holeHeight: $("#companyListTable").outerHeight(),
+            cornerRadius: 10,
+            holeCornerRadius: 10,
+            fromCenter: false,
+            holeFromCenter: false,
+            mask: true
+        });
+        // This shape is being masked
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.75)',
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            fromCenter: false,
+        });
+        $canvas.restoreCanvas();
+        $canvas.drawRect({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x: $("#companyListTable").offset().left,
+            y: $("#companyListTable").position().top,
+            width: $("#companyListTable").outerWidth(),
+            height: $("#companyListTable").outerHeight(),
+            cornerRadius: 10,
+            fromCenter: false,
+        });
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.8)',
+            strokeWidth: 5,
+            x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
+            y: $("#companyListTable").position().top + $("#companyListTable").outerHeight() / 2,
+            width: 600,
+            height: 80,
+            cornerRadius: 10
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
+            y: $("#companyListTable").position().top + $("#companyListTable").outerHeight() / 2,
+            text: "Companies are listed here.\nClick on the checkbox or company name\nto toggle the highlight on the map",
+            fontSize: '20pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+    },
 }
