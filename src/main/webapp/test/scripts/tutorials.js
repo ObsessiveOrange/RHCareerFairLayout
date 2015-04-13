@@ -169,7 +169,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200,
-            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50,
+            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 55,
             radius: 200,
             // start and end angles in degrees
             start: 90,
@@ -179,11 +179,11 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x1: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-            y1: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50,
+            y1: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 55,
             x2: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 15,
-            y2: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 75,
+            y2: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 80,
             x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
-            y3: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 75,
+            y3: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 80,
             closed: true,
         });
         $canvas.drawText({
