@@ -6,7 +6,7 @@ var timeoutEvent;
 var skipButton = null;
 
 function initTutorials(currentPage) {
-    var tutorialStatus = PersistentStorage.retreiveObject("tutorialStatus");
+    var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if(tutorialStatus && tutorialStatus[page]){
         endTutorial();
     }
@@ -45,7 +45,7 @@ function endTutorial() {
     $canvas.remove();
     unlockScrolling();
     showScrollbars();
-    var tutorialStatus = PersistentStorage.retreiveObject("tutorialStatus");
+    var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if(!tutorialStatus){
         tutorialStatus = {};
     }
