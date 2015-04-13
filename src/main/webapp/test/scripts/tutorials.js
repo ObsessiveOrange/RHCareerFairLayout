@@ -457,8 +457,8 @@ var tutorialObjects = {
         });
         $canvas.drawText({
             fillStyle: '#0AF',
-            x: $canvas.width() - 25,
-            y: $canvas.height() / 2,
+            x: $canvas.width() / 2,
+            y: $canvas.height() - 25,
             text: "RHCareerFairLayout, by Benedict Wong",
             fontSize: '15pt',
             fontStyle: 'bold',
