@@ -170,7 +170,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
-            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
+            y: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 50 + 200 / Math.sqrt(2) + 5,
             align: 'right',
             respectAlign: true,
             text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
@@ -369,7 +369,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
-            y: $("#selectionButtons").position().top + $("#selectionButtons").height() + 200 / Math.sqrt(2),
+            y: $("#selectionButtons").position().top + $("#selectionButtons").height() + 200 / Math.sqrt(2) + 5,
             align: 'right',
             respectAlign: true,
             text: "Use these buttons\nto do bulk selections.",
@@ -591,10 +591,10 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#backBtn").offset().left + $("#backBtn").width() / 2 + 200 - 200 / Math.sqrt(2) + 5,
-            y: $("#backBtn").position().top + $("#backBtn").height() / 2 + 50 + 200 / Math.sqrt(2),
+            y: $("#backBtn").position().top + $("#backBtn").height() / 2 + 50 + 200 / Math.sqrt(2) + 5,
             align: 'left',
             respectAlign: true,
-            text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
+            text: "This is the back button;\nIt will bring you back to the main page,\n discarding all filter changes",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
@@ -603,20 +603,13 @@ var tutorialObjects = {
     //
     //draw tutorial page
     drawFiltersTutorialSlide3: function() {
-        unlockScrolling();
-        $('html, body').animate({
-            scrollTop: $("#filtersListTable").offset().top
-        }, 1000);
-        timeoutEvent = setTimeout(function() {
-            lockScrolling($("#filtersListTable").offset().top)
-        }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
             holeX: $("#filtersListTable").offset().left,
-            holeY: $("#filtersListTable").position().top,
+            holeY: $("#filtersListTable").offset().top,
             holeWidth: $("#filtersListTable").outerWidth(),
             holeHeight: $("#filtersListTable").outerHeight(),
             cornerRadius: 10,
@@ -639,7 +632,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x: $("#filtersListTable").offset().left,
-            y: $("#filtersListTable").position().top,
+            y: $("#filtersListTable").offset().top,
             width: $("#filtersListTable").outerWidth(),
             height: $("#filtersListTable").outerHeight(),
             cornerRadius: 10,
@@ -649,16 +642,86 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#filtersListTable").offset().left + $("#filtersListTable").outerWidth() / 2,
-            y: $("#filtersListTable").position().top + $("#filtersListTable").outerHeight() / 2,
-            width: 400,
+            y: $("#filtersListTable").offset().top + $("#filtersListTable").outerHeight() / 2,
+            width: 600,
             height: 80,
             cornerRadius: 10
         });
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#filtersListTable").offset().left + $("#filtersListTable").outerWidth() / 2,
-            y: $("#filtersListTable").position().top + $("#filtersListTable").outerHeight() / 2,
+            y: $("#filtersListTable").offset().top + $("#filtersListTable").outerHeight() / 2,
             text: "All the filters are here, grouped by type.\nThis should be similar to what what\nyou may have used on CareerLink.",
+            fontSize: '20pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+    },
+    //
+    //draw tutorial page
+    drawFiltersTutorialSlide4: function() {
+        $canvas.drawInvertedRectangle({
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            holeX: $("#filterButtons").offset().left + $("#filterButtons").width() / 2,
+            holeY: $("#filterButtons").offset().top + $("#filterButtons").height() / 2,
+            holeWidth: $("#filterButtons").width(),
+            holeHeight: $("#filterButtons").height(),
+            cornerRadius: 10,
+            holeCornerRadius: 10,
+            fromCenter: false,
+            holeFromCenter: true,
+            mask: true
+        });
+        // This shape is being masked
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.75)',
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            fromCenter: false,
+        });
+        $canvas.restoreCanvas();
+        $canvas.drawRect({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x: $("#filterButtons").offset().left + $("#filterButtons").width() / 2,
+            y: $("#filterButtons").offset().top + $("#filterButtons").height() / 2,
+            width: $("#filterButtons").width(),
+            height: $("#filterButtons").height(),
+            cornerRadius: 10,
+        });
+        $canvas.drawArc({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x: $("#filterButtons").offset().left + $("#filterButtons").width() / 2 + 200,
+            y: $("#filterButtons").offset().top + $("#filterButtons").height() - 5,
+            radius: 200,
+            // start and end angles in degrees
+            start: 315,
+            end: 0,
+        });
+        $canvas.drawLine({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x1: $("#filterButtons").offset().left + $("#filterButtons").width() / 2,
+            y1: $("#filterButtons").offset().top + $("#filterButtons").height() - 5,
+            x2: $("#filterButtons").offset().left + $("#filterButtons").width() / 2 - 15,
+            y2: $("#filterButtons").offset().top + $("#filterButtons").height() - 30,
+            x3: $("#filterButtons").offset().left + $("#filterButtons").width() / 2 + 15,
+            y3: $("#filterButtons").offset().top + $("#filterButtons").height() - 30,
+            closed: true,
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $("#backBtn").offset().left + $("#backBtn").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
+            y: $("#backBtn").offset().top + $("#backBtn").height() + 200 / Math.sqrt(2) - 5,
+            align: 'left',
+            respectAlign: true,
+            text: "These buttons allow you to\ncancel your changes, clear all filters,\n and apply the selected filters, respectively.",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
