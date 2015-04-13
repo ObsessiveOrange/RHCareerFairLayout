@@ -447,7 +447,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
-            y: $("#companyListTable").position().top + $("#companyListTable").outerHeight() / 2,
+            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top)/2,
             text: "Companies are listed here.\nClick on the checkbox or company name\nto toggle the highlight on the map",
             fontSize: '20pt',
             fontStyle: 'bold',
