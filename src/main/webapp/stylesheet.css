@@ -184,7 +184,6 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 /*.companyListInfo {
     width: 50px;
 }*/
-
 /**
  * FILTERS
  * Body customization
@@ -202,7 +201,6 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 }
 .filtersListGroupRow td {
     border-bottom: solid 1px #222;
-}
 }
 /**
  *
