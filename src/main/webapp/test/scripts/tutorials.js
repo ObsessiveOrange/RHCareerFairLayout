@@ -31,14 +31,12 @@ function goToNextSlide() {
     }
     if (tutorialObjects.hasOwnProperty("draw" + page + "TutorialSlide" + slideCounter)) {
         tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
-        console.log("Next Slide!");
     } else {
         endTutorial();
     }
 }
 
 function endTutorial() {
-    console.log("Done!");
     if (skipButton != null) {
         skipButton.remove();
     }
@@ -108,48 +106,12 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-        // $canvas.drawRect({
-        //     strokeStyle: "#F55",
-        //     fillStyle: '#F88',
-        //     x: $(window).width() / 2,
-        //     y: $(window).height() / 2 + 150,
-        //     width: 200,
-        //     height: 50,
-        //     click: function(layer) {
-        //         endTutorial();
-        //     }
-        // });
-        // $canvas.drawText({
-        //     fillStyle: '#FFF',
-        //     x: $(window).width() / 2,
-        //     y: $(window).height() / 2 + 150,
-        //     text: "Skip",
-        //     fontSize: '20pt',
-        //     fontStyle: 'bold',
-        //     fontFamily: 'Verdana, sans-serif',
-        //     click: function(layer) {
-        //         endTutorial();
-        //     }
-        // });
         $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
         skipButton = $("#tutSkipButton");
     },
     //
     //draw tutorial page
     drawMainTutorialSlide1: function() {
-        // $canvas.drawInvertedEllipse({
-        //     x: 0,
-        //     y: 0,
-        // width: $canvas.width(),
-        // height: $canvas.height(),
-        // holeX: $("#filterBtn").offset().left + $("#filterBtn").width() / 2,
-        // holeY: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
-        // holeWidth: 100,
-        // holeHeight: 100,
-        // fromCenter: false,
-        // holeFromCenter: true,
-        // mask: true
-        // });
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
@@ -469,6 +431,36 @@ var tutorialObjects = {
             y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top) / 2,
             text: "Companies are listed here.\nClick on the checkbox or company name\nto toggle the highlight on the map",
             fontSize: '20pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+    },
+    //
+    //draw tutorial page
+    drawMainTutorialSlide5: function() {
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.75)',
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            fromCenter: false,
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $canvas.width() / 2,
+            y: $canvas.height() / 2,
+            text: "That's it!\n\nGood luck!",
+            fontSize: '30pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $canvas.width() - 25,
+            y: $canvas.height() / 2,
+            text: "RHCareerFairLayout, by Benedict Wong",
+            fontSize: '15pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
