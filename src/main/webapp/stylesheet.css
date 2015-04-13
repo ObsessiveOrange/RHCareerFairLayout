@@ -198,6 +198,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 .filtersListGroupRow {
     font-weight: bold;
     background-color: #A1D5FF;
+    border-bottom: solid 1px #222;
 }
 /**
  *
