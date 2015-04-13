@@ -644,14 +644,14 @@ var tutorialObjects = {
             x: $("#filtersListTable").offset().left + $("#filtersListTable").outerWidth() / 2,
             y: $("#filtersListTable").offset().top + $("#filtersListTable").outerHeight() / 2,
             width: 600,
-            height: 80,
+            height: 120,
             cornerRadius: 10
         });
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#filtersListTable").offset().left + $("#filtersListTable").outerWidth() / 2,
             y: $("#filtersListTable").offset().top + $("#filtersListTable").outerHeight() / 2,
-            text: "All the filters are here, grouped by type.\nThis should be similar to what what\nyou may have used on CareerLink.",
+            text: "All the filters are here, grouped by type.\nThis should be similar to what what\nyou may have used on CareerLink.\n\nClick on each group to show/hide it's subfilters.",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
