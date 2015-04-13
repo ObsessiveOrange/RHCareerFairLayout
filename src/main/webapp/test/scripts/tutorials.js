@@ -10,7 +10,7 @@ function initTutorials(currentPage) {
     $canvas = $("#tutorial");
     var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if(tutorialStatus && tutorialStatus[page]){
-        endTutorial();
+        return endTutorial();
     }
     slideCounter = 0;
     hideScrollbars();
