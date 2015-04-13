@@ -79,6 +79,7 @@ html, body {
     margin-bottom: 100px;
     overflow: auto;
     cursor: pointer;
+    background-color: #222;
 }
 .container {
     position: relative;
