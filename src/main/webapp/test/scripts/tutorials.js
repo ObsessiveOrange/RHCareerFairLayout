@@ -7,11 +7,11 @@ var skipButton = null;
 
 function initTutorials(currentPage) {
     page = currentPage;
+    $canvas = $("#tutorial");
     var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if(tutorialStatus && tutorialStatus[page]){
         endTutorial();
     }
-    $canvas = $("#tutorial");
     slideCounter = 0;
     hideScrollbars();
     $canvas.prop("width", $canvas.width());
