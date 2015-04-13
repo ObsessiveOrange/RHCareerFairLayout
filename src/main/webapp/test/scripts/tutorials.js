@@ -439,7 +439,7 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
-            y: $("#companyListTable").position().top + $("#companyListTable").outerHeight() / 2,
+            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top)/2,
             width: 600,
             height: 80,
             cornerRadius: 10
