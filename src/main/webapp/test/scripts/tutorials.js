@@ -368,7 +368,7 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 200,
-            y: $("#selectionButtons").position().top + $("#selectionButtons").height(),
+            y: $("#selectionButtons").position().top + $("#selectionButtons").height() + 5,
             radius: 200,
             // start and end angles in degrees
             start: 90,
@@ -378,11 +378,11 @@ var tutorialObjects = {
             strokeStyle: '#0AF',
             strokeWidth: 5,
             x1: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2,
-            y1: $("#selectionButtons").position().top + $("#selectionButtons").height(),
+            y1: $("#selectionButtons").position().top + $("#selectionButtons").height() + 5,
             x2: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 15,
-            y2: $("#selectionButtons").position().top + $("#selectionButtons").height() + 25,
+            y2: $("#selectionButtons").position().top + $("#selectionButtons").height() + 30,
             x3: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 + 15,
-            y3: $("#selectionButtons").position().top + $("#selectionButtons").height() + 25,
+            y3: $("#selectionButtons").position().top + $("#selectionButtons").height() + 30,
             closed: true,
         });
         $canvas.drawText({
