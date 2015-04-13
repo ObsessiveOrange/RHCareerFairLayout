@@ -5,24 +5,43 @@ var top;
 var timeoutEvent;
 var skipButton = null;
 
+/**
+ * Setup canvas and tutorial variables.
+ *
+ */
 function initTutorials(currentPage) {
+    //
+    //set environment variables required for endTutorial call, if needed.
     page = currentPage;
     $canvas = $("#tutorial");
+    //
+    //if tutorial has already been shown this session, end the tutorial.
     var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if (tutorialStatus && tutorialStatus[page]) {
         return endTutorial();
     }
+    //
+    //set other environment variables. 
     slideCounter = 0;
+    //
+    //hide scrollbars
     hideScrollbars();
+    //set canvas width and heights.
     $canvas.prop("width", $canvas.width());
     $canvas.prop("height", $canvas.height());
     $canvas.click(function(event) {
         goToNextSlide();
         event.stopPropagation();
     });
+    //
+    //call first drawTutorial method
     tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
 }
 
+/**
+ * Go to the next slide, if no more slides, end tutorial 
+ *
+ */
 function goToNextSlide() {
     slideCounter++;
     $canvas.clearCanvas();
@@ -36,6 +55,10 @@ function goToNextSlide() {
     }
 }
 
+/**
+ * End tutorial
+ *
+ */
 function endTutorial() {
     if (skipButton != null) {
         skipButton.remove();

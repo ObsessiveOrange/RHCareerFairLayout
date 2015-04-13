@@ -47,6 +47,11 @@ $(document).ready(function() {
     else {
         setupPage();
     }
+    $("#companySearchBar").focus(function() {
+        $('html, body').animate({
+            scrollTop: $("#companySearchBar").offset().top
+        }, 1000);
+    });
     //
     //save data when link out of page clicked.
     $("#filterBtn").on("click", function(event) {
