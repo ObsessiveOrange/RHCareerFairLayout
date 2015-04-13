@@ -32,6 +32,7 @@ $(document).ready(function() {
                 filters = {
                     changed: true
                 }
+                prepareForPageSwitch();
                 break;
             case "apply":
                 prepareForPageSwitch();
