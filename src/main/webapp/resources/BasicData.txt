@@ -1,8 +1,0 @@
-Item	Value
-Year	2015
-Quarter	Spring
-Layout_Section1	12
-Layout_Section2	20
-Layout_Section2_Rows	6
-Layout_Section2_PathWidth	2
-Layout_Section3	14
