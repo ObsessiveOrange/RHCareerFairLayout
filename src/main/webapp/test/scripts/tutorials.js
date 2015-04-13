@@ -326,4 +326,68 @@ var tutorialObjects = {
             fontFamily: 'Verdana, sans-serif',
         });
     }
+    //
+    //draw tutorial page
+    drawMainTutorialSlide4: function() {
+        unlockScrolling();
+        $('html, body').animate({
+            scrollTop: $("#companySearchBar").offset().top
+        }, 1000);
+        timeoutEvent = setTimeout(function() {
+            lockScrolling($("#companySearchBar").offset().top)
+        }, 1000);
+        $canvas.drawInvertedRectangle({
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            holeX: $("#companySearchBar").offset().left,
+            holeY: $("#companySearchBar").position().top,
+            holeWidth: $("#companySearchBar").outerWidth(),
+            holeHeight: $("#companySearchBar").outerHeight(),
+            cornerRadius: 10,
+            holeCornerRadius: 10,
+            fromCenter: false,
+            holeFromCenter: false,
+            mask: true
+        });
+        // This shape is being masked
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.75)',
+            x: 0,
+            y: 0,
+            width: $canvas.width(),
+            height: $canvas.height(),
+            fromCenter: false,
+        });
+        $canvas.restoreCanvas();
+        $canvas.drawRect({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x: $("#companySearchBar").offset().left,
+            y: $("#companySearchBar").position().top,
+            width: $("#companySearchBar").outerWidth(),
+            height: $("#companySearchBar").outerHeight(),
+            cornerRadius: 10,
+            fromCenter: false,
+        });
+        $canvas.drawRect({
+            fillStyle: 'rgba(0, 0, 0, 0.8)',
+            strokeWidth: 5,
+            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
+            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
+            width: 400,
+            height: 80,
+            cornerRadius: 10
+        });
+        $canvas.drawText({
+            fillStyle: '#0AF',
+            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
+            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
+            text: "This is the search bar.\nType a company name or\ntable number to search.",
+            fontSize: '20pt',
+            fontStyle: 'bold',
+            fontFamily: 'Verdana, sans-serif',
+        });
+    }
 }

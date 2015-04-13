@@ -61,9 +61,11 @@ html, body {
     border-spacing: 0;
     table-layout: fixed;
 }
+.buttonContainer{
+    float:right;
+}
 .button {
     display: inline-block;
-    float: right;
     border-left: solid 1px #CCC;
     border-bottom: solid 1px #CCC;
     border-top: solid 1px #CCC;
