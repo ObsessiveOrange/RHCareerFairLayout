@@ -450,7 +450,7 @@ var tutorialObjects = {
             fillStyle: '#0AF',
             x: $canvas.width() / 2,
             y: $canvas.height() / 2,
-            text: "That's it!\n\nGood luck!",
+            text: "That's it for this page!\n\nGood luck in the career fair!",
             fontSize: '30pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
