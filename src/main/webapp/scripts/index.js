@@ -47,7 +47,7 @@ $(document).ready(function() {
     else {
         setupPage();
     }
-    $("#companySearchBar").focus(function() {
+    $("#companySearchBar").click(function() {
         $('html, body').animate({
             scrollTop: $("#companySearchBar").offset().top
         }, 1000);
