@@ -40,6 +40,7 @@ $(document).ready(function() {
         }
         window.location = "index.html";
     });
+    initTutorials("Filters");
 });
 //load data saved in persistent storage
 function loadAfterPageSwitch() {
