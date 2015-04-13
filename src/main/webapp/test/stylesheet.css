@@ -62,12 +62,14 @@ html, body {
     color:#FFF;
     top:50%;
     transform: translateY(-50%);
+    cursor: pointer;
 }
 .bodyContent {
     position: relative;
     font-size: 2.0em;
     margin-bottom: 60px;
     overflow: auto;
+    cursor: pointer;
 }
 .container {
     position: relative;
