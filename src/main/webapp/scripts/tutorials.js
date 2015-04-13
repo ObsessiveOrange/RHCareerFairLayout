@@ -62,6 +62,7 @@ function goToNextSlide() {
     $canvas.clearCanvas();
     if (skipButton != null) {
         skipButton.remove();
+        skipButton = null;
     }
     if (tutorialObjects.hasOwnProperty("draw" + page + "TutorialSlide" + slideCounter)) {
         tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
@@ -76,6 +77,7 @@ function goToNextSlide() {
 function endTutorial() {
     if (skipButton != null) {
         skipButton.remove();
+        skipButton = null;
     }
     $canvas.remove();
     unlockScrolling();
@@ -143,8 +145,10 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-        $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
-        skipButton = $("#tutSkipButton");
+        if (skipButton == null) {
+            $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
+            skipButton = $("#tutSkipButton");
+        }
     },
     //
     //draw tutorial page
@@ -536,8 +540,10 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-        $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
-        skipButton = $("#tutSkipButton");
+        if (skipButton == null) {
+            $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
+            skipButton = $("#tutSkipButton");
+        }
     },
     drawFiltersTutorialSlide1: function() {
         $canvas.drawRect({
