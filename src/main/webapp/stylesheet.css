@@ -76,7 +76,7 @@ html, body {
 .bodyContent {
     position: relative;
     font-size: 2.0em;
-    margin-bottom: 60px;
+    margin-bottom: 100px;
     overflow: auto;
     cursor: pointer;
 }
