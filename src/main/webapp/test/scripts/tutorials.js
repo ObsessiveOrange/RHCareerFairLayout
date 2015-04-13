@@ -247,7 +247,7 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
-            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height()/2),
+            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height() / 2),
             width: 500,
             height: 100,
             cornerRadius: 10
@@ -255,7 +255,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#mapTables").offset().left + $("#mapTables").width() / 2,
-            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height()/2),
+            y: Math.min($("#mapTables").position().top + $("#mapTables").height() / 2, $(window).height() / 2),
             text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
             fontSize: '20pt',
             fontStyle: 'bold',
@@ -325,26 +325,19 @@ var tutorialObjects = {
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
         });
-    }
+    },
     //
     //draw tutorial page
     drawMainTutorialSlide4: function() {
-        unlockScrolling();
-        $('html, body').animate({
-            scrollTop: $("#companySearchBar").offset().top
-        }, 1000);
-        timeoutEvent = setTimeout(function() {
-            lockScrolling($("#companySearchBar").offset().top)
-        }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            holeX: $("#companySearchBar").offset().left,
-            holeY: $("#companySearchBar").position().top,
-            holeWidth: $("#companySearchBar").outerWidth(),
-            holeHeight: $("#companySearchBar").outerHeight(),
+            holeX: $("#selectionButtons").offset().left,
+            holeY: $("#selectionButtons").position().top,
+            holeWidth: $("#selectionButtons").outerWidth(),
+            holeHeight: $("#selectionButtons").outerHeight(),
             cornerRadius: 10,
             holeCornerRadius: 10,
             fromCenter: false,
@@ -364,27 +357,41 @@ var tutorialObjects = {
         $canvas.drawRect({
             strokeStyle: '#0AF',
             strokeWidth: 5,
-            x: $("#companySearchBar").offset().left,
-            y: $("#companySearchBar").position().top,
-            width: $("#companySearchBar").outerWidth(),
-            height: $("#companySearchBar").outerHeight(),
+            x: $("#selectionButtons").offset().left,
+            y: $("#selectionButtons").position().top,
+            width: $("#selectionButtons").outerWidth(),
+            height: $("#selectionButtons").outerHeight(),
             cornerRadius: 10,
             fromCenter: false,
         });
-        $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.8)',
+        $canvas.drawArc({
+            strokeStyle: '#0AF',
             strokeWidth: 5,
-            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
-            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
-            width: 400,
-            height: 80,
-            cornerRadius: 10
+            x: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 200,
+            y: $("#selectionButtons").position().top + $("#selectionButtons").height(),
+            radius: 200,
+            // start and end angles in degrees
+            start: 90,
+            end: 135,
+        });
+        $canvas.drawLine({
+            strokeStyle: '#0AF',
+            strokeWidth: 5,
+            x1: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2,
+            y1: $("#selectionButtons").position().top + $("#selectionButtons").height(),
+            x2: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 15,
+            y2: $("#selectionButtons").position().top + $("#selectionButtons").height() + 25,
+            x3: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 + 15,
+            y3: $("#selectionButtons").position().top + $("#selectionButtons").height() + 25,
+            closed: true,
         });
         $canvas.drawText({
             fillStyle: '#0AF',
-            x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
-            y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
-            text: "This is the search bar.\nType a company name or\ntable number to search.",
+            x: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 - 200 + 200 / Math.sqrt(2) - 5,
+            y: $("#selectionButtons").position().top + $("#selectionButtons").height() + 200 / Math.sqrt(2),
+            align: 'right',
+            respectAlign: true,
+            text: "Use these buttons\nto do bulk selections.",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
