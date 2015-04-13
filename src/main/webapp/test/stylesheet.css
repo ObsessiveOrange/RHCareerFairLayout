@@ -45,7 +45,7 @@ html, body {
  * Body Customization:
  */
 
-#tutSkipButton {
+#tutSkipButton > * {
     position: absolute;
     display: table-cell;
     left: calc(50% - 100px);
@@ -58,9 +58,6 @@ html, body {
     font-size: 20pt;
     vertical-align: middle;
     text-align: center;
-}
-#tutSkipText{
-    vertical-align: middle;
 }
 .bodyContent {
     position: relative;
