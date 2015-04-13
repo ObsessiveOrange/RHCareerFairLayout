@@ -437,7 +437,7 @@ var tutorialObjects = {
     },
     //
     //draw tutorial page
-    drawMainTutorialSlide5: function() {
+    drawMainTutorialSlide6: function() {
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.75)',
             x: 0,
