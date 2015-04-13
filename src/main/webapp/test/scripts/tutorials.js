@@ -3,6 +3,7 @@ var page;
 var slideCounter;
 var top;
 var timeoutEvent;
+var skipButton = null;
 
 function initTutorials(currentPage) {
     $canvas = $("#tutorial");
@@ -21,6 +22,9 @@ function initTutorials(currentPage) {
 function goToNextSlide() {
     slideCounter++;
     $canvas.clearCanvas();
+    if (skipButton != null) {
+        skipButton.remove();
+    }
     if (tutorialObjects.hasOwnProperty("draw" + page + "TutorialSlide" + slideCounter)) {
         tutorialObjects["draw" + page + "TutorialSlide" + slideCounter]();
         console.log("Next Slide!");
@@ -31,6 +35,9 @@ function goToNextSlide() {
 
 function endTutorial() {
     console.log("Done!");
+    if (skipButton != null) {
+        skipButton.remove();
+    }
     $canvas.remove();
     unlockScrolling();
     showScrollbars();
@@ -114,7 +121,7 @@ var tutorialObjects = {
         //         endTutorial();
         //     }
         // });
-        $canvas.html("<div class='tutSkipButton' onClick='endTutorial()'>Skip</div>");
+        skipButton = $body.append("<div class='tutSkipButton' onClick='endTutorial()'>Skip</div>");
     },
     //
     //draw tutorial page
@@ -440,7 +447,7 @@ var tutorialObjects = {
             fillStyle: 'rgba(0, 0, 0, 0.8)',
             strokeWidth: 5,
             x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
-            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top)/2,
+            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top) / 2,
             width: 600,
             height: 80,
             cornerRadius: 10
@@ -448,7 +455,7 @@ var tutorialObjects = {
         $canvas.drawText({
             fillStyle: '#0AF',
             x: $("#companyListTable").offset().left + $("#companyListTable").outerWidth() / 2,
-            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top)/2,
+            y: $("#companyListTable").position().top + ($(window).height() - $("#companyListTable").position().top) / 2,
             text: "Companies are listed here.\nClick on the checkbox or company name\nto toggle the highlight on the map",
             fontSize: '20pt',
             fontStyle: 'bold',
