@@ -175,14 +175,14 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     visibility: hidden;
 }
 .companyListCompanyName {
-    width: calc(100% - 200px);
+    width: calc(100% - 150px);
 }
 .companyListTable {
     width: 100px;
 }
-.companyListInfo {
+.companyListInfo {/*
     width: 50px;
-}
+}*/
 /**
  * FILTERS
  * Body customization

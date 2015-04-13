@@ -237,7 +237,9 @@ function updateCompanyList() {
     //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
-        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
+        // Not in use - includes [i], which is currently not supported.
+        //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td></tr>");
         careerFairData.companies[companyID].checked = false;
     });
     //
