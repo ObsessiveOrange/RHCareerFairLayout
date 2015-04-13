@@ -49,7 +49,7 @@ html, body {
     position: absolute;
     display: table-cell;
     left: calc(50% - 100px);
-    top: calc(50% - 25px);
+    top: calc(50% + 100px);
     width: 200px;
     height: 50px;
     z-index: 11;
@@ -58,6 +58,9 @@ html, body {
     font-size: 20pt;
     vertical-align: middle;
     text-align: center;
+}
+#tutSkipText{
+    vertical-align: middle;
 }
 .bodyContent {
     position: relative;

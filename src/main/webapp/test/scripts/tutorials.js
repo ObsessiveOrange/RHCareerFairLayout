@@ -121,7 +121,7 @@ var tutorialObjects = {
         //         endTutorial();
         //     }
         // });
-        $("body").append("<div id='tutSkipButton' onClick='endTutorial()'>Skip</div>");
+        $("body").append("<div id='tutSkipButton' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
         skipButton = $("#tutSkipButton");
     },
     //
