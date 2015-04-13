@@ -532,7 +532,7 @@ var tutorialObjects = {
     },
     //
     //draw tutorial page
-    drawMainTutorialSlide2: function() {
+    drawFiltersTutorialSlide2: function() {
         $canvas.drawInvertedRectangle({
             x: 0,
             y: 0,
