@@ -192,6 +192,10 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
 .filtersListExpandColumn {
     width: 100px;
 }
+.filtersListSelectColumn{
+    font-weight: bold;
+    color: #38C;
+}
 .filtersListFilterColumn {
     width: calc(100% - 100px);
 }
