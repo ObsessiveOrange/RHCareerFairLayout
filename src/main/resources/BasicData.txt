@@ -1,8 +1,8 @@
 Item	Value
 Year	2015
 Quarter	Spring
-Layout_Section1	26
-Layout_Section2	31
-Layout_Section2_Rows	8
-Layout_Section2_PathWidth	1
-Layout_Section3	30
+Layout_Section1	8
+Layout_Section2	12
+Layout_Section2_Rows	4
+Layout_Section2_PathWidth	2
+Layout_Section3	10

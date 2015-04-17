@@ -153,9 +153,9 @@ public class DataServlet extends HttpServlet {
             categories.put("Work Authorizations", workAuthList);
             categories.put("Position Types", posTypeList);
             HashMap<String, String> parameters = new HashMap<String, String>();
+            parameters.put("table", companyData.getItem(i, 4, String.class));
             
             Company newCompany = new Company(title, categories, null, parameters);
-            parameters.put("table", Integer.toString(newCompany.getID() - 99));
             
             companyMap.put(newCompany.getID(), newCompany);
         }
