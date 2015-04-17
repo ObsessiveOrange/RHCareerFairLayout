@@ -1,298 +1,66 @@
 Company Name	Majors Recruited	Work Authorization Desired	Position Types	Table
-Addenda/PAG Holdings	"Chemical Engineering, Chemistry"	"US Citizen, Permanent Resident"	"Internship/Externship, Co-op"	14
-"ADVICS Manufacturing Indiana, LLC"	"Electrical Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	189
-AI International	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Full Time, Part Time, Co-op"	200
-AI International	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Full Time, Part Time, Co-op"	210
-Aircom Manufacturing/Medivative Technologies	Biomedical Engineering	US Citizen	Internship/Externship	11
-Aircom Manufacturing/Medivative Technologies	Biomedical Engineering	US Citizen	Internship/Externship	12
-Aisin USA	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Full Time"	26
-Aisin USA	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Full Time"	29
-AK Steel Corporation	"Computer Science, Chemical Engineering, Electrical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	88
-AK Steel Corporation	"Computer Science, Chemical Engineering, Electrical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	89
-Alcoa Power & Propulsion	"Computer Science, Electrical Engineering, Mechanical Engineering"		"Internship/Externship, Full Time"	131
-Alcoa Power & Propulsion	"Computer Science, Electrical Engineering, Mechanical Engineering"		"Internship/Externship, Full Time"	132
-"Allegient, LLC"	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time"	160
-"Allegient, LLC"	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time"	164
-Alliant Energy	"Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	17
-Alliant Energy	"Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	19
-Allstate Insurance Corporation		"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	287
-Allstate Insurance Corporation		"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	293
-AM General LLC	Mechanical Engineering	US Citizen	Full Time	263
-AM General LLC	Mechanical Engineering	US Citizen	Full Time	266
-Amazon.com	Computational Science	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time, Co-op"	73
-Amazon.com	Computational Science	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time, Co-op"	75
-Ambu	"Mechanical Engineering, Biomedical Engineering"		Internship/Externship	272
-Ambu	"Mechanical Engineering, Biomedical Engineering"		Internship/Externship	277
-Appriss	Computational Science	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Part Time"	74
-Appriss	Computational Science	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Part Time"	76
-ArcelorMittal USA	"Civil Engineering, Electrical Engineering"	"US Citizen, Permanent Resident"	Full Time	55
-ArcelorMittal USA	Electrical Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	179
-ArcelorMittal USA	Electrical Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	181
-Archer Daniels Midland Company (ADM)	"Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, J-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	18
-Archer Daniels Midland Company (ADM)	"Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, J-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	20
-Bastian Solutions	"Computer Science, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	151
-Bastian Solutions	"Computer Science, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	152
-Belcan Engineering	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	140
-Belcan Engineering	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	142
-"Belden, inc."	"Chemical Engineering, Electrical Engineering"	"US Citizen, Permanent Resident"	Full Time	21
-"Belden, inc."	"Chemical Engineering, Electrical Engineering"	"US Citizen, Permanent Resident"	Full Time	22
-"Bill Austin & Associates, Inc."	"Chemical Engineering, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Software Engineering, Engineering Physics, Electrical and Computer Engineering, Syst Engr & Mgmt Internat'l"	"US Citizen, Permanent Resident"	Full Time	34
-"Bill Austin & Associates, Inc."	"Chemical Engineering, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Software Engineering, Engineering Physics, Electrical and Computer Engineering, Syst Engr & Mgmt Internat'l"	"US Citizen, Permanent Resident"	Full Time	35
-Boston Scientific	"Math, Computer Science, Chemical Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering, Biomedical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	246
-Brinkmann Constructors	"Civil Engineering, Engineering Management-GR Only"		"Internship/Externship, Full Time, Co-op"	66
-Brinkmann Constructors	"Civil Engineering, Engineering Management-GR Only"		"Internship/Externship, Full Time, Co-op"	67
-Caterpillar Inc.	"Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	228
-Caterpillar Inc.	"Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	229
-ChalkLabs	"Math, Computer Science, Computer Engineering, Physics"	"US Citizen, Permanent Resident"	"Full Time, Part Time"	249
-ChalkLabs	"Math, Computer Science, Computer Engineering, Physics"	"US Citizen, Permanent Resident"	"Full Time, Part Time"	250
-Clarity Solution Group	"Math, Computer Science, Civil Engineering, Chemistry, Computer Engineering, Physics, Software Engineering, Engineering Physics, Computational Science"	US Citizen	Full Time	247
-Clarity Solution Group	"Math, Computer Science, Civil Engineering, Chemistry, Computer Engineering, Physics, Software Engineering, Engineering Physics, Computational Science"	US Citizen	Full Time	248
-Clarke Engineering Services/Acquire Automation	"Chemical Engineering, Electrical Engineering, Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	23
-Clarke Engineering Services/Acquire Automation	"Chemical Engineering, Electrical Engineering, Mechanical Engineering, Biomedical Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	32
-Clarke Engineering Services/Acquire Automation	"Chemical Engineering, Electrical Engineering, Mechanical Engineering, Biomedical Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	33
-Closure Systems International (CSI)	"Chemical Engineering, Mechanical Engineering"	None	"Internship/Externship, Full Time, Co-op"	36
-Closure Systems International (CSI)	"Chemical Engineering, Mechanical Engineering"	None	"Internship/Externship, Full Time, Co-op"	38
-Crown Equipment Corporation	Mechanical Engineering	"US Citizen, Permanent Resident"	Full Time	257
-"CSN, LLC"	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Internship/Externship	190
-Delta Technologies	"Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	183
-Detroit Stoker Company	Mechanical Engineering	"US Citizen, Permanent Resident"	"Full Time, Co-op"	258
-"DIGIOP (Observint Technologies, Inc.)"	Software Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Part Time"	281
-Digital Insight	"Computer Science, Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time"	92
-Digital Insight	"Computer Science, Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time"	95
-Direct Supply	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	161
-Direct Supply	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	165
-Doxpop	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident, H-1 Visa"	"Internship/Externship, Full Time"	162
-Doxpop	"Computer Science, Software Engineering"	"US Citizen, Permanent Resident, H-1 Visa"	"Internship/Externship, Full Time"	166
-Duke Energy Corporation	"Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Co-op"	58
-Duke Energy Corporation	"Civil Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Co-op"	60
-Electric Power Systems	Electrical Engineering	None	Full Time	180
-Electric Power Systems	Electrical Engineering	None	Full Time	182
-Ellison Surface Technologies	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Co-op"	191
-Epic	All Majors	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time"	6
-Epic	All Majors	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time"	9
-Epic	"Math, Computer Science, Biology, Chemical Engineering, Chemistry, Electrical Engineering, Computer Engineering, Biomedical Engineering, Physics, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	Full Time	245
-Exelis - Geospatial Systems	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	226
-Exelis - Geospatial Systems	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	227
-"Expedia, Inc."	"Computer Science, Electrical Engineering, Computer Engineering, Electrical and Computer Engineering, International Computer Science"	None	Internship/Externship	114
-"Expedia, Inc."	"Computer Science, Electrical Engineering, Computer Engineering, Electrical and Computer Engineering, International Computer Science"	None	Internship/Externship	115
-Extension Healthcare	"Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	108
-Extension Healthcare	"Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	110
-Fathom Voice	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	98
-Firestone Industrial Products	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	24
-First Databank	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	102
-First Databank	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Full Time	105
-"FitzMark, Inc."	"Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Co-op"	109
-"FitzMark, Inc."	"Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Co-op"	111
-Fleece Performance Engineering	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	US Citizen	"Volunteer, Internship/Externship, Full Time, Part Time, Co-op"	225
-"Franklin Electric Co., Inc."		"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time"	288
-"Franklin Electric Co., Inc."		"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time"	294
-"Frito-Lay North America-Frankfort, IN"		"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	289
-"Frito-Lay North America-Frankfort, IN"		"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	295
-Garmin International	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering"		"Internship/Externship, Full Time"	133
-Garmin International	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering"		"Internship/Externship, Full Time"	134
-General Electric	"Electrical Engineering, Mechanical Engineering"	US Citizen	Co-op	201
-General Electric	"Electrical Engineering, Mechanical Engineering"	US Citizen	Co-op	211
-General Electric	"Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	Co-op	219
-Gentex Corporation	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	136
-Gentex Corporation	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	137
-Gerdau	"Civil Engineering, Electrical Engineering, Mechanical Engineering, Optical Engineering"	US Citizen	Full Time	64
-Gerdau	"Civil Engineering, Electrical Engineering, Mechanical Engineering, Optical Engineering"	US Citizen	Full Time	65
-"Google, Inc."	"Software Engineering, Computational Science"	"US Citizen, H-1 Visa"	Full Time	283
-Greenlee Textron	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	202
-Greenlee Textron	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	212
-Greenlee Textron	"Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	236
-greenlight.guru	"Computer Science, Software Engineering, International Computer Science"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	169
-Grote Industries	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Optical Engineering"	US Citizen	"Internship/Externship, Full Time"	224
-GSI Group	Mechanical Engineering	"US Citizen, Permanent Resident"	Internship/Externship	264
-GSI Group	Mechanical Engineering	"US Citizen, Permanent Resident"	Internship/Externship	267
-Halliburton	"Math, Chemical Engineering, Civil Engineering, Chemistry, Electrical Engineering, Mechanical Engineering, Computer Engineering, Biomedical Engineering, Physics, Engineering Physics, Biochemistry & Molecular Biology, Electrical and Computer Engineering, Biochemistry"	"US Citizen, Permanent Resident"	Full Time	241
-Halliburton	"Math, Chemical Engineering, Civil Engineering, Chemistry, Electrical Engineering, Mechanical Engineering, Computer Engineering, Biomedical Engineering, Physics, Engineering Physics, Biochemistry & Molecular Biology, Electrical and Computer Engineering, Biochemistry"	"US Citizen, Permanent Resident"	Full Time	242
-"HBK Engineering, LLC"	"Civil Engineering, Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	62
-"HBK Engineering, LLC"	"Civil Engineering, Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	63
-"HBM, Inc"	"Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science"	US Citizen	"Full Time, Part Time, Co-op"	112
-"HBM, Inc"	"Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science"	US Citizen	"Internship/Externship, Full Time"	155
-"HBM, Inc"	"Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science"	US Citizen	"Internship/Externship, Full Time"	156
-"HELMER, INC."	"Mechanical Engineering, Biomedical Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Co-op"	273
-"HELMER, INC."	"Mechanical Engineering, Biomedical Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Co-op"	278
-"Highway Machine Company, Inc. (HMC)"	Mechanical Engineering	US Citizen	"Internship/Externship, Full Time, Part Time"	259
-Hirata Corporation of America	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time"	203
-Hirata Corporation of America	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time"	213
-Honda	"Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	"Full Time, Co-op"	220
-Honda	"Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	"Full Time, Co-op"	221
-Honeywell FM&T	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	27
-Honeywell FM&T	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	30
-"Horner Electric, Inc."	"Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"	184
-"Hunt Construction Group, An AECOM Company"	"Civil Engineering, Electrical Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"	56
-"Hunt Construction Group, An AECOM Company"	"Civil Engineering, Electrical Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"	57
-HUSCO Automotive	Mechanical Engineering		"Internship/Externship, Full Time, Co-op"	265
-HUSCO Automotive	Mechanical Engineering		"Internship/Externship, Full Time, Co-op"	268
-Indiana Department of Transportation (INDOT)	Civil Engineering	US Citizen	"Internship/Externship, Full Time, Part Time"	40
-Indiana Department of Transportation (INDOT)	Civil Engineering	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	46
-Indiana Department of Transportation (INDOT)	Civil Engineering	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	52
-Indiana Legislative Services Agency	"Computer Science, Software Engineering"	US Citizen	"Internship/Externship, Full Time"	157
-INdigital telecom	Software Engineering	None	"Internship/Externship, Full Time"	282
-"Indigo Biosystems, Inc."	"Computer Science, Computer Engineering"		"Internship/Externship, Full Time"	93
-"Indigo Biosystems, Inc."	"Computer Science, Computer Engineering"		"Internship/Externship, Full Time"	96
-"Infrastructure Engineering, Inc."	Civil Engineering		Full Time	47
-"Infrastructure Engineering, Inc."	Civil Engineering		Full Time	53
-Ingram Micro Mobility - North America	"Economics, Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	175
-Ingredion Incorporated	"Chemical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	37
-Ingredion Incorporated	"Chemical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	39
-Intelligrated	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	147
-Intelligrated	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	148
-"Interactive Intelligence, Inc."	"Computer Science, Computer Engineering, Software Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	103
-"Interactive Intelligence, Inc."	"Computer Science, Computer Engineering, Software Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	106
-"Ivani, LLC"	"Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	187
-"Ivani, LLC"	"Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	188
-"Ivani, LLC"	"Electrical Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	Full Time	239
-Jacobs Technology Inc.	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	145
-Jacobs Technology Inc.	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	146
-"Janssen & Spaans Engineering, Inc."	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	48
-"Janssen & Spaans Engineering, Inc."	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	54
-John Crane Inc.	Mechanical Engineering	"US Citizen, Permanent Resident"	Full Time	260
-"KINZE Manufacturing, Inc."	"Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Co-op"	237
-"KINZE Manufacturing, Inc."	"Math, Computer Science, Electrical Engineering, Mechanical Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Full Time, Co-op"	254
-"KINZE Manufacturing, Inc."	"Math, Computer Science, Electrical Engineering, Mechanical Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Full Time, Co-op"	255
-KJWW Engineering Consultants	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	204
-KJWW Engineering Consultants	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	214
-Knauf Insulation	All Majors	"US Citizen, Permanent Resident"	"Volunteer, Internship/Externship, Full Time, Part Time, Co-op"	1
-Kohler Engines	Mechanical Engineering	"US Citizen, Permanent Resident, H-1 Visa"	Co-op	261
-L-3 Communications Cincinnati Electronics	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Applied Optics, Optical Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	135
-LG&E KU	"Civil Engineering, Electrical Engineering, Mechanical Engineering"		"Internship/Externship, Full Time, Co-op"	59
-LG&E KU	"Civil Engineering, Electrical Engineering, Mechanical Engineering"		"Internship/Externship, Full Time, Co-op"	61
-LGS Innovations	"Computer Science, Mechanical Engineering, Computer Engineering, Physics, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	153
-LHP	"Electrical Engineering, Mechanical Engineering, Software Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time"	234
-LHP	"Electrical Engineering, Mechanical Engineering, Software Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time"	235
-LHP	"Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time, Co-op"	238
-LifeShare Technologies	"Computer Science, Software Engineering"	US Citizen	"Internship/Externship, Full Time"	158
-"Lutron Electronics Co., Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Software Engineering, Engineering Physics, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	85
-"Lutron Electronics Co., Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Software Engineering, Engineering Physics, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	86
-"Lutron Electronics Co., Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Software Engineering, Engineering Physics, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	87
-"MacAulay-Brown, Inc. (MacB)"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	123
-"MacAulay-Brown, Inc. (MacB)"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	126
-"MacAulay-Brown, Inc. (MacB)"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	129
-"Manufacturing Technology, Inc. (MTI)"	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	195
-"Manufacturing Technology, Inc. (MTI)"	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	205
-"Manufacturing Technology, Inc. (MTI)"	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	215
-Marathon Petroleum Company LP	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Co-op	25
-Marathon Petroleum Company LP	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Co-op	28
-Marathon Petroleum Company LP	"Chemical Engineering, Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Co-op	31
-Marian University Accelerated Nursing Programs		"US Citizen, Permanent Resident"		284
-Marian University Accelerated Nursing Programs		"US Citizen, Permanent Resident"		290
-Marian University Accelerated Nursing Programs		"US Citizen, Permanent Resident"		296
-"MasterBrand Cabinets, Inc"	"Computer Science, Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	91
-"MasterBrand Cabinets, Inc"	"Computer Science, Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	94
-"MasterBrand Cabinets, Inc"	"Computer Science, Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	97
-"Matrix Technologies, Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	"Full Time, Co-op"	82
-"Matrix Technologies, Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	"Full Time, Co-op"	83
-"Matrix Technologies, Inc."	"Computer Science, Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering"	US Citizen	"Full Time, Co-op"	84
-Medtronic	"Mechanical Engineering, Biomedical Engineering"	US Citizen	Co-op	269
-Medtronic	"Mechanical Engineering, Biomedical Engineering"	US Citizen	Co-op	274
-Medtronic	"Mechanical Engineering, Biomedical Engineering"	US Citizen	Co-op	279
-"Metron, Inc."	"Math, Computational Science"	US Citizen	"Internship/Externship, Full Time"	244
-"Microchip Technology, Inc"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time"	124
-"Microchip Technology, Inc"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time"	127
-"Microchip Technology, Inc"	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time"	130
-"MS Consultants, inc."	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	41
-"MTD Products, Autonomous Lawn and Garden Division"	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Optical Engineering, Software Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Co-op"	138
-National Instruments	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Engineering Physics"		Full Time	116
-National Instruments	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Engineering Physics"		Full Time	117
-National Instruments	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Engineering Physics"		Full Time	118
-New Hudson Facades	"Civil Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	69
-New Hudson Facades	"Civil Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	70
-New Hudson Facades	"Civil Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	71
-Nidec Motor Corporation	"Electrical Engineering, Mechanical Engineering"	US Citizen	"Internship/Externship, Part Time"	192
-"North American Lighting, Inc. (NAL)"	Mechanical Engineering	None	Full Time	262
-"Pondurance, LLC"	Computer Science	US Citizen	"Internship/Externship, Full Time"	79
-"Pondurance, LLC"	Computer Science	US Citizen	"Internship/Externship, Full Time"	80
-"Pondurance, LLC"	Computer Science	US Citizen	"Internship/Externship, Full Time"	81
-ProTrans International	"Computer Science, Computer Engineering, Software Engineering, Computational Science"	"US Citizen, Permanent Resident"	Full Time	107
-"QuEST Global Services - NA, Inc."	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	Full Time	193
-Ray Skillman	All Majors	US Citizen		4
-Ray Skillman	All Majors	US Citizen		7
-Ray Skillman	All Majors	US Citizen		10
-Raytheon	"Math, Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Engineering Physics, Electrical and Computer Engineering, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	251
-Raytheon	"Math, Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Engineering Physics, Electrical and Computer Engineering, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	252
-Raytheon	"Math, Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Engineering Physics, Electrical and Computer Engineering, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	253
-Real Time Logic (RT Logic)	"Computer Science, Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	US Citizen	Internship/Externship	113
-"Remy International, Inc."	"Economics, Computer Science, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, International Studies"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	172
-"Remy International, Inc."	"Economics, Computer Science, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, International Studies"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	173
-"Remy International, Inc."	"Economics, Computer Science, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, International Studies"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	174
-Renaissance Administration LLC	"Economics, Math, Computer Science, Computer Engineering, Software Engineering"		"Internship/Externship, Full Time, Part Time"	176
-Renaissance Administration LLC	"Economics, Math, Computer Science, Computer Engineering, Software Engineering"		"Internship/Externship, Full Time, Part Time"	177
-Renaissance Administration LLC	"Economics, Math, Computer Science, Computer Engineering, Software Engineering"		"Internship/Externship, Full Time, Part Time"	178
-"Rexnord Industries, Inc."	"Civil Engineering, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa"	"Internship/Externship, Full Time, Part Time, Co-op"	68
-RINCON RESEARCH CORPORATION	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	119
-RINCON RESEARCH CORPORATION	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	120
-RINCON RESEARCH CORPORATION	"Computer Science, Electrical Engineering, Computer Engineering, Physics, Software Engineering, Electrical and Computer Engineering"	US Citizen	Full Time	121
-Rockwell Collins	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	139
-Rockwell Collins	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	141
-Rockwell Collins	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	143
-Rolls-Royce North America	"Electrical Engineering, Mechanical Engineering"	US Citizen	Internship/Externship	196
-Rolls-Royce North America	"Electrical Engineering, Mechanical Engineering"	US Citizen	Internship/Externship	206
-Rolls-Royce North America	"Electrical Engineering, Mechanical Engineering"	US Citizen	Internship/Externship	216
+Addenda/PAG Holdings	Chemical Engineering, Chemistry	US Citizen, Permanent Resident	Internship/Externship, Co-op	5
+ADVICS Manufacturing Indiana, LLC	Electrical Engineering, Electrical and Computer Engineering	US Citizen	Full Time	37
+ArcelorMittal USA	Civil Engineering, Electrical Engineering	US Citizen, Permanent Resident	Full Time	13
+Boston Scientific	Math, Computer Science, Chemical Engineering, Electrical Engineering, Mechanical Engineering, Computer Engineering, Biomedical Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time	54
+Clarke Engineering Services/Acquire Automation	Chemical Engineering, Electrical Engineering, Computer Engineering	US Citizen	Internship/Externship, Full Time, Co-op	8
+Crown Equipment Corporation	Mechanical Engineering	US Citizen, Permanent Resident	Full Time	56
+CSN, LLC	Electrical Engineering, Mechanical Engineering	US Citizen, Permanent Resident	Internship/Externship	38
+Delta Technologies	Electrical Engineering, Computer Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time	35
+Detroit Stoker Company	Mechanical Engineering	US Citizen, Permanent Resident	Full Time, Co-op	57
+DIGIOP (Observint Technologies, Inc.)	Software Engineering	US Citizen, Permanent Resident	Internship/Externship, Part Time	63
+Ellison Surface Technologies	Electrical Engineering, Mechanical Engineering	US Citizen	Internship/Externship, Co-op	39
+Epic	Math, Computer Science, Biology, Chemical Engineering, Chemistry, Electrical Engineering, Computer Engineering, Biomedical Engineering, Physics, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa	Full Time	53
+Fathom Voice	Computer Science, Computer Engineering, Software Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time	19
+Firestone Industrial Products	Chemical Engineering, Electrical Engineering, Mechanical Engineering	US Citizen, Permanent Resident	Full Time	9
+Fleece Performance Engineering	Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering	US Citizen	Volunteer, Internship/Externship, Full Time, Part Time, Co-op	45
+General Electric	Electrical Engineering, Mechanical Engineering, Computer Engineering	US Citizen	Co-op	43
+Google, Inc.	Software Engineering, Computational Science	US Citizen, H-1 Visa	Full Time	65
+Greenlee Textron	Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time, Co-op	46
+greenlight.guru	Computer Science, Software Engineering, International Computer Science	US Citizen, Permanent Resident	Internship/Externship, Full Time, Co-op	33
+Grote Industries	Electrical Engineering, Mechanical Engineering, Computer Engineering, Optical Engineering	US Citizen	Internship/Externship, Full Time	44
+HBM, Inc	Computer Science, Computer Engineering, Software Engineering, Electrical and Computer Engineering, Computational Science	US Citizen	Full Time, Part Time, Co-op	23
+Highway Machine Company, Inc. (HMC)	Mechanical Engineering	US Citizen	Internship/Externship, Full Time, Part Time	58
+Horner Electric, Inc.	Electrical Engineering, Computer Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time, Part Time	36
+Indiana Department of Transportation (INDOT)	Civil Engineering	US Citizen	Internship/Externship, Full Time, Part Time	10
+Indiana Legislative Services Agency	Computer Science, Software Engineering	US Citizen	Internship/Externship, Full Time	31
+INdigital telecom	Software Engineering	None	Internship/Externship, Full Time	64
+Ingram Micro Mobility - North America	Economics, Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time	34
+Ivani, LLC	Electrical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Full Time	49
+John Crane Inc.	Mechanical Engineering	US Citizen, Permanent Resident	Full Time	59
+KINZE Manufacturing, Inc.	Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship, Co-op	47
+Knauf Insulation	All Majors	US Citizen, Permanent Resident	Volunteer, Internship/Externship, Full Time, Part Time, Co-op	1
+Kohler Engines	Mechanical Engineering	US Citizen, Permanent Resident, H-1 Visa	Co-op	60
+L-3 Communications Cincinnati Electronics	Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Applied Optics, Optical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time, Co-op	26
+LGS Innovations	Computer Science, Mechanical Engineering, Computer Engineering, Physics, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time	29
+LHP	Electrical Engineering, Mechanical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa	Internship/Externship, Full Time, Part Time, Co-op	48
+LifeShare Technologies	Computer Science, Software Engineering	US Citizen	Internship/Externship, Full Time	32
+Metron, Inc.	Math, Computational Science	US Citizen	Internship/Externship, Full Time	52
+MS Consultants, inc.	Civil Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time	11
+MTD Products, Autonomous Lawn and Garden Division	Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Optical Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident	Internship/Externship, Co-op	27
+Nidec Motor Corporation	Electrical Engineering, Mechanical Engineering	US Citizen	Internship/Externship, Part Time	40
+North American Lighting, Inc. (NAL)	Mechanical Engineering	None	Full Time	61
+ProTrans International	Computer Science, Computer Engineering, Software Engineering, Computational Science	US Citizen, Permanent Resident	Full Time	22
+QuEST Global Services - NA, Inc.	Electrical Engineering, Mechanical Engineering	US Citizen, Permanent Resident	Full Time	41
+Real Time Logic (RT Logic)	Computer Science, Electrical Engineering, Computer Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship	24
+Rexnord Industries, Inc.	Civil Engineering, Engineering Management-GR Only, Electrical Engineering, Mechanical Engineering, Electrical and Computer Engineering	US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa, J-1 Student Visa	Internship/Externship, Full Time, Part Time, Co-op	14
 Rose-Hulman Ventures	All Majors	None	Internship/Externship	2
-Rose-Hulman Ventures				285
-Rose-Hulman Ventures				291
-Rose-Hulman Ventures				297
-Samtec	"Electrical Engineering, Mechanical Engineering, Optical Engineering"	US Citizen	Co-op	230
-Samtec	"Electrical Engineering, Mechanical Engineering, Optical Engineering"	US Citizen	Co-op	231
-Schreiber Foods	"Economics, Computer Science, Biology, Chemical Engineering, Chemistry, Engineering Management-GR Only, Biochemistry & Molecular Biology, Biochemistry, Computational Science, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	170
-Schreiber Foods	"Economics, Computer Science, Biology, Chemical Engineering, Chemistry, Engineering Management-GR Only, Biochemistry & Molecular Biology, Biochemistry, Computational Science, Syst Engr & Mgmt Internat'l"	US Citizen	"Internship/Externship, Full Time, Part Time, Co-op"	171
-Scientia LLC	"Computer Science, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	167
-Scientia LLC	"Computer Science, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	168
-Simonton Windows	"Engineering Management-GR Only, Biomedical Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	240
-"Skyworks Solutions, Inc."	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	197
-"Skyworks Solutions, Inc."	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	207
-SmartFile	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	125
-SmartFile	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	128
-Smith & Burgess LLC	Chemical Engineering	"US Citizen, Permanent Resident"	Full Time	13
-"Software Engineering Professionals, Inc. (SEP)"	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	99
-"Software Engineering Professionals, Inc. (SEP)"	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	101
-"Software Engineering Professionals, Inc. (SEP)"	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	104
-"SonaCare Medical, LLC."	"Electrical Engineering, Mechanical Engineering, Biomedical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	217
-"SonaCare Medical, LLC."	"Electrical Engineering, Mechanical Engineering, Biomedical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	218
-Southwest Research Institute	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Computational Science"	"US Citizen, Permanent Resident, H-1 Visa"	"Internship/Externship, Full Time"	222
-Southwest Research Institute	"Electrical Engineering, Mechanical Engineering, Computer Engineering, Computational Science"	"US Citizen, Permanent Resident, H-1 Visa"	"Internship/Externship, Full Time"	223
-"Spensa Technologies, Inc."	"Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	None	"Internship/Externship, Full Time"	122
-SS&C Technologies	"Computer Engineering, Software Engineering"	US Citizen	"Internship/Externship, Full Time"	78
-"State Collection Service, Inc"	"Computer Science, Computer Engineering"	US Citizen	Full Time	90
-STIMULUS Engineering	"Computer Science, Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"	149
-STIMULUS Engineering	"Computer Science, Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Part Time"	150
-Tangent Labs	"Math, Mechanical Engineering, Physics, Software Engineering, Electrical and Computer Engineering"	None	"Internship/Externship, Full Time, Part Time"	256
-Tarlton Corporation	Civil Engineering	US Citizen	"Internship/Externship, Full Time"	43
-Tarlton Corporation	Civil Engineering	US Citizen	"Internship/Externship, Full Time"	49
-TCC Software Solutions	"Computer Engineering, Computational Science"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	77
-Texas Instruments	"Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	185
-Texas Instruments	"Electrical Engineering, Computer Engineering, Electrical and Computer Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	186
-Textron (Dixie Chopper & Textron Aviation)	All Majors	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	5
-Textron (Dixie Chopper & Textron Aviation)	All Majors	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	8
-The HallStar Company	"Chemical Engineering, Chemistry"	US Citizen	Full Time	15
-Theoris	"Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering, Computational Science"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	154
-Thompson Thrift	Civil Engineering	US Citizen	Internship/Externship	42
-Tipmont REMC	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	198
-Tipmont REMC	"Electrical Engineering, Mechanical Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time"	208
-TOC Logistics	"Electrical Engineering, Mechanical Engineering"	US Citizen		199
-TOC Logistics	"Electrical Engineering, Mechanical Engineering"	US Citizen		209
-"Torax Medical, Inc"	"Mechanical Engineering, Biomedical Engineering"			270
-"Torax Medical, Inc"	"Mechanical Engineering, Biomedical Engineering"			275
-"Triumph Controls-Shelbyville, IN"	"Electrical Engineering, Mechanical Engineering"	US Citizen	Full Time	194
-TRW Automotive	"Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time, Co-op"	144
-Turner Construction Company	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Part Time, Co-op"	44
-Turner Construction Company	Civil Engineering	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Part Time, Co-op"	50
-U.S. Department of State-Bureau of Diplomatic Security	All Majors	US Citizen	"Internship/Externship, Full Time"	3
-U.S.Army Recruiting		US Citizen	Full Time	286
-U.S.Army Recruiting		US Citizen	Full Time	292
-United States Air Force	"Math, Chemistry, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Engineering Physics, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	243
-Valeo Lighting Systems North America	"Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	232
-Valeo Lighting Systems North America	"Electrical Engineering, Mechanical Engineering, Physics, Optical Engineering"	"US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa"	"Internship/Externship, Full Time, Co-op"	233
-Vogt Power International	"Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering"	US Citizen	"Full Time, Co-op"	16
-WDD Software Solutions	"Computer Science, Computer Engineering, Software Engineering"	"US Citizen, Permanent Resident"	Internship/Externship	100
-Wolf Technical Services	"Mechanical Engineering, Biomedical Engineering"	US Citizen	"Internship/Externship, Full Time"	271
-Wolf Technical Services	"Mechanical Engineering, Biomedical Engineering"	US Citizen	"Internship/Externship, Full Time"	276
-Wolf Technical Services	"Mechanical Engineering, Biomedical Engineering, Electrical and Computer Engineering"	US Citizen	"Internship/Externship, Full Time"	280
-"WSI Engineering / WSI, Inc."	Civil Engineering		Full Time	45
-"WSI Engineering / WSI, Inc."	Civil Engineering		Full Time	51
-Wynright	"Civil Engineering, Mechanical Engineering, Software Engineering"	"US Citizen, Permanent Resident"	"Internship/Externship, Full Time, Co-op"	72
-"X by 2, LLC."	"Computer Science, Software Engineering"	US Citizen		159
-"X by 2, LLC."	"Computer Science, Software Engineering"	US Citizen		163
+Simonton Windows	Engineering Management-GR Only, Biomedical Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time	50
+Smith & Burgess LLC	Chemical Engineering	US Citizen, Permanent Resident	Full Time	4
+Software Engineering Professionals, Inc. (SEP)	Computer Science, Computer Engineering, Software Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time, Co-op	20
+Spensa Technologies, Inc.	Computer Science, Electrical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering	None	Internship/Externship, Full Time	25
+SS&C Technologies	Computer Engineering, Software Engineering	US Citizen	Internship/Externship, Full Time	17
+State Collection Service, Inc	Computer Science, Computer Engineering	US Citizen	Full Time	18
+Tangent Labs	Math, Mechanical Engineering, Physics, Software Engineering, Electrical and Computer Engineering	None	Internship/Externship, Full Time, Part Time	55
+TCC Software Solutions	Computer Engineering, Computational Science	US Citizen, Permanent Resident	Internship/Externship, Full Time	16
+The HallStar Company	Chemical Engineering, Chemistry	US Citizen	Full Time	6
+Theoris	Computer Science, Mechanical Engineering, Computer Engineering, Software Engineering, Computational Science	US Citizen, Permanent Resident, H-1 Visa, F-1 Student Visa	Internship/Externship, Full Time, Co-op	30
+Thompson Thrift	Civil Engineering	US Citizen	Internship/Externship	12
+Triumph Controls-Shelbyville, IN	Electrical Engineering, Mechanical Engineering	US Citizen	Full Time	42
+TRW Automotive	Computer Science, Electrical Engineering, Mechanical Engineering, Computer Engineering, Software Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time, Co-op	28
+U.S. Department of State-Bureau of Diplomatic Security	All Majors	US Citizen	Internship/Externship, Full Time	3
+United States Air Force	Math, Chemistry, Electrical Engineering, Mechanical Engineering, Computer Engineering, Physics, Engineering Physics, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time	51
+Vogt Power International	Chemical Engineering, Civil Engineering, Electrical Engineering, Mechanical Engineering	US Citizen	Full Time, Co-op	7
+WDD Software Solutions	Computer Science, Computer Engineering, Software Engineering	US Citizen, Permanent Resident	Internship/Externship	21
+Wolf Technical Services	Mechanical Engineering, Biomedical Engineering, Electrical and Computer Engineering	US Citizen	Internship/Externship, Full Time	62
+Wynright	Civil Engineering, Mechanical Engineering, Software Engineering	US Citizen, Permanent Resident	Internship/Externship, Full Time, Co-op	15
