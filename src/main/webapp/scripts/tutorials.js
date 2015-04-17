@@ -343,7 +343,7 @@ var tutorialObjects = {
             fillStyle: '#0AF',
             x: $("#companySearchBar").offset().left + $("#companySearchBar").outerWidth() / 2,
             y: $("#companySearchBar").position().top + $("#companySearchBar").outerHeight() / 2,
-            text: "This is the search bar.\nType a company name or\ntable number to search.",
+            text: "This is the search bar.\nType a company name to search.",
             fontSize: '20pt',
             fontStyle: 'bold',
             fontFamily: 'Verdana, sans-serif',
