@@ -3,6 +3,6 @@ Year	2015
 Quarter	Spring
 Layout_Section1	0
 Layout_Section2	18
-Layout_Section2_Rows	0
+Layout_Section2_Rows	4
 Layout_Section2_PathWidth	0
 Layout_Section3	10
