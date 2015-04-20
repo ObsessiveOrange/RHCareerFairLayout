@@ -319,6 +319,85 @@ function drawRect(tableNumber, x, y, width, height) {
         });
     }
 }
+// //
+// //generate positions of all tables.
+// function generateTableLocations() {
+//     //
+//     //reset tableLocations variable - may have changed
+//     tableLocations = [];
+//     //
+//     //count number of vertical and horizontal tables there are
+//     var hrzCount = careerFairData.layout.section2 + 2;
+//     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
+//     //
+//     //calculate width and height of tables based on width of the canvas
+//     unitX = $mapTables.prop("width") / 100;
+//     //20% of space allocated to (vertical) walkways
+//     tableWidth = unitX * 80 / hrzCount;
+//     unitY = $mapTables.prop("width") / 2 / 100;
+//     //30% of space allocated to registration and rest area.
+//     tableHeight = unitY * 70 / vrtCount;
+//     //
+//     //convenience assignments
+//     var s1 = careerFairData.layout.section1;
+//     var s2 = careerFairData.layout.section2;
+//     var s2Rows = careerFairData.layout.section2Rows;
+//     var s2PathWidth = careerFairData.layout.section2PathWidth;
+//     var s3 = careerFairData.layout.section3;
+//     //
+//     // section 1
+//     for (var i = 0; i < s1; i++) {
+//         tableLocations.push({
+//             x: 5 * unitX,
+//             y: 5 * unitY + i * tableHeight
+//         });
+//     }
+//     //
+//     // section 2
+//     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+//     //
+//     //rows
+//     for (var i = 0; i < s2Rows; i++) {
+//         //
+//         //outer rows have no walkway
+//         if (i == 0 || i == s2Rows - 1) {
+//             for (var j = 0; j < s2; j++) {
+//                 tableLocations.push({
+//                     x: (10 * unitX) + ((1 + j) * tableWidth),
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+//                 });
+//             }
+//         }
+//         //
+//         //inner rows need to have walkway halfway through
+//         else {
+//             var leftTables = Math.floor((s2 - s2PathWidth) / 2);
+//             var rightTables = s2 - s2PathWidth - leftTables;
+//             for (var j = 0; j < leftTables; j++) {
+//                 tableLocations.push({
+//                     x: (10 * unitX) + ((1 + j) * tableWidth),
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+//                 });
+//             }
+//             for (var j = 0; j < rightTables; j++) {
+//                 tableLocations.push({
+//                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+//                 });
+//             }
+//         }
+//     }
+//     //
+//     // section 3
+//     for (var i = 0; i < s3; i++) {
+//         tableLocations.push({
+//             x: (15 * unitX) + ((1 + s2) * tableWidth),
+//             y: 5 * unitY + i * tableHeight
+//         });
+//     }
+// }
+
+
 //
 //generate positions of all tables.
 function generateTableLocations() {
@@ -396,6 +475,7 @@ function generateTableLocations() {
         });
     }
 }
+
 //
 //draw actual tables, then draw registration and rest areas
 function drawTables($mapTables) {
