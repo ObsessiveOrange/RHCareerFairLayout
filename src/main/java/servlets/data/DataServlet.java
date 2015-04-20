@@ -91,8 +91,8 @@ public class DataServlet extends HttpServlet {
             TableMapping table =
                     new TableMapping(tableMappings.getItem(i, 0, Integer.class), tableMappings.getItem(i, 1, Integer.class), tableMappings.getItem(i,
                             2, Integer.class));
-            layoutVars.getLocationTableMapping().put(tableMappings.getItem(i, 0, Integer.class), table);
-            layoutVars.getTableLocationMapping().put(tableMappings.getItem(i, 1, Integer.class), table);
+            layoutVars.getLocationTableMapping().put(table.location, table);
+            layoutVars.getTableLocationMapping().put(table.tableNumber, table);
         }
     }
     
