@@ -6,9 +6,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import servlets.SystemVars;
-
 public class SQLManager {
+    
+    private static final String            dbHost      = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    private static final String            dbPort      = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+    private static final String            dbUserName  = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+    private static final String            dbPassword  = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
     
@@ -27,8 +30,8 @@ public class SQLManager {
             Class.forName("com.mysql.jdbc.Driver");
             
             connections.put(dbName,
-                    DriverManager.getConnection("jdbc:mysql://" + SystemVars.getDbhost() + ":" + SystemVars.getDbport() + "/" + dbName,
-                            SystemVars.getDbusername(), SystemVars.getDbpassword()));
+                    DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName,
+                            dbUserName, dbPassword));
             return true;
             
         } catch (SQLException e) {

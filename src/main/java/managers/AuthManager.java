@@ -150,7 +150,7 @@ public class AuthManager {
             
             boolean hasNextResult;
             while (hasNextResult = result.next()) {
-                if (token.equals(result.getString("sessionKey"))) {
+                if (token.equals(result.getString("sessionKey")) && result.getDate("sessionValidDate").after(new Date(System.currentTimeMillis()))) {
                     break;
                 }
             }

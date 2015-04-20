@@ -56,9 +56,6 @@ public class AdminServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-            case "newTerm":
-                responseObject = AdminRequestHandler.handleNewTermRequest(request);
-                break;
             default:
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
@@ -69,13 +66,22 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-        response.setContentType("application/json");
+        Response authResponse;
+        if (!(authResponse = AuthManager.checkToken(request)).success) {
+            
+            response.getWriter().print(authResponse);
+            return;
+        }
         
+        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
         
         switch (method) {
+            case "newTerm":
+                responseObject = AdminRequestHandler.handleNewTermRequest(request);
+                break;
             case "setSize":
                 responseObject = AdminRequestHandler.handleSetSizeRequest(request);
                 break;
