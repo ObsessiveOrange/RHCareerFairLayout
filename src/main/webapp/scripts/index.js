@@ -431,10 +431,10 @@ function generateTableLocations() {
             x: 5 * unitX,
             y: 5 * unitY + i * tableHeight,
             width: tableWidth,
-            height: tableHeight * careerFairData.locationTableMapping[locationID].tableSize
+            height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
         });
-        i += careerFairData.locationTableMapping[locationID].tableSize;
-        locationID += careerFairData.locationTableMapping[locationID].tableSize;
+        i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+        locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
     }
     //
     // section 2
@@ -449,11 +449,11 @@ function generateTableLocations() {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
                 });
-                j += careerFairData.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.locationTableMapping[locationID].tableSize;
+                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
             }
         }
         //
@@ -465,21 +465,21 @@ function generateTableLocations() {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
                 });
-                j += careerFairData.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.locationTableMapping[locationID].tableSize;
+                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
             }
             for (var j = 0; j < rightTables;) {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
                 });
-                j += careerFairData.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.locationTableMapping[locationID].tableSize;
+                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
             }
         }
     }
@@ -490,10 +490,10 @@ function generateTableLocations() {
             x: (15 * unitX) + ((1 + s2) * tableWidth),
             y: 5 * unitY + i * tableHeight,
             width: tableWidth,
-            height: tableHeight * careerFairData.locationTableMapping[locationID].tableSize
+            height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
         });
-        i += careerFairData.locationTableMapping[locationID].tableSize;
-        locationID += careerFairData.locationTableMapping[locationID].tableSize;
+        i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+        locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
     }
 }
 //
@@ -504,7 +504,7 @@ function drawTables($mapTables) {
     for (var i = 0; i < tableLocations.length; i++) {
         var locationX = tableLocations[i].x;
         var locationY = tableLocations[i].y;
-        drawRect(careerFairData.locationTableMapping[i + 1].table, locationX, locationY, tableWidth, tableHeight);
+        drawRect(careerFairData.layout.locationTableMapping[i + 1].table, locationX, locationY, tableWidth, tableHeight);
     }
     //
     // rest & registration areas
