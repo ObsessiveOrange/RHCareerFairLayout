@@ -536,13 +536,13 @@ function highlightTables() {
     selectedCompanyIDs.forEach(function(id) {
         highlightTable(id, "#0F0");
     });
-}
+} 
 //
 //highlight a specific table (used to minimize redrawing for toggling company selected)
 function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
-    var location = careerFairData.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
+    var location = careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
     var x = tableLocations[location - 1].x;
     var y = tableLocations[location - 1].y;
     $mapHighlights.drawRect({
