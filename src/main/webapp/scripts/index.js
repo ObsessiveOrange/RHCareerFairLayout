@@ -512,7 +512,7 @@ function drawTables($mapTables) {
             var width = location.width;
             var height = location.height;
             drawRect(careerFairData.layout.locationTableMapping[location.locationID].tableNumber, locationX, locationY, width, height);
-        }
+        });
         //
         // rest & registration areas
         drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY); $mapTables.drawText({
