@@ -428,6 +428,7 @@ function generateTableLocations() {
     // section 1
     for (var i = 0; i < s1;) {
         tableLocations[locationID] = {
+            locationID: locationID,
             x: 5 * unitX,
             y: 5 * unitY + i * tableHeight,
             width: tableWidth,
@@ -447,6 +448,7 @@ function generateTableLocations() {
         if (i == 0 || i == s2Rows - 1) {
             for (var j = 0; j < s2;) {
                 tableLocations[locationID] = {
+                    locationID: locationID,
                     x: (10 * unitX) + ((1 + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
@@ -463,6 +465,7 @@ function generateTableLocations() {
             var rightTables = s2 - s2PathWidth - leftTables;
             for (var j = 0; j < leftTables;) {
                 tableLocations[locationID] = {
+                    locationID: locationID,
                     x: (10 * unitX) + ((1 + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
@@ -473,6 +476,7 @@ function generateTableLocations() {
             }
             for (var j = 0; j < rightTables;) {
                 tableLocations[locationID] = {
+                    locationID: locationID,
                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
@@ -487,6 +491,7 @@ function generateTableLocations() {
     // section 3
     for (var i = 0; i < s3;) {
         tableLocations[locationID] = {
+            locationID: locationID,
             x: (15 * unitX) + ((1 + s2) * tableWidth),
             y: 5 * unitY + i * tableHeight,
             width: tableWidth,
@@ -501,78 +506,77 @@ function generateTableLocations() {
 function drawTables($mapTables) {
     //
     //draw company tables based on generated locations
-    for (var i = 0; i < tableLocations.length; i++) {
-        var locationX = tableLocations[i].x;
-        var locationY = tableLocations[i].y;
-        drawRect(careerFairData.layout.locationTableMapping[i + 1].tableNumber, locationX, locationY, tableWidth, tableHeight);
+    Object.keys(tableLocations).forEach(function(location) {
+            var locationX = location.x;
+            var locationY = location.y;
+            var width = location.width;
+            var height = location.height;
+            drawRect(careerFairData.layout.locationTableMapping[location.locationID].tableNumber, locationX, locationY, width, height);
+        }
+        //
+        // rest & registration areas
+        drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY); $mapTables.drawText({
+            //    layer: true,
+            fillStyle: '#000000',
+            x: 62.5 * unitX,
+            y: 87.5 * unitY,
+            fontSize: 20 * scaling,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'Rest Area'
+        }); drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY); $mapTables.drawText({
+            //    layer: true,
+            fillStyle: '#000000',
+            x: 20 * unitX,
+            y: 87.5 * unitY,
+            fontSize: 20 * scaling,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'Registration'
+        });
     }
     //
-    // rest & registration areas
-    drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $mapTables.drawText({
-        //    layer: true,
-        fillStyle: '#000000',
-        x: 62.5 * unitX,
-        y: 87.5 * unitY,
-        fontSize: 20 * scaling,
-        fontFamily: 'Verdana, sans-serif',
-        text: 'Rest Area'
-    });
-    drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $mapTables.drawText({
-        //    layer: true,
-        fillStyle: '#000000',
-        x: 20 * unitX,
-        y: 87.5 * unitY,
-        fontSize: 20 * scaling,
-        fontFamily: 'Verdana, sans-serif',
-        text: 'Registration'
-    });
-}
-//
-//Highlight all tables in selected companies array
-function highlightTables() {
-    $mapHighlights.clearCanvas();
-    selectedCompanyIDs.forEach(function(id) {
-        highlightTable(id, "#0F0");
-    });
-} 
-//
-//highlight a specific table (used to minimize redrawing for toggling company selected)
-function highlightTable(id, color) {
+    //Highlight all tables in selected companies array
+    function highlightTables() {
+        $mapHighlights.clearCanvas();
+        selectedCompanyIDs.forEach(function(id) {
+            highlightTable(id, "#0F0");
+        });
+    }
     //
-    //get the actual table we need to highlight, not the  company'sid.
-    var location = careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
-    var x = tableLocations[location].x;
-    var y = tableLocations[location].y;
-    $mapHighlights.drawRect({
-        fillStyle: color,
-        x: x,
-        y: y,
-        width: tableWidth,
-        height: tableHeight,
-        fromCenter: false
-    });
-}
-//
-//send get request
-function sendGetRequest(requestObject) {
-    $.ajax({
-        url: requestObject.url,
-        type: "GET",
-        headers: requestObject.headers,
-        data: requestObject.data,
-        success: requestObject.successHandler
-    });
-};
-//
-//send post request
-function sendPostRequest(requestObject) {
-    $.ajax({
-        url: requestObject.url,
-        type: "POST",
-        headers: requestObject.headers,
-        data: requestObject.data,
-        success: requestObject.successHandler
-    });
-}
+    //highlight a specific table (used to minimize redrawing for toggling company selected)
+    function highlightTable(id, color) {
+        //
+        //get the actual table we need to highlight, not the  company'sid.
+        var location = careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
+        var x = tableLocations[location].x;
+        var y = tableLocations[location].y;
+        $mapHighlights.drawRect({
+            fillStyle: color,
+            x: x,
+            y: y,
+            width: tableWidth,
+            height: tableHeight,
+            fromCenter: false
+        });
+    }
+    //
+    //send get request
+    function sendGetRequest(requestObject) {
+        $.ajax({
+            url: requestObject.url,
+            type: "GET",
+            headers: requestObject.headers,
+            data: requestObject.data,
+            success: requestObject.successHandler
+        });
+    };
+    //
+    //send post request
+    function sendPostRequest(requestObject) {
+        $.ajax({
+            url: requestObject.url,
+            type: "POST",
+            headers: requestObject.headers,
+            data: requestObject.data,
+            success: requestObject.successHandler
+        });
+    }
