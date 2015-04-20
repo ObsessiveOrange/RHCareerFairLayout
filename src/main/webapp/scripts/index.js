@@ -508,11 +508,7 @@ function drawTables($mapTables) {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var locationX = location.x;
-        var locationY = location.y;
-        var width = location.width;
-        var height = location.height;
-        drawRect(careerFairData.layout.locationTableMapping[location.locationID].tableNumber, locationX, locationY, width, height);
+        drawRect(careerFairData.layout.locationTableMapping[location.locationID].tableNumber, location.x, location.y, location.width, location.height);
     });
     //
     // rest & registration areas
@@ -550,15 +546,13 @@ function highlightTables() {
 function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
-    var location = careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
-    var x = tableLocations[location].x;
-    var y = tableLocations[location].y;
+    var location = tableLocations[careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location];
     $mapHighlights.drawRect({
         fillStyle: color,
-        x: x,
-        y: y,
-        width: tableWidth,
-        height: tableHeight,
+        x: location.x,
+        y: location.y,
+        width: location.width,
+        height: location.height,
         fromCenter: false
     });
 }
