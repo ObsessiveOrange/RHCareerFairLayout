@@ -33,7 +33,7 @@ $(document).ready(function() {
         //
         //if other variables have not been created/set, do it now.
         if (!tableLocations || !selectedCompanyIDs || !filteredCompanyIDs || !filters) {
-            tableLocations = [];
+            tableLocations = {};
             selectedCompanyIDs = [];
             filteredCompanyIDs = [];
             filters = {};
@@ -324,7 +324,7 @@ function drawRect(tableNumber, x, y, width, height) {
 // function generateTableLocations() {
 //     //
 //     //reset tableLocations variable - may have changed
-//     tableLocations = [];
+//     tableLocations = {};
 //     //
 //     //count number of vertical and horizontal tables there are
 //     var hrzCount = careerFairData.layout.section2 + 2;
@@ -401,7 +401,7 @@ function drawRect(tableNumber, x, y, width, height) {
 function generateTableLocations() {
     //
     //reset tableLocations variable - may have changed
-    tableLocations = [];
+    tableLocations = {};
     //
     //count number of vertical and horizontal tables there are
     var hrzCount = careerFairData.layout.section2 + 2;
