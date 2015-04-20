@@ -56,11 +56,11 @@ html, body {
 #tutSkipButton {
     position: absolute;
     left: calc(50% - 100px);
-    top: calc(50% + 100px);
+    bottom: 50px;
     width: 200px;
     height: 50px;
     z-index: 11;
-    background-color: #F55;
+    background-color: #622;
 }
 #tutSkipText {
     position: absolute;
