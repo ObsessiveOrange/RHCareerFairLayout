@@ -121,7 +121,7 @@ var tutorialObjects = {
             lockScrolling($("#navBarContainer").offset().top);
         }, 1000);
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -171,7 +171,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -248,7 +248,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -312,7 +312,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -369,7 +369,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -440,7 +440,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -481,7 +481,7 @@ var tutorialObjects = {
     //draw tutorial page
     drawMainTutorialSlide6: function() {
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -516,7 +516,7 @@ var tutorialObjects = {
             lockScrolling($("#navBarContainer").offset().top);
         }, 1000);
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -548,7 +548,7 @@ var tutorialObjects = {
     },
     drawFiltersTutorialSlide1: function() {
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -594,7 +594,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -664,7 +664,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -721,7 +721,7 @@ var tutorialObjects = {
         });
         // This shape is being masked
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
@@ -775,7 +775,7 @@ var tutorialObjects = {
     //draw tutorial page
     drawFiltersTutorialSlide5: function() {
         $canvas.drawRect({
-            fillStyle: 'rgba(0, 0, 0, 0.85)',
+            fillStyle: 'rgba(0, 0, 0, 0.80)',
             x: 0,
             y: 0,
             width: $canvas.width(),
