@@ -396,8 +396,6 @@ function drawRect(tableNumber, x, y, width, height) {
 //         });
 //     }
 // }
-
-
 //
 //generate positions of all tables.
 function generateTableLocations() {
@@ -424,12 +422,19 @@ function generateTableLocations() {
     var s2PathWidth = careerFairData.layout.section2PathWidth;
     var s3 = careerFairData.layout.section3;
     //
+    //
+    var locationID = 1;
+    //
     // section 1
-    for (var i = 0; i < s1; i++) {
+    for (var i = 0; i < s1;) {
         tableLocations.push({
             x: 5 * unitX,
-            y: 5 * unitY + i * tableHeight
+            y: 5 * unitY + i * tableHeight,
+            width: tableWidth,
+            height: tableHeight * careerFairData.locationTableMapping[locationID].tableSize
         });
+        i += careerFairData.locationTableMapping[locationID].tableSize;
+        locationID += careerFairData.locationTableMapping[locationID].tableSize;
     }
     //
     // section 2
@@ -443,8 +448,12 @@ function generateTableLocations() {
             for (var j = 0; j < s2; j++) {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    height: tableHeight
                 });
+                j += careerFairData.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.locationTableMapping[locationID].tableSize;
             }
         }
         //
@@ -452,30 +461,41 @@ function generateTableLocations() {
         else {
             var leftTables = Math.floor((s2 - s2PathWidth) / 2);
             var rightTables = s2 - s2PathWidth - leftTables;
-            for (var j = 0; j < leftTables; j++) {
+            for (var j = 0; j < leftTables;) {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    height: tableHeight
                 });
+                j += careerFairData.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.locationTableMapping[locationID].tableSize;
             }
-            for (var j = 0; j < rightTables; j++) {
+            for (var j = 0; j < rightTables;) {
                 tableLocations.push({
                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
+                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                    width: tableWidth * careerFairData.locationTableMapping[locationID].tableSize,
+                    height: tableHeight
                 });
+                j += careerFairData.locationTableMapping[locationID].tableSize;
+                locationID += careerFairData.locationTableMapping[locationID].tableSize;
             }
         }
     }
     //
     // section 3
-    for (var i = 0; i < s3; i++) {
+    for (var i = 0; i < s3;) {
         tableLocations.push({
             x: (15 * unitX) + ((1 + s2) * tableWidth),
-            y: 5 * unitY + i * tableHeight
+            y: 5 * unitY + i * tableHeight,
+            width: tableWidth,
+            height: tableHeight * careerFairData.locationTableMapping[locationID].tableSize
         });
+        i += careerFairData.locationTableMapping[locationID].tableSize;
+        locationID += careerFairData.locationTableMapping[locationID].tableSize;
     }
 }
-
 //
 //draw actual tables, then draw registration and rest areas
 function drawTables($mapTables) {
@@ -484,7 +504,7 @@ function drawTables($mapTables) {
     for (var i = 0; i < tableLocations.length; i++) {
         var locationX = tableLocations[i].x;
         var locationY = tableLocations[i].y;
-        drawRect(i + 1, locationX, locationY, tableWidth, tableHeight);
+        drawRect(careerFairData.locationTableMapping[i + 1].table, locationX, locationY, tableWidth, tableHeight);
     }
     //
     // rest & registration areas
@@ -522,9 +542,9 @@ function highlightTables() {
 function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
-    var table = careerFairData.companies[id].parameters.table
-    var x = tableLocations[table - 1].x;
-    var y = tableLocations[table - 1].y;
+    var location = careerFairData.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
+    var x = tableLocations[location - 1].x;
+    var y = tableLocations[location - 1].y;
     $mapHighlights.drawRect({
         fillStyle: color,
         x: x,
