@@ -504,7 +504,7 @@ function drawTables($mapTables) {
     for (var i = 0; i < tableLocations.length; i++) {
         var locationX = tableLocations[i].x;
         var locationY = tableLocations[i].y;
-        drawRect(careerFairData.layout.locationTableMapping[i + 1].table, locationX, locationY, tableWidth, tableHeight);
+        drawRect(careerFairData.layout.locationTableMapping[i + 1].tableNumber, locationX, locationY, tableWidth, tableHeight);
     }
     //
     // rest & registration areas
