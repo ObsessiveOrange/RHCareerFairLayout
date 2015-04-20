@@ -445,7 +445,7 @@ function generateTableLocations() {
         //
         //outer rows have no walkway
         if (i == 0 || i == s2Rows - 1) {
-            for (var j = 0; j < s2; j++) {
+            for (var j = 0; j < s2;) {
                 tableLocations[locationID] = {
                     x: (10 * unitX) + ((1 + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
