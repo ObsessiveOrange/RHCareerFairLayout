@@ -543,8 +543,8 @@ function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
     var location = careerFairData.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location;
-    var x = tableLocations[location - 1].x;
-    var y = tableLocations[location - 1].y;
+    var x = tableLocations[location].x;
+    var y = tableLocations[location].y;
     $mapHighlights.drawRect({
         fillStyle: color,
         x: x,
