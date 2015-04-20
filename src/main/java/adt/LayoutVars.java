@@ -1,12 +1,17 @@
 package adt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LayoutVars {
     
-    private int section1          = 0;
-    private int section2          = 0;
-    private int section2Rows      = 0;
-    private int section2PathWidth = 0;
-    private int section3          = 0;
+    private int                        section1             = 0;
+    private int                        section2             = 0;
+    private int                        section2Rows         = 0;
+    private int                        section2PathWidth    = 0;
+    private int                        section3             = 0;
+    private Map<Integer, TableMapping> locationTableMapping = new HashMap<Integer, TableMapping>();
+    private Map<Integer, TableMapping> tableLocationMapping = new HashMap<Integer, TableMapping>();
     
     public int getSection1() {
     
@@ -56,5 +61,21 @@ public class LayoutVars {
     public void setSection2Rows(int section2Rows) {
     
         this.section2Rows = section2Rows;
+    }
+    
+    /**
+     * @return the locationTableMapping
+     */
+    public Map<Integer, TableMapping> getLocationTableMapping() {
+    
+        return locationTableMapping;
+    }
+    
+    /**
+     * @return the tableLocationMapping
+     */
+    public Map<Integer, TableMapping> getTableLocationMapping() {
+    
+        return tableLocationMapping;
     }
 }

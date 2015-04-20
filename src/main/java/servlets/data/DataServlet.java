@@ -18,6 +18,7 @@ import adt.ItemVars;
 import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
+import adt.TableMapping;
 
 @WebServlet("/api/data")
 public class DataServlet extends HttpServlet {
@@ -82,6 +83,17 @@ public class DataServlet extends HttpServlet {
         layoutVars.setSection2Rows(basicData.getItem("Layout_Section2_Rows", "Value", Integer.class));
         layoutVars.setSection2PathWidth(basicData.getItem("Layout_Section2_PathWidth", "Value", Integer.class));
         layoutVars.setSection3(basicData.getItem("Layout_Section3", "Value", Integer.class));
+        
+        ArrayList2D tableMappings = new ArrayList2D();
+        tableMappings.importFromResourceFile("TableMappings.txt", "\t", true);
+        
+        for (int i = 0; i < tableMappings.getRows(); i++) {
+            TableMapping table =
+                    new TableMapping(tableMappings.getItem(i, 0, Integer.class), tableMappings.getItem(i, 1, Integer.class), tableMappings.getItem(i,
+                            2, Integer.class));
+            layoutVars.getLocationTableMapping().put(tableMappings.getItem(i, 0, Integer.class), table);
+            layoutVars.getTableLocationMapping().put(tableMappings.getItem(i, 1, Integer.class), table);
+        }
     }
     
     private static void setupCategories() throws IOException {
