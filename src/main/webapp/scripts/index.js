@@ -377,7 +377,7 @@ function generateTableLocations() {
                 for (var j = 0; j < s2;) {
                     tableLocations[locationID] = {
                         locationID: locationID,
-                        x: (10 * unitX) + ((1 + j) * tableWidth),
+                        x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                         height: tableHeight
