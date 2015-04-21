@@ -82,6 +82,9 @@ public class UsersServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
         }
+        if (responseObject.cookie != null) {
+            response.addCookie(responseObject.cookie);
+        }
         response.getWriter().print(responseObject);
     }
 }
