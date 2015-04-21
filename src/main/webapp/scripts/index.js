@@ -438,7 +438,7 @@ function generateTableLocations() {
     //calculate width and height of tables based on width of the canvas
     unitX = $mapTables.prop("width") / 100;
     //20% of space allocated to (vertical) walkways
-    tableWidth = unitX * 80 / hrzCount;
+    tableWidth = unitX * 85 / hrzCount;
     unitY = $mapTables.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
     tableHeight = unitY * 70 / vrtCount;
