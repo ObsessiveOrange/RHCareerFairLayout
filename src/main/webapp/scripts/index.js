@@ -319,6 +319,121 @@ function drawRect(tableNumber, x, y, width, height) {
         });
     }
 }
+//
+//generate positions of all tables.
+function generateTableLocations() {
+    //
+    //reset tableLocations variable - may have changed
+    tableLocations = {};
+    //
+    //convenience assignments
+    var s1 = careerFairData.layout.section1;
+    var s2 = careerFairData.layout.section2;
+    var s2Rows = careerFairData.layout.section2Rows;
+    var s2PathWidth = careerFairData.layout.section2PathWidth;
+    var s3 = careerFairData.layout.section3;
+    //
+    //count number of vertical and horizontal tables there are
+    var hrzCount = careerFairData.layout.section2 + Math.min(s1, 1) + Math.min(s3, 1);
+    var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
+    //
+    //calculate width and height of tables based on width of the canvas
+    unitX = $mapTables.prop("width") / 100;
+    //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
+    tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
+    unitY = $mapTables.prop("width") / 2 / 100;
+    //30% of space allocated to registration and rest area.
+    tableHeight = unitY * 70 / vrtCount;
+    //
+    //
+    var locationID = 1;
+    var offsetX = 5 * unitX;
+    //
+    // section 1
+    if (s1 > 0) {
+        for (var i = 0; i < s1;) {
+            tableLocations[locationID] = {
+                locationID: locationID,
+                x: offsetX,
+                y: 5 * unitY + i * tableHeight,
+                width: tableWidth,
+                height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
+            };
+            i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+            locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
+        }
+        offsetX += tableWidth + 5 * unitX;
+    }
+    //
+    // section 2
+    var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+    //
+    //rows
+    if (s2Rows > 0 && s2 > 0) {
+        for (var i = 0; i < s2Rows; i++) {
+            //
+            //outer rows have no walkway
+            if (i == 0 || i == s2Rows - 1) {
+                for (var j = 0; j < s2;) {
+                    tableLocations[locationID] = {
+                        locationID: locationID,
+                        x: (10 * unitX) + ((1 + j) * tableWidth),
+                        y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                        width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+                        height: tableHeight
+                    };
+                    j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                    locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                }
+            }
+            //
+            //inner rows need to have walkway halfway through
+            else {
+                var leftTables = Math.floor((s2 - s2PathWidth) / 2);
+                var rightTables = s2 - s2PathWidth - leftTables;
+                for (var j = 0; j < leftTables;) {
+                    tableLocations[locationID] = {
+                        locationID: locationID,
+                        x: offsetX + (j * tableWidth),
+                        y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                        width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+                        height: tableHeight
+                    };
+                    j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                    locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                }
+                for (var j = 0; j < rightTables;) {
+                    tableLocations[locationID] = {
+                        locationID: locationID,
+                        x: offsetX + ((leftTables + j) * tableWidth),
+                        y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                        width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+                        height: tableHeight
+                    };
+                    j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                    locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
+                }
+            }
+        }
+        offsetX += s2 * tableWidth + 5 * unitX;
+    }
+    //
+    // section 3
+    if (s3 > 0) {
+        for (var i = 0; i < s3;) {
+            tableLocations[locationID] = {
+                locationID: locationID,
+                x: offsetX,
+                y: 5 * unitY + i * tableHeight,
+                width: tableWidth,
+                height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
+            };
+            i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+            locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
+        }
+    }
+    offsetX += tableWidth + 5 * unitX;
+}
 // //
 // //generate positions of all tables.
 // function generateTableLocations() {
@@ -327,13 +442,13 @@ function drawRect(tableNumber, x, y, width, height) {
 //     tableLocations = {};
 //     //
 //     //count number of vertical and horizontal tables there are
-//     var hrzCount = careerFairData.layout.section2 + 2;
+//     var hrzCount = careerFairData.layout.section2 + 1;
 //     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
 //     //
 //     //calculate width and height of tables based on width of the canvas
 //     unitX = $mapTables.prop("width") / 100;
 //     //20% of space allocated to (vertical) walkways
-//     tableWidth = unitX * 80 / hrzCount;
+//     tableWidth = unitX * 85 / hrzCount;
 //     unitY = $mapTables.prop("width") / 2 / 100;
 //     //30% of space allocated to registration and rest area.
 //     tableHeight = unitY * 70 / vrtCount;
@@ -348,19 +463,6 @@ function drawRect(tableNumber, x, y, width, height) {
 //     //
 //     var locationID = 1;
 //     //
-//     // section 1
-//     for (var i = 0; i < s1;) {
-//         tableLocations[locationID] = {
-//             locationID: locationID,
-//             x: 5 * unitX,
-//             y: 5 * unitY + i * tableHeight,
-//             width: tableWidth,
-//             height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
-//         };
-//         i += careerFairData.layout.locationTableMapping[locationID].tableSize;
-//         locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-//     }
-//     //
 //     // section 2
 //     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
 //     //
@@ -372,7 +474,7 @@ function drawRect(tableNumber, x, y, width, height) {
 //             for (var j = 0; j < s2;) {
 //                 tableLocations[locationID] = {
 //                     locationID: locationID,
-//                     x: (10 * unitX) + ((1 + j) * tableWidth),
+//                     x: (5 * unitX) + ((j) * tableWidth),
 //                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
 //                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
 //                     height: tableHeight
@@ -389,7 +491,7 @@ function drawRect(tableNumber, x, y, width, height) {
 //             for (var j = 0; j < leftTables;) {
 //                 tableLocations[locationID] = {
 //                     locationID: locationID,
-//                     x: (10 * unitX) + ((1 + j) * tableWidth),
+//                     x: (5 * unitX) + ((j) * tableWidth),
 //                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
 //                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
 //                     height: tableHeight
@@ -400,7 +502,7 @@ function drawRect(tableNumber, x, y, width, height) {
 //             for (var j = 0; j < rightTables;) {
 //                 tableLocations[locationID] = {
 //                     locationID: locationID,
-//                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
+//                     x: (5 * unitX) + ((leftTables + s2PathWidth + j) * tableWidth),
 //                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
 //                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
 //                     height: tableHeight
@@ -415,7 +517,7 @@ function drawRect(tableNumber, x, y, width, height) {
 //     for (var i = 0; i < s3;) {
 //         tableLocations[locationID] = {
 //             locationID: locationID,
-//             x: (15 * unitX) + ((1 + s2) * tableWidth),
+//             x: (10 * unitX) + ((s2) * tableWidth),
 //             y: 5 * unitY + i * tableHeight,
 //             width: tableWidth,
 //             height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
@@ -424,98 +526,6 @@ function drawRect(tableNumber, x, y, width, height) {
 //         locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //     }
 // }
-//
-//generate positions of all tables.
-function generateTableLocations() {
-    //
-    //reset tableLocations variable - may have changed
-    tableLocations = {};
-    //
-    //count number of vertical and horizontal tables there are
-    var hrzCount = careerFairData.layout.section2 + 1;
-    var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
-    //
-    //calculate width and height of tables based on width of the canvas
-    unitX = $mapTables.prop("width") / 100;
-    //20% of space allocated to (vertical) walkways
-    tableWidth = unitX * 85 / hrzCount;
-    unitY = $mapTables.prop("width") / 2 / 100;
-    //30% of space allocated to registration and rest area.
-    tableHeight = unitY * 70 / vrtCount;
-    //
-    //convenience assignments
-    var s1 = careerFairData.layout.section1;
-    var s2 = careerFairData.layout.section2;
-    var s2Rows = careerFairData.layout.section2Rows;
-    var s2PathWidth = careerFairData.layout.section2PathWidth;
-    var s3 = careerFairData.layout.section3;
-    //
-    //
-    var locationID = 1;
-    //
-    // section 2
-    var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
-    //
-    //rows
-    for (var i = 0; i < s2Rows; i++) {
-        //
-        //outer rows have no walkway
-        if (i == 0 || i == s2Rows - 1) {
-            for (var j = 0; j < s2;) {
-                tableLocations[locationID] = {
-                    locationID: locationID,
-                    x: (5 * unitX) + ((j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
-                    height: tableHeight
-                };
-                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-            }
-        }
-        //
-        //inner rows need to have walkway halfway through
-        else {
-            var leftTables = Math.floor((s2 - s2PathWidth) / 2);
-            var rightTables = s2 - s2PathWidth - leftTables;
-            for (var j = 0; j < leftTables;) {
-                tableLocations[locationID] = {
-                    locationID: locationID,
-                    x: (5 * unitX) + ((j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
-                    height: tableHeight
-                };
-                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-            }
-            for (var j = 0; j < rightTables;) {
-                tableLocations[locationID] = {
-                    locationID: locationID,
-                    x: (5 * unitX) + ((leftTables + s2PathWidth + j) * tableWidth),
-                    y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                    width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
-                    height: tableHeight
-                };
-                j += careerFairData.layout.locationTableMapping[locationID].tableSize;
-                locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-            }
-        }
-    }
-    //
-    // section 3
-    for (var i = 0; i < s3;) {
-        tableLocations[locationID] = {
-            locationID: locationID,
-            x: (10 * unitX) + ((s2) * tableWidth),
-            y: 5 * unitY + i * tableHeight,
-            width: tableWidth,
-            height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
-        };
-        i += careerFairData.layout.locationTableMapping[locationID].tableSize;
-        locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-    }
-}
 //
 //draw actual tables, then draw registration and rest areas
 function drawTables($mapTables) {
