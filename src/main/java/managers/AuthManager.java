@@ -36,7 +36,8 @@ public class AuthManager {
                         SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions "
                                 + "VALUES(?, ?, ?, ?);");
                 getAuthToken =
-                        SQLManager.getConn("Users").prepareStatement("SELECT sessionKey FROM Sessions WHERE username = ? AND sessionClient = ?;");
+                        SQLManager.getConn("Users").prepareStatement(
+                                "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
