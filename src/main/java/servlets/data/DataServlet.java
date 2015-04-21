@@ -118,7 +118,7 @@ public class DataServlet extends HttpServlet {
         companyData.importFromResourceFile("CompanyData.txt", "\t", true);
         
         for (int i = 0; i < companyData.getRows(); i++) {
-            String title = companyData.getItem(i, 0, String.class);
+            String title = companyData.getItem(i, 0, String.class).replace("\"", "");
             String[] majors = companyData.getItem(i, 1, String.class) == null ? new String[] {} : companyData.getItem(i, 1, String.class).split(",");
             String[] workAuths =
                     companyData.getItem(i, 2, String.class) == null ? new String[] {} : companyData.getItem(i, 2, String.class).split(",");
