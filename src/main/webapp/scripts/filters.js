@@ -3,6 +3,11 @@
  *
  * Creator: Benedict Wong, 2015
  */
+//
+// Set strict mode on.
+"use strict";
+//
+// Initialize variables
 var careerFairData;
 var filters;
 var clearCacheFlag;

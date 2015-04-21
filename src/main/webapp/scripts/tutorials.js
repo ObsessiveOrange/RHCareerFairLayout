@@ -1,3 +1,13 @@
+/**
+ * Dynamic tutorial creator for webpage
+ *
+ * Creator: Benedict Wong, 2015
+ */
+//
+// Set strict mode on.
+"use strict";
+//
+// Initialize variables
 var $canvas;
 var page;
 var slideCounter;

@@ -3,6 +3,11 @@
  *
  * Creator: Benedict Wong, 2015
  */
+//
+// Set strict mode on.
+"use strict";
+//
+// Initialize variables
 var careerFairData;
 var companyList;
 var tableLocations;
@@ -11,6 +16,8 @@ var filteredCompanyIDs = [];
 var filters;
 var $mapTables;
 var $mapHighlights;
+var unitX;
+var unitY;
 var scaling = 2;
 var clearCacheFlag;
 $(document).ready(function() {
@@ -340,10 +347,10 @@ function generateTableLocations() {
     //calculate width and height of tables based on width of the canvas
     unitX = $mapTables.prop("width") / 100;
     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
-    tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
+    var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
     unitY = $mapTables.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
-    tableHeight = unitY * 70 / vrtCount;
+    var tableHeight = unitY * 70 / vrtCount;
     //
     //
     var locationID = 1;

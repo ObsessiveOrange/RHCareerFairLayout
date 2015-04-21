@@ -142,7 +142,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     margin-bottom: 30px;
 }
 .mapContainer:before {
-    content="";
+    /*content: "";*/
     display: block;
     padding-top: 50%;
 }
@@ -176,7 +176,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     visibility: hidden;
 }
 .companyListCompanyName {
-    width: calc(100% - 150px);
+    /*width: calc(100% - 150px);*/
 }
 .companyListTable {
     width: 100px;
@@ -197,7 +197,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     color: #38C;
 }
 .filtersListFilterColumn {
-    width: calc(100% - 100px);
+    /*width: calc(100% - 100px);*/
 }
 .filtersListGroupRow {
     font-weight: bold;
