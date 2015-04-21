@@ -84,6 +84,7 @@ public class UsersServlet extends HttpServlet {
         }
         if (responseObject.cookie != null) {
             response.addCookie(responseObject.cookie);
+            responseObject.addToReturnData("Test", "Test");
         }
         response.getWriter().print(responseObject);
     }
