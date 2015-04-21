@@ -89,6 +89,10 @@ public class AuthManager {
             String userName = request.getHeader("authUser");
             String password = request.getHeader("authPass");
             
+            if (userName == null || password == null) {
+                return new FailResponse("Invalid Username/Password Combination");
+            }
+            
             getHashedPWStatement.setString(1, userName);
             
             ResultSet result = getHashedPWStatement.executeQuery();
