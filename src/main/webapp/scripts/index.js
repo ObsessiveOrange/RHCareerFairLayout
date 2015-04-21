@@ -345,12 +345,20 @@ function drawRect(tableNumber, x, y, width, height) {
 //     var s2PathWidth = careerFairData.layout.section2PathWidth;
 //     var s3 = careerFairData.layout.section3;
 //     //
+//     //
+//     var locationID = 1;
+//     //
 //     // section 1
-//     for (var i = 0; i < s1; i++) {
-//         tableLocations.push({
+//     for (var i = 0; i < s1;) {
+//         tableLocations[locationID] = {
+//             locationID: locationID,
 //             x: 5 * unitX,
-//             y: 5 * unitY + i * tableHeight
-//         });
+//             y: 5 * unitY + i * tableHeight,
+//             width: tableWidth,
+//             height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
+//         };
+//         i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+//         locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //     }
 //     //
 //     // section 2
@@ -361,11 +369,16 @@ function drawRect(tableNumber, x, y, width, height) {
 //         //
 //         //outer rows have no walkway
 //         if (i == 0 || i == s2Rows - 1) {
-//             for (var j = 0; j < s2; j++) {
-//                 tableLocations.push({
+//             for (var j = 0; j < s2;) {
+//                 tableLocations[locationID] = {
+//                     locationID: locationID,
 //                     x: (10 * unitX) + ((1 + j) * tableWidth),
-//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
-//                 });
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+//                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+//                     height: tableHeight
+//                 };
+//                 j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+//                 locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //             }
 //         }
 //         //
@@ -373,27 +386,42 @@ function drawRect(tableNumber, x, y, width, height) {
 //         else {
 //             var leftTables = Math.floor((s2 - s2PathWidth) / 2);
 //             var rightTables = s2 - s2PathWidth - leftTables;
-//             for (var j = 0; j < leftTables; j++) {
-//                 tableLocations.push({
+//             for (var j = 0; j < leftTables;) {
+//                 tableLocations[locationID] = {
+//                     locationID: locationID,
 //                     x: (10 * unitX) + ((1 + j) * tableWidth),
-//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
-//                 });
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+//                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+//                     height: tableHeight
+//                 };
+//                 j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+//                 locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //             }
-//             for (var j = 0; j < rightTables; j++) {
-//                 tableLocations.push({
+//             for (var j = 0; j < rightTables;) {
+//                 tableLocations[locationID] = {
+//                     locationID: locationID,
 //                     x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
-//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight
-//                 });
+//                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+//                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
+//                     height: tableHeight
+//                 };
+//                 j += careerFairData.layout.locationTableMapping[locationID].tableSize;
+//                 locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //             }
 //         }
 //     }
 //     //
 //     // section 3
-//     for (var i = 0; i < s3; i++) {
-//         tableLocations.push({
+//     for (var i = 0; i < s3;) {
+//         tableLocations[locationID] = {
+//             locationID: locationID,
 //             x: (15 * unitX) + ((1 + s2) * tableWidth),
-//             y: 5 * unitY + i * tableHeight
-//         });
+//             y: 5 * unitY + i * tableHeight,
+//             width: tableWidth,
+//             height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
+//         };
+//         i += careerFairData.layout.locationTableMapping[locationID].tableSize;
+//         locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
 //     }
 // }
 //
@@ -404,7 +432,7 @@ function generateTableLocations() {
     tableLocations = {};
     //
     //count number of vertical and horizontal tables there are
-    var hrzCount = careerFairData.layout.section2 + 2;
+    var hrzCount = careerFairData.layout.section2 + 1;
     var vrtCount = Math.max(careerFairData.layout.section1, careerFairData.layout.section3);
     //
     //calculate width and height of tables based on width of the canvas
@@ -425,19 +453,6 @@ function generateTableLocations() {
     //
     var locationID = 1;
     //
-    // section 1
-    for (var i = 0; i < s1;) {
-        tableLocations[locationID] = {
-            locationID: locationID,
-            x: 5 * unitX,
-            y: 5 * unitY + i * tableHeight,
-            width: tableWidth,
-            height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
-        };
-        i += careerFairData.layout.locationTableMapping[locationID].tableSize;
-        locationID += careerFairData.layout.locationTableMapping[locationID].tableSize;
-    }
-    //
     // section 2
     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
     //
@@ -449,7 +464,7 @@ function generateTableLocations() {
             for (var j = 0; j < s2;) {
                 tableLocations[locationID] = {
                     locationID: locationID,
-                    x: (10 * unitX) + ((1 + j) * tableWidth),
+                    x: (5 * unitX) + ((j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
@@ -466,7 +481,7 @@ function generateTableLocations() {
             for (var j = 0; j < leftTables;) {
                 tableLocations[locationID] = {
                     locationID: locationID,
-                    x: (10 * unitX) + ((1 + j) * tableWidth),
+                    x: (5 * unitX) + ((j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
@@ -477,7 +492,7 @@ function generateTableLocations() {
             for (var j = 0; j < rightTables;) {
                 tableLocations[locationID] = {
                     locationID: locationID,
-                    x: (10 * unitX) + ((1 + leftTables + s2PathWidth + j) * tableWidth),
+                    x: (5 * unitX) + ((leftTables + s2PathWidth + j) * tableWidth),
                     y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                     width: tableWidth * careerFairData.layout.locationTableMapping[locationID].tableSize,
                     height: tableHeight
@@ -492,7 +507,7 @@ function generateTableLocations() {
     for (var i = 0; i < s3;) {
         tableLocations[locationID] = {
             locationID: locationID,
-            x: (15 * unitX) + ((1 + s2) * tableWidth),
+            x: (10 * unitX) + ((s2) * tableWidth),
             y: 5 * unitY + i * tableHeight,
             width: tableWidth,
             height: tableHeight * careerFairData.layout.locationTableMapping[locationID].tableSize
