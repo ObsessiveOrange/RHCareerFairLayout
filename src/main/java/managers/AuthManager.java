@@ -146,7 +146,7 @@ public class AuthManager {
             }
             
             if (token == null) {
-                return new FailResponse("Invalid Token");
+                return new FailResponse("No token provided");
             }
             
             getAuthToken.setString(1, userName);

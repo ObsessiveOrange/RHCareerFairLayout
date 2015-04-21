@@ -87,6 +87,7 @@ public class AdminServlet extends HttpServlet {
         }
         
         PrintWriter out = response.getWriter();
+        
         out.print("Request content length is " + request.getContentLength() + "<br/>");
         out.print("Request content type is " + request.getHeader("Content-Type") + "<br/>");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
