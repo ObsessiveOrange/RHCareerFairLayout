@@ -122,7 +122,7 @@ public class AdminServlet extends HttpServlet {
                     }
                 }
             } catch (FileUploadException fue) {
-                out.write("fue!!!!!!!!!");
+                out.print(new FailResponse(fue));
             }
         }
         
