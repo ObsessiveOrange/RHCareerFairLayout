@@ -73,7 +73,7 @@ public class DataServlet extends HttpServlet {
     private static void setupBasicData() throws IOException {
     
         ArrayList2D basicData = new ArrayList2D();
-        basicData.importFromResourceFile("BasicData.txt", "\t", true);
+        basicData.importFromResourceFile("BasicData.txt", "\t", true, "\"");
         DataVars.setYear(basicData.getItem("Year", "Value", Integer.class));
         DataVars.setQuarter(basicData.getItem("Quarter", "Value", String.class));
         
@@ -85,7 +85,7 @@ public class DataServlet extends HttpServlet {
         layoutVars.setSection3(basicData.getItem("Layout_Section3", "Value", Integer.class));
         
         ArrayList2D tableMappings = new ArrayList2D();
-        tableMappings.importFromResourceFile("TableMappings.txt", "\t", true);
+        tableMappings.importFromResourceFile("TableMappings.txt", "\t", true, "\"");
         
         for (int i = 0; i < tableMappings.getRows(); i++) {
             TableMapping table =
@@ -99,7 +99,7 @@ public class DataServlet extends HttpServlet {
     private static void setupCategories() throws IOException {
     
         ArrayList2D categories = new ArrayList2D();
-        categories.importFromResourceFile("Categories.txt", "\t", true);
+        categories.importFromResourceFile("Categories.txt", "\t", true, "\"");
         
         for (int i = 0; i < categories.getRows(); i++) {
             String title = categories.getItem(i, 0, String.class);
@@ -115,7 +115,7 @@ public class DataServlet extends HttpServlet {
     private static void setupCompanyData() throws IOException {
     
         ArrayList2D companyData = new ArrayList2D();
-        companyData.importFromResourceFile("CompanyData.txt", "\t", true);
+        companyData.importFromResourceFile("CompanyData.txt", "\t", true, "\"");
         
         for (int i = 0; i < companyData.getRows(); i++) {
             String title = companyData.getItem(i, 0, String.class).replace("\"", "");

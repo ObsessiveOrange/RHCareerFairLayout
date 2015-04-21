@@ -818,15 +818,34 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         System.out.println("\n");
     }
     
-    public ArrayList2D importFromCSV(String filename, boolean hasHeaders) throws IOException {
+    public ArrayList2D importFromCSV(String filename, boolean hasHeaders, String removeChars) throws IOException {
     
         return importFromCSV(filename, ",", hasHeaders);
     }
     
-    public ArrayList2D importFromCSV(String filename, String separator, Boolean hasHeaders) throws IOException {
+    public ArrayList2D importFromCSV(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
     
         BufferedReader br = new BufferedReader(new FileReader(filename));
-        return importFromFile(br, separator, hasHeaders);
+        return importFromFile(br, separator, hasHeaders, removeChars);
+    }
+    
+    public ArrayList2D importFromResourceFile(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
+    
+        InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        
+        return importFromFile(br, separator, hasHeaders, removeChars);
+    }
+    
+    public ArrayList2D importFromCSV(String filename, boolean hasHeaders) throws IOException {
+    
+        return importFromCSV(filename, ",", hasHeaders, null);
+    }
+    
+    public ArrayList2D importFromCSV(String filename, String separator, boolean hasHeaders) throws IOException {
+    
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        return importFromFile(br, separator, hasHeaders, null);
     }
     
     public ArrayList2D importFromResourceFile(String filename, String separator, boolean hasHeaders) throws IOException {
@@ -834,10 +853,10 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         
-        return importFromFile(br, separator, hasHeaders);
+        return importFromFile(br, separator, hasHeaders, null);
     }
     
-    public ArrayList2D importFromFile(BufferedReader br, String separator, boolean hasHeaders) throws IOException {
+    public ArrayList2D importFromFile(BufferedReader br, String separator, boolean hasHeaders, String removeChars) throws IOException {
     
         boolean headerRowComplete = false;
         String line = "";
@@ -845,6 +864,10 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         while ((line = br.readLine()) != null) {
             // use comma as separator
             ArrayList<Object> newRow = new ArrayList<Object>();
+            
+            if (removeChars != null) {
+                line.replaceAll(removeChars, "");
+            }
             
             while (line.charAt(line.length() - 1) == ',') {
                 line = line.substring(0, line.length() - 1);

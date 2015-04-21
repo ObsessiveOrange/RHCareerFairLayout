@@ -1,12 +1,12 @@
 package servlets.admin;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
 
 import adt.Category;
 import adt.Company;
@@ -92,35 +91,21 @@ public class AdminServlet extends HttpServlet {
         out.print("Request content type is " + request.getHeader("Content-Type") + "<br/>");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
-            ServletFileUpload upload = new ServletFileUpload();
             try {
-                FileItemIterator iter = upload.getItemIterator(request);
-                FileItemStream item = null;
-                String name = "";
-                InputStream stream = null;
-                while (iter.hasNext()) {
-                    item = iter.next();
-                    name = item.getFieldName();
-                    stream = item.openStream();
-                    if (item.isFormField()) {
-                        out.write("Form field " + name + ": "
-                                + Streams.asString(stream) + "<br/>");
-                    }
-                    else {
-                        name = item.getName();
-                        System.out.println("name==" + name);
-                        if (name != null && !"".equals(name)) {
-                            String fileName = new File(item.getName()).getName();
-                            out.write("Client file: " + item.getName() + " <br/>with file name "
-                                    + fileName + " was uploaded.<br/>");
-                            File file = new File(getServletContext().getRealPath("/" + fileName));
-                            FileOutputStream fos = new FileOutputStream(file);
-                            long fileSize = Streams.copy(stream, fos, true);
-                            out.write("Size was " + fileSize + " bytes <br/>");
-                            out.write("File Path is " + file.getPath() + "<br/>");
-                        }
-                    }
-                }
+                // Create a factory for disk-based file items
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                
+                // Configure a repository (to ensure a secure temp location is used)
+                ServletContext servletContext = this.getServletConfig().getServletContext();
+                File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+                factory.setRepository(repository);
+                
+                // Create a new file upload handler
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                
+                // Parse the request
+                List<FileItem> items = upload.parseRequest(request);
+                
             } catch (FileUploadException fue) {
                 out.print(new FailResponse(fue));
             }
