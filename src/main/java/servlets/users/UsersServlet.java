@@ -29,6 +29,33 @@ public class UsersServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+        Response authResponse;
+        // check if the user has already been authenticated.
+        if (!(authResponse = AuthManager.checkToken(request)).success) {
+            // if fails authentication check, return the error.
+            response.getWriter().print(authResponse);
+            return;
+        }
+        
+        response.setContentType("application/json");
+        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
+        
+        Response responseObject;
+        
+        switch (method) {
+            default:
+                responseObject = new FailResponse("Invalid GET method supplied: " + method);
+                break;
+        }
+        if (responseObject.cookie != null) {
+            response.addCookie(responseObject.cookie);
+        }
+        response.getWriter().print(responseObject);
+    }
+    
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
         if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
                 && !request.getParameter("method").equalsIgnoreCase("registerUser")) {
             Response authResponse;
@@ -45,32 +72,12 @@ public class UsersServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-            case "registerUser":
-                responseObject = AuthManager.addUser(request);
-                break;
             case "login":
                 responseObject = AuthManager.authenticateUser(request);
                 break;
-            default:
-                responseObject = new FailResponse("Invalid GET method supplied: " + method);
+            case "registerUser":
+                responseObject = AuthManager.addUser(request);
                 break;
-        }
-        if (responseObject.cookie != null) {
-            response.addCookie(responseObject.cookie);
-        }
-        response.getWriter().print(responseObject);
-    }
-    
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-        response.setContentType("application/json");
-        
-        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
-        
-        Response responseObject;
-        
-        switch (method) {
             default:
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
