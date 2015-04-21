@@ -866,7 +866,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
             ArrayList<Object> newRow = new ArrayList<Object>();
             
             if (removeChars != null) {
-                line.replaceAll(removeChars, "");
+                line = line.replaceAll(removeChars, "");
             }
             
             while (line.charAt(line.length() - 1) == ',') {
