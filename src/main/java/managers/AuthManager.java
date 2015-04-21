@@ -1,9 +1,9 @@
 package managers;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
@@ -104,12 +104,12 @@ public class AuthManager {
             }
             
             String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
-            Date sessionValidDate = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(SESSION_VALID_DAYS));
+            Timestamp sessionValidDate = new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
             String sessionClient = request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent");
             
             newSession.setString(1, userName);
             newSession.setString(2, sessionKey);
-            newSession.setDate(3, sessionValidDate);
+            newSession.setTimestamp(3, sessionValidDate);
             newSession.setString(4, sessionClient);
             
             newSession.executeUpdate();
@@ -155,7 +155,8 @@ public class AuthManager {
             
             boolean hasNextResult;
             while (hasNextResult = result.next()) {
-                if (token.equals(result.getString("sessionKey")) && result.getDate("sessionValidDate").after(new Date(System.currentTimeMillis()))) {
+                if (token.equals(result.getString("sessionKey"))
+                        && result.getTimestamp("sessionValidDate").after(new Timestamp(System.currentTimeMillis()))) {
                     break;
                 }
             }
