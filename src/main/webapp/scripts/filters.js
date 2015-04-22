@@ -18,7 +18,7 @@ $(document).ready(function() {
     //
     //if data is not present, go back to index page to load the data.
     if (!careerFairData || !filters) {
-        window.location = "index.html";
+        window.location = "/";
         return;
     }
     //
@@ -43,7 +43,7 @@ $(document).ready(function() {
                 prepareForPageSwitch();
                 break;
         }
-        window.location = "index.html";
+        window.location = "/";
     });
     initTutorials("Filters");
 });
