@@ -1,3 +1,10 @@
+/**
+ * Data Servlet
+ * 
+ * Serves data requests for public site; no authentication required.
+ * 
+ * @author Benedict Wong
+ */
 package servlets.data;
 
 import java.io.IOException;
@@ -20,6 +27,7 @@ import adt.Response;
 import adt.Response.FailResponse;
 import adt.TableMapping;
 
+//Use Servlet 3.0 annotations
 @WebServlet("/api/data")
 public class DataServlet extends HttpServlet {
     
@@ -28,55 +36,66 @@ public class DataServlet extends HttpServlet {
      */
     private static final long                serialVersionUID = -5982008108929904358L;
     
+    /**
+     * Set variables for data - will eventually be moved to database
+     */
     public static LayoutVars                 layoutVars;
     public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
     public static HashMap<Integer, Company>  companyMap       = new HashMap<Integer, Company>();
     
-    /** Getter & Setter Methods **/
-    
     public DataServlet() throws IOException {
     
         super();
         
-        setupTestData();
+        loadDataFromFile();
     }
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-        response.setContentType("text/plain");
+        // get supplied method, use "null" if none given.
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
+        // create response object
         Response responseObject;
         
+        // select method based on the parameters sent.
         switch (method) {
             case "getData":
                 responseObject = DataRequestHandler.handleGetDataRequest(request);
                 break;
+            // If invalid method header, return with an error;
             default:
-                responseObject = new FailResponse("Invalid GET method supplied: " + method);
+                responseObject = new FailResponse("Invalid GET method supplied to data servlet: " + method);
                 break;
         }
+        
+        // Set return content type and send data;
+        response.setContentType("text/plain");
         response.getWriter().print(responseObject);
     }
     
-    public static void setupTestData() throws IOException {
+    public static void loadDataFromFile() throws IOException {
     
-        setupBasicData();
+        loadBasicData();
         
-        setupCategories();
+        loadCategories();
         
-        setupCompanyData();
+        loadCompanyData();
     }
     
-    private static void setupBasicData() throws IOException {
+    private static void loadBasicData() throws IOException {
     
+        // import basicData from file
         ArrayList2D basicData = new ArrayList2D();
         basicData.importFromResourceFile("BasicData.txt", "\t", true, "\"");
+        
+        // set Year and Quarter
         DataVars.setYear(basicData.getItem("Year", "Value", Integer.class));
         DataVars.setQuarter(basicData.getItem("Quarter", "Value", String.class));
         
+        // set layout data;
         layoutVars = new LayoutVars();
         layoutVars.setSection1(basicData.getItem("Layout_Section1", "Value", Integer.class));
         layoutVars.setSection2(basicData.getItem("Layout_Section2", "Value", Integer.class));
@@ -84,9 +103,11 @@ public class DataServlet extends HttpServlet {
         layoutVars.setSection2PathWidth(basicData.getItem("Layout_Section2_PathWidth", "Value", Integer.class));
         layoutVars.setSection3(basicData.getItem("Layout_Section3", "Value", Integer.class));
         
+        // import table mappings
         ArrayList2D tableMappings = new ArrayList2D();
         tableMappings.importFromResourceFile("TableMappings.txt", "\t", true, "\"");
         
+        // generate two-way table mappings.
         for (int i = 0; i < tableMappings.getRows(); i++) {
             TableMapping table =
                     new TableMapping(tableMappings.getItem(i, 0, Integer.class), tableMappings.getItem(i, 1, Integer.class), tableMappings.getItem(i,
@@ -96,7 +117,7 @@ public class DataServlet extends HttpServlet {
         }
     }
     
-    private static void setupCategories() throws IOException {
+    private static void loadCategories() throws IOException {
     
         ArrayList2D categories = new ArrayList2D();
         categories.importFromResourceFile("Categories.txt", "\t", true, "\"");
@@ -112,7 +133,7 @@ public class DataServlet extends HttpServlet {
         }
     }
     
-    private static void setupCompanyData() throws IOException {
+    private static void loadCompanyData() throws IOException {
     
         ArrayList2D companyData = new ArrayList2D();
         companyData.importFromResourceFile("CompanyData.txt", "\t", true, "\"");

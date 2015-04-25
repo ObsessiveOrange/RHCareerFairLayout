@@ -19,7 +19,9 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = Utils.sanitizeString(request.getHeader("term"));
+            String year = Utils.sanitizeString(request.getHeader("year"));
+            String term = Utils.sanitizeString(request.getHeader("term"));
+            String dbName = term + year;
             
             // Create new database
             PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE " + dbName + ";");
@@ -50,6 +52,7 @@ public class AdminRequestHandler {
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories_Companies ("
                     + "categoryId int NOT NULL,"
                     + "companyId int NOT NULL,"
+                    + "PRIMARY KEY (categoryId, companyId),"
                     + "FOREIGN KEY (categoryId) REFERENCES Categories(id) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
@@ -57,6 +60,7 @@ public class AdminRequestHandler {
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
                     + "companyId INT NOT NULL,"
                     + "repId INT NOT NULL,"
+                    + "PRIMARY KEY (companyId, repId),"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
@@ -65,8 +69,22 @@ public class AdminRequestHandler {
                     + "username VARCHAR(30) NOT NULL,"
                     + "companyId INT NOT NULL,"
                     + "priority INT NOT NULL,"
+                    + "PRIMARY KEY (username, companyId),"
                     + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE " + dbName + " ("
+                    + "item VARCHAR(20) NOT NULL,"
+                    + "value VARCHAR(20) NOT NULL"
+                    + "PRIMARY KEY (item)"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName
+                    + "(item, value) "
+                    + "VALUES "
+                    + "('Year'," + year + "),"
+                    + "('Term'," + term + "),"
                     + ")ENGINE=INNODB;");
             
             return new SuccessResponse("Rows changed: " + insertResult);

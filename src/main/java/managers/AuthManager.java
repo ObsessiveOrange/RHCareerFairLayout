@@ -163,6 +163,7 @@ public class AuthManager {
             if (!hasNextResult) {
                 return new FailResponse("Invalid Token");
             }
+            result.close();
             
             return new SuccessResponse();
         } catch (SQLException e) {
