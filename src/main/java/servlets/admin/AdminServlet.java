@@ -121,6 +121,8 @@ public class AdminServlet extends HttpServlet {
         // response.getWriter().print(new FailResponse(fue));
         // }
         // }
+        
+        Response respObj = new SuccessResponse("File Upload successful");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
             try {
@@ -137,8 +139,6 @@ public class AdminServlet extends HttpServlet {
                 
                 // Parse the request
                 List<FileItem> items = upload.parseRequest(request);
-                
-                Response respObj = new SuccessResponse("File Upload successful");
                 
                 for (int i = 0; i < items.size(); i++) {
                     
