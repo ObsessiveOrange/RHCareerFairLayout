@@ -34,7 +34,7 @@ public class AdminRequestHandler {
             return new FailResponse("Expected multipart/form-data");
         }
         
-        Response respObj = new SuccessResponse("File Upload successful");
+        Response respObj = new SuccessResponse("File upload successful");
         
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload();
