@@ -1,35 +1,35 @@
 <html>
-   <form>
-     File Description:<input type="text" id="desc" />
-     Choose File:<input type="file" id="chosenFile" />
-     <input type="button" id="submitFile" value="submitTheFile" />
-   </form>
-   <script type="text/javascript">
-    jQuery.noConflict();
-    jQuery(document).ready(function() {
-        jQuery("#submitFile").click(function() {
-            jQuery.ajax({
-                url: "[url to be submitted to]",
-                type: "POST",
-                contentType: false,
-                processData: false,
-                data: function() {
-                    var data = new FormData();
-                    data.append("fileDescription", jQuery("#desc").val());
-                    data.append("chosenFile", jQuery("#chosenFile").get(0).files[0]);
-                    return data;
-                    // Or simply return new FormData(jQuery("form")[0]);
-                }(),
-                error: function(_, textStatus, errorThrown) {
-                    alert("Error");
-                    console.log(textStatus, errorThrown);
-                },
-                success: function(response, textStatus) {
-                    alert("Success");
-                    console.log(response, textStatus);
-                }
+    <form>
+        File Description:<input type="text" id="desc" />
+        Choose File:<input type="file" id="chosenFile" />
+        <input type="button" id="submitFile" value="submitTheFile" />
+    </form>
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+            jQuery("#submitFile").click(function() {
+                jQuery.ajax({
+                    url: "[url to be submitted to]",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: function() {
+                        var data = new FormData();
+                        data.append("fileDescription", jQuery("#desc").val());
+                        data.append("chosenFile", jQuery("#chosenFile").get(0).files[0]);
+                        return data;
+                        // Or simply return new FormData(jQuery("form")[0]);
+                    }(),
+                    error: function(_, textStatus, errorThrown) {
+                        alert("Error");
+                        console.log(textStatus, errorThrown);
+                    },
+                    success: function(response, textStatus) {
+                        alert("Success");
+                        console.log(response, textStatus);
+                    }
+                });
             });
         });
-    });
-<script>
+    </script>
 </html>
