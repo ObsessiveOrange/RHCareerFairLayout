@@ -86,43 +86,43 @@ public class AdminServlet extends HttpServlet {
             response.getWriter().print(authResponse);
             return;
         }
-        Response respObj = new SuccessResponse("File Upload successful");
-        
-        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        if (isMultipart) {
-            
-            // Create a new file upload handler
-            ServletFileUpload upload = new ServletFileUpload();
-            
-            try {
-                // Parse the request
-                FileItemIterator iter = upload.getItemIterator(request);
-                int i = 0;
-                while (iter.hasNext()) {
-                    FileItemStream item = iter.next();
-                    String name = item.getFieldName();
-                    InputStream stream = item.openStream();
-                    if (item.isFormField()) {
-                        respObj.addToReturnData("Item " + i, "Form field " + name + " with value "
-                                + Streams.asString(stream));
-                    }
-                    else {
-                        respObj.addToReturnData("Item " + i, "File field " + name + " with file name "
-                                + item.getName());
-                        // Process the input stream
-                        ArrayList2D arr = new ArrayList2D();
-                        arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
-                        
-                        respObj.addToReturnData("Item " + i + " data", arr.toJson());
-                    }
-                    i++;
-                }
-                response.getWriter().print(respObj);
-                return;
-            } catch (FileUploadException fue) {
-                response.getWriter().print(new FailResponse(fue));
-            }
-        }
+        // Response respObj = new SuccessResponse("File Upload successful");
+        //
+        // boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        // if (isMultipart) {
+        //
+        // // Create a new file upload handler
+        // ServletFileUpload upload = new ServletFileUpload();
+        //
+        // try {
+        // // Parse the request
+        // FileItemIterator iter = upload.getItemIterator(request);
+        // int i = 0;
+        // while (iter.hasNext()) {
+        // FileItemStream item = iter.next();
+        // String name = item.getFieldName();
+        // InputStream stream = item.openStream();
+        // if (item.isFormField()) {
+        // respObj.addToReturnData("Item " + i, "Form field " + name + " with value "
+        // + Streams.asString(stream));
+        // }
+        // else {
+        // respObj.addToReturnData("Item " + i, "File field " + name + " with file name "
+        // + item.getName());
+        // // Process the input stream
+        // ArrayList2D arr = new ArrayList2D();
+        // arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+        //
+        // respObj.addToReturnData("Item " + i + " data", arr.toJson());
+        // }
+        // i++;
+        // }
+        // response.getWriter().print(respObj);
+        // return;
+        // } catch (FileUploadException fue) {
+        // response.getWriter().print(new FailResponse(fue));
+        // }
+        // }
         
         response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
@@ -130,9 +130,47 @@ public class AdminServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-        // case "upload":
-        // resp
-        // break;
+            case "upload":
+                Response respObj = new SuccessResponse("File Upload successful");
+                
+                boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+                if (isMultipart) {
+                    
+                    // Create a new file upload handler
+                    ServletFileUpload upload = new ServletFileUpload();
+                    
+                    try {
+                        // Parse the request
+                        FileItemIterator iter = upload.getItemIterator(request);
+                        int i = 0;
+                        while (iter.hasNext()) {
+                            FileItemStream item = iter.next();
+                            String name = item.getFieldName();
+                            InputStream stream = item.openStream();
+                            if (item.isFormField()) {
+                                respObj.addToReturnData("Item " + i, "Form field " + name + " with value "
+                                        + Streams.asString(stream));
+                            }
+                            else {
+                                respObj.addToReturnData("Item " + i, "File field " + name + " with file name "
+                                        + item.getName());
+                                // Process the input stream
+                                ArrayList2D arr = new ArrayList2D();
+                                arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+                                
+                                respObj.addToReturnData("Item " + i + " data", arr.toJson());
+                            }
+                            i++;
+                        }
+                        response.getWriter().print(respObj);
+                        return;
+                    } catch (FileUploadException fue) {
+                        response.getWriter().print(new FailResponse(fue));
+                        return;
+                    }
+                }
+                return;
+                // break;
             case "newTerm":
                 responseObject = AdminRequestHandler.handleNewTermRequest(request);
                 break;
