@@ -1,7 +1,9 @@
 package servlets.admin;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,12 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
+import misc.ArrayList2D;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.Category;
 import adt.Company;
 import adt.DataVars;
@@ -117,6 +122,13 @@ public class AdminServlet extends HttpServlet {
                         respObj.addToReturnData("Item " + i + " name:", items.get(i).getName());
                         respObj.addToReturnData("Item " + i + " field name:", items.get(i).getFieldName());
                         respObj.addToReturnData("Item " + i + " size:", items.get(i).getSize());
+                        ArrayList2D arr = new ArrayList2D();
+                        arr.importFromFile(new BufferedReader(new InputStreamReader(item.getInputStream())), "\t", true, "\"");
+                        
+                        LogEvent e = new LogEvent();
+                        e.setDetail("Col1", arr.getItem(0, 0, String.class));
+                        
+                        ServletLog.logEvent(e);
                     }
                 }
                 
