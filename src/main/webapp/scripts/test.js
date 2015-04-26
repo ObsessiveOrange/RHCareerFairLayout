@@ -2,7 +2,7 @@ var globalData;
 $(document).ready(function() {
     $("#uploadForm").submit(function(e) {
         e.preventDefault();
-        var formData = new FormData($('#uploadForm')[0]);
+        var formData = new FormData(jQuery('form')[0]);
         $.ajax({
             url: '/api/users/admin?method=test', //Server script to process data
             type: 'POST',
