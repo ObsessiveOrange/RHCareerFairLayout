@@ -124,7 +124,7 @@ public class AdminServlet extends HttpServlet {
         // }
         // }
         
-        response.setContentType("application/json");
+        // response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
