@@ -126,7 +126,7 @@ public class AdminServlet extends HttpServlet {
                         arr.importFromFile(new BufferedReader(new InputStreamReader(item.getInputStream())), "\t", true, "\"");
                         
                         LogEvent e = new LogEvent();
-                        e.setDetail("Col1", arr.getItem(0, 0, String.class));
+                        e.setDetail("Data:", arr.toJson());
                         
                         ServletLog.logEvent(e);
                     }

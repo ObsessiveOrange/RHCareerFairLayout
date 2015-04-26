@@ -22,6 +22,8 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import com.google.gson.Gson;
+
 public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
     
     /**
@@ -785,6 +787,35 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
     /****************************************************************************** Row/Columns Methods ******************************************************************************/
     
     /****************************************************************************** Input/Output Methods ******************************************************************************/
+    public String toListString() {
+    
+        StringBuilder b = new StringBuilder();
+        int columnWidth = 20;
+        
+        if (headerArray.size() > 0) {
+            for (Object header : headerArray.keySet()) {
+                b.append(String.format("%" + columnWidth + "." + columnWidth + "s", header));
+                b.append("|");
+            }
+            b.append("\n");
+        }
+        
+        for (int i = 0; i < outerArray.size(); i++) {
+            for (int j = 0; j < outerArray.get(i).size(); j++) {
+                b.append(String.format("%" + columnWidth + "." + columnWidth + "s", outerArray.get(i).get(j)));
+                b.append("|");
+            }
+            b.append("\n");
+        }
+        
+        return b.toString();
+    }
+    
+    public String toJson() {
+    
+        return new Gson().toJson(outerArray);
+    }
+    
     public void printList(int columnWidth) {
     
         printHeader(columnWidth);
