@@ -169,7 +169,7 @@ public class AuthManager {
             boolean hasNextResult;
             while (hasNextResult = result.next()) {
                 authEvent.setDetail("dbToken", result.getString("sessionKey"));
-                authEvent.setDetail("dbValidDate", result.getLong("sessionValidDate"));
+                authEvent.setDetail("dbValidDate", result.getTimestamp("sessionValidDate"));
                 
                 if (token.equals(result.getString("sessionKey"))
                         && result.getTimestamp("sessionValidDate").after(new Timestamp(System.currentTimeMillis()))) {
