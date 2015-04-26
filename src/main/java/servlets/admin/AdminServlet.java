@@ -2,7 +2,6 @@ package servlets.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,11 +84,6 @@ public class AdminServlet extends HttpServlet {
             response.getWriter().print(authResponse);
             return;
         }
-        
-        PrintWriter out = response.getWriter();
-        
-        out.print("Request content length is " + request.getContentLength() + "<br/>");
-        out.print("Request content type is " + request.getHeader("Content-Type") + "<br/>");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
             try {
@@ -107,7 +101,7 @@ public class AdminServlet extends HttpServlet {
                 // Parse the request
                 List<FileItem> items = upload.parseRequest(request);
                 
-                Response respObj = new SuccessResponse("TEST");
+                Response respObj = new SuccessResponse("File Upload successful");
                 
                 for (int i = 0; i < items.size(); i++) {
                     
@@ -119,7 +113,7 @@ public class AdminServlet extends HttpServlet {
                 return;
                 
             } catch (FileUploadException fue) {
-                out.print(new FailResponse(fue));
+                response.getWriter().print(new FailResponse(fue));
             }
         }
         
