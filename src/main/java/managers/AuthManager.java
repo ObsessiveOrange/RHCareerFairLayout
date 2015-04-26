@@ -137,8 +137,11 @@ public class AuthManager {
             String userName = request.getHeader("authUser");
             String token = null;
             
+            if (userName == null) {
+                return new FailResponse("Username not provided");
+            }
             if (request.getCookies() == null) {
-                return new FailResponse("Invalid Token");
+                return new FailResponse("No token provided");
             }
             
             for (Cookie c : request.getCookies()) {
