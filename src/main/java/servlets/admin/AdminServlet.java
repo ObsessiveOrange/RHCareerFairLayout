@@ -2,11 +2,10 @@ package servlets.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import managers.AuthManager;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -85,29 +85,36 @@ public class AdminServlet extends HttpServlet {
             return;
         }
         
-        PrintWriter out = response.getWriter();
-        
-        out.print("Request content length is " + request.getContentLength() + "<br/>");
-        out.print("Request content type is " + request.getHeader("Content-Type") + "<br/>");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        
         if (isMultipart) {
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            
             try {
-                // Create a factory for disk-based file items
-                DiskFileItemFactory factory = new DiskFileItemFactory();
-                
-                // Configure a repository (to ensure a secure temp location is used)
-                ServletContext servletContext = this.getServletConfig().getServletContext();
-                File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-                factory.setRepository(repository);
-                
-                // Create a new file upload handler
-                ServletFileUpload upload = new ServletFileUpload(factory);
-                
-                // Parse the request
-                List<FileItem> items = upload.parseRequest(request);
-                
-            } catch (FileUploadException fue) {
-                out.print(new FailResponse(fue));
+                List items = upload.parseRequest(request);
+                Iterator iterator = items.iterator();
+                while (iterator.hasNext()) {
+                    FileItem item = (FileItem) iterator.next();
+                    
+                    if (!item.isFormField()) {
+                        String fileName = item.getName();
+                        
+                        String root = getServletContext().getRealPath("/");
+                        File path = new File(root + "/uploads");
+                        if (!path.exists()) {
+                            boolean status = path.mkdirs();
+                        }
+                        
+                        File uploadedFile = new File(path + "/" + fileName);
+                        System.out.println(uploadedFile.getAbsolutePath());
+                        item.write(uploadedFile);
+                    }
+                }
+            } catch (FileUploadException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         

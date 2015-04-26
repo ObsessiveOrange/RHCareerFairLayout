@@ -19,7 +19,10 @@ $(document).ready(function() {
             success: function(response, textStatus) {
                 alert("Success");
                 console.log(response, textStatus);
-            }
+            },
+            headers: {
+                "authUser": "bennydictwong",
+            },
         });
     });
 });
