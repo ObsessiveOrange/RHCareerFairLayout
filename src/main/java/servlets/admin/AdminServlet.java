@@ -123,6 +123,7 @@ public class AdminServlet extends HttpServlet {
         // }
         
         response.setContentType("application/json");
+        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response respObj = new SuccessResponse("File Upload successful");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -166,7 +167,6 @@ public class AdminServlet extends HttpServlet {
                 response.getWriter().print(new FailResponse(fue));
             }
         }
-        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
         
