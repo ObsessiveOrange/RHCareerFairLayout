@@ -112,7 +112,10 @@ public class AdminServlet extends HttpServlet {
                         item.write(uploadedFile);
                     }
                     
-                    response.getWriter().print(new SuccessResponse("IT WORKED!").addToReturnData("filename", items.get(0).getName()));
+                    Response respObj = new SuccessResponse("IT WORKED!");
+                    respObj.addToReturnData("filename", items.get(0).getName());
+                    
+                    response.getWriter().print(respObj);
                     return;
                 }
             } catch (FileUploadException e) {
