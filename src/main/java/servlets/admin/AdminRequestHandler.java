@@ -94,7 +94,7 @@ public class AdminRequestHandler {
                                 }
                             }
                             workbook.close();
-                            file.close();
+                            stream.close();
                         }
                         else {
                             // respObj.addToReturnData(name, Streams.asString(stream));
