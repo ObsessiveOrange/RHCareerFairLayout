@@ -36,6 +36,11 @@ public class AdminRequestHandler {
         
         Response respObj = new SuccessResponse("File upload successful");
         
+        LogEvent event0 = new LogEvent();
+        event0.setDetail("Type", "Log");
+        event0.setDetail("isMultipart:", isMultipart);
+        ServletLog.logEvent(event0);
+        
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload();
         
@@ -44,10 +49,10 @@ public class AdminRequestHandler {
             FileItemIterator iter = upload.getItemIterator(request);
             int i = 0;
             
-            LogEvent event = new LogEvent();
-            event.setDetail("Type", "Log");
-            event.setDetail("Iterator has next:", iter.hasNext());
-            ServletLog.logEvent(event);
+            LogEvent event1 = new LogEvent();
+            event1.setDetail("Type", "Log");
+            event1.setDetail("Iterator has next:", iter.hasNext());
+            ServletLog.logEvent(event1);
             
             while (iter.hasNext()) {
                 FileItemStream item = iter.next();
@@ -56,7 +61,7 @@ public class AdminRequestHandler {
                 LogEvent event2 = new LogEvent();
                 event2.setDetail("Type", "Log");
                 event2.setDetail("Item:", name);
-                ServletLog.logEvent(event);
+                ServletLog.logEvent(event2);
                 
                 InputStream stream = item.openStream();
                 if (item.isFormField()) {
