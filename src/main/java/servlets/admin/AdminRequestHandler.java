@@ -43,9 +43,21 @@ public class AdminRequestHandler {
             // Parse the request
             FileItemIterator iter = upload.getItemIterator(request);
             int i = 0;
+            
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Log");
+            event.setDetail("Iterator has next:", iter.hasNext());
+            ServletLog.logEvent(event);
+            
             while (iter.hasNext()) {
                 FileItemStream item = iter.next();
                 String name = item.getFieldName();
+                
+                LogEvent event2 = new LogEvent();
+                event2.setDetail("Type", "Log");
+                event2.setDetail("Item:", name);
+                ServletLog.logEvent(event);
+                
                 InputStream stream = item.openStream();
                 if (item.isFormField()) {
                     respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
