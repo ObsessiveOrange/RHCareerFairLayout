@@ -18,10 +18,10 @@ $(document).ready(function() {
             success: function(data) {
                 globalData = data;
                 console.log(data);
-            }
+            },
             headers: {
                 "authUser": "bennydictwong",
-            }
+            },
             // error: errorHandler,
             // Form data
             data: formData,
