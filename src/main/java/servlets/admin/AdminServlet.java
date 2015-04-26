@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.Category;
 import adt.Company;
 import adt.DataVars;
@@ -82,7 +88,26 @@ public class AdminServlet extends HttpServlet {
         
         switch (method) {
             case "upload":
-                responseObject = AdminRequestHandler.handleUploadRequest(request);
+                boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+                if (!isMultipart) {
+                    responseObject = new FailResponse("Expected multipart/form-data");
+                }
+                
+                try {
+                    // Create a new file upload handler
+                    ServletFileUpload upload = new ServletFileUpload();
+                    FileItemIterator iter = upload.getItemIterator(request);
+                    
+                    // process data with this iterator.
+                    responseObject = AdminRequestHandler.handleUploadRequest(request, iter);
+                } catch (Exception e) {
+                    LogEvent event = new LogEvent();
+                    event.setDetail("Type", "Exception");
+                    event.setDetail("Exception", e.getStackTrace());
+                    ServletLog.logEvent(event);
+                    
+                    responseObject = new FailResponse(e);
+                }
                 break;
             case "newTerm":
                 responseObject = AdminRequestHandler.handleNewTermRequest(request);
