@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $("#submitFile").click(function() {
         $.ajax({
-            url: "/api/users/admin?method=test",
+            url: "/api/users/admin?method=upload",
             type: "POST",
             contentType: false,
             processData: false,
