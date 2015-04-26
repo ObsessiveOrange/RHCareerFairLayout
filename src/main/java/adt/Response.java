@@ -1,5 +1,6 @@
 package adt;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,40 @@ public abstract class Response {
     
         returnData.put(key, value);
         return this;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T getFromReturnData(String key, Class<T> returnClass) {
+    
+        Object returnItem = returnData.get(key);
+        if (returnItem != null) {
+            
+            if (returnItem.getClass().equals(returnClass)) {
+                return (T) returnItem;
+            }
+            else if (returnClass.equals(Integer.class)) {
+                return (T) Integer.valueOf(String.valueOf(returnItem));
+            }
+            else if (returnClass.equals(Long.class)) {
+                return (T) Long.valueOf(String.valueOf(returnItem));
+            }
+            else if (returnClass.equals(Double.class)) {
+                return (T) Double.valueOf(String.valueOf(returnItem));
+            }
+            else if (returnClass.equals(BigDecimal.class)) {
+                return (T) new BigDecimal(String.valueOf(returnItem));
+            }
+            else if (returnClass.equals(Boolean.class)) {
+                return (T) Boolean.valueOf(String.valueOf(returnItem));
+            }
+            else if (returnClass.equals(String.class)) {
+                return (T) String.valueOf(returnItem);
+            }
+            else {
+                return returnClass.cast(returnItem);
+            }
+        }
+        return null;
     }
     
     @Override

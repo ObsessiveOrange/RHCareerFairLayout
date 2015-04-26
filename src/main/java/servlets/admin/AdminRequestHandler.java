@@ -15,6 +15,7 @@ import misc.Utils;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 import servlets.ServletLog;
@@ -26,44 +27,45 @@ import adt.Response.SuccessResponse;
 
 public class AdminRequestHandler {
     
-    public static Response handleUploadRequest(HttpServletRequest request, FileItemIterator iter) {
+    public static Response handleUploadRequest(HttpServletRequest request) {
     
-        Response respObj = new SuccessResponse("File upload successful");
+        Response respObj = new SuccessResponse("File Upload successful");
         
-        try {
-            // Parse the request
-            int i = 0;
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (isMultipart) {
             
-            while (iter.hasNext()) {
-                FileItemStream item = iter.next();
-                String name = item.getFieldName();
-                
-                InputStream stream = item.openStream();
-                if (item.isFormField()) {
-                    respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
-                            + Streams.asString(stream) + "'");
+            // Create a new file upload handler
+            ServletFileUpload upload = new ServletFileUpload();
+            
+            try {
+                // Parse the request
+                FileItemIterator iter = upload.getItemIterator(request);
+                int i = 0;
+                while (iter.hasNext()) {
+                    FileItemStream item = iter.next();
+                    String name = item.getFieldName();
+                    respObj.addToReturnData("fieldName", name);
+                    InputStream stream = item.openStream();
+                    if (item.isFormField()) {
+                        respObj.addToReturnData("fieldValue", Streams.asString(stream));
+                    }
+                    else {
+                        respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
+                                + item.getName() + "'");
+                        // Process the input stream
+                        ArrayList2D arr = new ArrayList2D();
+                        arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+                        
+                        respObj.addToReturnData("Item " + i + " data", arr.toJson());
+                    }
+                    i++;
                 }
-                else {
-                    respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
-                            + item.getName() + "'");
-                    // Process the input stream
-                    ArrayList2D arr = new ArrayList2D();
-                    arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
-                    
-                    respObj.addToReturnData("array data:", arr.toJson());
-                }
-                i++;
+                return respObj;
+            } catch (Exception e) {
+                return new FailResponse(e);
             }
-        } catch (Exception e) {
-            LogEvent event = new LogEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
-            
-            return new FailResponse(e);
         }
-        
-        return respObj;
+        return new FailResponse("Expected content of type multipart/form-data");
     }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {
