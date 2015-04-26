@@ -48,12 +48,12 @@ public class AdminRequestHandler {
                 String name = item.getFieldName();
                 InputStream stream = item.openStream();
                 if (item.isFormField()) {
-                    respObj.addToReturnData("Item " + i, "Form field \"" + name + "\" with value \""
-                            + Streams.asString(stream) + "\"");
+                    respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
+                            + Streams.asString(stream) + "'");
                 }
                 else {
-                    respObj.addToReturnData("Item " + i, "File field \"" + name + "\" with file name \""
-                            + item.getName() + "\"");
+                    respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
+                            + item.getName() + "'");
                     // Process the input stream
                     ArrayList2D arr = new ArrayList2D();
                     arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
