@@ -29,7 +29,7 @@ public class AdminRequestHandler {
     
     public static Response handleUploadRequest(HttpServletRequest request) {
     
-        Response respObj = new SuccessResponse("File Upload successful");
+        Response respObj = new SuccessResponse("File Upload successfulx");
         
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
