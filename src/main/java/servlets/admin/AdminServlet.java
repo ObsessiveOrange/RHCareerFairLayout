@@ -105,12 +105,12 @@ public class AdminServlet extends HttpServlet {
                     String name = item.getFieldName();
                     InputStream stream = item.openStream();
                     if (item.isFormField()) {
-                        respObj.addToReturnData("Item " + i, "Form field " + name + " with value "
-                                + Streams.asString(stream));
+                        respObj.addToReturnData("Item " + i, "Form field \"" + name + "\" with value \""
+                                + Streams.asString(stream) + "\"");
                     }
                     else {
-                        respObj.addToReturnData("Item " + i, "File field " + name + " with file name "
-                                + item.getName());
+                        respObj.addToReturnData("Item " + i, "File field \"" + name + "\" with file name \""
+                                + item.getName() + "\"");
                         // Process the input stream
                         ArrayList2D arr = new ArrayList2D();
                         arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
@@ -127,45 +127,6 @@ public class AdminServlet extends HttpServlet {
             } catch (FileUploadException fue) {
                 response.getWriter().print(new FailResponse(fue));
             }
-            
-            // try {
-            // // Create a factory for disk-based file items
-            // DiskFileItemFactory factory = new DiskFileItemFactory();
-            //
-            // // Configure a repository (to ensure a secure temp location is used)
-            // ServletContext servletContext = this.getServletConfig().getServletContext();
-            // File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-            // factory.setRepository(repository);
-            //
-            // // Create a new file upload handler
-            // ServletFileUpload upload = new ServletFileUpload(factory);
-            //
-            // // Parse the request
-            // List<FileItem> items = upload.parseRequest(request);
-            //
-            // for (int i = 0; i < items.size(); i++) {
-            //
-            // FileItem item = items.get(i);
-            //
-            // if (item.isFormField()) {
-            // // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
-            // respObj.addToReturnData("Item " + i + " field name:", items.get(i).getFieldName());
-            // respObj.addToReturnData("Item " + i + " value:", items.get(i).getString());
-            // }
-            // else {
-            // // Process form file field (input type="file").
-            // respObj.addToReturnData("Item " + i + " name:", items.get(i).getName());
-            // respObj.addToReturnData("Item " + i + " field name:", items.get(i).getFieldName());
-            // respObj.addToReturnData("Item " + i + " size:", items.get(i).getSize());
-            // }
-            // }
-            //
-            // response.getWriter().print(respObj);
-            // return;
-            //
-            // } catch (FileUploadException fue) {
-            // response.getWriter().print(new FailResponse(fue));
-            // }
         }
         
         response.setContentType("application/json");
