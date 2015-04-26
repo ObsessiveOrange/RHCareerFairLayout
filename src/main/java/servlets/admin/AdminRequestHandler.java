@@ -1,8 +1,6 @@
 package servlets.admin;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
@@ -58,10 +56,9 @@ public class AdminRequestHandler {
                     else {
                         if (item.getName().substring(item.getName().length() - 4).equalsIgnoreCase(".xls")) {
                             // || item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
-                            FileInputStream file = new FileInputStream(new File("howtodoinjava_demo.xlsx"));
                             
                             // Create Workbook instance holding reference to .xls file
-                            HSSFWorkbook workbook = new HSSFWorkbook(file);
+                            HSSFWorkbook workbook = new HSSFWorkbook(stream);
                             
                             // Get first/desired sheet from the workbook
                             HSSFSheet sheet = workbook.getSheetAt(0);
