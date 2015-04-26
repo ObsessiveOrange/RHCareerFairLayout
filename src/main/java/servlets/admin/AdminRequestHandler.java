@@ -1,11 +1,14 @@
 package servlets.admin;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +20,10 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 import servlets.ServletLog;
 import servlets.ServletLog.LogEvent;
@@ -44,19 +51,64 @@ public class AdminRequestHandler {
                 while (iter.hasNext()) {
                     FileItemStream item = iter.next();
                     String name = item.getFieldName();
-                    respObj.addToReturnData("fieldName", name);
                     InputStream stream = item.openStream();
                     if (item.isFormField()) {
-                        respObj.addToReturnData("fieldValue", Streams.asString(stream));
+                        respObj.addToReturnData(name, Streams.asString(stream));
                     }
                     else {
-                        respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
-                                + item.getName() + "'");
-                        // Process the input stream
-                        ArrayList2D arr = new ArrayList2D();
-                        arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
-                        
-                        respObj.addToReturnData("Item " + i + " data", arr.toJson());
+                        if (item.getName().substring(item.getName().length() - 4).equalsIgnoreCase(".xls")) {
+                            // || item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
+                            FileInputStream file = new FileInputStream(new File("howtodoinjava_demo.xlsx"));
+                            
+                            // Create Workbook instance holding reference to .xls file
+                            HSSFWorkbook workbook = new HSSFWorkbook(file);
+                            
+                            // Get first/desired sheet from the workbook
+                            HSSFSheet sheet = workbook.getSheetAt(0);
+                            
+                            // Iterate through each rows one by one
+                            Iterator<Row> rowIterator = sheet.iterator();
+                            while (rowIterator.hasNext())
+                            {
+                                Row row = rowIterator.next();
+                                // For each row, iterate through all the columns
+                                Iterator<Cell> cellIterator = row.cellIterator();
+                                
+                                while (cellIterator.hasNext())
+                                {
+                                    Cell cell = cellIterator.next();
+                                    // Check the cell type and format accordingly
+                                    switch (cell.getCellType())
+                                    {
+                                        case Cell.CELL_TYPE_NUMERIC:
+                                            Double value = cell.getNumericCellValue();
+                                            if (value == value.intValue()) {
+                                                respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")",
+                                                        value.intValue());
+                                            }
+                                            else
+                                                respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")", value);
+                                            break;
+                                        case Cell.CELL_TYPE_STRING:
+                                            respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")",
+                                                    cell.getStringCellValue());
+                                            break;
+                                    }
+                                }
+                            }
+                            workbook.close();
+                            file.close();
+                        }
+                        else {
+                            // respObj.addToReturnData(name, Streams.asString(stream));
+                            respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
+                                    + item.getName() + "'");
+                            // Process the input stream
+                            ArrayList2D arr = new ArrayList2D();
+                            arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+                            
+                            respObj.addToReturnData("Item " + i + " data", arr.toJson());
+                        }
                     }
                     i++;
                 }
