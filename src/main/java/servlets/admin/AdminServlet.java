@@ -86,10 +86,10 @@ public class AdminServlet extends HttpServlet {
             response.getWriter().print(authResponse);
             return;
         }
+        Response respObj = new SuccessResponse("File Upload successful");
+        
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
-            
-            Response respObj = new SuccessResponse("File Upload successful");
             
             // Create a new file upload handler
             ServletFileUpload upload = new ServletFileUpload();
