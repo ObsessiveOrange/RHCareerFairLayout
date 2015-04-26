@@ -1,4 +1,3 @@
-$.noConflict();
 $(document).ready(function() {
     $("#submitFile").click(function() {
         $.ajax({
