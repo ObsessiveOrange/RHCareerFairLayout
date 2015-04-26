@@ -19,6 +19,9 @@ $(document).ready(function() {
                 globalData = data;
                 console.log(data);
             }
+            headers: {
+                "authUser": "bennydictwong",
+            }
             // error: errorHandler,
             // Form data
             data: formData,
