@@ -123,7 +123,6 @@ public class AdminServlet extends HttpServlet {
         // }
         
         response.setContentType("application/json");
-        String test = request.getParameter("method");
         
         Response respObj = new SuccessResponse("File Upload successful");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
