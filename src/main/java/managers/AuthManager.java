@@ -93,7 +93,7 @@ public class AuthManager {
             String password = request.getHeader("authPass");
             
             if (userName == null || password == null) {
-                return new FailResponse("Invalid Username/Password Combination");
+                return new FailResponse("Invalid Username/Password provided");
             }
             
             getHashedPWStatement.setString(1, userName);
@@ -119,7 +119,8 @@ public class AuthManager {
             SuccessResponse response = new SuccessResponse();
             
             response.addToReturnData("token", sessionKey);
-            response.setAuthCookie(sessionKey);
+            response.addCookie("authUser", userName);
+            response.addCookie("authToken", sessionKey);
             
             return response;
         } catch (SQLException e) {
@@ -135,27 +136,25 @@ public class AuthManager {
             setupAuthManager();
             
             String userName = request.getHeader("authUser");
-            String token = null;
+            String token = request.getHeader("authToken");
+            
+            if (request.getCookies() != null) {
+                for (Cookie c : request.getCookies()) {
+                    if (c.getName().equals("authUser")) {
+                        userName = c.getValue();
+                    }
+                    if (c.getName().equals("authToken")) {
+                        token = c.getValue();
+                    }
+                }
+            }
             
             if (userName == null) {
                 return new FailResponse("Username not provided");
             }
-            if (request.getCookies() == null) {
-                return new FailResponse("No token provided");
-            }
-            
-            for (Cookie c : request.getCookies()) {
-                if (c.getName().equals("authToken")) {
-                    token = c.getValue();
-                }
-            }
-            
-            if (token == null && request.getHeader("authUser") != null) {
-                token = request.getHeader("authUser");
-            }
             
             if (token == null) {
-                return new FailResponse("No token provided");
+                return new FailResponse("Token not provided");
             }
             
             getAuthToken.setString(1, userName);

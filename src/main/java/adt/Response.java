@@ -1,5 +1,6 @@
 package adt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +12,7 @@ import com.google.gson.Gson;
 public abstract class Response {
     
     public final boolean             success;
-    public Cookie                    cookie     = null;
+    public ArrayList<Cookie>         cookies    = null;
     public final Map<String, Object> returnData = new HashMap<String, Object>();
     
     public Response(boolean success) {
@@ -48,11 +49,17 @@ public abstract class Response {
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         
-        public Response setAuthCookie(String authToken) {
+        public Response addCookie(String key, String value) {
         
-            cookie = new Cookie("authToken", authToken);
-            cookie.setSecure(true);
-            cookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30));
+            if (cookies == null) {
+                cookies = new ArrayList<Cookie>();
+            }
+            
+            Cookie newCookie = new Cookie(key, value);
+            newCookie.setSecure(true);
+            newCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30));
+            
+            cookies.add(newCookie);
             
             return this;
         }

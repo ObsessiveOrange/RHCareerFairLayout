@@ -3,6 +3,7 @@ package servlets.users;
 import java.io.IOException;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,8 +48,10 @@ public class UsersServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
         }
-        if (responseObject.cookie != null) {
-            response.addCookie(responseObject.cookie);
+        if (responseObject.cookies != null) {
+            for (Cookie c : responseObject.cookies) {
+                response.addCookie(c);
+            }
         }
         response.getWriter().print(responseObject);
     }
@@ -82,9 +85,10 @@ public class UsersServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
         }
-        if (responseObject.cookie != null) {
-            response.addCookie(responseObject.cookie);
-            responseObject.addToReturnData("Test", "Test");
+        if (responseObject.cookies != null) {
+            for (Cookie c : responseObject.cookies) {
+                response.addCookie(c);
+            }
         }
         response.getWriter().print(responseObject);
     }
