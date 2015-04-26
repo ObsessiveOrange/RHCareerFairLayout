@@ -118,6 +118,7 @@ public class AdminServlet extends HttpServlet {
                     i++;
                 }
                 response.getWriter().print(respObj);
+                return;
             } catch (FileUploadException fue) {
                 response.getWriter().print(new FailResponse(fue));
             }
