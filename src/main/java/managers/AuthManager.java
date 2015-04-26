@@ -10,6 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import misc.BCrypt;
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -39,7 +41,10 @@ public class AuthManager {
                         SQLManager.getConn("Users").prepareStatement(
                                 "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             } catch (SQLException e) {
-                e.printStackTrace();
+                LogEvent event = new LogEvent();
+                event.setDetail("Type", "Exception");
+                event.setDetail("Exception", e.getStackTrace());
+                ServletLog.logEvent(event);
             }
         }
     }
@@ -72,7 +77,11 @@ public class AuthManager {
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
             return new FailResponse(e);
         }
     }
@@ -122,8 +131,11 @@ public class AuthManager {
             
             return response;
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
             return new FailResponse(e);
         }
     }
@@ -174,8 +186,11 @@ public class AuthManager {
             result.close();
             return new SuccessResponse();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
             return new FailResponse(e);
         }
     }

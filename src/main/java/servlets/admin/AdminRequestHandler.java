@@ -1,5 +1,8 @@
 package servlets.admin;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -7,13 +10,72 @@ import java.sql.Statement;
 import javax.servlet.http.HttpServletRequest;
 
 import managers.SQLManager;
+import misc.ArrayList2D;
 import misc.Utils;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
+
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
 
 public class AdminRequestHandler {
+    
+    public static Response handleUploadRequest(HttpServletRequest request) {
+    
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (!isMultipart) {
+            return new FailResponse("Expected multipart/form-data");
+        }
+        
+        Response respObj = new SuccessResponse("File Upload successful");
+        
+        // Create a new file upload handler
+        ServletFileUpload upload = new ServletFileUpload();
+        
+        try {
+            // Parse the request
+            FileItemIterator iter = upload.getItemIterator(request);
+            int i = 0;
+            while (iter.hasNext()) {
+                FileItemStream item = iter.next();
+                String name = item.getFieldName();
+                InputStream stream = item.openStream();
+                if (item.isFormField()) {
+                    respObj.addToReturnData("Item " + i, "Form field \"" + name + "\" with value \""
+                            + Streams.asString(stream) + "\"");
+                }
+                else {
+                    respObj.addToReturnData("Item " + i, "File field \"" + name + "\" with file name \""
+                            + item.getName() + "\"");
+                    // Process the input stream
+                    ArrayList2D arr = new ArrayList2D();
+                    arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+                    
+                    LogEvent e = new LogEvent();
+                    e.setDetail("Data:", arr.toJson());
+                    
+                    ServletLog.logEvent(e);
+                }
+                i++;
+            }
+        } catch (Exception e) {
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
+            return new FailResponse(e);
+        }
+        
+        return respObj;
+    }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {
     
@@ -89,8 +151,11 @@ public class AdminRequestHandler {
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
             return new FailResponse(e.toString());
         }
         
