@@ -78,7 +78,7 @@ public class AdminServlet extends HttpServlet {
         response.setContentType("application/json");
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-        if (fileUploadResponse.success) {
+        if (fileUploadResponse != null) {
             response.getWriter().print(fileUploadResponse);
             return;
         }
