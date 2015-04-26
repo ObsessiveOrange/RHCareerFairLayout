@@ -20,6 +20,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.Category;
 import adt.Company;
 import adt.DataVars;
@@ -108,12 +110,14 @@ public class AdminServlet extends HttpServlet {
                         }
                         
                         File uploadedFile = new File(path + "/" + fileName);
-                        System.out.println(uploadedFile.getAbsolutePath());
                         item.write(uploadedFile);
                     }
                     
                     Response respObj = new SuccessResponse("IT WORKED!");
-                    respObj.addToReturnData("filename", items.get(0).getName());
+                    LogEvent e = new LogEvent();
+                    e.setDetail("filename", items.get(0).getName());;
+                    ServletLog.logEvent(e);
+                    respObj.addToReturnData("event", e);
                     
                     response.getWriter().print(respObj);
                     return;
