@@ -105,8 +105,19 @@ public class AdminServlet extends HttpServlet {
                 
                 for (int i = 0; i < items.size(); i++) {
                     
-                    respObj.addToReturnData("Item " + i + " name:", items.get(i).getName());
-                    respObj.addToReturnData("Item " + i + " size:", items.get(i).getSize());
+                    FileItem item = items.get(i);
+                    
+                    if (item.isFormField()) {
+                        // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+                        respObj.addToReturnData("Item " + i + " field name:", items.get(i).getFieldName());
+                        respObj.addToReturnData("Item " + i + " value:", items.get(i).getString());
+                    }
+                    else {
+                        // Process form file field (input type="file").
+                        respObj.addToReturnData("Item " + i + " name:", items.get(i).getName());
+                        respObj.addToReturnData("Item " + i + " field name:", items.get(i).getFieldName());
+                        respObj.addToReturnData("Item " + i + " size:", items.get(i).getSize());
+                    }
                 }
                 
                 response.getWriter().print(respObj);
