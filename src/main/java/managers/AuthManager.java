@@ -10,6 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import misc.BCrypt;
+import servlets.ServletLog;
+import servlets.ServletLog.LogEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -145,6 +147,10 @@ public class AuthManager {
                 }
             }
             
+            if (token == null && request.getHeader("authUser") != null) {
+                token = request.getHeader("authUser");
+            }
+            
             if (token == null) {
                 return new FailResponse("No token provided");
             }
@@ -153,8 +159,15 @@ public class AuthManager {
             getAuthToken.setString(2, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
             ResultSet result = getAuthToken.executeQuery();
             
+            LogEvent authEvent = new LogEvent();
+            authEvent.setDetail("authUser", userName);
+            authEvent.setDetail("authToken", token);
+            
             boolean hasNextResult;
             while (hasNextResult = result.next()) {
+                authEvent.setDetail("dbToken", result.getString("sessionKey"));
+                authEvent.setDetail("dbValidDate", result.getLong("sessionValidDate"));
+                
                 if (token.equals(result.getString("sessionKey"))
                         && result.getTimestamp("sessionValidDate").after(new Timestamp(System.currentTimeMillis()))) {
                     break;
@@ -163,8 +176,10 @@ public class AuthManager {
             if (!hasNextResult) {
                 return new FailResponse("Invalid Token");
             }
+            
             result.close();
             
+            ServletLog.logEvent(authEvent);
             return new SuccessResponse();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
