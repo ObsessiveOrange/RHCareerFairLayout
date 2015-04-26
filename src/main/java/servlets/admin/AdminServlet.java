@@ -88,58 +88,58 @@ public class AdminServlet extends HttpServlet {
             return;
         }
         
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (!isMultipart) {
+            response.getWriter().print(new FailResponse("Expected multipart/form-data"));
+        }
+        Response respObj = new SuccessResponse("File upload successful");
+        
+        try {
+            // Create a new file upload handler
+            ServletFileUpload upload = new ServletFileUpload();
+            FileItemIterator iter = upload.getItemIterator(request);
+            
+            // process data with this iterator.
+            int i = 0;
+            
+            while (iter.hasNext()) {
+                FileItemStream item = iter.next();
+                String name = item.getFieldName();
+                
+                InputStream stream = item.openStream();
+                if (item.isFormField()) {
+                    respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
+                            + Streams.asString(stream) + "'");
+                }
+                else {
+                    respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
+                            + item.getName() + "'");
+                    // Process the input stream
+                    ArrayList2D arr = new ArrayList2D();
+                    arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
+                    
+                    respObj.addToReturnData("array data:", arr.toJson());
+                }
+                i++;
+            }
+            response.getWriter().print(respObj);
+        } catch (Exception e) {
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
+            response.getWriter().print(new FailResponse(e));
+        }
         response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
         
         switch (method) {
-            case "upload":
-                boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-                if (!isMultipart) {
-                    responseObject = new FailResponse("Expected multipart/form-data");
-                }
-                Response respObj = new SuccessResponse("File upload successful");
-                
-                try {
-                    // Create a new file upload handler
-                    ServletFileUpload upload = new ServletFileUpload();
-                    FileItemIterator iter = upload.getItemIterator(request);
-                    
-                    // process data with this iterator.
-                    responseObject = AdminRequestHandler.handleUploadRequest(request, iter);
-                    int i = 0;
-                    
-                    while (iter.hasNext()) {
-                        FileItemStream item = iter.next();
-                        String name = item.getFieldName();
-                        
-                        InputStream stream = item.openStream();
-                        if (item.isFormField()) {
-                            respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
-                                    + Streams.asString(stream) + "'");
-                        }
-                        else {
-                            respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
-                                    + item.getName() + "'");
-                            // Process the input stream
-                            ArrayList2D arr = new ArrayList2D();
-                            arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
-                            
-                            respObj.addToReturnData("array data:", arr.toJson());
-                        }
-                        i++;
-                    }
-                    responseObject = respObj;
-                } catch (Exception e) {
-                    LogEvent event = new LogEvent();
-                    event.setDetail("Type", "Exception");
-                    event.setDetail("Exception", e.getStackTrace());
-                    ServletLog.logEvent(event);
-                    
-                    responseObject = new FailResponse(e);
-                }
-                break;
+        // case "upload":
+        // resp
+        // break;
             case "newTerm":
                 responseObject = AdminRequestHandler.handleNewTermRequest(request);
                 break;
