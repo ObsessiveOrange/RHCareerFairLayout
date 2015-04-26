@@ -86,10 +86,10 @@ public class AdminServlet extends HttpServlet {
             response.getWriter().print(authResponse);
             return;
         }
-        
-        Response respObj = new SuccessResponse("File Upload successful");
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
+            
+            Response respObj = new SuccessResponse("File Upload successful");
             
             // Create a new file upload handler
             ServletFileUpload upload = new ServletFileUpload();
@@ -120,9 +120,7 @@ public class AdminServlet extends HttpServlet {
             } catch (FileUploadException fue) {
                 response.getWriter().print(new FailResponse(fue));
             }
-            
         }
-        response.getWriter().print(respObj);
         
         response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
@@ -131,6 +129,7 @@ public class AdminServlet extends HttpServlet {
         
         switch (method) {
         // case "upload":
+        // resp
         // break;
             case "newTerm":
                 responseObject = AdminRequestHandler.handleNewTermRequest(request);
