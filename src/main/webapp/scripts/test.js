@@ -1,61 +1,26 @@
-var globalData;
+$.noConflict();
 $(document).ready(function() {
-    $("#uploadForm").submit(function(e) {
-        e.preventDefault();
-        // var formData = new FormData();
-        // $.each($('#file')[0].files, function(i, file) {
-        //     formData.append('file-' + i, file);
-        // });
-        // $.ajax({
-        //     url: '/api/users/admin?method=test', //Server script to process data
-        //     type: 'POST',
-        //     xhr: function() { // Custom XMLHttpRequest
-        //         var myXhr = $.ajaxSettings.xhr();
-        //         if (myXhr.upload) { // Check if upload property exists
-        //             myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
-        //         }
-        //         return myXhr;
-        //     },
-        //     //Ajax events
-        //     // beforeSend: beforeSendHandler,
-        //     success: function(data) {
-        //         globalData = data;
-        //         console.log(data);
-        //     },
-        //     headers: {
-        //         "authUser": "bennydictwong",
-        //     },
-        //     // error: errorHandler,
-        //     // Form data
-        //     data: formData,
-        //     //Options to tell jQuery not to process data or worry about content-type.
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false
-        // });
-        var form = $("#uploadForm");
-        var formdata = false;
-        if (window.FormData) {
-            formdata = new FormData(form[0]);
-        }
-        var formAction = form.attr('action');
+    $("#submitFile").click(function() {
         $.ajax({
-            url: '/api/users/admin?method=test',
-            data: formdata ? formdata : form.serialize(),
-            cache: false,
+            url: "/api/users/admin?method=test",
+            type: "POST",
             contentType: false,
             processData: false,
-            type: 'POST',
-            success: function(data, textStatus, jqXHR) {
-                // Callback code
-                globalData = data;
-                console.log(data);
+            data: function() {
+                var data = new FormData();
+                data.append("fileDescription", $("#desc").val());
+                data.append("chosenFile", $("#chosenFile").get(0).files[0]);
+                return data;
+                // Or simply return new FormData($("form")[0]);
+            }(),
+            error: function(_, textStatus, errorThrown) {
+                alert("Error");
+                console.log(textStatus, errorThrown);
             },
-            error: function(jqXHR, textStatus, errorThrown ) {
-                console.log("failed");
-                console.log(textStatus);
-                console.log(errorThrown);
-            },
+            success: function(response, textStatus) {
+                alert("Success");
+                console.log(response, textStatus);
+            }
         });
     });
 });
