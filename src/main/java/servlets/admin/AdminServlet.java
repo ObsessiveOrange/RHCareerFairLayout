@@ -27,6 +27,7 @@ import adt.ItemVars;
 import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
+import adt.Response.SuccessResponse;
 
 @WebServlet("/api/users/admin")
 @MultipartConfig(location = "/var/lib/openshift/5514734a4382ec499b000009/app-root/data")
@@ -92,10 +93,10 @@ public class AdminServlet extends HttpServlet {
             ServletFileUpload upload = new ServletFileUpload(factory);
             
             try {
-                List items = upload.parseRequest(request);
-                Iterator iterator = items.iterator();
+                List<FileItem> items = upload.parseRequest(request);
+                Iterator<FileItem> iterator = items.iterator();
                 while (iterator.hasNext()) {
-                    FileItem item = (FileItem) iterator.next();
+                    FileItem item = iterator.next();
                     
                     if (!item.isFormField()) {
                         String fileName = item.getName();
@@ -110,6 +111,9 @@ public class AdminServlet extends HttpServlet {
                         System.out.println(uploadedFile.getAbsolutePath());
                         item.write(uploadedFile);
                     }
+                    
+                    response.getWriter().print(new SuccessResponse("IT WORKED!").addToReturnData("filename", items.get(0).getName()));
+                    return;
                 }
             } catch (FileUploadException e) {
                 e.printStackTrace();
