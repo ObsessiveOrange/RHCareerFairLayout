@@ -54,6 +54,7 @@ public class AdminRequestHandler {
                         respObj.addToReturnData(name, Streams.asString(stream));
                     }
                     else {
+                        ArrayList2D arr = new ArrayList2D();
                         if (item.getName().substring(item.getName().length() - 4).equalsIgnoreCase(".xls")) {
                             // || item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
                             
@@ -78,17 +79,13 @@ public class AdminRequestHandler {
                                     switch (cell.getCellType())
                                     {
                                         case Cell.CELL_TYPE_NUMERIC:
-                                            Double value = cell.getNumericCellValue();
-                                            if (value == value.intValue()) {
-                                                respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")",
-                                                        value.intValue());
-                                            }
-                                            else
-                                                respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")", value);
+                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
+                                            break;
+                                        case Cell.CELL_TYPE_BOOLEAN:
+                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
                                             break;
                                         case Cell.CELL_TYPE_STRING:
-                                            respObj.addToReturnData("(" + cell.getRowIndex() + ", " + cell.getColumnIndex() + ")",
-                                                    cell.getStringCellValue());
+                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
                                             break;
                                     }
                                 }
@@ -101,11 +98,10 @@ public class AdminRequestHandler {
                             respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
                                     + item.getName() + "'");
                             // Process the input stream
-                            ArrayList2D arr = new ArrayList2D();
                             arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
                             
-                            respObj.addToReturnData("Item " + i + " data", arr.toJson());
                         }
+                        respObj.addToReturnData("Item " + i + " data", arr.toJson());
                     }
                     i++;
                 }
