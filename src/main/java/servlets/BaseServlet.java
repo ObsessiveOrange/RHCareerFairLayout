@@ -17,7 +17,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 
-@WebServlet("/api/users/admin")
+@WebServlet("/api")
 @MultipartConfig(location = "/var/lib/openshift/5514734a4382ec499b000009/app-root/data")
 public class BaseServlet extends HttpServlet {
     
