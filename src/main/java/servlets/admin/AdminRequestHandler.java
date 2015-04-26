@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 
 import managers.SQLManager;
@@ -25,6 +26,7 @@ import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
 
+@MultipartConfig(location = "/var/lib/openshift/5514734a4382ec499b000009/app-root/data")
 public class AdminRequestHandler {
     
     public static Response handleUploadRequest(HttpServletRequest request) {
@@ -37,13 +39,21 @@ public class AdminRequestHandler {
             // Create a new file upload handler
             ServletFileUpload upload = new ServletFileUpload();
             
+            respObj.addToReturnData("1.IsMultipart", true);
+            
             try {
                 // Parse the request
                 FileItemIterator iter = upload.getItemIterator(request);
                 int i = 0;
+                
+                respObj.addToReturnData("2.Iterator has Next", iter.hasNext());
+                
                 while (iter.hasNext()) {
                     FileItemStream item = iter.next();
                     String name = item.getFieldName();
+                    
+                    respObj.addToReturnData("2.Iterator has item:", name);
+                    
                     InputStream stream = item.openStream();
                     if (item.isFormField()) {
                         respObj.addToReturnData("Item " + i, "Form field '" + name + "' with value '"
