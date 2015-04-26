@@ -108,8 +108,12 @@ public class AdminServlet extends HttpServlet {
                 List<FileItem> items = upload.parseRequest(request);
                 
                 Response respObj = new SuccessResponse("TEST");
-                respObj.addToReturnData("Size", items.get(0).getSize());
-                respObj.addToReturnData("Name", items.get(0).getName());
+                
+                for (int i = 0; i < items.size(); i++) {
+                    
+                    respObj.addToReturnData("Item " + i + " name:", items.get(i).getName());
+                    respObj.addToReturnData("Item " + i + " size:", items.get(i).getSize());
+                }
                 
                 response.getWriter().print(respObj);
                 return;
