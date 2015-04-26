@@ -98,7 +98,7 @@ public class AdminServlet extends HttpServlet {
                 if (!isMultipart) {
                     
                     responseObject = new FailResponse("Expected content of type: multipart/form-data");
-                    return;
+                    break;
                 }
                 
                 Response respObj = new SuccessResponse("File Upload successful");
