@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
 import servlets.ServletLog.LogEvent;
@@ -56,6 +57,16 @@ public class AdminRequestHandler {
                             
                             // Create Workbook instance holding reference to .xls file
                             HSSFWorkbook workbook = new HSSFWorkbook(stream);
+                            
+                            arr.importFromWorkbook(workbook, 0);
+                            
+                            workbook.close();
+                            stream.close();
+                        }
+                        if (item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
+                            
+                            // Create Workbook instance holding reference to .xlsx file
+                            XSSFWorkbook workbook = new XSSFWorkbook(stream);
                             
                             arr.importFromWorkbook(workbook, 0);
                             
