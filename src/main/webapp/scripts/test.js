@@ -22,8 +22,8 @@ $(document).ready(function() {
             },
             headers: {
                 "authUser": "bennydictwong",
-                "Year": "1415",
-                "Term": "Spring",
+                "year": "1415",
+                "term": "Spring",
             },
         });
     });
