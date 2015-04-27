@@ -167,7 +167,7 @@ public class AdminRequestHandler {
                     + "(item, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"
-                    + "('Term'," + term + ");");
+                    + "('Term','" + term + "');");
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
