@@ -120,8 +120,10 @@ public class AdminRequestHandler {
             }
             
             PreparedStatement insertTableMapping =
-                    SQLManager.getConn(dbName).prepareStatement(
-                            "INSERT INTO TableMappings (location, tableNo, tableSize) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+                    SQLManager
+                            .getConn(dbName)
+                            .prepareStatement(
+                                    "INSERT INTO TableMappings (location, tableNo, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE tableNo=values(tableNo), tableSize=values(tableSize);");
             
             Sheet tableMappings = workbook.getSheet("TableMappings");
             for (int i = 0; i < tableMappings.getRows(); i++) {
