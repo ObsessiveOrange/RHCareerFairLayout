@@ -78,8 +78,8 @@ public class AdminServlet extends HttpServlet {
         response.setContentType("application/json");
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-        if (fileUploadResponse.getFromReturnData("errorCode", Integer.class) == null
-                || fileUploadResponse.getFromReturnData("errorCode", Integer.class) != -100) {
+        if (fileUploadResponse.getFromReturnData("errorCode", Integer.class) != null
+                && fileUploadResponse.getFromReturnData("errorCode", Integer.class) != -100) {
             response.getWriter().print(fileUploadResponse);
             return;
         }
