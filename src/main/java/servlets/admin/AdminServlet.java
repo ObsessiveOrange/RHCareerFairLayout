@@ -89,7 +89,6 @@ public class AdminServlet extends HttpServlet {
         LogEvent event = new LogEvent();
         event.setDetail("Type", "Log");
         event.setDetail("id", 1);
-        event.setDetail("fileUploadResponse", fileUploadResponse);
         ServletLog.logEvent(event);
         response.getWriter().print(1);
         
