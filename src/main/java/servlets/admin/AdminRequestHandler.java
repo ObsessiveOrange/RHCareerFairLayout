@@ -189,7 +189,7 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TermVars ("
-                    + "item VARCHAR(20) NOT NULL,"
+                    + "item VARCHAR(30) NOT NULL,"
                     + "value TEXT NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
-import servlets.ServletLog;
-import servlets.ServletLog.LogEvent;
 import adt.Category;
 import adt.Company;
 import adt.DataVars;
@@ -86,31 +84,12 @@ public class AdminServlet extends HttpServlet {
             return;
         }
         
-        LogEvent event = new LogEvent();
-        event.setDetail("Type", "Log");
-        event.setDetail("id", 1);
-        ServletLog.logEvent(event);
-        response.getWriter().print(1);
-        
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
-        
-        event = new LogEvent();
-        event.setDetail("Type", "Log");
-        event.setDetail("id", 2);
-        event.setDetail("method", method);
-        ServletLog.logEvent(event);
-        response.getWriter().print(2);
         
         Response responseObject;
         
         switch (method) {
             case "uploadData":
-                event = new LogEvent();
-                event.setDetail("Type", "Log");
-                event.setDetail("id", 3);
-                ServletLog.logEvent(event);
-                response.getWriter().print(3);
-                
                 responseObject = AdminRequestHandler.handleUploadDataRequest(request, fileUploadResponse);
                 break;
             case "newTerm":
