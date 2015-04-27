@@ -384,7 +384,7 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
                 return (T) returnItem;
             }
             else if (returnClass.equals(Integer.class)) {
-                return (T) new Integer(Double.valueOf(String.valueOf(returnItem)).intValue());
+                return (T) new Integer((int) Math.round(Double.valueOf(String.valueOf(returnItem))));
             }
             else if (returnClass.equals(Long.class)) {
                 return (T) Long.valueOf(String.valueOf(returnItem));
