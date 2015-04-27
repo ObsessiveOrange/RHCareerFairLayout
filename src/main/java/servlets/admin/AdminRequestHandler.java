@@ -157,13 +157,13 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE " + dbName + " ("
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE vars ("
                     + "item VARCHAR(20) NOT NULL,"
                     + "value VARCHAR(20) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName
+            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".vars"
                     + "(item, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"
