@@ -2,15 +2,22 @@ package adt;
 
 import misc.DataTable;
 
-public class Sheet {
+public class Sheet extends DataTable {
     
-    private final String    name;
-    private final DataTable data;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2894564054267085814L;
+    private String            name;
     
-    public Sheet(String name, DataTable data) {
+    public Sheet() {
     
-        this.name = name;
-        this.data = data;
+        // stub; nothing to do here...
+    }
+    
+    public Sheet(String name) {
+    
+        this.setName(name);
     }
     
     /**
@@ -22,10 +29,10 @@ public class Sheet {
     }
     
     /**
-     * @return the data
+     * @param name the name to set
      */
-    public DataTable getData() {
+    public void setName(String name) {
     
-        return data;
+        this.name = name;
     }
 }

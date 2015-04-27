@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import misc.DataTable;
-
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,17 +34,18 @@ public class Workbook {
     
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             
-            DataTable table = new DataTable();
-            
             // Get first/desired sheet from the workbook
             HSSFSheet sheet = workbook.getSheetAt(i);
+            
+            // Sheet newSheet = new Sheet(sheet.getSheetName());
             
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
             
-            readWorkbookToDataTable(table, rowIterator, hasHeaders);
+            Sheet newSheet = readWorkbookToDataTable(rowIterator, hasHeaders);
+            newSheet.setName(sheet.getSheetName());
             
-            sheets.put(sheet.getSheetName(), new Sheet(sheet.getSheetName(), table));
+            sheets.put(sheet.getSheetName(), newSheet);
         }
         
         return this;
@@ -56,25 +55,27 @@ public class Workbook {
     
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             
-            DataTable table = new DataTable();
-            
             // Get first/desired sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(i);
+            
+            // Sheet newSheet = new Sheet(sheet.getSheetName());
             
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
             
-            readWorkbookToDataTable(table, rowIterator, hasHeaders);
+            Sheet newSheet = readWorkbookToDataTable(rowIterator, hasHeaders);
+            newSheet.setName(sheet.getSheetName());
             
-            sheets.put(sheet.getSheetName(), new Sheet(sheet.getSheetName(), table));
+            sheets.put(sheet.getSheetName(), newSheet);
         }
         
         return this;
     }
     
-    private DataTable readWorkbookToDataTable(DataTable table, Iterator<Row> rowIterator, boolean hasHeaders) {
+    private Sheet readWorkbookToDataTable(Iterator<Row> rowIterator, boolean hasHeaders) {
     
         boolean headersSet = false;
+        Sheet sheet = new Sheet();
         
         while (rowIterator.hasNext())
         {
@@ -106,13 +107,13 @@ public class Workbook {
             }
             
             if (hasHeaders && !headersSet) {
-                table.setHeaders(newRow.toArray());
+                sheet.setHeaders(newRow.toArray());
                 headersSet = true;
             }
             else {
-                table.addRow(newRow);;
+                sheet.addRow(newRow);;
             }
         }
-        return table;
+        return sheet;
     }
 }
