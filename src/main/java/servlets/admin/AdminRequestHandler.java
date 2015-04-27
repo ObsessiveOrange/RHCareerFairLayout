@@ -126,7 +126,7 @@ public class AdminRequestHandler {
             return new FailResponse(e);
         }
         
-        return null;
+        return new SuccessResponse();
     }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {
