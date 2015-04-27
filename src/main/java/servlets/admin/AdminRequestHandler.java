@@ -53,9 +53,9 @@ public class AdminRequestHandler {
                     }
                     else {
                         String fileExt = item.getName().substring(item.getName().lastIndexOf('.'));
-                        if (fileExt == ".xls" || fileExt == ".xlsx") {
+                        if (fileExt.equalsIgnoreCase(".xls") || fileExt.equalsIgnoreCase(".xlsx")) {
                             Workbook workbook = new Workbook();
-                            if (fileExt == ".xls") {
+                            if (fileExt.equalsIgnoreCase(".xls")) {
                                 
                                 // Create Workbook instance holding reference to .xls file
                                 HSSFWorkbook inputWorkbook = new HSSFWorkbook(stream);
@@ -65,7 +65,7 @@ public class AdminRequestHandler {
                                 inputWorkbook.close();
                                 stream.close();
                             }
-                            else if (fileExt == ".xlsx") {
+                            else if (fileExt.equalsIgnoreCase(".xlsx")) {
                                 
                                 // Create Workbook instance holding reference to .xlsx file
                                 XSSFWorkbook inputWorkbook = new XSSFWorkbook(stream);
