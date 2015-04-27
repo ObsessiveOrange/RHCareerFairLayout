@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,10 +17,7 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 import servlets.ServletLog;
 import servlets.ServletLog.LogEvent;
@@ -61,35 +57,8 @@ public class AdminRequestHandler {
                             // Create Workbook instance holding reference to .xls file
                             HSSFWorkbook workbook = new HSSFWorkbook(stream);
                             
-                            // Get first/desired sheet from the workbook
-                            HSSFSheet sheet = workbook.getSheetAt(0);
+                            arr.importFromWorkbook(workbook, 0);
                             
-                            // Iterate through each rows one by one
-                            Iterator<Row> rowIterator = sheet.iterator();
-                            while (rowIterator.hasNext())
-                            {
-                                Row row = rowIterator.next();
-                                // For each row, iterate through all the columns
-                                Iterator<Cell> cellIterator = row.cellIterator();
-                                
-                                while (cellIterator.hasNext())
-                                {
-                                    Cell cell = cellIterator.next();
-                                    // Check the cell type and format accordingly
-                                    switch (cell.getCellType())
-                                    {
-                                        case Cell.CELL_TYPE_NUMERIC:
-                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
-                                            break;
-                                        case Cell.CELL_TYPE_BOOLEAN:
-                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
-                                            break;
-                                        case Cell.CELL_TYPE_STRING:
-                                            arr.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
-                                            break;
-                                    }
-                                }
-                            }
                             workbook.close();
                             stream.close();
                         }
@@ -101,7 +70,7 @@ public class AdminRequestHandler {
                             arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
                             
                         }
-                        respObj.addToReturnData("Item " + i + " data", arr.toJson());
+                        respObj.addToReturnData(name, arr.toJson());
                     }
                     i++;
                 }

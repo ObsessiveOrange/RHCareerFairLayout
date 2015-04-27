@@ -22,6 +22,13 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.google.gson.Gson;
 
 public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
@@ -847,6 +854,60 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
             System.out.print("|");
         }
         System.out.println("\n");
+    }
+    
+    public ArrayList2D importFromWorkbook(HSSFWorkbook workbook, int sheetIndex) {
+    
+        // Get first/desired sheet from the workbook
+        HSSFSheet sheet = workbook.getSheetAt(sheetIndex);
+        
+        // Iterate through each rows one by one
+        Iterator<Row> rowIterator = sheet.iterator();
+        
+        readWorkbook(rowIterator);
+        
+        return this;
+    }
+    
+    public ArrayList2D importFromWorkbook(XSSFWorkbook workbook, int sheetIndex) {
+    
+        // Get first/desired sheet from the workbook
+        XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
+        
+        // Iterate through each rows one by one
+        Iterator<Row> rowIterator = sheet.iterator();
+        
+        readWorkbook(rowIterator);
+        
+        return this;
+    }
+    
+    private void readWorkbook(Iterator<Row> rowIterator) {
+    
+        while (rowIterator.hasNext())
+        {
+            Row row = rowIterator.next();
+            // For each row, iterate through all the columns
+            Iterator<Cell> cellIterator = row.cellIterator();
+            
+            while (cellIterator.hasNext())
+            {
+                Cell cell = cellIterator.next();
+                // Check the cell type and format accordingly
+                switch (cell.getCellType())
+                {
+                    case Cell.CELL_TYPE_NUMERIC:
+                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
+                        break;
+                    case Cell.CELL_TYPE_BOOLEAN:
+                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
+                        break;
+                    case Cell.CELL_TYPE_STRING:
+                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
+                        break;
+                }
+            }
+        }
     }
     
     public ArrayList2D importFromCSV(String filename, boolean hasHeaders, String removeChars) throws IOException {
