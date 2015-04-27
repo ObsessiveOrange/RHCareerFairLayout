@@ -27,6 +27,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
+import adt.Sheet;
 import adt.Workbook;
 
 public class AdminRequestHandler {
@@ -117,6 +118,18 @@ public class AdminRequestHandler {
                 insertVars.setString(2, row.get(1).toString());
                 insertVars.executeUpdate();
             }
+            
+            PreparedStatement insertTableMapping =
+                    SQLManager.getConn(dbName).prepareStatement(
+                            "INSERT INTO TableMappings (location, tableNo, tableSize) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+            
+            Sheet tableMappings = workbook.getSheet("TableMappings");
+            for (int i = 0; i < tableMappings.getRows(); i++) {
+                insertTableMapping.setInt(1, tableMappings.getItem(i, 0, Integer.class));
+                insertTableMapping.setInt(2, tableMappings.getItem(i, 1, Integer.class));
+                insertTableMapping.setInt(3, tableMappings.getItem(i, 2, Integer.class));
+                insertTableMapping.executeUpdate();
+            }
         } catch (SQLException e) {
             LogEvent event = new LogEvent();
             event.setDetail("Type", "Exception");
@@ -151,7 +164,7 @@ public class AdminRequestHandler {
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies ("
                     + "id INT NOT NULL AUTO_INCREMENT,"
-                    + "name VARCHAR(50) NOT NULL,"
+                    + "name TEXT NOT NULL,"
                     + "description TEXT,"
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
@@ -186,6 +199,13 @@ public class AdminRequestHandler {
                     + "PRIMARY KEY (username, companyId),"
                     + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
+            
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TableMappings ("
+                    + "location INT NOT NULL,"
+                    + "tableNo INT NOT NULL,"
+                    + "tableSize INT NOT NULL,"
+                    + "PRIMARY KEY (location)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TermVars ("
