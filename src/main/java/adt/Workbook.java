@@ -1,5 +1,6 @@
 package adt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -43,7 +44,7 @@ public class Workbook {
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
             
-            readWorkbookToDataTable(table, rowIterator);
+            readWorkbookToDataTable(table, rowIterator, hasHeaders);
             
             sheets.put(sheet.getSheetName(), new Sheet(sheet.getSheetName(), table));
         }
@@ -63,7 +64,7 @@ public class Workbook {
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
             
-            readWorkbookToDataTable(table, rowIterator);
+            readWorkbookToDataTable(table, rowIterator, hasHeaders);
             
             sheets.put(sheet.getSheetName(), new Sheet(sheet.getSheetName(), table));
         }
@@ -71,13 +72,17 @@ public class Workbook {
         return this;
     }
     
-    private DataTable readWorkbookToDataTable(DataTable table, Iterator<Row> rowIterator) {
+    private DataTable readWorkbookToDataTable(DataTable table, Iterator<Row> rowIterator, boolean hasHeaders) {
     
+        boolean headersSet = false;
+        
         while (rowIterator.hasNext())
         {
             Row row = rowIterator.next();
             // For each row, iterate through all the columns
             Iterator<Cell> cellIterator = row.cellIterator();
+            
+            ArrayList<Object> newRow = new ArrayList<Object>();
             
             while (cellIterator.hasNext())
             {
@@ -86,15 +91,26 @@ public class Workbook {
                 switch (cell.getCellType())
                 {
                     case Cell.CELL_TYPE_NUMERIC:
-                        table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
+                        newRow.add(cell.getNumericCellValue());
+                        // table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
-                        table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
+                        newRow.add(cell.getBooleanCellValue());
+                        // table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
                         break;
                     case Cell.CELL_TYPE_STRING:
-                        table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
+                        newRow.add(cell.getStringCellValue());
+                        // table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
                         break;
                 }
+            }
+            
+            if (hasHeaders && !headersSet) {
+                table.setHeaders(newRow.toArray());
+                headersSet = true;
+            }
+            else {
+                table.addRow(newRow);;
             }
         }
         return table;

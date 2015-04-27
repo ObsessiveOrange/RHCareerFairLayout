@@ -137,6 +137,20 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
     }
     
     /**
+     * Set the column headers for the 2D ArrayList
+     * 
+     * @param newHeaderArray Array of headers; the size of this array does not have to match the number of columns in the 2D array
+     */
+    public void setHeaders(Object[] newHeaderArray) {
+    
+        headerArray = new LinkedHashMap<String, Integer>();
+        for (int i = 0; i < newHeaderArray.length; i++) {
+            headerArray.put(newHeaderArray[i].toString(), i);
+        }
+        
+    }
+    
+    /**
      * Gets the column headers for the 2D ArrayList
      */
     public ArrayList<String> getHeaders() {
