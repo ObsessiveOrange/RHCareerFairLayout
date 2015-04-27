@@ -10,7 +10,7 @@ import java.sql.Statement;
 import javax.servlet.http.HttpServletRequest;
 
 import managers.SQLManager;
-import misc.ArrayList2D;
+import misc.DataTable;
 import misc.Utils;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -26,6 +26,7 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
+import adt.Workbook;
 
 public class AdminRequestHandler {
     
@@ -51,37 +52,41 @@ public class AdminRequestHandler {
                         respObj.addToReturnData(name, Streams.asString(stream));
                     }
                     else {
-                        ArrayList2D arr = new ArrayList2D();
-                        if (item.getName().substring(item.getName().length() - 4).equalsIgnoreCase(".xls")) {
-                            // || item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
-                            
-                            // Create Workbook instance holding reference to .xls file
-                            HSSFWorkbook workbook = new HSSFWorkbook(stream);
-                            
-                            arr.importFromWorkbook(workbook, 0);
-                            
-                            workbook.close();
-                            stream.close();
-                        }
-                        if (item.getName().substring(item.getName().length() - 5).equalsIgnoreCase(".xlsx")) {
-                            
-                            // Create Workbook instance holding reference to .xlsx file
-                            XSSFWorkbook workbook = new XSSFWorkbook(stream);
-                            
-                            arr.importFromWorkbook(workbook, 0);
-                            
-                            workbook.close();
-                            stream.close();
+                        String fileExt = item.getName().substring(item.getName().lastIndexOf('.'));
+                        if (fileExt == ".xls" || fileExt == ".xlsx") {
+                            Workbook workbook = new Workbook();
+                            if (fileExt == ".xls") {
+                                
+                                // Create Workbook instance holding reference to .xls file
+                                HSSFWorkbook inputWorkbook = new HSSFWorkbook(stream);
+                                
+                                workbook.importFromWorkbook(inputWorkbook, true);
+                                
+                                inputWorkbook.close();
+                                stream.close();
+                            }
+                            else if (fileExt == ".xlsx") {
+                                
+                                // Create Workbook instance holding reference to .xlsx file
+                                XSSFWorkbook inputWorkbook = new XSSFWorkbook(stream);
+                                
+                                workbook.importFromWorkbook(inputWorkbook, true);
+                                
+                                inputWorkbook.close();
+                                stream.close();
+                            }
+                            respObj.addToReturnData(name, workbook);
                         }
                         else {
+                            DataTable arr = new DataTable();
                             // respObj.addToReturnData(name, Streams.asString(stream));
                             respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
                                     + item.getName() + "'");
                             // Process the input stream
                             arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
                             
+                            respObj.addToReturnData(name, arr);
                         }
-                        respObj.addToReturnData(name, arr.toJson());
                     }
                     i++;
                 }

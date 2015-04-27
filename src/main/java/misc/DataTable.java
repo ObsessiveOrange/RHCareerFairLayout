@@ -22,16 +22,9 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.google.gson.Gson;
 
-public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
+public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
     
     /**
      * @author ObsessiveOrange
@@ -46,7 +39,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
     /**
      * Creates a blank 2-Dimensional ArrayList
      */
-    public ArrayList2D() {
+    public DataTable() {
     
         outerArray = new ArrayList<ArrayList<Object>>(50);
     }
@@ -57,7 +50,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param size The initial size of the 2D ArrayList to be created
      * @param size Initial rows of array to be created (0 = default [50])
      */
-    public ArrayList2D(int size) {
+    public DataTable(int size) {
     
         outerArray = new ArrayList<ArrayList<Object>>(size == 0 ? 50 : size);
     }
@@ -68,7 +61,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param newHeaderArray headers for ArrayList2D
      * @param size Initial rows of array to be created (0 = default [50])
      */
-    public ArrayList2D(String[] newHeaderArray, int size) {
+    public DataTable(String[] newHeaderArray, int size) {
     
         outerArray = new ArrayList<ArrayList<Object>>(size == 0 ? 50 : size);
         setHeaders(newHeaderArray);
@@ -80,7 +73,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param newHeaderArray headers for ArrayList2D
      * @param size Initial rows of array to be created (0 = default [50])
      */
-    public ArrayList2D(Map<String, Integer> headerMap, int size) {
+    public DataTable(Map<String, Integer> headerMap, int size) {
     
         outerArray = new ArrayList<ArrayList<Object>>(size == 0 ? 50 : size);
         headerArray = headerMap;
@@ -92,7 +85,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param input_data Data to put into ArrayList
      * @param size Initial rows of array to be created (0 = default [1.5 x size of input data])
      */
-    public ArrayList2D(Object[][] input_data, int size) {
+    public DataTable(Object[][] input_data, int size) {
     
         outerArray = new ArrayList<ArrayList<Object>>(size == 0 ? (int) (input_data.length * 1.5) : size);
         addRows(input_data);
@@ -105,7 +98,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param input_data Data to put into ArrayList
      * @param size Initial rows of array to be created (0 = default [1.5 x size of input data])
      */
-    public ArrayList2D(String[] newHeaderArray, Object[][] input_data, int size) {
+    public DataTable(String[] newHeaderArray, Object[][] input_data, int size) {
     
         outerArray = new ArrayList<ArrayList<Object>>(size == 0 ? (int) (input_data.length * 1.5) : size);
         setHeaders(newHeaderArray);
@@ -582,9 +575,9 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         return returnList;
     }
     
-    public ArrayList2D countOccurrences(Object query) {
+    public DataTable countOccurrences(Object query) {
     
-        ArrayList2D occurrences = new ArrayList2D();
+        DataTable occurrences = new DataTable();
         int[] lastFound = { 0, 0 };
         
         for (int i = 0; true; i++) {
@@ -663,9 +656,9 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @return ArrayList2D with specified row
      */
     @SuppressWarnings("unchecked")
-    public ArrayList2D getRowAsArrayList2D(int rowIndex) {
+    public DataTable getRowAsArrayList2D(int rowIndex) {
     
-        ArrayList2D newArray = new ArrayList2D(headerArray, 0);
+        DataTable newArray = new DataTable(headerArray, 0);
         
         newArray.addRow((ArrayList<Object>) getRow(rowIndex).clone());
         
@@ -679,7 +672,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
      * @param rowIndex index of row to return
      * @return ArrayList2D with specified row
      */
-    public ArrayList2D getRowAsArrayList2D(Object query) {
+    public DataTable getRowAsArrayList2D(Object query) {
     
         return getRowAsArrayList2D(findInColumn(query));
     }
@@ -856,72 +849,18 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         System.out.println("\n");
     }
     
-    public ArrayList2D importFromWorkbook(HSSFWorkbook workbook, int sheetIndex) {
-    
-        // Get first/desired sheet from the workbook
-        HSSFSheet sheet = workbook.getSheetAt(sheetIndex);
-        
-        // Iterate through each rows one by one
-        Iterator<Row> rowIterator = sheet.iterator();
-        
-        readWorkbook(rowIterator);
-        
-        return this;
-    }
-    
-    public ArrayList2D importFromWorkbook(XSSFWorkbook workbook, int sheetIndex) {
-    
-        // Get first/desired sheet from the workbook
-        XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
-        
-        // Iterate through each rows one by one
-        Iterator<Row> rowIterator = sheet.iterator();
-        
-        readWorkbook(rowIterator);
-        
-        return this;
-    }
-    
-    private void readWorkbook(Iterator<Row> rowIterator) {
-    
-        while (rowIterator.hasNext())
-        {
-            Row row = rowIterator.next();
-            // For each row, iterate through all the columns
-            Iterator<Cell> cellIterator = row.cellIterator();
-            
-            while (cellIterator.hasNext())
-            {
-                Cell cell = cellIterator.next();
-                // Check the cell type and format accordingly
-                switch (cell.getCellType())
-                {
-                    case Cell.CELL_TYPE_NUMERIC:
-                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
-                        break;
-                    case Cell.CELL_TYPE_BOOLEAN:
-                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getBooleanCellValue());
-                        break;
-                    case Cell.CELL_TYPE_STRING:
-                        setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
-                        break;
-                }
-            }
-        }
-    }
-    
-    public ArrayList2D importFromCSV(String filename, boolean hasHeaders, String removeChars) throws IOException {
+    public DataTable importFromCSV(String filename, boolean hasHeaders, String removeChars) throws IOException {
     
         return importFromCSV(filename, ",", hasHeaders);
     }
     
-    public ArrayList2D importFromCSV(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
+    public DataTable importFromCSV(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
     
         BufferedReader br = new BufferedReader(new FileReader(filename));
         return importFromFile(br, separator, hasHeaders, removeChars);
     }
     
-    public ArrayList2D importFromResourceFile(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
+    public DataTable importFromResourceFile(String filename, String separator, boolean hasHeaders, String removeChars) throws IOException {
     
         InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -929,18 +868,18 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         return importFromFile(br, separator, hasHeaders, removeChars);
     }
     
-    public ArrayList2D importFromCSV(String filename, boolean hasHeaders) throws IOException {
+    public DataTable importFromCSV(String filename, boolean hasHeaders) throws IOException {
     
         return importFromCSV(filename, ",", hasHeaders, null);
     }
     
-    public ArrayList2D importFromCSV(String filename, String separator, boolean hasHeaders) throws IOException {
+    public DataTable importFromCSV(String filename, String separator, boolean hasHeaders) throws IOException {
     
         BufferedReader br = new BufferedReader(new FileReader(filename));
         return importFromFile(br, separator, hasHeaders, null);
     }
     
-    public ArrayList2D importFromResourceFile(String filename, String separator, boolean hasHeaders) throws IOException {
+    public DataTable importFromResourceFile(String filename, String separator, boolean hasHeaders) throws IOException {
     
         InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -948,7 +887,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         return importFromFile(br, separator, hasHeaders, null);
     }
     
-    public ArrayList2D importFromFile(BufferedReader br, String separator, boolean hasHeaders, String removeChars) throws IOException {
+    public DataTable importFromFile(BufferedReader br, String separator, boolean hasHeaders, String removeChars) throws IOException {
     
         boolean headerRowComplete = false;
         String line = "";
@@ -1017,7 +956,7 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         // Deserialize data object from file
         ObjectInputStream fileReader = new ObjectInputStream(new FileInputStream(filename));
         
-        this.outerArray = ((ArrayList2D) fileReader.readObject()).outerArray;
+        this.outerArray = ((DataTable) fileReader.readObject()).outerArray;
         fileReader.close();
         
     }
@@ -1270,9 +1209,9 @@ public class ArrayList2D implements Iterable<ArrayList<Object>>, Serializable {
         
     }
     
-    public ArrayList2D cloneArray() {
+    public DataTable cloneArray() {
     
-        ArrayList2D newArray = new ArrayList2D();
+        DataTable newArray = new DataTable();
         
         newArray.setHeaders(getHeaders());
         
