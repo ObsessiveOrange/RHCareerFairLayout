@@ -95,7 +95,7 @@ public class AdminRequestHandler {
                 return new FailResponse(e);
             }
         }
-        return new FailResponse("Expected content of type multipart/form-data");
+        return new FailResponse(-100, "Expected content of type multipart/form-data");
     }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {

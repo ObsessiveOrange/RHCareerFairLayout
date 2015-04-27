@@ -102,11 +102,29 @@ public abstract class Response {
     
     public static class FailResponse extends Response {
         
-        public FailResponse(String error) {
+        public FailResponse(int errorCode) {
         
             super(false);
             addToReturnData("success", 0);
-            addToReturnData("error", error);
+            addToReturnData("errorCode", errorCode);
+            addToReturnData("timestamp", System.currentTimeMillis());
+        }
+        
+        public FailResponse(String description) {
+        
+            super(false);
+            addToReturnData("success", 0);
+            addToReturnData("errorCode", -1);
+            addToReturnData("description", description);
+            addToReturnData("timestamp", System.currentTimeMillis());
+        }
+        
+        public FailResponse(int errorCode, String description) {
+        
+            super(false);
+            addToReturnData("success", 0);
+            addToReturnData("errorCode", errorCode);
+            addToReturnData("description", description);
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         
