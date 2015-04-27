@@ -159,7 +159,7 @@ public class AdminRequestHandler {
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE " + dbName + " ("
                     + "item VARCHAR(20) NOT NULL,"
-                    + "value VARCHAR(20) NOT NULL"
+                    + "value VARCHAR(20) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
@@ -177,7 +177,7 @@ public class AdminRequestHandler {
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
             
-            return new FailResponse(e.toString());
+            return new FailResponse(e);
         }
         
     }
