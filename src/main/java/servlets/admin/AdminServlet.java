@@ -89,6 +89,9 @@ public class AdminServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
+            case "uploadData":
+                responseObject = AdminRequestHandler.handleUploadDataRequest(request, fileUploadResponse);
+                break;
             case "newTerm":
                 responseObject = AdminRequestHandler.handleNewTermRequest(request);
                 break;

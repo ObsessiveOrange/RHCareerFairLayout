@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -75,7 +76,7 @@ public class AdminRequestHandler {
                                 inputWorkbook.close();
                                 stream.close();
                             }
-                            respObj.addToReturnData(name, workbook);
+                            respObj.addToReturnData("uploadedWorkbook", workbook);
                         }
                         else {
                             DataTable arr = new DataTable();
@@ -96,6 +97,34 @@ public class AdminRequestHandler {
             }
         }
         return new FailResponse(-100, "Expected content of type multipart/form-data");
+    }
+    
+    public static Response handleUploadDataRequest(HttpServletRequest request, Response fileUploadResponse) {
+    
+        String year = Utils.sanitizeString(request.getHeader("year"));
+        String term = Utils.sanitizeString(request.getHeader("term"));
+        String dbName = term + year;
+        
+        Workbook workbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
+        
+        try {
+            PreparedStatement insertVars = SQLManager.getConn(dbName).prepareStatement("INSERT INTO Vars (item, value) VALUES (?, ?);");
+            
+            for (ArrayList<Object> row : workbook.getSheet("Variables")) {
+                insertVars.setString(1, row.get(0).toString());
+                insertVars.setString(2, row.get(1).toString());
+                insertVars.executeUpdate();
+            }
+        } catch (SQLException e) {
+            LogEvent event = new LogEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
+            return new FailResponse(e);
+        }
+        
+        return null;
     }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {
@@ -157,13 +186,13 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE vars ("
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Vars ("
                     + "item VARCHAR(20) NOT NULL,"
                     + "value VARCHAR(20) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".vars"
+            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".Vars"
                     + "(item, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"
