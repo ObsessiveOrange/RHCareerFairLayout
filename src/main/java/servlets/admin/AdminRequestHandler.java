@@ -168,7 +168,7 @@ public class AdminRequestHandler {
                     + "VALUES "
                     + "('Year'," + year + "),"
                     + "('Term'," + term + "),"
-                    + ")ENGINE=INNODB;");
+                    + ");");
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
