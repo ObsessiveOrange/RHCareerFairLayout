@@ -190,7 +190,7 @@ public class AdminRequestHandler {
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Vars ("
                     + "key VARCHAR(20) NOT NULL,"
-                    + "value VARCHAR(50) NOT NULL,"
+                    + "value TEXT NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
