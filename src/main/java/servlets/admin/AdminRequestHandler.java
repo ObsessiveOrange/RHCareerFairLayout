@@ -108,7 +108,9 @@ public class AdminRequestHandler {
         Workbook workbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
         
         try {
-            PreparedStatement insertVars = SQLManager.getConn(dbName).prepareStatement("INSERT INTO Vars (item, value) VALUES (?, ?);");
+            PreparedStatement insertVars =
+                    SQLManager.getConn(dbName).prepareStatement(
+                            "INSERT INTO Vars (key, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
             
             for (ArrayList<Object> row : workbook.getSheet("Variables")) {
                 insertVars.setString(1, row.get(0).toString());
@@ -187,13 +189,13 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Vars ("
-                    + "item VARCHAR(20) NOT NULL,"
-                    + "value VARCHAR(20) NOT NULL,"
+                    + "key VARCHAR(20) NOT NULL,"
+                    + "value VARCHAR(50) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".Vars"
-                    + "(item, value) "
+                    + "(key, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"
                     + "('Term','" + term + "');");
