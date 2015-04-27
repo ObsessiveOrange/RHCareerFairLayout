@@ -110,7 +110,7 @@ public class AdminRequestHandler {
         try {
             PreparedStatement insertVars =
                     SQLManager.getConn(dbName).prepareStatement(
-                            "INSERT INTO Vars (key, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+                            "INSERT INTO TermVars (key, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
             
             for (ArrayList<Object> row : workbook.getSheet("Variables")) {
                 insertVars.setString(1, row.get(0).toString());
@@ -188,13 +188,13 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Vars ("
+            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TermVars ("
                     + "key VARCHAR(20) NOT NULL,"
                     + "value TEXT NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".Vars"
+            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
                     + "(key, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"
