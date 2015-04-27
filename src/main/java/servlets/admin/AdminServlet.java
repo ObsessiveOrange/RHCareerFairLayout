@@ -99,7 +99,6 @@ public class AdminServlet extends HttpServlet {
         event.setDetail("Type", "Log");
         event.setDetail("id", 2);
         event.setDetail("method", method);
-        event.setDetail("fileUploadResponse", fileUploadResponse);
         ServletLog.logEvent(event);
         response.getWriter().print(2);
         
@@ -110,7 +109,6 @@ public class AdminServlet extends HttpServlet {
                 event = new LogEvent();
                 event.setDetail("Type", "Log");
                 event.setDetail("id", 3);
-                event.setDetail("fileUploadResp", fileUploadResponse);
                 ServletLog.logEvent(event);
                 response.getWriter().print(3);
                 
