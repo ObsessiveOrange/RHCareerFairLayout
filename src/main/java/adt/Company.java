@@ -2,8 +2,6 @@ package adt;
 
 import java.util.List;
 
-import servlets.data.DataServlet;
-
 public class Company extends Item implements Comparable<Company> {
     
     /**
@@ -27,15 +25,6 @@ public class Company extends Item implements Comparable<Company> {
         this.categories = categories;
         this.description = description;
         this.tableNumber = tableNumber;
-        
-        // add to all categories in list
-        for (Integer id : categories) {
-            if (id == 0) {
-                continue;
-            }
-            Category category = DataServlet.categoryMap.get(id);
-            category.getEntries().add(this.getID());
-        }
     }
     
     public String getName() {
