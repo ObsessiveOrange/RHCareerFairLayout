@@ -72,7 +72,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Companies (id, name, table, description) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name) table=values(table), description=values(description);");
+                                "INSERT INTO Companies (id, name, tableNo, description) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name) tableNo=values(tableNo), description=values(description);");
         
         for (Company c : companies) {
             insertCompanies.setInt(1, c.getID());

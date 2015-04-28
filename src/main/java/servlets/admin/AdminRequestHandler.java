@@ -156,7 +156,7 @@ public class AdminRequestHandler {
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies ("
                     + "id INT NOT NULL,"
                     + "name TEXT NOT NULL,"
-                    + "table INT,"
+                    + "tableNo INT,"
                     + "description TEXT,"
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
