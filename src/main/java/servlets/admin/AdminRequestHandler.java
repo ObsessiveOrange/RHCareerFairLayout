@@ -150,7 +150,7 @@ public class AdminRequestHandler {
                     + "name VARCHAR(50) NOT NULL,"
                     + "type VARCHAR(25) NOT NULL,"
                     + "PRIMARY KEY (id),"
-                    + "UNIQUE (title, type)"
+                    + "UNIQUE (name, type)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies ("
