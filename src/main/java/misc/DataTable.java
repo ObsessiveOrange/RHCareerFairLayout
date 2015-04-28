@@ -117,7 +117,7 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
     
         headerArray = new LinkedHashMap<String, Integer>();
         for (int i = 0; i < newHeaderArray.length; i++) {
-            headerArray.put(newHeaderArray[i], i);
+            headerArray.put(newHeaderArray[i].toLowerCase(), i);
         }
         
     }
@@ -131,7 +131,7 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
     
         headerArray = new LinkedHashMap<String, Integer>();
         for (int i = 0; i < newHeaderArray.size(); i++) {
-            headerArray.put(newHeaderArray.get(i), i);
+            headerArray.put(newHeaderArray.get(i).toLowerCase(), i);
         }
         
     }
@@ -145,7 +145,7 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
     
         headerArray = new LinkedHashMap<String, Integer>();
         for (int i = 0; i < newHeaderArray.length; i++) {
-            headerArray.put(newHeaderArray[i].toString(), i);
+            headerArray.put(newHeaderArray[i].toString().toLowerCase(), i);
         }
         
     }
@@ -199,9 +199,9 @@ public class DataTable implements Iterable<ArrayList<Object>>, Serializable {
      * 
      * @param colID the index of the column to get header of (null if not found)
      */
-    public int findHeader(Object query) {
+    public int findHeader(String query) {
     
-        Integer result = headerArray.get(query);
+        Integer result = headerArray.get(query.toLowerCase());
         if (result == null) {
             System.out.println("Could not find header: " + query);
         }

@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import managers.DataManager;
 import managers.SQLManager;
 import misc.DataTable;
 import misc.Utils;
@@ -27,7 +27,6 @@ import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
-import adt.Sheet;
 import adt.Workbook;
 
 public class AdminRequestHandler {
@@ -109,29 +108,20 @@ public class AdminRequestHandler {
         Workbook workbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
         
         try {
-            PreparedStatement insertVars =
-                    SQLManager.getConn(dbName).prepareStatement(
-                            "INSERT INTO TermVars (item, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+            Response updateTermVarsResponse = DataManager.updateTermVars(dbName, workbook.getSheet("Variables"));
+            Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, workbook.getSheet("TableMappings"));
+            Response updateCategoriesAndCompaniesResponse =
+                    DataManager.updateCategoriesAndCompanies(dbName, workbook.getSheet("Categories"), workbook.getSheet("Companies"));
             
-            for (ArrayList<Object> row : workbook.getSheet("Variables")) {
-                insertVars.setString(1, row.get(0).toString());
-                insertVars.setString(2, row.get(1).toString());
-                insertVars.executeUpdate();
+            if (updateTermVarsResponse.success && updateTableMappingsResponse.success && updateCategoriesAndCompaniesResponse.success) {
+                return new SuccessResponse();
             }
             
-            PreparedStatement insertTableMapping =
-                    SQLManager
-                            .getConn(dbName)
-                            .prepareStatement(
-                                    "INSERT INTO TableMappings (location, tableNo, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE tableNo=values(tableNo), tableSize=values(tableSize);");
-            
-            Sheet tableMappings = workbook.getSheet("TableMappings");
-            for (int i = 0; i < tableMappings.getRows(); i++) {
-                insertTableMapping.setInt(1, tableMappings.getItem(i, 0, Integer.class));
-                insertTableMapping.setInt(2, tableMappings.getItem(i, 1, Integer.class));
-                insertTableMapping.setInt(3, tableMappings.getItem(i, 2, Integer.class));
-                insertTableMapping.executeUpdate();
-            }
+            Response failed = new FailResponse(-1);
+            failed.addToReturnData("updateTermVarsResponse", updateTermVarsResponse);
+            failed.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
+            failed.addToReturnData("updateCategoriesAndCompaniesResponse", updateCategoriesAndCompaniesResponse);
+            return failed;
         } catch (SQLException e) {
             LogEvent event = new LogEvent();
             event.setDetail("Type", "Exception");
@@ -140,8 +130,6 @@ public class AdminRequestHandler {
             
             return new FailResponse(e);
         }
-        
-        return new SuccessResponse();
     }
     
     public static Response handleNewTermRequest(HttpServletRequest request) {
@@ -156,29 +144,31 @@ public class AdminRequestHandler {
             PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE " + dbName + ";");
             String insertResult = createDatabaseStatement.executeUpdate() + "";
             
-            Statement newCategoryStatement = SQLManager.getConn(dbName).createStatement();
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories ("
-                    + "id INT NOT NULL AUTO_INCREMENT,"
-                    + "title VARCHAR(50) NOT NULL,"
+            Statement newTermStatement = SQLManager.getConn(dbName).createStatement();
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Categories ("
+                    + "id INT NOT NULL,"
+                    + "name VARCHAR(50) NOT NULL,"
                     + "type VARCHAR(25) NOT NULL,"
-                    + "PRIMARY KEY (id)"
+                    + "PRIMARY KEY (id),"
+                    + "UNIQUE (title, type)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies ("
-                    + "id INT NOT NULL AUTO_INCREMENT,"
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies ("
+                    + "id INT NOT NULL,"
                     + "name TEXT NOT NULL,"
+                    + "table INT,"
                     + "description TEXT,"
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Representatives ("
-                    + "id INT NOT NULL AUTO_INCREMENT,"
-                    + "name VARCHAR(50) NOT NULL,"
-                    + "roseGrad BOOLEAN NOT NULL,"
-                    + "PRIMARY KEY (id)"
-                    + ")ENGINE=INNODB;");
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Representatives ("
+            // + "id INT NOT NULL,"
+            // + "name VARCHAR(50) NOT NULL,"
+            // + "roseGrad BOOLEAN NOT NULL,"
+            // + "PRIMARY KEY (id)"
+            // + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Categories_Companies ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Categories_Companies ("
                     + "categoryId int NOT NULL,"
                     + "companyId int NOT NULL,"
                     + "PRIMARY KEY (categoryId, companyId),"
@@ -186,15 +176,15 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
-                    + "companyId INT NOT NULL,"
-                    + "repId INT NOT NULL,"
-                    + "PRIMARY KEY (companyId, repId),"
-                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-                    + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
+            // + "companyId INT NOT NULL,"
+            // + "repId INT NOT NULL,"
+            // + "PRIMARY KEY (companyId, repId),"
+            // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
+            // + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
+            // + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE UserCompanyList ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE UserCompanyList ("
                     + "username VARCHAR(30) NOT NULL,"
                     + "companyId INT NOT NULL,"
                     + "priority INT NOT NULL,"
@@ -203,20 +193,20 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TableMappings ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TableMappings ("
                     + "location INT NOT NULL,"
                     + "tableNo INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
                     + "PRIMARY KEY (location)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("CREATE TABLE TermVars ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TermVars ("
                     + "item VARCHAR(30) NOT NULL,"
                     + "value TEXT NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newCategoryStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
+            insertResult += ", " + newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
                     + "(item, value) "
                     + "VALUES "
                     + "('Year'," + year + "),"

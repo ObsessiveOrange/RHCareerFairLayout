@@ -1,7 +1,6 @@
 package adt;
 
 import java.util.List;
-import java.util.Map;
 
 import servlets.data.DataServlet;
 
@@ -10,45 +9,48 @@ public class Company extends Item implements Comparable<Company> {
     /**
      * 
      */
-    private static final long          serialVersionUID = 418100621969341337L;
-    private String                     title;
-    private Map<String, List<Integer>> categories;
-    private String                     description;
-    private Map<String, String>        parameters;
+    private static final long serialVersionUID = 418100621969341337L;
+    private String            name;
+    private List<Integer>     categories;
+    private String            description;
+    private Integer           tableNumber;
     
     public Company() {
     
         super(0);
     }
     
-    public Company(String title, Map<String, List<Integer>> categories, String description, Map<String, String> parameters) {
+    public Company(String name, List<Integer> categories, String description, Integer tableNumber) {
     
         super(DataVars.getNextEntryID());
-        this.title = title;
+        this.name = name;
         this.categories = categories;
         this.description = description;
-        this.parameters = parameters;
+        this.tableNumber = tableNumber;
         
         // add to all categories in list
-        for (List<Integer> categoryList : categories.values()) {
-            for (Integer id : categoryList) {
-                if (id == 0) {
-                    continue;
-                }
-                Category category = DataServlet.categoryMap.get(id);
-                category.getEntries().add(this.getID());
+        for (Integer id : categories) {
+            if (id == 0) {
+                continue;
             }
+            Category category = DataServlet.categoryMap.get(id);
+            category.getEntries().add(this.getID());
         }
     }
     
-    public String getTitle() {
+    public String getName() {
     
-        return title;
+        return name;
     }
     
-    public Map<String, List<Integer>> getCategories() {
+    public List<Integer> getCategories() {
     
         return categories;
+    }
+    
+    public Integer getTableNumber() {
+    
+        return tableNumber;
     }
     
     public String getDescription() {
@@ -56,14 +58,10 @@ public class Company extends Item implements Comparable<Company> {
         return description;
     }
     
-    public Map<String, String> getParameters() {
-    
-        return parameters;
-    }
-    
     @Override
     public int compareTo(Company other) {
     
-        return title.compareTo(other.getTitle());
+        return name.compareTo(other.getName());
     }
+    
 }
