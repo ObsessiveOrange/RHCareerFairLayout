@@ -190,6 +190,10 @@ public class DataManager {
             companyList.add(newCompany);
             
             for (Integer categoryID : companyCategories) {
+                
+                if (categoryID == 0) {
+                    continue;
+                }
                 Category category = categoryMap.get(categoryID);
                 category.getEntries().add(newCompany.getID());
             }
