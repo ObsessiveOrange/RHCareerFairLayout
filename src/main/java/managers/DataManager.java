@@ -56,7 +56,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Categories (id, name, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name) type=values(type);");
+                                "INSERT INTO Categories (id, name, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), type=values(type);");
         
         for (Category c : categories) {
             insertCategories.setInt(1, c.getID());
@@ -74,7 +74,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Companies (id, name, tableNo, description) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name) tableNo=values(tableNo), description=values(description);");
+                                "INSERT INTO Companies (id, name, tableNo, description) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), tableNo=values(tableNo), description=values(description);");
         
         for (Company c : companies) {
             insertCompanies.setInt(1, c.getID());
