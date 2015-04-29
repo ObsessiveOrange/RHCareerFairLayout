@@ -183,7 +183,6 @@ public class AuthManager {
                 return new FailResponse("Invalid Token");
             }
             
-            result.close();
             return new SuccessResponse();
         } catch (SQLException e) {
             LogEvent event = new LogEvent();
