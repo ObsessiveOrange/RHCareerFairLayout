@@ -1,11 +1,14 @@
 package managers;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import servlets.ServletLog;
+import servlets.ServletLog.ServletEvent;
 import adt.Category;
 import adt.Company;
 import adt.Response;
@@ -14,6 +17,49 @@ import adt.Response.SuccessResponse;
 import adt.Sheet;
 
 public class DataManager {
+    
+    private static String selectedTerm = null;
+    
+    /**
+     * @return the selectedTerm
+     */
+    public static String getSelectedTerm() {
+    
+        if (selectedTerm == null) {
+            try {
+                ResultSet r =
+                        SQLManager.getConn("RHCareerFairLayout").createStatement()
+                                .executeQuery("SELECT value FROM Vars WHERE item = 'selectedTerm';");
+                
+                while (r.next()) {
+                    if (r.getRow() > 1) {
+                        return null;
+                    }
+                    selectedTerm = r.getString("value");
+                }
+                
+                r.close();
+                
+            } catch (SQLException e) {
+                ServletEvent event = new ServletEvent();
+                event.setDetail("Type", "Exception");
+                event.setDetail("Exception", e.getStackTrace());
+                ServletLog.logEvent(event);
+                
+                return null;
+            }
+        }
+        
+        return selectedTerm;
+    }
+    
+    /**
+     * @param selectedTerm the selectedTerm to set
+     */
+    public static void setSelectedTerm(String selectedTerm) {
+    
+        DataManager.selectedTerm = selectedTerm;
+    }
     
     public static Response updateTermVars(String dbName, Sheet termVars) throws SQLException {
     

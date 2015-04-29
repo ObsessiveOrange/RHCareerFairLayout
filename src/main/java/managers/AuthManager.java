@@ -32,13 +32,13 @@ public class AuthManager {
         if (!isSetup) {
             
             try {
-                getHashedPWStatement = SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
-                check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
+                getHashedPWStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
+                check = SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
                 newSession =
-                        SQLManager.getConn("Users").prepareStatement("INSERT INTO Sessions "
+                        SQLManager.getConn("RHCareerFairLayout").prepareStatement("INSERT INTO Sessions "
                                 + "VALUES(?, ?, ?, ?);");
                 getAuthToken =
-                        SQLManager.getConn("Users").prepareStatement(
+                        SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                                 "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             } catch (SQLException e) {
                 ServletEvent event = new ServletEvent();
@@ -70,7 +70,8 @@ public class AuthManager {
             // 10 - Admin (Edit user permssions, edit company/category list)
             // Always add as users, require admin access to elevate
             PreparedStatement statement =
-                    SQLManager.getConn("Users").prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
+                    SQLManager.getConn("RHCareerFairLayout")
+                            .prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
             statement.setString(1, userName);
             statement.setString(2, BCrypt.hashpw(password, BCrypt.gensalt()));
             Integer insertResult = statement.executeUpdate();

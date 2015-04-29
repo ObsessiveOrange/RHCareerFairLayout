@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import managers.DataManager;
 import managers.SQLManager;
 import servlets.ServletLog;
 import servlets.ServletLog.ServletEvent;
@@ -30,7 +31,7 @@ public class DataRequestHandler {
             HashMap<String, Object> layout = new HashMap<String, Object>();
             
             // Organize termVars into hashmap
-            PreparedStatement getTermVars = SQLManager.getConn("Spring1415").prepareStatement(
+            PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
                     "SELECT item, value FROM TermVars;");
             ResultSet getTermVarsRS = getTermVars.executeQuery();
             

@@ -23,7 +23,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
 import servlets.ServletLog.ServletEvent;
-import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -193,7 +192,7 @@ public class AdminRequestHandler {
             // + "companyId INT NOT NULL,"
             // + "priority INT NOT NULL,"
             // + "PRIMARY KEY (username, companyId),"
-            // + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
+            // + "FOREIGN KEY (username) REFERENCES RHCareerFairLayout.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
             // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
             // + ")ENGINE=INNODB;");
             
@@ -228,43 +227,75 @@ public class AdminRequestHandler {
         
     }
     
-    public static Response handleSetSizeRequest(HttpServletRequest request) {
+    public static Response handleSetTermRequest(HttpServletRequest request) {
     
-        String section = request.getHeader("section");
-        Integer size = request.getHeader("size") == null ? -1 : Integer.valueOf(request.getHeader("size"));
-        if (section == null || size == -1) {
-            return new FailResponse("Invalid section provided");
+        if ((request.getHeader("year") == null && request.getHeader("Year") == null) ||
+                (request.getHeader("term") == null && request.getHeader("Term") == null)) {
+            return new FailResponse("Year or term not provided");
         }
         
-        Layout layout = AdminServlet.layoutVars;
-        
-        switch (section.toLowerCase()) {
-            case "1":
-            case "section1":
-                layout.setSection1(size);
-                break;
-            case "2":
-            case "section2":
-                layout.setSection2(size);
-                break;
-            case "2r":
-            case "section2rows":
-                layout.setSection2Rows(size);
-                break;
-            case "2p":
-            case "section2pathwidth":
-                layout.setSection2PathWidth(size);
-                break;
-            case "3":
-            case "section3":
-                layout.setSection3(size);
-                break;
-            default:
-                return new FailResponse("Invalid section provided");
+        String year = Utils.sanitizeString(request.getHeader("year") == null ? request.getHeader("Year") : request.getHeader("year"));
+        String term = Utils.sanitizeString(request.getHeader("term") == null ? request.getHeader("Term") : request.getHeader("term"));
+        String dbName = term + year;
+        try {
+            PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                    "INSERT INTO Vars (item, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+            
+            updateTermRequestStatement.setString(1, "selectedTerm");
+            updateTermRequestStatement.setString(2, dbName);
+            
+            int result = updateTermRequestStatement.executeUpdate();
+            
+            Response resp = new SuccessResponse("Term successfully updated");
+            resp.addToReturnData("SQL rows affected", result);
+            
+            return resp;
+        } catch (SQLException e) {
+            ServletEvent event = new ServletEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
+            return new FailResponse(e);
         }
-        
-        return new SuccessResponse("Size successfully set");
     }
+    // public static Response handleSetSizeRequest(HttpServletRequest request) {
+    //
+    // String section = request.getHeader("section");
+    // Integer size = request.getHeader("size") == null ? -1 : Integer.valueOf(request.getHeader("size"));
+    // if (section == null || size == -1) {
+    // return new FailResponse("Invalid section provided");
+    // }
+    //
+    // Layout layout = AdminServlet.layoutVars;
+    //
+    // switch (section.toLowerCase()) {
+    // case "1":
+    // case "section1":
+    // layout.setSection1(size);
+    // break;
+    // case "2":
+    // case "section2":
+    // layout.setSection2(size);
+    // break;
+    // case "2r":
+    // case "section2rows":
+    // layout.setSection2Rows(size);
+    // break;
+    // case "2p":
+    // case "section2pathwidth":
+    // layout.setSection2PathWidth(size);
+    // break;
+    // case "3":
+    // case "section3":
+    // layout.setSection3(size);
+    // break;
+    // default:
+    // return new FailResponse("Invalid section provided");
+    // }
+    //
+    // return new SuccessResponse("Size successfully set");
+    // }
     
     // public static Response handleTestDbRequest(HttpServletRequest request) {
     //

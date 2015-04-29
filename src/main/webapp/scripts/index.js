@@ -35,7 +35,7 @@ $(document).ready(function() {
     //try to retrieve data from persistent storage
     loadAfterPageSwitch();
     //
-    //if CareerFairData has not been loaded, or it's date is too long ago, reload it.
+    //if CareerFairData has not been loaded, or it's date is too long ago, reload it. Currently 30 min (1000ms * 60s * 30m)
     if (!careerFairData || (new Date().getTime() - careerFairData.lastFetchTime) > 30 * 60 * 1000) {
         //
         //if other variables have not been created/set, do it now.
