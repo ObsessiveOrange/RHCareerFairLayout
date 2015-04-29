@@ -120,7 +120,6 @@ public class DataManager {
     
     public static Response updateCategoriesAndCompanies(String dbName, Sheet categories, Sheet companies) throws SQLException {
     
-        HashMap<Integer, Category> categoryMap = new HashMap<Integer, Category>();
         HashMap<String, HashMap<String, Integer>> categoryLookupTable = new HashMap<String, HashMap<String, Integer>>();
         List<Company> companyList = new ArrayList<Company>();
         List<Category> categoryList = new ArrayList<Category>();
@@ -135,7 +134,6 @@ public class DataManager {
             }
             
             categoryLookupTable.get(type).put(name, newCategory.getID());
-            categoryMap.put(newCategory.getID(), newCategory);
             
             categoryList.add(newCategory);
         }
@@ -197,16 +195,6 @@ public class DataManager {
             
             Company newCompany = new Company(name, companyCategories, null, tableNumber);
             companyList.add(newCompany);
-            
-            for (Integer categoryID : companyCategories) {
-                
-                if (categoryID == 0) {
-                    continue;
-                }
-                
-                Category category = categoryMap.get(categoryID);
-                category.getEntries().add(newCompany.getID());
-            }
         }
         
         Response updateCategoriesResponse = updateCategories(dbName, categoryList);

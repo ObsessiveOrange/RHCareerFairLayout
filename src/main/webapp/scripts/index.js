@@ -206,7 +206,7 @@ function updateCompanyList() {
                         if (filters[filterType].length == 0) {
                             return true;
                             //
-                            //else, make sure the intersection of the filters in the type group and the categories the company is in overlap 
+                            //else, make sure the intersection of the filters (categories) selected in the type group and the categories the company is in overlap 
                             //otherwise, set it to false
                         } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
                             showCompany = false;

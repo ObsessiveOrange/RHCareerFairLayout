@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import adt.Category;
 import adt.Company;
 import adt.ItemVars;
-import adt.LayoutVars;
+import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -34,7 +34,7 @@ public class DataServlet extends HttpServlet {
     /**
      * Set variables for data - will eventually be moved to database
      */
-    public static LayoutVars                 layoutVars;
+    public static Layout                 layoutVars;
     public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
     public static HashMap<Integer, Company>  companyMap       = new HashMap<Integer, Company>();

@@ -1,5 +1,6 @@
 package adt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Company extends Item implements Comparable<Company> {
@@ -13,9 +14,21 @@ public class Company extends Item implements Comparable<Company> {
     private String            description;
     private Integer           tableNumber;
     
-    public Company() {
+    /**
+     * Constructor for reconstructing from SQL queries
+     * 
+     * @param id The ID of the company
+     * @param name The name of the company
+     * @param description A description of the company (Can be null)
+     * @param tableNumber The table the company will be at.
+     */
+    public Company(Integer id, String name, String description, Integer tableNumber) {
     
-        super(0);
+        super(id);
+        this.name = name;
+        this.categories = new ArrayList<Integer>();
+        this.description = description;
+        this.tableNumber = tableNumber;
     }
     
     public Company(String name, List<Integer> categories, String description, Integer tableNumber) {

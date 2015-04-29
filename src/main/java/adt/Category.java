@@ -1,16 +1,23 @@
 package adt;
 
-import java.util.ArrayList;
 
 public class Category extends Item implements Comparable<Category> {
     
     /**
      * 
      */
-    private static final long  serialVersionUID = -7441122606014580042L;
-    private String             title;
-    private String             type;
-    private ArrayList<Integer> entries;
+    private static final long serialVersionUID = -7441122606014580042L;
+    private String            title;
+    private String            type;
+    
+    public Category(Integer id, String title, String type) {
+    
+        super(id);
+        
+        this.title = title;
+        this.type = type;
+        
+    }
     
     public Category(String title, String type) {
     
@@ -18,7 +25,6 @@ public class Category extends Item implements Comparable<Category> {
         
         this.title = title;
         this.type = type;
-        this.entries = new ArrayList<Integer>();
         
     }
     
@@ -30,11 +36,6 @@ public class Category extends Item implements Comparable<Category> {
     public String getType() {
     
         return type;
-    }
-    
-    public ArrayList<Integer> getEntries() {
-    
-        return entries;
     }
     
     @Override

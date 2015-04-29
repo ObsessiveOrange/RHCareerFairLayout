@@ -3,7 +3,7 @@ package adt;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LayoutVars {
+public class Layout {
     
     private int                        section1             = 0;
     private int                        section2             = 0;

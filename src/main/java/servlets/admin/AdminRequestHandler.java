@@ -23,7 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
 import servlets.ServletLog.ServletEvent;
-import adt.LayoutVars;
+import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -188,14 +188,14 @@ public class AdminRequestHandler {
             // + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
             // + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE UserCompanyList ("
-                    + "username VARCHAR(30) NOT NULL,"
-                    + "companyId INT NOT NULL,"
-                    + "priority INT NOT NULL,"
-                    + "PRIMARY KEY (username, companyId),"
-                    + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
-                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE UserCompanyList ("
+            // + "username VARCHAR(30) NOT NULL,"
+            // + "companyId INT NOT NULL,"
+            // + "priority INT NOT NULL,"
+            // + "PRIMARY KEY (username, companyId),"
+            // + "FOREIGN KEY (username) REFERENCES Users.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
+            // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+            // + ")ENGINE=INNODB;");
             
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TableMappings ("
                     + "location INT NOT NULL,"
@@ -236,7 +236,7 @@ public class AdminRequestHandler {
             return new FailResponse("Invalid section provided");
         }
         
-        LayoutVars layout = AdminServlet.layoutVars;
+        Layout layout = AdminServlet.layoutVars;
         
         switch (section.toLowerCase()) {
             case "1":

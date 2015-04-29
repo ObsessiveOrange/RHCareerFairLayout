@@ -14,7 +14,7 @@ import adt.Category;
 import adt.Company;
 import adt.DataVars;
 import adt.ItemVars;
-import adt.LayoutVars;
+import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -28,7 +28,7 @@ public class AdminServlet extends HttpServlet {
     private static final long                serialVersionUID = -5982008108929904358L;
     
     public static DataVars                   dataVars;
-    public static LayoutVars                 layoutVars;
+    public static Layout                 layoutVars;
     public static ItemVars                   systemVars;
     public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
     public static HashMap<Integer, Company>  entryMap         = new HashMap<Integer, Company>();
