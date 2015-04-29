@@ -154,6 +154,12 @@ public class DataManager {
             
             for (String major : majors) {
                 Integer id = categoryLookupTable.get("Major").get(major);
+                if (test < 1) {
+                    
+                    ServletEvent e = new ServletEvent();
+                    e.setDetail("majorId", id);
+                    ServletLog.logEvent(e);
+                }
                 if (id != null) {
                     majorsList.add(id);
                 }
@@ -161,6 +167,12 @@ public class DataManager {
             
             for (String workAuth : workAuths) {
                 Integer id = categoryLookupTable.get("Work Authorization").get(workAuth);
+                if (test < 1) {
+                    
+                    ServletEvent e = new ServletEvent();
+                    e.setDetail("workAuthId", id);
+                    ServletLog.logEvent(e);
+                }
                 if (id != null) {
                     workAuthList.add(id);
                 }
@@ -168,6 +180,12 @@ public class DataManager {
             
             for (String posType : posTypes) {
                 Integer id = categoryLookupTable.get("Position Type").get(posType);
+                if (test < 1) {
+                    
+                    ServletEvent e = new ServletEvent();
+                    e.setDetail("posTypeId", id);
+                    ServletLog.logEvent(e);
+                }
                 if (id != null) {
                     posTypeList.add(id);
                 }
@@ -183,7 +201,7 @@ public class DataManager {
                 posTypeList.addAll(categoryLookupTable.get("Position Type").values());
             }
             
-            if (test < 2) {
+            if (test < 1) {
                 
                 ServletEvent e = new ServletEvent();
                 e.setDetail("majorsList", majorsList);
