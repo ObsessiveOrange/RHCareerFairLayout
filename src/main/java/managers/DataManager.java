@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Category;
 import adt.Company;
 import adt.Response;
@@ -124,8 +122,6 @@ public class DataManager {
         List<Company> companyList = new ArrayList<Company>();
         List<Category> categoryList = new ArrayList<Category>();
         
-        int test = 0;
-        
         for (int i = 0; i < categories.getRows(); i++) {
             String name = categories.getItem(i, "Name", String.class);
             String type = categories.getItem(i, "Type", String.class);
@@ -154,12 +150,6 @@ public class DataManager {
             
             for (String major : majors) {
                 Integer id = categoryLookupTable.get("Major").get(major.trim());
-                if (test < 1) {
-                    
-                    ServletEvent e = new ServletEvent();
-                    e.setDetail("majorId", id);
-                    ServletLog.logEvent(e);
-                }
                 if (id != null) {
                     majorsList.add(id);
                 }
@@ -167,12 +157,6 @@ public class DataManager {
             
             for (String workAuth : workAuths) {
                 Integer id = categoryLookupTable.get("Work Authorization").get(workAuth.trim());
-                if (test < 1) {
-                    
-                    ServletEvent e = new ServletEvent();
-                    e.setDetail("workAuthId", id);
-                    ServletLog.logEvent(e);
-                }
                 if (id != null) {
                     workAuthList.add(id);
                 }
@@ -180,12 +164,6 @@ public class DataManager {
             
             for (String posType : posTypes) {
                 Integer id = categoryLookupTable.get("Position Type").get(posType.trim());
-                if (test < 1) {
-                    
-                    ServletEvent e = new ServletEvent();
-                    e.setDetail("posTypeId", id);
-                    ServletLog.logEvent(e);
-                }
                 if (id != null) {
                     posTypeList.add(id);
                 }
@@ -199,16 +177,6 @@ public class DataManager {
             }
             if (posTypeList.isEmpty()) {
                 posTypeList.addAll(categoryLookupTable.get("Position Type").values());
-            }
-            
-            if (test < 1) {
-                
-                ServletEvent e = new ServletEvent();
-                e.setDetail("majorsList", majorsList);
-                e.setDetail("workAuthList", workAuthList);
-                e.setDetail("posTypeList", posTypeList);
-                ServletLog.logEvent(e);
-                test++;
             }
             
             List<Integer> companyCategories = new ArrayList<Integer>();
