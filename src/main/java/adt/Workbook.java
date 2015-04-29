@@ -92,7 +92,13 @@ public class Workbook {
                 switch (cell.getCellType())
                 {
                     case Cell.CELL_TYPE_NUMERIC:
-                        newRow.add(cell.getNumericCellValue());
+                        Double value = cell.getNumericCellValue();
+                        if (value == value.intValue()) {
+                            newRow.add(value.intValue());
+                        }
+                        else {
+                            newRow.add(value);
+                        }
                         // table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getNumericCellValue());
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
@@ -102,6 +108,9 @@ public class Workbook {
                     case Cell.CELL_TYPE_STRING:
                         newRow.add(cell.getStringCellValue());
                         // table.setValue(cell.getRowIndex(), cell.getColumnIndex(), cell.getStringCellValue());
+                        break;
+                    case Cell.CELL_TYPE_BLANK:
+                        newRow.add("");
                         break;
                 }
             }
