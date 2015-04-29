@@ -230,8 +230,8 @@ function updateCompanyList() {
     //
     //sort filteredCompanyIDs before creating the array
     filteredCompanyIDs.sort(function(a, b) {
-        var o1 = careerFairData.companies[a].title.toLowerCase();
-        var o2 = careerFairData.companies[b].title.toLowerCase();
+        var o1 = careerFairData.companies[a].name.toLowerCase();
+        var o2 = careerFairData.companies[b].name.toLowerCase();
         var p1 = Number(careerFairData.companies[a].parameters.table);
         var p2 = Number(careerFairData.companies[b].parameters.table);
         if (o1 < o2) return -1;
@@ -245,8 +245,8 @@ function updateCompanyList() {
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         // Not in use - includes [i], which is currently not supported.
-        //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
-        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.title + "</td><td class='center companyListTable'>" + company.parameters.table + "</td></tr>");
+        //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.parameters.table + "</td></tr>");
         careerFairData.companies[companyID].checked = false;
     });
     //
