@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import managers.SQLManager;
 import misc.BCrypt;
 import servlets.ServletLog;
-import servlets.ServletLog.LogEvent;
+import servlets.ServletLog.ServletEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -46,7 +46,7 @@ public class UsersRequestHandler {
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
@@ -75,7 +75,7 @@ public class UsersRequestHandler {
             
             return new SuccessResponse("success");
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);

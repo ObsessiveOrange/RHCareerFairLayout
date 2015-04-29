@@ -22,7 +22,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
-import servlets.ServletLog.LogEvent;
+import servlets.ServletLog.ServletEvent;
 import adt.LayoutVars;
 import adt.Response;
 import adt.Response.FailResponse;
@@ -123,7 +123,7 @@ public class AdminRequestHandler {
             failed.addToReturnData("updateCategoriesAndCompaniesResponse", updateCategoriesAndCompaniesResponse);
             return failed;
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
@@ -214,7 +214,7 @@ public class AdminRequestHandler {
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);

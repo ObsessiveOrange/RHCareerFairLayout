@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import servlets.ServletLog;
+import servlets.ServletLog.ServletEvent;
 import adt.Category;
 import adt.Company;
 import adt.Response;
@@ -133,6 +135,7 @@ public class DataManager {
             }
             
             categoryLookupTable.get(type).put(name, newCategory.getID());
+            categoryMap.put(newCategory.getID(), newCategory);
             
             categoryList.add(newCategory);
         }
@@ -194,6 +197,13 @@ public class DataManager {
                 if (categoryID == 0) {
                     continue;
                 }
+                ServletEvent e = new ServletEvent();
+                e.setDetail("categoryID", categoryID);
+                e.setDetail("categoryMap", categoryMap);
+                e.setDetail("companyCategories", companyCategories);
+                
+                ServletLog.logEvent(e);
+                
                 Category category = categoryMap.get(categoryID);
                 category.getEntries().add(newCompany.getID());
             }

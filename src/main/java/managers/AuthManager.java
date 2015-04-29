@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import misc.BCrypt;
 import servlets.ServletLog;
-import servlets.ServletLog.LogEvent;
+import servlets.ServletLog.ServletEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -41,7 +41,7 @@ public class AuthManager {
                         SQLManager.getConn("Users").prepareStatement(
                                 "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             } catch (SQLException e) {
-                LogEvent event = new LogEvent();
+                ServletEvent event = new ServletEvent();
                 event.setDetail("Type", "Exception");
                 event.setDetail("Exception", e.getStackTrace());
                 ServletLog.logEvent(event);
@@ -77,7 +77,7 @@ public class AuthManager {
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
@@ -131,7 +131,7 @@ public class AuthManager {
             
             return response;
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
@@ -185,7 +185,7 @@ public class AuthManager {
             
             return new SuccessResponse();
         } catch (SQLException e) {
-            LogEvent event = new LogEvent();
+            ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);

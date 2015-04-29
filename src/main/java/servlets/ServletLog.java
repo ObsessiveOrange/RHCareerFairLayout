@@ -13,18 +13,18 @@ public class ServletLog {
     
     private static final int           MAX_LOG_SIZE = 5000;
     
-    private static final Set<LogEvent> log          = Collections.newSetFromMap(new LinkedHashMap<LogEvent, Boolean>() {
+    private static final Set<ServletEvent> log          = Collections.newSetFromMap(new LinkedHashMap<ServletEvent, Boolean>() {
                                                         
                                                         private static final long serialVersionUID = -2642465950081345680L;
                                                         
                                                         @Override
-                                                        protected boolean removeEldestEntry(Map.Entry<LogEvent, Boolean> eldest) {
+                                                        protected boolean removeEldestEntry(Map.Entry<ServletEvent, Boolean> eldest) {
                                                         
                                                             return size() > MAX_LOG_SIZE;
                                                         }
                                                     });     ;
     
-    public static void logEvent(LogEvent event) {
+    public static void logEvent(ServletEvent event) {
     
         log.add(event);
     }
@@ -34,7 +34,7 @@ public class ServletLog {
         return new Gson().toJson(log);
     }
     
-    public static class LogEvent {
+    public static class ServletEvent {
         
         private final HashMap<String, Object> details   = new HashMap<String, Object>();
         private final long                    timestamp = System.currentTimeMillis();
