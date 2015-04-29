@@ -107,6 +107,10 @@ public class AdminRequestHandler {
         
         Workbook workbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
         
+        if (workbook == null) {
+            return new FailResponse("No valid excel (.xls/.xlsx) file provided");
+        }
+        
         try {
             Response updateTermVarsResponse = DataManager.updateTermVars(dbName, workbook.getSheet("Variables"));
             Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, workbook.getSheet("TableMappings"));
