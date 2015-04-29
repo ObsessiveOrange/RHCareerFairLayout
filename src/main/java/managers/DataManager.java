@@ -56,7 +56,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Categories (id, name, type) ON DUPLICATE KEY UPDATE name=values(name) type=values(type);");
+                                "INSERT INTO Categories (id, name, type) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name) type=values(type);");
         
         for (Category c : categories) {
             insertCategories.setInt(1, c.getID());
