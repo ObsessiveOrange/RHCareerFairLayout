@@ -172,15 +172,21 @@ public class DataManager {
                     posTypeList.add(id);
                 }
             }
+            ServletEvent e = new ServletEvent();
+            e.setDetail("majorsList", majorsList);
+            e.setDetail("workAuthList", workAuthList);
+            e.setDetail("posTypeList", posTypeList);
+            e.setDetail("categoryLookupTable", categoryLookupTable);
+            ServletLog.logEvent(e);
             
             if (majorsList.isEmpty()) {
-                majorsList.addAll(categoryLookupTable.get("Majors").values());
+                majorsList.addAll(categoryLookupTable.get("Major").values());
             }
             if (workAuthList.isEmpty()) {
-                workAuthList.addAll(categoryLookupTable.get("Work Authorizations").values());
+                workAuthList.addAll(categoryLookupTable.get("Work Authorization").values());
             }
             if (posTypeList.isEmpty()) {
-                posTypeList.addAll(categoryLookupTable.get("Position Types").values());
+                posTypeList.addAll(categoryLookupTable.get("Position Type").values());
             }
             
             List<Integer> companyCategories = new ArrayList<Integer>();
@@ -197,12 +203,6 @@ public class DataManager {
                 if (categoryID == 0) {
                     continue;
                 }
-                ServletEvent e = new ServletEvent();
-                e.setDetail("categoryID", categoryID);
-                e.setDetail("categoryMap", categoryMap);
-                e.setDetail("companyCategories", companyCategories);
-                
-                ServletLog.logEvent(e);
                 
                 Category category = categoryMap.get(categoryID);
                 category.getEntries().add(newCompany.getID());
