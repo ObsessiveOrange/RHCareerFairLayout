@@ -8,17 +8,12 @@
 package servlets.data;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import adt.Category;
-import adt.Company;
-import adt.ItemVars;
-import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -29,15 +24,7 @@ public class DataServlet extends HttpServlet {
     /**
      * 
      */
-    private static final long                serialVersionUID = -5982008108929904358L;
-    
-    /**
-     * Set variables for data - will eventually be moved to database
-     */
-    public static Layout                 layoutVars;
-    public static ItemVars                   systemVars;
-    public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
-    public static HashMap<Integer, Company>  companyMap       = new HashMap<Integer, Company>();
+    private static final long serialVersionUID = -5982008108929904358L;
     
     public DataServlet() throws IOException {
     

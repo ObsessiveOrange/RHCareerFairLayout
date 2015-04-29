@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -9,11 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import adt.Category;
-import adt.Company;
-import adt.DataVars;
-import adt.ItemVars;
-import adt.Layout;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -24,15 +18,7 @@ public class BaseServlet extends HttpServlet {
     /**
      * 
      */
-    private static final long                serialVersionUID = -5982008108929904358L;
-    
-    public static DataVars                   dataVars;
-    public static Layout                 layoutVars;
-    public static ItemVars                   systemVars;
-    public static HashMap<Integer, Category> categoryMap      = new HashMap<Integer, Category>();
-    public static HashMap<Integer, Company>  entryMap         = new HashMap<Integer, Company>();
-    
-    public static boolean                    isTest           = true;
+    private static final long serialVersionUID = -5982008108929904358L;
     
     /** Getter & Setter Methods **/
     

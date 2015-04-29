@@ -18,15 +18,6 @@ public class Category extends Item implements Comparable<Category> {
         
     }
     
-    public Category(String name, String type) {
-    
-        super(DataVars.getNextCategoryID());
-        
-        this.name = name;
-        this.type = type;
-        
-    }
-    
     public String getName() {
     
         return name;

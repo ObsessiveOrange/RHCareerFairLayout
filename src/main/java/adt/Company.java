@@ -24,16 +24,12 @@ public class Company extends Item implements Comparable<Company> {
      */
     public Company(Integer id, String name, String description, Integer tableNumber) {
     
-        super(id);
-        this.name = name;
-        this.categories = new ArrayList<Integer>();
-        this.description = description;
-        this.tableNumber = tableNumber;
+        this(id, name, new ArrayList<Integer>(), description, tableNumber);
     }
     
-    public Company(String name, List<Integer> categories, String description, Integer tableNumber) {
+    public Company(Integer id, String name, List<Integer> categories, String description, Integer tableNumber) {
     
-        super(DataVars.getNextEntryID());
+        super(id);
         this.name = name;
         this.categories = categories;
         this.description = description;

@@ -171,7 +171,7 @@ public class DataManager {
         for (int i = 0; i < categories.getRows(); i++) {
             String name = categories.getItem(i, "Name", String.class);
             String type = categories.getItem(i, "Type", String.class);
-            Category newCategory = new Category(name, type);
+            Category newCategory = new Category(i + 1, name, type);
             
             if (categoryLookupTable.get(type) == null) {
                 categoryLookupTable.put(type, new HashMap<String, Integer>());
@@ -231,7 +231,7 @@ public class DataManager {
             companyCategories.addAll(posTypeList);
             Integer tableNumber = companies.getItem(i, "Table", Integer.class);
             
-            Company newCompany = new Company(name, companyCategories, null, tableNumber);
+            Company newCompany = new Company(i + 100, name, companyCategories, null, tableNumber);
             companyList.add(newCompany);
         }
         
