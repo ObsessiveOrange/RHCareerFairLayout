@@ -148,16 +148,6 @@ public class DataManager {
             String[] posTypes =
                     companies.getItem(i, 3, String.class) == null ? new String[] {} : companies.getItem(i, 3, String.class).split(",");
             
-            if (test < 2) {
-                
-                ServletEvent e = new ServletEvent();
-                e.setDetail("majors", majors);
-                e.setDetail("workAuths", workAuths);
-                e.setDetail("posTypes", posTypes);
-                ServletLog.logEvent(e);
-                test++;
-            }
-            
             ArrayList<Integer> majorsList = new ArrayList<Integer>();
             ArrayList<Integer> workAuthList = new ArrayList<Integer>();
             ArrayList<Integer> posTypeList = new ArrayList<Integer>();
@@ -191,6 +181,16 @@ public class DataManager {
             }
             if (posTypeList.isEmpty()) {
                 posTypeList.addAll(categoryLookupTable.get("Position Type").values());
+            }
+            
+            if (test < 2) {
+                
+                ServletEvent e = new ServletEvent();
+                e.setDetail("majorsList", majorsList);
+                e.setDetail("workAuthList", workAuthList);
+                e.setDetail("posTypeList", posTypeList);
+                ServletLog.logEvent(e);
+                test++;
             }
             
             List<Integer> companyCategories = new ArrayList<Integer>();
