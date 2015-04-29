@@ -94,7 +94,7 @@ function createFilterList() {
             filterID = Number(filterID);
             //
             //Create filter rows
-            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterID + "'>☐</td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].title + "</td></tr>");
+            $filtersListBody.append("<tr class='filterGroup" + filterGroupID + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterID + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterID + "'>☐</td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterID].name + "</td></tr>");
             //
             //if it was previously selected, check it off.
             if (filters[filterGroup].indexOf(filterID) != -1) {

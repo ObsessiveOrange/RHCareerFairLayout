@@ -1,36 +1,35 @@
 package adt;
 
-
 public class Category extends Item implements Comparable<Category> {
     
     /**
      * 
      */
     private static final long serialVersionUID = -7441122606014580042L;
-    private String            title;
+    private String            name;
     private String            type;
     
-    public Category(Integer id, String title, String type) {
+    public Category(Integer id, String name, String type) {
     
         super(id);
         
-        this.title = title;
+        this.name = name;
         this.type = type;
         
     }
     
-    public Category(String title, String type) {
+    public Category(String name, String type) {
     
         super(DataVars.getNextCategoryID());
         
-        this.title = title;
+        this.name = name;
         this.type = type;
         
     }
     
-    public String getTitle() {
+    public String getName() {
     
-        return title;
+        return name;
     }
     
     public String getType() {
@@ -41,6 +40,6 @@ public class Category extends Item implements Comparable<Category> {
     @Override
     public int compareTo(Category other) {
     
-        return title.compareTo(other.getTitle());
+        return name.compareTo(other.getName());
     }
 }

@@ -60,7 +60,7 @@ public class DataManager {
         
         for (Category c : categories) {
             insertCategories.setInt(1, c.getID());
-            insertCategories.setString(2, c.getTitle());
+            insertCategories.setString(2, c.getName());
             insertCategories.setString(3, c.getType());
             insertCategories.executeUpdate();
         }
