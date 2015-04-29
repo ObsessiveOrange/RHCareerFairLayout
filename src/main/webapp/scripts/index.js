@@ -232,8 +232,8 @@ function updateCompanyList() {
     filteredCompanyIDs.sort(function(a, b) {
         var o1 = careerFairData.companies[a].name.toLowerCase();
         var o2 = careerFairData.companies[b].name.toLowerCase();
-        var p1 = Number(careerFairData.companies[a].parameters.table);
-        var p2 = Number(careerFairData.companies[b].parameters.table);
+        var p1 = Number(careerFairData.companies[a].tableNumber);
+        var p2 = Number(careerFairData.companies[b].tableNumber);
         if (o1 < o2) return -1;
         if (o1 > o2) return 1;
         if (p1 < p2) return -1;
@@ -245,8 +245,8 @@ function updateCompanyList() {
     filteredCompanyIDs.forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         // Not in use - includes [i], which is currently not supported.
-        //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.parameters.table + "</td><td class='center companyListInfo'>[i]</td></tr>");
-        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.parameters.table + "</td></tr>");
+        //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.tableNumber + "</td><td class='center companyListInfo'>[i]</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyID'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.tableNumber + "</td></tr>");
         careerFairData.companies[companyID].checked = false;
     });
     //
@@ -486,7 +486,7 @@ function highlightTables() {
 function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
-    var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[careerFairData.companies[id].parameters.table].location];
+    var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[careerFairData.companies[id].tableNumber].location];
     $mapHighlights.drawRect({
         fillStyle: color,
         x: location.x,
