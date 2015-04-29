@@ -208,7 +208,7 @@ function updateCompanyList() {
                             //
                             //else, make sure the intersection of the filters (categories) selected in the type group and the categories the company is in overlap 
                             //otherwise, set it to false
-                        } else if (_.intersection(filters[filterType], company.categories[filterType]).length == 0) {
+                        } else if (_.intersection(filters[filterType], company.categories).length == 0) {
                             showCompany = false;
                         }
                     }
