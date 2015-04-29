@@ -51,7 +51,7 @@ public class DataRequestHandler {
             termVars.put("layout", layout);
             
             // Retreive TableMapping from DB
-            PreparedStatement getTableMappings = SQLManager.getConn("Spring1415").prepareStatement(
+            PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
                     "SELECT location, tableNo, tableSize FROM TableMappings;");
             ResultSet getTableMappingsRS = getTableMappings.executeQuery();
             
@@ -69,7 +69,7 @@ public class DataRequestHandler {
             }
             
             // Organize categories into hashmap
-            PreparedStatement getCategories = SQLManager.getConn("Spring1415").prepareStatement(
+            PreparedStatement getCategories = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
                     "SELECT id, name, type FROM Categories;");
             ResultSet getCategoriesRS = getCategories.executeQuery();
             
@@ -86,7 +86,7 @@ public class DataRequestHandler {
             }
             
             // Organize companies into hashmap
-            PreparedStatement getCompanies = SQLManager.getConn("Spring1415").prepareStatement(
+            PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
                     "SELECT id, name, tableNo, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
@@ -101,7 +101,7 @@ public class DataRequestHandler {
             }
             
             // Add categoryIDs to company objects
-            PreparedStatement getCategories_Companies = SQLManager.getConn("Spring1415").prepareStatement(
+            PreparedStatement getCategories_Companies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
                     "SELECT categoryId, companyId FROM Categories_Companies;");
             ResultSet getCategories_CompaniesRS = getCategories_Companies.executeQuery();
             

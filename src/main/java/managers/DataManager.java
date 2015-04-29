@@ -149,7 +149,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Categories_Companies (categoryId, companyId) VALUES (?, ?) ON DUPLICATE KEY UPDATE categoryId=values(categoryId), companyId=values(companyId);");
+                                "INSERT IGNORE INTO Categories_Companies (categoryId, companyId) VALUES (?, ?)");
         
         for (Company company : companies) {
             for (Integer categoryID : company.getCategories()) {
