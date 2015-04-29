@@ -153,7 +153,7 @@ public class DataManager {
             ArrayList<Integer> posTypeList = new ArrayList<Integer>();
             
             for (String major : majors) {
-                Integer id = categoryLookupTable.get("Major").get(major);
+                Integer id = categoryLookupTable.get("Major").get(major.trim());
                 if (test < 1) {
                     
                     ServletEvent e = new ServletEvent();
@@ -166,7 +166,7 @@ public class DataManager {
             }
             
             for (String workAuth : workAuths) {
-                Integer id = categoryLookupTable.get("Work Authorization").get(workAuth);
+                Integer id = categoryLookupTable.get("Work Authorization").get(workAuth.trim());
                 if (test < 1) {
                     
                     ServletEvent e = new ServletEvent();
@@ -179,7 +179,7 @@ public class DataManager {
             }
             
             for (String posType : posTypes) {
-                Integer id = categoryLookupTable.get("Position Type").get(posType);
+                Integer id = categoryLookupTable.get("Position Type").get(posType.trim());
                 if (test < 1) {
                     
                     ServletEvent e = new ServletEvent();
