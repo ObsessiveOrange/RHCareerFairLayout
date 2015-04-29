@@ -90,10 +90,10 @@ public class DataRequestHandler {
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
-                Integer id = getCategoriesRS.getInt("id");
-                String name = getCategoriesRS.getString("name");
-                String description = getCategoriesRS.getString("description");
-                Integer tableNo = getCategoriesRS.getInt("tableNo");
+                Integer id = getCompaniesRS.getInt("id");
+                String name = getCompaniesRS.getString("name");
+                String description = getCompaniesRS.getString("description");
+                Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
                 Company c = new Company(id, name, description, tableNo);
                 companyMap.put(c.getID(), c);
