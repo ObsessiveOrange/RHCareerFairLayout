@@ -341,7 +341,7 @@ function generateTableLocations() {
     var s3 = careerFairData.termVars.layout.Section3;
     //
     //count number of vertical and horizontal tables there are
-    var hrzCount = careerFairData.termVars.layout.section2 + Math.min(s1, 1) + Math.min(s3, 1);
+    var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
     var vrtCount = Math.max(s1, s3);
     //
     //calculate width and height of tables based on width of the canvas
