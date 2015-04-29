@@ -150,15 +150,15 @@ public class AdminRequestHandler {
             Statement newTermStatement = SQLManager.getConn(dbName).createStatement();
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Categories ("
                     + "id INT NOT NULL,"
-                    + "name VARCHAR(50) NOT NULL,"
-                    + "type VARCHAR(25) NOT NULL,"
+                    + "name VARCHAR(100) NOT NULL,"
+                    + "type VARCHAR(50) NOT NULL,"
                     + "PRIMARY KEY (id),"
                     + "UNIQUE (name, type)"
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies ("
                     + "id INT NOT NULL,"
-                    + "name TEXT NOT NULL,"
+                    + "name VARCHAR(100) NOT NULL,"
                     + "tableNo INT,"
                     + "description TEXT,"
                     + "PRIMARY KEY (id)"
@@ -204,8 +204,8 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TermVars ("
-                    + "item VARCHAR(30) NOT NULL,"
-                    + "value TEXT NOT NULL,"
+                    + "item VARCHAR(50) NOT NULL,"
+                    + "value VARCHAR(100) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
