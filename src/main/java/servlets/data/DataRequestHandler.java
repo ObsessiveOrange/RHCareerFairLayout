@@ -39,7 +39,7 @@ public class DataRequestHandler {
                 String value = getTermVarsRS.getString("value");
                 
                 if (item.startsWith("Layout")) {
-                    layout.put(item.replace("Layout_", ""), value);
+                    layout.put(item.replace("Layout_", ""), Integer.valueOf(value));
                 }
                 else {
                     termVars.put(item, value);
