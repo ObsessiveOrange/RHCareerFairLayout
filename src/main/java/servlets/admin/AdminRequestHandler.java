@@ -144,11 +144,11 @@ public class AdminRequestHandler {
             String dbName = term + year;
             
             // Create new database
-            PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE " + dbName + ";");
+            PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
             String insertResult = createDatabaseStatement.executeUpdate() + "";
             
             Statement newTermStatement = SQLManager.getConn(dbName).createStatement();
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Categories ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories ("
                     + "id INT NOT NULL,"
                     + "name VARCHAR(100) NOT NULL,"
                     + "type VARCHAR(50) NOT NULL,"
@@ -156,7 +156,7 @@ public class AdminRequestHandler {
                     + "UNIQUE (name, type)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies ("
                     + "id INT NOT NULL,"
                     + "name VARCHAR(100) NOT NULL,"
                     + "tableNo INT,"
@@ -164,14 +164,14 @@ public class AdminRequestHandler {
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Representatives ("
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Representatives ("
             // + "id INT NOT NULL,"
             // + "name VARCHAR(50) NOT NULL,"
             // + "roseGrad BOOLEAN NOT NULL,"
             // + "PRIMARY KEY (id)"
             // + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Categories_Companies ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories_Companies ("
                     + "categoryId int NOT NULL,"
                     + "companyId int NOT NULL,"
                     + "PRIMARY KEY (categoryId, companyId),"
@@ -179,7 +179,7 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE Companies_Representatives ("
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies_Representatives ("
             // + "companyId INT NOT NULL,"
             // + "repId INT NOT NULL,"
             // + "PRIMARY KEY (companyId, repId),"
@@ -187,7 +187,7 @@ public class AdminRequestHandler {
             // + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
             // + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE UserCompanyList ("
+            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS UserCompanyList ("
             // + "username VARCHAR(30) NOT NULL,"
             // + "companyId INT NOT NULL,"
             // + "priority INT NOT NULL,"
@@ -196,14 +196,14 @@ public class AdminRequestHandler {
             // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
             // + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TableMappings ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
                     + "location INT NOT NULL,"
                     + "tableNo INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
                     + "PRIMARY KEY (location)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE TermVars ("
+            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
                     + "item VARCHAR(50) NOT NULL,"
                     + "value VARCHAR(100) NOT NULL,"
                     + "PRIMARY KEY (item)"

@@ -1,10 +1,37 @@
 <html>
     <form>
-        File Description:<input type="text" id="desc" />
-        Choose File:<input type="file" id="chosenFile" />
-        <input type="button" id="submitFile" value="submitTheFile" />
-    </form>
-    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script src="/scripts/test.js"></script>
-    </script>
-</html>
+        <table>
+            <tr>
+                <td>Term:</td>
+                <td>
+                    <select id="termField" style="width: 100%">
+                        <option value="Fall">Fall</option>
+                        <option value="Winter">Winter</option>
+                        <option value="Spring">Spring</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Year:</td>
+                <td>
+                    <select id="yearField" style="width: 100%">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Data File:</td>
+                <td>
+                    <input type="file" id="file" style="width: 100%" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" id="submit" value="update" style="float: right" />
+                </td>
+            </tr>
+        </form>
+        <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="../scripts/test.js"></script>
+        </script>
+    </html>

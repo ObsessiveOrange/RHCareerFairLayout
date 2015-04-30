@@ -1,5 +1,8 @@
 $(document).ready(function() {
-    $("#submitFile").click(function() {
+    for (i = 0; i < 5; i++) {
+        $("#yearField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
+    }
+    $("#submit").click(function() {
         $.ajax({
             url: "/api/users/admin?method=uploadData",
             type: "POST",
@@ -7,8 +10,7 @@ $(document).ready(function() {
             processData: false,
             data: function() {
                 var data = new FormData();
-                data.append("fileDescription", $("#desc").val());
-                data.append("chosenFile", $("#chosenFile").get(0).files[0]);
+                data.append("chosenFile", $("#file").get(0).files[0]);
                 return data;
                 // Or simply return new FormData($("form")[0]);
             }(),
@@ -22,8 +24,8 @@ $(document).ready(function() {
             },
             headers: {
                 "authUser": "bennydictwong",
-                "year": "1415",
-                "term": "Spring",
+                "year": $("#yearField").val(),
+                "term": $("#termField").val(),
             },
         });
     });
