@@ -23,7 +23,6 @@ $(document).ready(function() {
                 console.log(response, textStatus);
             },
             headers: {
-                "authUser": "bennydictwong",
                 "year": $("#yearField").val(),
                 "term": $("#termField").val(),
             },
