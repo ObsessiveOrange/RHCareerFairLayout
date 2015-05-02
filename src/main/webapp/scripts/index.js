@@ -433,7 +433,7 @@ function generateTableLocations() {
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * ((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize
+                height: tableHeight * (((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize)
             };
             i += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
             locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
