@@ -428,15 +428,17 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
+
+            var tableSize = (((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize);
             tableLocations[locationID] = {
                 locationID: locationID,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * (((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize)
+                height: tableHeight * tableSize
             };
-            i += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
-            locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
+            i += tableSize;
+            locationID += tableSize;
         }
     }
     offsetX += tableWidth + 5 * unitX;
