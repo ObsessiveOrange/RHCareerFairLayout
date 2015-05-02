@@ -15,9 +15,9 @@ public class SQLManager {
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
     
-    public static Connection getConn(String dbName) {
+    public static Connection getConn(String dbName) throws SQLException {
     
-        if (connections.get(dbName) == null) {
+        if (connections.get(dbName) == null || connections.get(dbName).isClosed()) {
             setupConnection(dbName);
         }
         
