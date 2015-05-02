@@ -428,7 +428,6 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-
             var tableSize = (((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize);
             tableLocations[locationID] = {
                 locationID: locationID,
@@ -450,7 +449,7 @@ function drawTables($mapTables) {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-            var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationID]) == "undefined") ? -1 : careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber);
+        var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationID]) == "undefined") ? "" : careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber);
         drawRect(tableNumber, location.x, location.y, location.width, location.height);
     });
     //
