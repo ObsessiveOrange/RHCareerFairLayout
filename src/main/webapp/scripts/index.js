@@ -450,7 +450,8 @@ function drawTables($mapTables) {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        drawRect(careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber, location.x, location.y, location.width, location.height);
+            var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationID]) == "undefined") ? -1 : careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber);
+        drawRect(tableNumber, location.x, location.y, location.width, location.height);
     });
     //
     // rest & registration areas
