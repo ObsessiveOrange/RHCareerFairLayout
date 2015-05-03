@@ -57,34 +57,6 @@ body {
     height: 100%;
     z-index: 10
 }
-#tutSkipButton {
-    position: absolute;
-    left: calc(50% - 100px);
-    bottom: 50px;
-    width: 200px;
-    height: 50px;
-    z-index: 11;
-    background-color: #622;
-}
-#tutSkipText {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    font-size: 20pt;
-    color: #FFF;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    cursor: pointer;
-}
-.bodyContent {
-    position: relative;
-    font-size: 2.0em;
-    margin-bottom: 100px;
-    overflow: auto;
-    cursor: pointer;
-    background-color: #222;
-}
 .container {
     position: relative;
 }
@@ -107,6 +79,26 @@ body {
     cursor: pointer;
     background-color: #EEE;
     color: #000;
+}
+.menuList tr {
+    padding: 30px 10px;
+    border-top: solid 1px #CCC;
+    color: #000;
+}
+.menuList tr:nth-child(even) {
+    background: #EEE;
+}
+.menuList tr:nth-child(odd) {
+    background: #CCC;
+}
+.menuList tr:last-child {
+    border-bottom: solid 1px #CCC;
+}
+.menuList td {
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .tableList tr {
     background-color: #EEE;
@@ -150,7 +142,6 @@ body {
     -webkit-box-shadow: 5px 0 5px -2 #888;
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
-
 }
 .contentFrame {
     position: relative;

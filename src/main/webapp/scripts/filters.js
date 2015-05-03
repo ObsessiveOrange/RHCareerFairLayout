@@ -86,7 +86,7 @@ function createFilterList() {
         var filterGroupID = filterGroupArray.length;
         //
         //create header row of group
-        $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>▼</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
+        $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupID + "Row' onclick='toggleFilterGroupID(" + filterGroupID + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupID + "'>►</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         //
         //populate filter group
         Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterID) {
@@ -112,7 +112,7 @@ function createFilterList() {
 function showFilterGroup(groupID) {
     //
     //set the up arrow to show that it can be minimized.
-    $("#filtersListExpand_" + groupID).html("▲");
+    $("#filtersListExpand_" + groupID).html("►");
     //
     //hide all items with animation
     $(".filterGroup" + groupID + "Element").show(250);
