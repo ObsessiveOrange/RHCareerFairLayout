@@ -115,7 +115,7 @@ body {
 .menuContainer {
     position: relative;
     padding: 25px 0px 25px 0px;
-    width: 200px;
+    width: 250px;
     float: left;
     background-color: #BBB;
     height: calc(100% - 170px);
@@ -136,7 +136,7 @@ body {
 }
 .menuList td {
     border: none;
-    padding: 30px 10px;
+    padding: 5px 5px;
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -152,7 +152,7 @@ body {
 .contentFrame {
     position: relative;
     padding: 25px 25px 25px 25px;
-    width: calc(100% - 250px);
+    width: calc(100% - 300px);
     float: right;
 }
 .searchBar {
