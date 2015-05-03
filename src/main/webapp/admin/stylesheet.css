@@ -100,6 +100,13 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.menuList .level1{
+    font-weight: bold;
+    font-size: 20px;
+}
+.menuList .level2{
+    font-size: 16px;
+}
 .tableList tr {
     background-color: #EEE;
     color: #000;
