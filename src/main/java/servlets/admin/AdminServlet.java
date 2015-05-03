@@ -2,7 +2,9 @@ package servlets.admin;
 
 import java.io.IOException;
 
+import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +15,8 @@ import adt.Response;
 import adt.Response.FailResponse;
 
 @WebServlet("/api/users/admin")
-@MultipartConfig(location = "/var/lib/openshift/5514734a4382ec499b000009/app-root/data")
+@MultipartConfig
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class AdminServlet extends HttpServlet {
     
     /**

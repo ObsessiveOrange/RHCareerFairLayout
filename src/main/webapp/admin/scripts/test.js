@@ -24,8 +24,8 @@ $(document).ready(function() {
             },
             headers: {
                 "year": $("#yearField").val(),
-                "term": $("#termField").val(),
-            },
+                "term": $("#termField").val()
+            }
         });
     });
 });

@@ -2,6 +2,8 @@ package servlets.users;
 
 import java.io.IOException;
 
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import managers.AuthManager;
 import adt.Response;
 import adt.Response.FailResponse;
+import adt.Response.SuccessResponse;
 
 @WebServlet("/api/users")
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class UsersServlet extends HttpServlet {
     
     /**
@@ -75,6 +79,9 @@ public class UsersServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
+            case "checkAuthentication":
+                responseObject = new SuccessResponse("Authenticated");
+                break;
             case "login":
                 responseObject = AuthManager.authenticateUser(request);
                 break;
