@@ -4,7 +4,8 @@ $(document).ready(function() {
         successHandler: function(data) {
             //
             //parse the data from JSON (may switch to JSONP eventually... how does that affect this?)
-            var returnData = $.parseJSON(data);
+            // var returnData = $.parseJSON(data);
+            var returnData = data;
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {

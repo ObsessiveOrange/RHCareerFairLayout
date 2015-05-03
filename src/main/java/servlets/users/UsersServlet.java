@@ -42,6 +42,7 @@ public class UsersServlet extends HttpServlet {
             return;
         }
         
+        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
@@ -72,6 +73,7 @@ public class UsersServlet extends HttpServlet {
             }
         }
         
+        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
