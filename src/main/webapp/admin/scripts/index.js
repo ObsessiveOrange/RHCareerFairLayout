@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    sendGetRequest({
+    sendPostRequest({
         url: "/api/users?method=checkAuthentication",
         successHandler: function(data) {
             //

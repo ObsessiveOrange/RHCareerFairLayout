@@ -137,8 +137,8 @@ function getNewData() {
         url: "/api/data?method=getData",
         successHandler: function(data) {
             //
-            //parse the data from JSON (may switch to JSONP eventually... how does that affect this?)
-            careerFairData = $.parseJSON(data);
+            //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
+            careerFairData = data;
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
