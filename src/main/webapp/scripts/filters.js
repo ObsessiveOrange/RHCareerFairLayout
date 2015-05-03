@@ -36,11 +36,13 @@ $(document).ready(function() {
             case "clear":
                 filters = {
                     changed: true
-                }
+                };
                 prepareForPageSwitch();
                 break;
             case "apply":
                 prepareForPageSwitch();
+                break;
+            default:
                 break;
         }
         window.location = "/";

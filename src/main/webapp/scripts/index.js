@@ -11,7 +11,7 @@
 var careerFairData;
 var companyList;
 var tableLocations;
-var selectedCompanyIDs
+var selectedCompanyIDs;
 var filteredCompanyIDs = [];
 var filters;
 var $mapTables;
@@ -97,6 +97,8 @@ $(document).ready(function() {
                         markCheckboxUnchecked(id);
                     }
                 });
+                break;
+            default:
                 break;
         }
         //
@@ -203,12 +205,12 @@ function updateCompanyList() {
                     if (Array.isArray(filters[filterType])) {
                         //
                         //if the filter length is 0, no filters are applied in that type group - automatically true.
-                        if (filters[filterType].length == 0) {
-                            return true;
+                        if (filters[filterType].length === 0) {
+                            return;
                             //
                             //else, make sure the intersection of the filters (categories) selected in the type group and the categories the company is in overlap 
                             //otherwise, set it to false
-                        } else if (_.intersection(filters[filterType], company.categories).length == 0) {
+                        } else if (_.intersection(filters[filterType], company.categories).length === 0) {
                             showCompany = false;
                         }
                     }
@@ -307,14 +309,14 @@ function drawRect(tableNumber, x, y, width, height) {
         y3: y + height,
         x4: x,
         y4: y + height,
-        closed: true,
+        closed: true
         //    click : function(layer) {
         //      alert("You clicked an area!");
         //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
     });
     //
     //draw tablenumber in box for easy reading.
-    if (tableNumber != 0) {
+    if (Number(tableNumber) !== 0) {
         $mapTables.drawText({
             //      layer: true,
             fillStyle: '#000000',
@@ -380,7 +382,7 @@ function generateTableLocations() {
         for (var i = 0; i < s2Rows; i++) {
             //
             //outer rows have no walkway
-            if (i == 0 || i == s2Rows - 1) {
+            if (i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
                     tableLocations[locationID] = {
                         locationID: locationID,
@@ -508,7 +510,7 @@ function sendGetRequest(requestObject) {
         data: requestObject.data,
         success: requestObject.successHandler
     });
-};
+}
 //
 //send post request
 function sendPostRequest(requestObject) {

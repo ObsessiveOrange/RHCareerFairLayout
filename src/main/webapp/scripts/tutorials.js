@@ -27,7 +27,8 @@ function initTutorials(currentPage) {
     //if tutorial has already been shown this session, end the tutorial.
     var tutorialStatus = PersistentStorage.retrieveObject("tutorialStatus");
     if (tutorialStatus && tutorialStatus[page]) {
-        return endTutorial();
+        endTutorial();
+        return;
     }
     //
     //set other environment variables. 
@@ -70,7 +71,7 @@ function setupCanvas() {
 function goToNextSlide() {
     slideCounter++;
     $canvas.clearCanvas();
-    if (skipButton != null) {
+    if (skipButton !== null) {
         skipButton.remove();
         skipButton = null;
     }
@@ -85,7 +86,7 @@ function goToNextSlide() {
  *
  */
 function endTutorial() {
-    if (skipButton != null) {
+    if (skipButton !== null) {
         skipButton.remove();
         skipButton = null;
     }
@@ -145,7 +146,7 @@ var tutorialObjects = {
             text: "Welcome to the Rose Career Fair Layout website.",
             fontSize: '30pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -154,9 +155,9 @@ var tutorialObjects = {
             text: "This 30-second walkthrough will show you\nthis site's features and options.\n\nPress anywhere to continue.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
-        if (skipButton == null) {
+        if (skipButton === null) {
             $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
             skipButton = $("#tutSkipButton");
         }
@@ -186,7 +187,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -196,7 +197,7 @@ var tutorialObjects = {
             y: $("#filterBtn").position().top + $("#filterBtn").height() / 2,
             width: 100,
             height: 100,
-            cornerRadius: 10,
+            cornerRadius: 10
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
@@ -206,7 +207,7 @@ var tutorialObjects = {
             radius: 200,
             // start and end angles in degrees
             start: 90,
-            end: 135,
+            end: 135
         });
         $canvas.drawLine({
             strokeStyle: '#0AF',
@@ -217,7 +218,7 @@ var tutorialObjects = {
             y2: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 80,
             x3: $("#filterBtn").offset().left + $("#filterBtn").width() / 2 + 15,
             y3: $("#filterBtn").position().top + $("#filterBtn").height() / 2 + 80,
-            closed: true,
+            closed: true
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -228,7 +229,7 @@ var tutorialObjects = {
             text: "This is the filter button;\nClick it to filter companies\nlike you would in CareerLink.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -239,7 +240,7 @@ var tutorialObjects = {
             scrollTop: $("#mapContainer").offset().top
         }, 1000);
         timeoutEvent = setTimeout(function() {
-            lockScrolling($("#mapContainer").offset().top)
+            lockScrolling($("#mapContainer").offset().top);
         }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
@@ -263,7 +264,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -274,7 +275,7 @@ var tutorialObjects = {
             width: $("#mapTables").width(),
             height: $("#mapTables").height(),
             cornerRadius: 10,
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
@@ -292,7 +293,7 @@ var tutorialObjects = {
             text: "This is the map of the career fair;\nCompanies that fit the filters and that you\nhave selected will be highlighted here.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -303,7 +304,7 @@ var tutorialObjects = {
             scrollTop: $("#companySearchBar").offset().top
         }, 1000);
         timeoutEvent = setTimeout(function() {
-            lockScrolling($("#companySearchBar").offset().top)
+            lockScrolling($("#companySearchBar").offset().top);
         }, 1000);
         $canvas.drawInvertedRectangle({
             x: 0,
@@ -327,7 +328,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -338,7 +339,7 @@ var tutorialObjects = {
             width: $("#companySearchBar").outerWidth(),
             height: $("#companySearchBar").outerHeight(),
             cornerRadius: 10,
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
@@ -356,7 +357,7 @@ var tutorialObjects = {
             text: "This is the search bar.\nType a company name to search.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -384,7 +385,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -395,7 +396,7 @@ var tutorialObjects = {
             width: $("#selectionButtons").outerWidth(),
             height: $("#selectionButtons").outerHeight(),
             cornerRadius: 10,
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
@@ -405,7 +406,7 @@ var tutorialObjects = {
             radius: 200,
             // start and end angles in degrees
             start: 90,
-            end: 135,
+            end: 135
         });
         $canvas.drawLine({
             strokeStyle: '#0AF',
@@ -416,7 +417,7 @@ var tutorialObjects = {
             y2: $("#selectionButtons").position().top + $("#selectionButtons").height() + 30,
             x3: $("#selectionButtons").offset().left + $("#selectionButtons").width() / 2 + 15,
             y3: $("#selectionButtons").position().top + $("#selectionButtons").height() + 30,
-            closed: true,
+            closed: true
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -427,7 +428,7 @@ var tutorialObjects = {
             text: "Use these buttons\nto do bulk selections.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -455,7 +456,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -466,7 +467,7 @@ var tutorialObjects = {
             width: $("#companyListTable").outerWidth(),
             height: $("#companyListTable").outerHeight(),
             cornerRadius: 10,
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
@@ -484,7 +485,7 @@ var tutorialObjects = {
             text: "Companies are listed here.\nClick on the checkbox or company name\nto toggle the highlight on the map",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -496,7 +497,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -505,7 +506,7 @@ var tutorialObjects = {
             text: "That's it for this page!\n\nGood luck in the career fair!",
             fontSize: '30pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -514,7 +515,7 @@ var tutorialObjects = {
             text: "RHCareerFairLayout, by Benedict Wong",
             fontSize: '15pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     drawFiltersTutorialSlide0: function() {
@@ -540,7 +541,7 @@ var tutorialObjects = {
             text: "Welcome to the Rose Career Fair Layout website.",
             fontSize: '30pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -549,9 +550,9 @@ var tutorialObjects = {
             text: "This 30-second walkthrough will show you\nthis site's features and options.\n\nPress anywhere to continue.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
-        if (skipButton == null) {
+        if (skipButton === null) {
             $("body").append("<div id='tutSkipButton' class='roundTopLeft roundTopRight roundBottomLeft roundBottomRight' onClick='endTutorial()'><span id='tutSkipText'>Skip</span></div>");
             skipButton = $("#tutSkipButton");
         }
@@ -572,7 +573,7 @@ var tutorialObjects = {
             text: "This is the filters page.",
             fontSize: '30pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -581,7 +582,7 @@ var tutorialObjects = {
             text: "Selecting filters here will allow you to see companies based on\nwhich major, positions or work authorizations they accept.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -609,7 +610,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -619,7 +620,7 @@ var tutorialObjects = {
             y: $("#backBtn").position().top + $("#backBtn").height() / 2,
             width: 100,
             height: 100,
-            cornerRadius: 10,
+            cornerRadius: 10
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
@@ -629,7 +630,7 @@ var tutorialObjects = {
             radius: 200,
             // start and end angles in degrees
             start: 225,
-            end: 270,
+            end: 270
         });
         $canvas.drawLine({
             strokeStyle: '#0AF',
@@ -640,7 +641,7 @@ var tutorialObjects = {
             y2: $("#backBtn").position().top + $("#backBtn").height() / 2 + 80,
             x3: $("#backBtn").offset().left + $("#backBtn").width() / 2 + 15,
             y3: $("#backBtn").position().top + $("#backBtn").height() / 2 + 80,
-            closed: true,
+            closed: true
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -651,7 +652,7 @@ var tutorialObjects = {
             text: "This is the back button;\nIt will bring you back to the main page,\n discarding all filter changes",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -679,7 +680,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -690,7 +691,7 @@ var tutorialObjects = {
             width: $("#filtersListTable").outerWidth(),
             height: $("#filtersListTable").outerHeight(),
             cornerRadius: 10,
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawRect({
             fillStyle: 'rgba(0, 0, 0, 0.8)',
@@ -708,7 +709,7 @@ var tutorialObjects = {
             text: "All the filters are here, grouped by type.\nThis should be similar to what what\nyou may have used on CareerLink.\n\nClick on each group to show/hide it's subfilters.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -736,7 +737,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.restoreCanvas();
         $canvas.drawRect({
@@ -746,7 +747,7 @@ var tutorialObjects = {
             y: $("#filterButtons").offset().top + $("#filterButtons").height() / 2,
             width: $("#filterButtons").width(),
             height: $("#filterButtons").height(),
-            cornerRadius: 10,
+            cornerRadius: 10
         });
         $canvas.drawArc({
             strokeStyle: '#0AF',
@@ -756,7 +757,7 @@ var tutorialObjects = {
             radius: 200,
             // start and end angles in degrees
             start: 45,
-            end: 90,
+            end: 90
         });
         $canvas.drawLine({
             strokeStyle: '#0AF',
@@ -767,7 +768,7 @@ var tutorialObjects = {
             y2: $("#filterButtons").offset().top - 30,
             x3: $("#filterButtons").offset().left + $("#filterButtons").width() / 2 + 15,
             y3: $("#filterButtons").offset().top - 30,
-            closed: true,
+            closed: true
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -778,7 +779,7 @@ var tutorialObjects = {
             text: "These buttons allow you to\ncancel your changes, clear all filters,\n and apply the selected filters, respectively.",
             fontSize: '20pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
     },
     //
@@ -790,7 +791,7 @@ var tutorialObjects = {
             y: 0,
             width: $canvas.width(),
             height: $canvas.height(),
-            fromCenter: false,
+            fromCenter: false
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -799,7 +800,7 @@ var tutorialObjects = {
             text: "That's it for this page!\n\nGood luck in the career fair!",
             fontSize: '30pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
         $canvas.drawText({
             fillStyle: '#0AF',
@@ -808,7 +809,7 @@ var tutorialObjects = {
             text: "RHCareerFairLayout, by Benedict Wong",
             fontSize: '15pt',
             fontStyle: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            fontFamily: 'Verdana, sans-serif'
         });
-    },
-}
+    }
+};
