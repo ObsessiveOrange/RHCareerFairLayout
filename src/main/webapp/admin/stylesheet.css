@@ -80,33 +80,6 @@ body {
     background-color: #EEE;
     color: #000;
 }
-.menuList tr {
-    padding: 30px 10px;
-    border-top: solid 1px #CCC;
-    color: #000;
-}
-.menuList tr:nth-child(even) {
-    background: #EEE;
-}
-.menuList tr:nth-child(odd) {
-    background: #CCC;
-}
-.menuList tr:last-child {
-    border-bottom: solid 1px #CCC;
-}
-.menuList td {
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.menuList .level1{
-    font-weight: bold;
-    font-size: 20px;
-}
-.menuList .level2{
-    font-size: 16px;
-}
 .tableList tr {
     background-color: #EEE;
     color: #000;
@@ -141,7 +114,7 @@ body {
 
 .menuContainer {
     position: relative;
-    padding: 25px 25px 25px 25px;
+    padding: 25px 0px 25px 0px;
     width: 200px;
     float: left;
     background-color: #BBB;
@@ -150,10 +123,31 @@ body {
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
 }
+.menuList tr {
+    padding: 30px 10px;
+    border-top: solid 1px #CCC;
+    color: #000;
+}
+.menuList tr:last-child {
+    border-bottom: solid 1px #CCC;
+}
+.menuList td {
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.menuList .level1{
+    font-weight: bold;
+    font-size: 20px;
+}
+.menuList .level2{
+    font-size: 16px;
+}
 .contentFrame {
     position: relative;
     padding: 25px 25px 25px 25px;
-    width: calc(100% - 300px);
+    width: calc(100% - 250px);
     float: right;
 }
 .searchBar {
