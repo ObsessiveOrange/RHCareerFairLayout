@@ -9,7 +9,7 @@ html {
     margin: 0;
     padding: 0 20px 0 20px;
     width: calc(100% - 40px);
-    height: 100%;
+    min-height: 100%;
     background-color: #222;
     -webkit-overflow-scrolling: touch;
     font-family: sans-serif;
@@ -19,7 +19,7 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: calc(100% - 38px);
+    min-height: calc(100% - 38px);
     -webkit-overflow-scrolling: touch;
     font-family: sans-serif;
     color: #000;
@@ -118,7 +118,7 @@ body {
     width: 250px;
     float: left;
     background-color: #BBB;
-    height: calc(100% - 170px);
+    min-height: calc(100% - 170px);
     -webkit-box-shadow: 5px 0 5px -2 #888;
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
