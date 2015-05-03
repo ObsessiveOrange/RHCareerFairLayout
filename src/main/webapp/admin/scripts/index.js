@@ -10,6 +10,7 @@ $(document).ready(function() {
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {
                 $("#contentFrame").load("test.html");
+                $.getScript("scripts/test.js");
             } else {
                 $("#contentFrame").load("login.html");
             }
