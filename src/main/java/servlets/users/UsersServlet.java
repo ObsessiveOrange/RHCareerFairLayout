@@ -34,6 +34,8 @@ public class UsersServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+        response.setContentType("application/json");
+        
         Response authResponse;
         // check if the user has already been authenticated.
         if (!(authResponse = AuthManager.checkToken(request)).success) {
@@ -42,7 +44,6 @@ public class UsersServlet extends HttpServlet {
             return;
         }
         
-        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
@@ -63,6 +64,8 @@ public class UsersServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+        response.setContentType("application/json");
+        
         if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
                 && !request.getParameter("method").equalsIgnoreCase("registerUser")) {
             Response authResponse;
@@ -73,7 +76,6 @@ public class UsersServlet extends HttpServlet {
             }
         }
         
-        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;

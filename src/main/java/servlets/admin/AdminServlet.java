@@ -34,6 +34,8 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+        response.setContentType("application/json");
+        
         Response authResponse;
         if (!(authResponse = AuthManager.checkToken(request)).success) {
             
@@ -41,7 +43,6 @@ public class AdminServlet extends HttpServlet {
             return;
         }
         
-        response.setContentType("application/json");
         String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
         
         Response responseObject;
@@ -57,14 +58,14 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+        response.setContentType("application/json");
+        
         Response authResponse;
         if (!(authResponse = AuthManager.checkToken(request)).success) {
             
             response.getWriter().print(authResponse);
             return;
         }
-        
-        response.setContentType("application/json");
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
         if (fileUploadResponse.getFromReturnData("errorCode", Integer.class) != null
