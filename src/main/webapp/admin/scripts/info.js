@@ -14,8 +14,6 @@
         errorHandler: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus + " : " + errorThrown);
             $("#contentFrame").load("login.html");
-        },
-        data: {},
-        headers: {}
+        }
     });
 })();

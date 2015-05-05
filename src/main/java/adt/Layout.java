@@ -13,6 +13,15 @@ public class Layout {
     private Map<Integer, TableMapping> locationTableMapping = new HashMap<Integer, TableMapping>();
     private Map<Integer, TableMapping> tableLocationMapping = new HashMap<Integer, TableMapping>();
     
+    public Layout(HashMap<String, Object> layoutMap) {
+    
+        this.section1 = Integer.valueOf(layoutMap.get("Layout_Section1").toString());
+        this.section2 = Integer.valueOf(layoutMap.get("Layout_Section2").toString());
+        this.section2Rows = Integer.valueOf(layoutMap.get("Layout_Section2_Rows").toString());
+        this.section2PathWidth = Integer.valueOf(layoutMap.get("Layout_Section2_PathWidth").toString());
+        this.section3 = Integer.valueOf(layoutMap.get("Layout_Section3").toString());
+    }
+    
     public int getSection1() {
     
         return section1;
@@ -77,5 +86,19 @@ public class Layout {
     public Map<Integer, TableMapping> getTableLocationMapping() {
     
         return tableLocationMapping;
+    }
+    
+    public int getTableCount() {
+    
+        int tableCount = 0;
+        
+        // add all section 1 tables
+        tableCount += section1;
+        
+        // add section 2 tables, minus path width
+        tableCount += (section2 * section2Rows) - (section2Rows > 2 ? ((section2Rows - 2) * section2PathWidth) : 0);
+        tableCount += section3;
+        
+        return tableCount;
     }
 }

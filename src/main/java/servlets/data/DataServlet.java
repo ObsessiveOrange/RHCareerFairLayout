@@ -50,6 +50,15 @@ public class DataServlet extends HttpServlet {
             case "getSelectedTerm":
                 responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
                 break;
+            case "getCategories":
+                responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
+                break;
+            case "getCompanies":
+                responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
+                break;
+            case "getLayout":
+                responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
+                break;
             case "getData":
                 responseObject = DataRequestHandler.handleGetDataRequest(request);
                 break;

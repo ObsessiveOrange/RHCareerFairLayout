@@ -61,6 +61,26 @@ public class DataManager {
     
         DataManager.selectedQuarter = selectedQuarter;
         DataManager.selectedYear = selectedYear;
+        
+        try {
+            PreparedStatement updateStatement =
+                    SQLManager
+                            .getConn("RHCareerFairLayout")
+                            .prepareStatement(
+                                    "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?), (?, ?, ?) ON DUPLICATE KEY UPDATE item=values(item), value=values(value), type=values(type);");
+            updateStatement.setString(1, "selectedQuarter");
+            updateStatement.setString(2, selectedQuarter);
+            updateStatement.setString(3, "selectedTerm");
+            updateStatement.setString(4, "selectedYear");
+            updateStatement.setString(5, selectedYear);
+            updateStatement.setString(6, "selectedTerm");
+            updateStatement.executeUpdate();
+        } catch (Exception e) {
+            ServletEvent event = new ServletEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+        }
     }
     
     private static void getSelectedTermFromDB() {
@@ -81,13 +101,11 @@ public class DataManager {
             
             r.close();
             
-        } catch (SQLException e) {
+        } catch (Exception e) {
             ServletEvent event = new ServletEvent();
             event.setDetail("Type", "Exception");
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
-            
-            return;
         }
     }
     
