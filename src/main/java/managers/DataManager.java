@@ -95,11 +95,12 @@ public class DataManager {
     
         PreparedStatement insertVars =
                 SQLManager.getConn(dbName).prepareStatement(
-                        "INSERT INTO TermVars (item, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=values(value);");
+                        "INSERT INTO TermVars (item, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
         
         for (int i = 0; i < termVars.getRows(); i++) {
             insertVars.setString(1, termVars.getItem(i, "Item", String.class));
             insertVars.setString(2, termVars.getItem(i, "Value", String.class));
+            insertVars.setString(3, termVars.getItem(i, "Type", String.class));
             insertVars.executeUpdate();
         }
         

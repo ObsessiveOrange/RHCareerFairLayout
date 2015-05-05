@@ -210,10 +210,10 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             insertResult += ", " + newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
-                    + "(item, value) "
+                    + "(item, value, type) "
                     + "VALUES "
-                    + "('Year'," + year + "),"
-                    + "('Term','" + term + "');");
+                    + "('Year','" + year + "', 'term'),"
+                    + "('Term','" + term + "', 'term');");
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (SQLException e) {

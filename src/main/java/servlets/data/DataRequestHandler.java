@@ -32,14 +32,15 @@ public class DataRequestHandler {
             
             // Organize termVars into hashmap
             PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT item, value FROM TermVars;");
+                    "SELECT item, value, type FROM TermVars;");
             ResultSet getTermVarsRS = getTermVars.executeQuery();
             
             while (getTermVarsRS.next()) {
                 String item = getTermVarsRS.getString("item");
                 String value = getTermVarsRS.getString("value");
+                String type = getTermVarsRS.getString("type");
                 
-                if (item.startsWith("Layout")) {
+                if (type.equalsIgnoreCase("layout")) {
                     layout.put(item.replace("Layout_", ""), Integer.valueOf(value));
                 }
                 else {
