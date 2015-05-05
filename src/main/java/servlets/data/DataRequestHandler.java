@@ -250,6 +250,21 @@ public class DataRequestHandler {
             
             Layout layout = new Layout(layoutMap);
             
+            // Retreive TableMapping from DB
+            PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
+                    "SELECT location, tableNo, tableSize FROM TableMappings;");
+            ResultSet getTableMappingsRS = getTableMappings.executeQuery();
+            
+            while (getTableMappingsRS.next()) {
+                Integer location = getTableMappingsRS.getInt("location");
+                Integer tableNo = getTableMappingsRS.getInt("tableNo");
+                Integer tableSize = getTableMappingsRS.getInt("tableSize");
+                TableMapping mapping = new TableMapping(location, tableNo, tableSize);
+                
+                layout.getLocationTableMapping().put(location, mapping);
+                layout.getTableLocationMapping().put(tableNo, mapping);
+            }
+            
             SuccessResponse response = new SuccessResponse();
             response.addToReturnData("layout", layout);
             
