@@ -47,7 +47,7 @@ public class DataServlet extends HttpServlet {
         
         // select method based on the parameters sent.
         switch (method) {
-            case "getActiveTerm":
+            case "getSelectedTerm":
                 responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
                 break;
             case "getData":
