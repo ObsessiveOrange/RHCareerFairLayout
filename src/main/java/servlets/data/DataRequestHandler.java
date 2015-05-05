@@ -41,7 +41,7 @@ public class DataRequestHandler {
                 String type = getTermVarsRS.getString("type");
                 
                 if (type.equalsIgnoreCase("layout")) {
-                    layoutMap.put(item.replace("Layout_", ""), Integer.valueOf(value));
+                    layoutMap.put(item, Integer.valueOf(value));
                 }
                 else {
                     termVars.put(item, value);
@@ -244,7 +244,7 @@ public class DataRequestHandler {
                 String type = getTermVarsRS.getString("type");
                 
                 if (type.equalsIgnoreCase("layout")) {
-                    layoutMap.put(item.replace("Layout_", ""), Integer.valueOf(value));
+                    layoutMap.put(item, Integer.valueOf(value));
                 }
             }
             
@@ -281,7 +281,7 @@ public class DataRequestHandler {
                 String type = getTermVarsRS.getString("type");
                 
                 if (type.equalsIgnoreCase("layout")) {
-                    layoutMap.put(item.replace("Layout_", ""), Integer.valueOf(value));
+                    layoutMap.put(item, Integer.valueOf(value));
                 }
             }
             

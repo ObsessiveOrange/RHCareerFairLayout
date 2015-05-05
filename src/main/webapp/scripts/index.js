@@ -336,11 +336,11 @@ function generateTableLocations() {
     tableLocations = {};
     //
     //convenience assignments
-    var s1 = Number(careerFairData.termVars.layout.Section1);
-    var s2 = Number(careerFairData.termVars.layout.Section2);
-    var s2Rows = Number(careerFairData.termVars.layout.Section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.Section2_PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.Section3);
+    var s1 = Number(careerFairData.termVars.layout.section1);
+    var s2 = Number(careerFairData.termVars.layout.section2);
+    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
+    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
+    var s3 = Number(careerFairData.termVars.layout.section3);
     //
     //count number of vertical and horizontal tables there are
     var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);

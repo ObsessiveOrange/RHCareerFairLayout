@@ -7,8 +7,8 @@ public class Layout {
     
     private int                        section1             = 0;
     private int                        section2             = 0;
-    private int                        section2Rows         = 0;
-    private int                        section2PathWidth    = 0;
+    private int                        section2_Rows         = 0;
+    private int                        section2_PathWidth    = 0;
     private int                        section3             = 0;
     private Map<Integer, TableMapping> locationTableMapping = new HashMap<Integer, TableMapping>();
     private Map<Integer, TableMapping> tableLocationMapping = new HashMap<Integer, TableMapping>();
@@ -17,8 +17,8 @@ public class Layout {
     
         this.section1 = Integer.valueOf(layoutMap.get("Layout_Section1").toString());
         this.section2 = Integer.valueOf(layoutMap.get("Layout_Section2").toString());
-        this.section2Rows = Integer.valueOf(layoutMap.get("Layout_Section2_Rows").toString());
-        this.section2PathWidth = Integer.valueOf(layoutMap.get("Layout_Section2_PathWidth").toString());
+        this.section2_Rows = Integer.valueOf(layoutMap.get("Layout_Section2_Rows").toString());
+        this.section2_PathWidth = Integer.valueOf(layoutMap.get("Layout_Section2_PathWidth").toString());
         this.section3 = Integer.valueOf(layoutMap.get("Layout_Section3").toString());
     }
     
@@ -44,12 +44,12 @@ public class Layout {
     
     public int getSection2PathWidth() {
     
-        return section2PathWidth;
+        return section2_PathWidth;
     }
     
     public void setSection2PathWidth(int section2PathWidth) {
     
-        this.section2PathWidth = section2PathWidth;
+        this.section2_PathWidth = section2PathWidth;
     }
     
     public int getSection3() {
@@ -64,12 +64,12 @@ public class Layout {
     
     public int getSection2Rows() {
     
-        return section2Rows;
+        return section2_Rows;
     }
     
     public void setSection2Rows(int section2Rows) {
     
-        this.section2Rows = section2Rows;
+        this.section2_Rows = section2Rows;
     }
     
     /**
@@ -96,7 +96,7 @@ public class Layout {
         tableCount += section1;
         
         // add section 2 tables, minus path width
-        tableCount += (section2 * section2Rows) - (section2Rows > 2 ? ((section2Rows - 2) * section2PathWidth) : 0);
+        tableCount += (section2 * section2_Rows) - (section2_Rows > 2 ? ((section2_Rows - 2) * section2_PathWidth) : 0);
         tableCount += section3;
         
         return tableCount;

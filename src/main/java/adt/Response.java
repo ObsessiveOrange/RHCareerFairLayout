@@ -133,7 +133,7 @@ public abstract class Response {
             super(false);
             addToReturnData("success", 0);
             
-            addToReturnData("exception message", exception.getLocalizedMessage());
+            addToReturnData("exception message", exception.getMessage());
             addToReturnData("exception stack trace", exception.getStackTrace());
             addToReturnData("timestamp", System.currentTimeMillis());
         }
