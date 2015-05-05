@@ -133,7 +133,7 @@ public class DataRequestHandler {
         }
     }
     
-    public static Response handleGetActiveTermRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetSelectedTermRequest(HttpServletRequest request) throws IOException {
     
         SuccessResponse response = new SuccessResponse();
         response.addToReturnData("selectedQuarter", DataManager.getSelectedQuarter());
