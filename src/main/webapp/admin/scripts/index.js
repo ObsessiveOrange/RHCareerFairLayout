@@ -29,7 +29,7 @@ function loadContent(name) {
 //load page and corresponding .js file
 function loadContentWithJS(name) {
     $("#contentFrame").load(name + ".html");
-    $.getScript("scripts/" + name + ".js");
+    loadScript("scripts/" + name + ".js");
 }
 //
 //send get request
@@ -54,4 +54,22 @@ function sendPostRequest(requestObject) {
         success: requestObject.successHandler,
         error: requestObject.errorHandler
     });
+}
+// Helps with IE debugging.
+function loadScript(url, callback) {
+    var head = document.getElementsByTagName("head")[0];
+    var script = document.createElement("script");
+    var done = false; // Handle Script loading
+    script.src = url;
+    script.onload = script.onreadystatechange = function() { // Attach handlers for all browsers
+        if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
+            done = true;
+            if (callback) {
+                callback();
+            }
+            script.onload = script.onreadystatechange = null; // Handle memory leak in IE
+        }
+    };
+    head.appendChild(script);
+    return undefined; // We handle everything using the script element injection
 }
