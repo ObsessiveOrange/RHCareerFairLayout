@@ -68,7 +68,7 @@ public class DataManager {
         try {
             ResultSet r =
                     SQLManager.getConn("RHCareerFairLayout").createStatement()
-                            .executeQuery("SELECT value FROM Vars WHERE type = 'selectedTerm';");
+                            .executeQuery("SELECT item, value, type FROM Vars WHERE type = 'selectedTerm';");
             
             while (r.next()) {
                 if (r.getString("item").equalsIgnoreCase("selectedQuarter")) {
