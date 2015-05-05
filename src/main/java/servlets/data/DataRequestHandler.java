@@ -231,7 +231,7 @@ public class DataRequestHandler {
     
         try {
             
-            HashMap<String, Object> layout = new HashMap<String, Object>();
+            HashMap<String, Object> layoutMap = new HashMap<String, Object>();
             
             // Organize termVars into hashmap
             PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
@@ -244,9 +244,11 @@ public class DataRequestHandler {
                 String type = getTermVarsRS.getString("type");
                 
                 if (type.equalsIgnoreCase("layout")) {
-                    layout.put(item.replace("Layout_", ""), Integer.valueOf(value));
+                    layoutMap.put(item.replace("Layout_", ""), Integer.valueOf(value));
                 }
             }
+            
+            Layout layout = new Layout(layoutMap);
             
             SuccessResponse response = new SuccessResponse();
             response.addToReturnData("layout", layout);
@@ -263,7 +265,6 @@ public class DataRequestHandler {
         }
     }
     
-    @SuppressWarnings("unchecked")
     public static Response handleGetStatisticsRequest(HttpServletRequest request) throws IOException {
     
         try {

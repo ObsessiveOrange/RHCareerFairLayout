@@ -59,6 +59,9 @@ public class DataServlet extends HttpServlet {
             case "getLayout":
                 responseObject = DataRequestHandler.handleGetLayoutRequest(request);
                 break;
+            case "getStatistics":
+                responseObject = DataRequestHandler.handleGetLayoutRequest(request);
+                break;
             case "getData":
                 responseObject = DataRequestHandler.handleGetDataRequest(request);
                 break;
