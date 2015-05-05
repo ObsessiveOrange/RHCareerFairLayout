@@ -7,7 +7,6 @@ $(document).ready(function() {
             if (returnData.success !== 0) {
                 $("#activeQuarter").html(returnData.activeQuarter);
                 $("#activeYear").html(returnData.activeYear);
-                $.getScript("scripts/test.js");
             } else {
                 alert("Error: Could not retreive data");
             }
