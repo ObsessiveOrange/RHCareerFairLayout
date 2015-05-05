@@ -13,6 +13,8 @@ sendGetRequest({
     errorHandler: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus + " : " + errorThrown);
         $("#contentFrame").load("login.html");
-    }
+    },
+    data: {},
+    headers: {}
 });
 //# sourceURL=/admin/scripts/info.js

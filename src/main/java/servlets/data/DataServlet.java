@@ -60,7 +60,6 @@ public class DataServlet extends HttpServlet {
         }
         
         // Set return content type and send data;
-        response.setContentType("text/plain");
         response.getWriter().print(responseObject);
     }
 }
