@@ -1,12 +1,12 @@
 (window.run = function(){
     sendGetRequest({
-        url: "/api/data?method=getActiveTerm",
+        url: "/api/data?method=getSelectedTerm",
         successHandler: function(returnData) {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {
-                $("#activeQuarter").html(returnData.activeQuarter);
-                $("#activeYear").html(returnData.activeYear);
+                $("#selectedQuarter").html(returnData.activeQuarter);
+                $("#selectedYear").html(returnData.activeYear);
             } else {
                 alert("Error: Could not retreive data");
             }
