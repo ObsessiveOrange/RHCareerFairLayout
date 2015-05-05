@@ -27,4 +27,3 @@ $("#submit").click(function() {
         }
     });
 });
-//# sourceURL=/admin/scripts/yearTerm.js

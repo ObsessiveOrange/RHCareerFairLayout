@@ -19,4 +19,3 @@
         headers: {}
     });
 })();
-//# sourceURL=/admin/scripts/info.js

@@ -29,7 +29,7 @@ function loadContent(name) {
 //load page and corresponding .js file
 function loadContentWithJS(name) {
     $("#contentFrame").load(name + ".html");
-    // loadScript("scripts/" + name + ".js");
+    loadScript("scripts/" + name + ".js");
 }
 //
 //send get request
