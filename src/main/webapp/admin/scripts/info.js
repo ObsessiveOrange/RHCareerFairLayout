@@ -5,8 +5,8 @@
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {
-                $("#selectedQuarter").html(returnData.activeQuarter);
-                $("#selectedYear").html(returnData.activeYear);
+                $("#selectedQuarter").html(returnData.selectedQuarter);
+                $("#selectedYear").html(returnData.selectedYear);
             } else {
                 alert("Error: Could not retreive data");
             }
