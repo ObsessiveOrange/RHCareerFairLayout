@@ -9,8 +9,7 @@ $(document).ready(function() {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {
-                $("#contentFrame").load("info.html");
-                $.getScript("scripts/info.js");
+                loadContentWithJS("info");
             } else {
                 $("#contentFrame").load("login.html");
             }
@@ -21,6 +20,17 @@ $(document).ready(function() {
         }
     });
 });
+//
+//load page
+function loadContent(name) {
+    $("#contentFrame").load(name + ".html");
+}
+//
+//load page and corresponding .js file
+function loadContentWithJS(name) {
+    $("#contentFrame").load(name + ".html");
+    $.getScript("scripts/" + name + ".js");
+}
 //
 //send get request
 function sendGetRequest(requestObject) {

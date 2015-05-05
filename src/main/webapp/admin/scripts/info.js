@@ -41,3 +41,4 @@ function sendPostRequest(requestObject) {
         error: requestObject.errorHandler
     });
 }
+//@ sourceURL=info.js
