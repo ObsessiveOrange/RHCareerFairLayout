@@ -284,6 +284,8 @@ public class DataRequestHandler {
     
         try {
             HashMap<String, Object> layoutMap = new HashMap<String, Object>();
+            Layout layout = null;
+            Integer mappedTableCount = 0;
             
             // Organize termVars into hashmap
             PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
@@ -300,7 +302,7 @@ public class DataRequestHandler {
                 }
             }
             
-            Layout layout = new Layout(layoutMap);
+            layout = new Layout(layoutMap);
             
             HashMap<Integer, Company> companyMap = new HashMap<Integer, Company>();
             
@@ -319,8 +321,17 @@ public class DataRequestHandler {
                 companyMap.put(c.getID(), c);
             }
             
+            PreparedStatement getMappedTables = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
+                    "SELECT SUM(tableSize) as NumTables FROM TableMappings;");
+            ResultSet getMappedTablesRS = getMappedTables.executeQuery();
+            
+            while (getMappedTablesRS.next()) {
+                mappedTableCount = getMappedTablesRS.getInt("NumTables");
+            }
+            
             SuccessResponse response = new SuccessResponse();
-            response.addToReturnData("tableCount", layout.getTableCount());
+            response.addToReturnData("layoutTableCount", layout.getTableCount());
+            response.addToReturnData("mappedTableCount", mappedTableCount);
             response.addToReturnData("companyCount", companyMap.size());
             
             return response;
