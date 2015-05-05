@@ -18,47 +18,77 @@ import adt.Sheet;
 
 public class DataManager {
     
-    private static String selectedTerm = null;
+    private static String selectedQuarter = null;
+    private static String selectedYear    = null;
     
     /**
      * @return the selectedTerm
      */
     public static String getSelectedTerm() {
     
-        if (selectedTerm == null) {
-            try {
-                ResultSet r =
-                        SQLManager.getConn("RHCareerFairLayout").createStatement()
-                                .executeQuery("SELECT value FROM Vars WHERE item = 'selectedTerm';");
-                
-                while (r.next()) {
-                    if (r.getRow() > 1) {
-                        return null;
-                    }
-                    selectedTerm = r.getString("value");
-                }
-                
-                r.close();
-                
-            } catch (SQLException e) {
-                ServletEvent event = new ServletEvent();
-                event.setDetail("Type", "Exception");
-                event.setDetail("Exception", e.getStackTrace());
-                ServletLog.logEvent(event);
-                
-                return null;
-            }
+        if (selectedQuarter == null || selectedYear == null) {
+            getSelectedTermFromDB();
         }
-        
-        return selectedTerm;
+        return selectedQuarter + selectedYear;
+    }
+    
+    /**
+     * @return the selectedTerm
+     */
+    public static String getSelectedQuarter() {
+    
+        if (selectedQuarter == null || selectedYear == null) {
+            getSelectedTermFromDB();
+        }
+        return selectedQuarter;
+    }
+    
+    /**
+     * @return the selectedTerm
+     */
+    public static String getSelectedYear() {
+    
+        if (selectedQuarter == null || selectedYear == null) {
+            getSelectedTermFromDB();
+        }
+        return selectedYear;
     }
     
     /**
      * @param selectedTerm the selectedTerm to set
      */
-    public static void setSelectedTerm(String selectedTerm) {
+    public static void setSelectedTerm(String selectedQuarter, String selectedYear) {
     
-        DataManager.selectedTerm = selectedTerm;
+        DataManager.selectedQuarter = selectedQuarter;
+        DataManager.selectedYear = selectedYear;
+    }
+    
+    private static void getSelectedTermFromDB() {
+    
+        try {
+            ResultSet r =
+                    SQLManager.getConn("RHCareerFairLayout").createStatement()
+                            .executeQuery("SELECT value FROM Vars WHERE type = 'selectedTerm';");
+            
+            while (r.next()) {
+                if (r.getString("item").equalsIgnoreCase("selectedQuarter")) {
+                    selectedQuarter = r.getString("value");
+                }
+                else if (r.getString("item").equalsIgnoreCase("selectedYear")) {
+                    selectedYear = r.getString("value");
+                }
+            }
+            
+            r.close();
+            
+        } catch (SQLException e) {
+            ServletEvent event = new ServletEvent();
+            event.setDetail("Type", "Exception");
+            event.setDetail("Exception", e.getStackTrace());
+            ServletLog.logEvent(event);
+            
+            return;
+        }
     }
     
     public static Response updateTermVars(String dbName, Sheet termVars) throws SQLException {

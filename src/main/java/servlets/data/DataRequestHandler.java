@@ -131,4 +131,13 @@ public class DataRequestHandler {
             return new FailResponse(e);
         }
     }
+    
+    public static Response handleGetActiveTermRequest(HttpServletRequest request) throws IOException {
+    
+        SuccessResponse response = new SuccessResponse();
+        response.addToReturnData("selectedQuarter", DataManager.getSelectedQuarter());
+        response.addToReturnData("selectedYear", DataManager.getSelectedYear());
+        
+        return response;
+    }
 }
