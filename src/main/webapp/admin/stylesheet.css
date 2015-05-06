@@ -34,7 +34,7 @@ body {
     position: relative;
     width: calc(100% - 40px);
     height: 75px;
-    flex-grow: 0;
+    flex: 0 0 75px;
     padding: 25px 20px 20px 20px;
     background-color: #800000;
     color: #FFF;
@@ -52,6 +52,7 @@ body {
  * Body Customization:
  */
 .bodyContent{
+    flex: 1 1 auto;
     display:flex;
     flex-direction: row;
 }
@@ -99,13 +100,14 @@ body {
 
 .menuContainer {
     position: relative;
-    padding: 25px 0px 25px 0px;
+    padding: 25px 10px 25px 10px;
     float: left;
     background-color: #BBB;
     -webkit-box-shadow: 5px 0 5px 0 #888;
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
-    flex: 0 0 250px;
+    flex: 0 0 auto;
+    border-collapse: collapse;
 }
 .menuList {
     position: relative;
@@ -144,7 +146,7 @@ body {
     padding: 25px 25px 25px 25px;
     float: right;
     word-wrap: break-word;
-    flex-grow: 1;
+    flex: 1 1 auto;
 }
 .searchBar {
     width: calc(100% - 34px);
