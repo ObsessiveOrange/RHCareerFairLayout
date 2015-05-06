@@ -1,7 +1,7 @@
 (window.setup = function() {
     for (i = 0; i < 5; i++) {
-        $("#selectTermTermField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
-        $("#uploadDataTermField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
+        $("#selectTermYearField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
+        $("#uploadDataYearField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
     }
     $("#selectTermSubmit").click(function() {
         $.ajax({
