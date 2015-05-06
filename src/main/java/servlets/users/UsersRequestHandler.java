@@ -51,7 +51,7 @@ public class UsersRequestHandler {
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
             
-            return new FailResponse(e.toString());
+            return new FailResponse(e);
         }
         
     }
@@ -80,7 +80,7 @@ public class UsersRequestHandler {
             event.setDetail("Exception", e.getStackTrace());
             ServletLog.logEvent(event);
             
-            return new FailResponse(e.toString());
+            return new FailResponse(e);
         }
         
     }
