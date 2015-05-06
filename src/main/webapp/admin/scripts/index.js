@@ -1,9 +1,8 @@
 $(document).ready(function() {
     //
     //create variables that will be overwritten by individual .js files
-    window.setup = function(){};
-    window.cleanup = function(){};
-
+    window.setup = function() {};
+    window.cleanup = function() {};
     sendPostRequest({
         url: "/api/users?method=checkAuthentication",
         successHandler: function(data) {
@@ -27,20 +26,19 @@ $(document).ready(function() {
     });
 });
 
-function setupLinks(){
-    $(".groupHeader").click(function(event){
+function setupLinks() {
+    $(".groupHeader").click(function(event) {
         var sourceID = event.delegateTarget.id;
         var target = sourceID.replace("GroupHeader", "");
-        if($("#" + sourceID + "Arrow").html().trim() == "▼") {
+        if ($("#" + sourceID + "Arrow").html().trim() == "▼") {
             $("." + target + "Item").hide();
             $("#" + sourceID + "Arrow").html("►");
-        }
-        else{
+        } else {
             $("." + target + "Item").show();
             $("#" + sourceID + "Arrow").html("▼");
         }
     });
-    $(".menuLink").click(function(event){
+    $(".menuLink").click(function(event) {
         var sourceID = event.delegateTarget.id;
         loadContentWithJS(sourceID);
     });
@@ -55,8 +53,10 @@ function loadContent(name) {
 //load page and corresponding .js file
 function loadContentWithJS(name) {
     cleanup();
-    $("#contentFrame").load(name + ".html");
-    loadScript("scripts/" + name + ".js");
+    //load HTML first, then load scripts once HTML is done loading.
+    $("#contentFrame").load(name + ".html", function() {
+        loadScript("scripts/" + name + ".js");
+    });
 }
 //
 //send get request
