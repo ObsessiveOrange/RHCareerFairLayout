@@ -35,6 +35,10 @@ function setupLinks(){
             $("#" + sourceID + "Arrow").html("▼");
         }
     });
+    $(".menuLink").click(function(event){
+        var sourceID = event.delegateTarget.id;
+        loadContentWithJS(sourceID);
+    });
 }
 //
 //load page
