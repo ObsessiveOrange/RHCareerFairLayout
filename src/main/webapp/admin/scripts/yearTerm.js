@@ -2,7 +2,25 @@
     for (i = 0; i < 5; i++) {
         $("#yearField").append("<option value='" + (new Date().getFullYear() + i) + "'>" + (new Date().getFullYear() + i) + "</option>");
     }
-    $("#submit").click(function() {
+    $("#selectTermSubmit").click(function() {
+        $.ajax({
+            url: "/api/users/admin?method=setTerm",
+            type: "POST",
+            error: function(_, textStatus, errorThrown) {
+                alert("Error");
+                console.log(textStatus, errorThrown);
+            },
+            success: function(response, textStatus) {
+                alert("Success");
+                console.log(response, textStatus);
+            },
+            headers: {
+                "term": $("#selectTermTermField").val(),
+                "year": $("#selectTermYearField").val()
+            }
+        });
+    });
+    $("#uploadDataSubmit").click(function() {
         $.ajax({
             url: "/api/users/admin?method=uploadData",
             type: "POST",
@@ -23,8 +41,8 @@
                 console.log(response, textStatus);
             },
             headers: {
-                "year": $("#yearField").val(),
-                "term": $("#termField").val()
+                "term": $("#uploadDataTermField").val(),
+                "year": $("#uploadDataYearField").val()
             }
         });
     });

@@ -1,11 +1,11 @@
 <html>
-    <form>
-        <table>
-        <tr><td colspan="2"><strong>Upload data in excel format:</strong><br /><br /></td></tr>
+    <table>
+        <form>
+            <tr><td colspan="2"><strong>Select active term:</strong><br /><br /></td></tr>
             <tr>
                 <td>Term:</td>
                 <td>
-                    <select id="termField" style="width: 100%">
+                    <select id="selectTermTermField" style="width: 100%">
                         <option value="Fall">Fall</option>
                         <option value="Winter">Winter</option>
                         <option value="Spring">Spring</option>
@@ -15,21 +15,48 @@
             <tr>
                 <td>Year:</td>
                 <td>
-                    <select id="yearField" style="width: 100%">
+                    <select id="selectTermYearField" style="width: 100%">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" id="selectTermSubmit" style="float: right" />
+                </td>
+            </tr>
+        </form>
+        <tr><td><br /><br /><br /></td></tr>
+        <form>
+            <tr><td colspan="2"><strong>Upload data in excel format:</strong><br /><br /></td></tr>
+            <tr>
+                <td>Term:</td>
+                <td>
+                    <select id="uploadDataTermField" style="width: 100%">
+                        <option value="Fall">Fall</option>
+                        <option value="Winter">Winter</option>
+                        <option value="Spring">Spring</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Year:</td>
+                <td>
+                    <select id="uploadDataYearField" style="width: 100%">
                     </select>
                 </td>
             </tr>
             <tr>
                 <td>Data File:</td>
                 <td>
-                    <input type="file" id="file" style="width: 100%" />
+                    <input type="file" id="uploadDataFile" style="width: 100%" />
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <input type="button" id="submit" value="update" style="float: right" />
+                    <input type="button" id="uploadDataSubmit" style="float: right" />
                 </td>
             </tr>
         </form>
-    </html>
+    </table>
+</html>
