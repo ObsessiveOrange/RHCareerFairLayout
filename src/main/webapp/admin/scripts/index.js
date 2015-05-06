@@ -27,11 +27,11 @@ function setupLinks(){
         var sourceID = event.delegateTarget.id;
         var target = sourceID.replace("GroupHeader", "");
         if($("#" + sourceID + "Arrow").html() == "▼") {
-            $("." + target).hide();
+            $("." + target + "Item").hide();
             $("#" + sourceID + "Arrow").html("►");
         }
         else{
-            $("." + target).show();
+            $("." + target + "Item").show();
             $("#" + sourceID + "Arrow").html("▼");
         }
     });
