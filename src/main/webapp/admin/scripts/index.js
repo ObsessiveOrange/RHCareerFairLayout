@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    //
+    //create variables that will be overwritten by individual .js files
+    window.setup = function(){};
+    window.cleanup = function(){};
+
     sendPostRequest({
         url: "/api/users?method=checkAuthentication",
         successHandler: function(data) {
