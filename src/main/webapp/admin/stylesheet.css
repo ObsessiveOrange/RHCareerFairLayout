@@ -107,11 +107,11 @@ body {
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
     flex: 0 0 auto;
-    border-collapse: collapse;
 }
 .menuList {
     position: relative;
     width: 100%;
+    border-collapse: collapse;
 }
 .menuList tr {
     border: none;
