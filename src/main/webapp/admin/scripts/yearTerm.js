@@ -29,7 +29,7 @@
             processData: false,
             data: function() {
                 var data = new FormData();
-                data.append("chosenFile", $("#file").get(0).files[0]);
+                data.append("termData", $("#uploadDataFile").get(0).files[0]);
                 return data;
                 // Or simply return new FormData($("form")[0]);
             }(),

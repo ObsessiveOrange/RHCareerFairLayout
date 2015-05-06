@@ -12,6 +12,9 @@ html {
     background-color: #222;
     -webkit-overflow-scrolling: touch;
     font-family: sans-serif;
+    min-height: 100%;
+    display:flex;
+    flex-direction: row;
 }
 body {
     position: relative;
@@ -31,10 +34,9 @@ body {
  */
 
 .navBarContainer {
-    position: relative;
+    display:block;
     width: calc(100% - 40px);
     height: 75px;
-    flex: 0 0 75px;
     padding: 25px 20px 20px 20px;
     background-color: #800000;
     color: #FFF;
@@ -52,9 +54,8 @@ body {
  * Body Customization:
  */
 .bodyContent{
-    flex: 1 1 auto;
+    flex: 1 0 auto;
     display:flex;
-    flex-direction: row;
 }
 .container {
     position: relative;
@@ -101,7 +102,6 @@ body {
 .menuContainer {
     position: relative;
     padding: 25px 10px 25px 10px;
-    float: left;
     background-color: #BBB;
     -webkit-box-shadow: 5px 0 5px 0 #888;
     -moz-box-shadow: 5px 0 5px 0 #888;
@@ -144,7 +144,6 @@ body {
 .contentFrame {
     position: relative;
     padding: 25px 25px 25px 25px;
-    float: right;
     word-wrap: break-word;
     flex: 1 1 auto;
 }
@@ -204,7 +203,7 @@ body {
  */
 
 .footer {
-    display: block;
+    display:block;
     overflow: hidden;
     position: relative;
     bottom: 0;
