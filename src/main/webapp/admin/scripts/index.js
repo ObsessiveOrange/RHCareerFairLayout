@@ -23,10 +23,17 @@ $(document).ready(function() {
 });
 
 function setupLinks(){
-    $(".header").click(function(event){
+    $(".groupHeader").click(function(event){
         var sourceID = $(event.target).id;
         var target = sourceId.replace("GroupHeader", "");
-        $("." + target).hide();
+        if($("#" + sourceID + "Arrow").html() == "▼") {
+            $("." + target).hide();
+            $("#" + sourceID + "Arrow").html("►");
+        }
+        else{
+            $("." + target).show();
+            $("#" + sourceID + "Arrow").html("▼");
+        }
     });
 }
 //
