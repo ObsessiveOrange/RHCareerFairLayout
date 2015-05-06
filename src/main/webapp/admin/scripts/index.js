@@ -26,7 +26,7 @@ function setupLinks(){
     $(".groupHeader").click(function(event){
         var sourceID = event.delegateTarget.id;
         var target = sourceID.replace("GroupHeader", "");
-        if($("#" + sourceID + "Arrow").html() == "▼") {
+        if($("#" + sourceID + "Arrow").html().trim == "▼") {
             $("." + target + "Item").hide();
             $("#" + sourceID + "Arrow").html("►");
         }
