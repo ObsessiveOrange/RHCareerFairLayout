@@ -24,8 +24,8 @@ $(document).ready(function() {
 
 function setupLinks(){
     $(".groupHeader").click(function(event){
-        var sourceID = $(event.target).id;
-        var target = sourceId.replace("GroupHeader", "");
+        var sourceID = event.delegateTarget.id;
+        var target = sourceID.replace("GroupHeader", "");
         if($("#" + sourceID + "Arrow").html() == "▼") {
             $("." + target).hide();
             $("#" + sourceID + "Arrow").html("►");
