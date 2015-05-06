@@ -1,4 +1,4 @@
-(window.run = function(){
+(window.setup = function() {
     sendGetRequest({
         url: "/api/data?method=getSelectedTerm",
         successHandler: function(returnData) {
@@ -35,3 +35,4 @@
         }
     });
 })();
+window.cleanup = function() {};

@@ -43,11 +43,13 @@ function setupLinks(){
 //
 //load page
 function loadContent(name) {
+    cleanup();
     $("#contentFrame").load(name + ".html");
 }
 //
 //load page and corresponding .js file
 function loadContentWithJS(name) {
+    cleanup();
     $("#contentFrame").load(name + ".html");
     loadScript("scripts/" + name + ".js");
 }
