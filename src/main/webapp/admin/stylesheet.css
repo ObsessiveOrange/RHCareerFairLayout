@@ -22,6 +22,8 @@ body {
     font-family: sans-serif;
     color: #000;
     background-color: #DDD;
+    display:flex;
+    flex-direction: column;
 }
 /*
  *
@@ -29,11 +31,10 @@ body {
  */
 
 .navBarContainer {
-    display: block;
-    overflow: hidden;
     position: relative;
     width: calc(100% - 40px);
     height: 75px;
+    flex-grow: 0;
     padding: 25px 20px 20px 20px;
     background-color: #800000;
     color: #FFF;
@@ -50,7 +51,10 @@ body {
  * 
  * Body Customization:
  */
-
+.bodyContent{
+    display:flex;
+    flex-direction: row;
+}
 .container {
     position: relative;
 }
@@ -96,12 +100,12 @@ body {
 .menuContainer {
     position: relative;
     padding: 25px 0px 25px 0px;
-    width: 250px;
     float: left;
     background-color: #BBB;
     -webkit-box-shadow: 5px 0 5px 0 #888;
     -moz-box-shadow: 5px 0 5px 0 #888;
     box-shadow: 5px 0 5px 0 #888;
+    flex: 0 0 250px;
 }
 .menuList {
     position: relative;
@@ -138,8 +142,9 @@ body {
 .contentFrame {
     position: relative;
     padding: 25px 25px 25px 25px;
-    width: calc(100% - 300px);
     float: right;
+    word-wrap: break-word;
+    flex-grow: 1;
 }
 .searchBar {
     width: calc(100% - 34px);
