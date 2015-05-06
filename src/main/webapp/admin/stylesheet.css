@@ -51,14 +51,6 @@ body {
  * Body Customization:
  */
 
-.tutorial {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10
-}
 .container {
     position: relative;
 }
@@ -68,19 +60,6 @@ body {
     margin: 0;
     border-spacing: 0;
     table-layout: fixed;
-}
-.buttonContainer {
-    float: right;
-}
-.button {
-    display: inline-block;
-    border-left: solid 1px #CCC;
-    border-bottom: solid 1px #CCC;
-    border-top: solid 1px #CCC;
-    padding: 10px 15px;
-    cursor: pointer;
-    background-color: #EEE;
-    color: #000;
 }
 .tableList tr {
     background-color: #EEE;
@@ -132,6 +111,11 @@ body {
     border: none;
     border-top: solid 1px #CCC;
     color: #000;
+    cursor: pointer;
+}
+.menuList tr:hover {
+    color: #000;
+    background-color: #CFF;
 }
 .menuList tr:last-child {
     border-bottom: solid 1px #CCC;

@@ -9,7 +9,8 @@ $(document).ready(function() {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success !== 0) {
-                loadContentWithJS("info");
+                loadContentWithJS("overview");
+                setupLinks();
             } else {
                 $("#contentFrame").load("login.html");
             }
@@ -20,6 +21,14 @@ $(document).ready(function() {
         }
     });
 });
+
+function setupLinks(){
+    $(".header").click(function(event){
+        var sourceID = $(event.target).id;
+        var target = sourceId.replace("GroupHeader", "");
+        $("." + target).hide();
+    });
+}
 //
 //load page
 function loadContent(name) {
