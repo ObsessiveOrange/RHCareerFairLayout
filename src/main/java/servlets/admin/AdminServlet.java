@@ -50,6 +50,10 @@ public class AdminServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
+            case "listTerms": {
+                responseObject = AdminRequestHandler.listTerms();
+                break;
+            }
             default:
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
@@ -120,11 +124,6 @@ public class AdminServlet extends HttpServlet {
                     break;
                 }
                 responseObject = AdminRequestHandler.setTerm(year, quarter);
-                break;
-            }
-            case "listTerms": {
-                
-                responseObject = AdminRequestHandler.listTerms();
                 break;
             }
             default: {
