@@ -87,7 +87,7 @@ public class AdminServlet extends HttpServlet {
         switch (method) {
             case "uploadData": {
                 String year = request.getHeader("year");
-                String quarter = request.getHeader("year");
+                String quarter = request.getHeader("quarter");
                 Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
                 
                 if (!Utils.validateArgs(year, quarter, uploadedWorkbook) || !Utils.validateTerm(year, quarter)) {
@@ -102,7 +102,7 @@ public class AdminServlet extends HttpServlet {
             case "newTerm": {
                 
                 String year = request.getHeader("year");
-                String quarter = request.getHeader("year");
+                String quarter = request.getHeader("quarter");
                 
                 if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
                     
@@ -116,7 +116,7 @@ public class AdminServlet extends HttpServlet {
             case "setTerm": {
                 
                 String year = request.getHeader("year");
-                String quarter = request.getHeader("year");
+                String quarter = request.getHeader("quarter");
                 
                 if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
                     
