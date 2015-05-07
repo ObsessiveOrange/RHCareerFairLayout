@@ -11,7 +11,7 @@
                 console.log(textStatus, errorThrown);
             },
             success: function(response, textStatus) {
-                if(success !== 1){
+                if(response.success !== 1){
                     alert("Error: " + response.message);
                 }
                 console.log(response, textStatus);
@@ -38,7 +38,7 @@
                 console.log(textStatus, errorThrown);
             },
             success: function(response, textStatus) {
-                if(success !== 1){
+                if(response.success !== 1){
                     alert("Error: " + response.message);
                 }
                 console.log(response, textStatus);
