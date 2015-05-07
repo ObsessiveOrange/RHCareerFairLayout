@@ -6,7 +6,7 @@
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success === 1) {
                 returnData.terms.forEach(function(obj) {
-                    $("#selectTermField").prepend("<option value='" + obj.year + " " + obj.quarter + "'>" + obj.year + " " + obj.quarter + "</option>");
+                    $("#selectTermField").prepend("<option value='" + obj.quarter + " " + obj.year + "'>" + obj.quarter + " " + obj.year + "</option>");
                 });
             } else {
                 alert("Error: Could not retreive data.");
@@ -33,8 +33,8 @@
                 console.log(response, textStatus);
             },
             headers: {
-                "quarter": $("#selectTermTermField").val(),
-                "year": $("#selectTermYearField").val()
+                "quarter": $("#selectTermField").val().split(" ")[0],
+                "year": $("#selectTermField").val().split(" ")[1]
             }
         });
     });
@@ -60,7 +60,7 @@
                 console.log(response, textStatus);
             },
             headers: {
-                "quarter": $("#uploadDataTermField").val(),
+                "quarter": $("#uploadDataQuarterField").val(),
                 "year": $("#uploadDataYearField").val()
             }
         });
