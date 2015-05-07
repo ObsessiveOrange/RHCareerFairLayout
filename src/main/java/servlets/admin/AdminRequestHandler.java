@@ -97,27 +97,20 @@ public class AdminRequestHandler {
                 return new FailResponse(e);
             }
         }
-        return new FailResponse("Expected content of type multipart/form-data");
+        return new FailResponse(-100, "Expected content of type multipart/form-data");
     }
     
     public static Response uploadData(String year, String quarter, Workbook uploadedWorkbook) {
     
         String dbName = quarter + year;
-        ResultSet rs = null;
         
         try {
-            PreparedStatement checkDBExists =
-                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                            "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
-            checkDBExists.setString(1, quarter + year);
-            rs = checkDBExists.executeQuery();
-            
-            while (rs.next()) {
-                if (rs.getInt("DBCount") <= 0) {
-                    createNewTerm(year, quarter);
+            if (!DataManager.checkDBExists(dbName)) {
+                Response resp = createNewTerm(year, quarter);
+                if (resp.getFromReturnData("success", Integer.class) != 1) {
+                    return new FailResponse("Could not create new term");
                 }
             }
-            rs.close();
             
             Response updateTermVarsResponse = DataManager.updateTermVars(dbName, uploadedWorkbook.getSheet("Variables"));
             Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, uploadedWorkbook.getSheet("TableMappings"));
