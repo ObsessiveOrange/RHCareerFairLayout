@@ -6,7 +6,7 @@
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success === 1) {
                 returnData.terms.forEach(function(obj) {
-                    $("#selectTermField").append("<option value='" + obj.year + obj.quarter + "'>" + obj.year + obj.quarter + "</option>");
+                    $("#selectTermField").prepend("<option value='" + obj.year + " " + obj.quarter + "'>" + obj.year + " " + obj.quarter + "</option>");
                 });
             } else {
                 alert("Error: Could not retreive data.");
