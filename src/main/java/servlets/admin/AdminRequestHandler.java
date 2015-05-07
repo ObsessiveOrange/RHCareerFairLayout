@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -241,9 +242,12 @@ public class AdminRequestHandler {
                     SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                             "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
             checkDBExists.setString(1, quarter + year);
+            ResultSet checkDBExistsRS = checkDBExists.executeQuery();
             
-            if (!checkDBExists.execute()) {
-                return new FailResponse("Database does not exist");
+            while (checkDBExistsRS.next()) {
+                if (checkDBExistsRS.getInt("DBCount") <= 0) {
+                    return new FailResponse("Database does not exist");
+                }
             }
             
             PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
