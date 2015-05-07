@@ -238,7 +238,7 @@ public class AdminRequestHandler {
         String quarter = Utils.sanitizeString(request.getHeader("quarter") == null ? request.getHeader("Quarter") : request.getHeader("quarter"));
         try {
             PreparedStatement checkDBExists =
-                    SQLManager.getConn("RHCareerFairlayout").prepareStatement(
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                             "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
             checkDBExists.setString(1, quarter + year);
             
