@@ -239,7 +239,7 @@ public class AdminRequestHandler {
         String dbName = term + year;
         try {
             PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                    "INSERT INTO Vars (item, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
+                    "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
             
             updateTermRequestStatement.setString(1, "selectedTerm");
             updateTermRequestStatement.setString(2, dbName);
