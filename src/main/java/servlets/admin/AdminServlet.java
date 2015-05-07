@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
+import misc.Utils;
 import adt.Response;
 import adt.Response.FailResponse;
+import adt.Workbook;
 
 @WebServlet("/api/users/admin")
 @MultipartConfig
@@ -79,18 +81,56 @@ public class AdminServlet extends HttpServlet {
         Response responseObject;
         
         switch (method) {
-            case "uploadData":
-                responseObject = AdminRequestHandler.handleUploadDataRequest(request, fileUploadResponse);
+            case "uploadData": {
+                String year = request.getHeader("year");
+                String quarter = request.getHeader("year");
+                Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
+                
+                if (!Utils.validateArgs(year, quarter, uploadedWorkbook) || !Utils.validateTerm(year, quarter)) {
+                    
+                    responseObject = new FailResponse("Invalid parameters provided");
+                    break;
+                }
+                
+                responseObject = AdminRequestHandler.uploadData(year, quarter, uploadedWorkbook);
                 break;
-            case "newTerm":
-                responseObject = AdminRequestHandler.handleNewTermRequest(request);
+            }
+            case "newTerm": {
+                
+                String year = request.getHeader("year");
+                String quarter = request.getHeader("year");
+                
+                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
+                    
+                    responseObject = new FailResponse("Invalid parameters provided");
+                    break;
+                }
+                
+                responseObject = AdminRequestHandler.createNewTerm(year, quarter);
                 break;
-            case "setTerm":
-                responseObject = AdminRequestHandler.handleSetTermRequest(request);
+            }
+            case "setTerm": {
+                
+                String year = request.getHeader("year");
+                String quarter = request.getHeader("year");
+                
+                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
+                    
+                    responseObject = new FailResponse("Invalid parameters provided");
+                    break;
+                }
+                responseObject = AdminRequestHandler.setTerm(year, quarter);
                 break;
-            default:
+            }
+            case "listTerms": {
+                
+                responseObject = AdminRequestHandler.listTerms();
+                break;
+            }
+            default: {
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
+            }
         }
         response.getWriter().print(responseObject);
     }

@@ -11,22 +11,31 @@ import com.google.gson.Gson;
 
 public class ServletLog {
     
-    private static final int           MAX_LOG_SIZE = 5000;
+    private static final int               MAX_LOG_SIZE = 5000;
     
     private static final Set<ServletEvent> log          = Collections.newSetFromMap(new LinkedHashMap<ServletEvent, Boolean>() {
-                                                        
-                                                        private static final long serialVersionUID = -2642465950081345680L;
-                                                        
-                                                        @Override
-                                                        protected boolean removeEldestEntry(Map.Entry<ServletEvent, Boolean> eldest) {
-                                                        
-                                                            return size() > MAX_LOG_SIZE;
-                                                        }
-                                                    });     ;
+                                                            
+                                                            private static final long serialVersionUID = -2642465950081345680L;
+                                                            
+                                                            @Override
+                                                            protected boolean removeEldestEntry(Map.Entry<ServletEvent, Boolean> eldest) {
+                                                            
+                                                                return size() > MAX_LOG_SIZE;
+                                                            }
+                                                        });     ;
     
     public static void logEvent(ServletEvent event) {
     
         log.add(event);
+    }
+    
+    public static void logEvent(Exception e) {
+    
+        ServletEvent event = new ServletEvent();
+        event.setDetail("Type", "Exception");
+        event.setDetail("Exception stack trace", e.getStackTrace());
+        event.setDetail("Exception message", e.getMessage());
+        logEvent(event);
     }
     
     public static String getLogJson() {

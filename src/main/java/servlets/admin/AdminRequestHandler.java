@@ -5,15 +5,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import managers.DataManager;
 import managers.SQLManager;
 import misc.DataTable;
-import misc.Utils;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -23,10 +24,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
+import adt.Term;
 import adt.Workbook;
 
 public class AdminRequestHandler {
@@ -96,29 +97,35 @@ public class AdminRequestHandler {
                 return new FailResponse(e);
             }
         }
-        return new FailResponse(-100, "Expected content of type multipart/form-data");
+        return new FailResponse("Expected content of type multipart/form-data");
     }
     
-    public static Response handleUploadDataRequest(HttpServletRequest request, Response fileUploadResponse) {
+    public static Response uploadData(String year, String quarter, Workbook uploadedWorkbook) {
     
-        String year = Utils.sanitizeString(request.getHeader("year"));
-        String term = Utils.sanitizeString(request.getHeader("term"));
-        String dbName = term + year;
-        
-        Workbook workbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
-        
-        if (workbook == null) {
-            return new FailResponse("No valid excel (.xls/.xlsx) file provided");
-        }
+        String dbName = quarter + year;
+        ResultSet rs = null;
         
         try {
-            Response updateTermVarsResponse = DataManager.updateTermVars(dbName, workbook.getSheet("Variables"));
-            Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, workbook.getSheet("TableMappings"));
+            PreparedStatement checkDBExists =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                            "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
+            checkDBExists.setString(1, quarter + year);
+            rs = checkDBExists.executeQuery();
+            
+            while (rs.next()) {
+                if (rs.getInt("DBCount") <= 0) {
+                    createNewTerm(year, quarter);
+                }
+            }
+            rs.close();
+            
+            Response updateTermVarsResponse = DataManager.updateTermVars(dbName, uploadedWorkbook.getSheet("Variables"));
+            Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, uploadedWorkbook.getSheet("TableMappings"));
             Response updateCategoriesAndCompaniesResponse =
-                    DataManager.updateCategoriesAndCompanies(dbName, workbook.getSheet("Categories"), workbook.getSheet("Companies"));
+                    DataManager.updateCategoriesAndCompanies(dbName, uploadedWorkbook.getSheet("Categories"), uploadedWorkbook.getSheet("Companies"));
             
             if (updateTermVarsResponse.success && updateTableMappingsResponse.success && updateCategoriesAndCompaniesResponse.success) {
-                return new SuccessResponse();
+                return new SuccessResponse("Term data uploaded successfully.");
             }
             
             Response failed = new FailResponse(-1);
@@ -126,30 +133,30 @@ public class AdminRequestHandler {
             failed.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
             failed.addToReturnData("updateCategoriesAndCompaniesResponse", updateCategoriesAndCompaniesResponse);
             return failed;
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
     }
     
-    public static Response handleNewTermRequest(HttpServletRequest request) {
+    public static Response createNewTerm(String year, String quarter) {
     
         try {
             
-            String year = Utils.sanitizeString(request.getHeader("year"));
-            String term = Utils.sanitizeString(request.getHeader("term"));
-            String dbName = term + year;
+            String dbName = quarter + year;
             
             // Create new database
-            PreparedStatement createDatabaseStatement = SQLManager.getConn("mysql").prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
-            String insertResult = createDatabaseStatement.executeUpdate() + "";
+            PreparedStatement stmt = SQLManager.getConn().prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
+            stmt.executeUpdate();
+            
+            stmt = SQLManager.getConn().prepareStatement("INSERT INTO Terms (year, quarter) VALUES (?, ?);");
+            stmt.setString(1, year);
+            stmt.setString(2, quarter);
+            stmt.executeUpdate();
             
             Statement newTermStatement = SQLManager.getConn(dbName).createStatement();
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories ("
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories ("
                     + "id INT NOT NULL,"
                     + "name VARCHAR(100) NOT NULL,"
                     + "type VARCHAR(50) NOT NULL,"
@@ -157,7 +164,7 @@ public class AdminRequestHandler {
                     + "UNIQUE (name, type)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies ("
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies ("
                     + "id INT NOT NULL,"
                     + "name VARCHAR(100) NOT NULL,"
                     + "tableNo INT,"
@@ -165,14 +172,14 @@ public class AdminRequestHandler {
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Representatives ("
-            // + "id INT NOT NULL,"
-            // + "name VARCHAR(50) NOT NULL,"
-            // + "roseGrad BOOLEAN NOT NULL,"
-            // + "PRIMARY KEY (id)"
-            // + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Representatives ("
+                    + "id INT NOT NULL,"
+                    + "name VARCHAR(50) NOT NULL,"
+                    + "roseGrad BOOLEAN NOT NULL,"
+                    + "PRIMARY KEY (id)"
+                    + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories_Companies ("
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories_Companies ("
                     + "categoryId int NOT NULL,"
                     + "companyId int NOT NULL,"
                     + "PRIMARY KEY (categoryId, companyId),"
@@ -180,74 +187,56 @@ public class AdminRequestHandler {
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies_Representatives ("
-            // + "companyId INT NOT NULL,"
-            // + "repId INT NOT NULL,"
-            // + "PRIMARY KEY (companyId, repId),"
-            // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-            // + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
-            // + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies_Representatives ("
+                    + "companyId INT NOT NULL,"
+                    + "repId INT NOT NULL,"
+                    + "PRIMARY KEY (companyId, repId),"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
+                    + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
             
-            // insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS UserCompanyList ("
-            // + "username VARCHAR(30) NOT NULL,"
-            // + "companyId INT NOT NULL,"
-            // + "priority INT NOT NULL,"
-            // + "PRIMARY KEY (username, companyId),"
-            // + "FOREIGN KEY (username) REFERENCES RHCareerFairLayout.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
-            // + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
-            // + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS UserCompanyList ("
+                    + "username VARCHAR(30) NOT NULL,"
+                    + "companyId INT NOT NULL,"
+                    + "priority INT NOT NULL,"
+                    + "PRIMARY KEY (username, companyId),"
+                    + "FOREIGN KEY (username) REFERENCES RHCareerFairLayout.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
+                    + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
                     + "location INT NOT NULL,"
                     + "tableNo INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
                     + "PRIMARY KEY (location)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
                     + "item VARCHAR(50) NOT NULL,"
                     + "value VARCHAR(100) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
-            insertResult += ", " + newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
+            newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
                     + "(item, value, type) "
                     + "VALUES "
                     + "('Year','" + year + "', 'term'),"
-                    + "('Term','" + term + "', 'term');");
+                    + "('Term','" + quarter + "', 'term');");
             
-            return new SuccessResponse("Rows changed: " + insertResult);
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            return new SuccessResponse("Creation of new term: " + quarter + " " + year + " successful");
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
         
     }
     
-    public static Response handleSetTermRequest(HttpServletRequest request) {
+    public static Response setTerm(String year, String quarter) {
     
-        if ((request.getHeader("year") == null && request.getHeader("Year") == null) ||
-                (request.getHeader("quarter") == null && request.getHeader("Quarter") == null)) {
-            return new FailResponse("Year or term not provided");
-        }
-        
-        String year = Utils.sanitizeString(request.getHeader("year") == null ? request.getHeader("Year") : request.getHeader("year"));
-        String quarter = Utils.sanitizeString(request.getHeader("quarter") == null ? request.getHeader("Quarter") : request.getHeader("quarter"));
         try {
-            PreparedStatement checkDBExists =
-                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                            "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
-            checkDBExists.setString(1, quarter + year);
-            ResultSet checkDBExistsRS = checkDBExists.executeQuery();
-            
-            while (checkDBExistsRS.next()) {
-                if (checkDBExistsRS.getInt("DBCount") <= 0) {
-                    return new FailResponse("Database does not exist");
-                }
+            if (DataManager.checkDBExists(year + quarter)) {
+                return new FailResponse("Invalid term selected.");
             }
             
             PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
@@ -256,120 +245,51 @@ public class AdminRequestHandler {
             updateTermRequestStatement.setString(1, "selectedYear");
             updateTermRequestStatement.setString(2, year);
             updateTermRequestStatement.setString(3, "selectedTerm");
-            int result = updateTermRequestStatement.executeUpdate();
+            updateTermRequestStatement.executeUpdate();
             
             updateTermRequestStatement.setString(1, "selectedQuarter");
             updateTermRequestStatement.setString(2, quarter);
             updateTermRequestStatement.setString(3, "selectedTerm");
-            result += updateTermRequestStatement.executeUpdate();
+            updateTermRequestStatement.executeUpdate();
             
             DataManager.setSelectedTerm(quarter, year);
             
-            Response resp = new SuccessResponse("Term successfully updated");
-            resp.addToReturnData("SQL rows affected", result);
-            
-            return resp;
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            return new SuccessResponse("Term successfully updated");
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
     }
-    // public static Response handleSetSizeRequest(HttpServletRequest request) {
-    //
-    // String section = request.getHeader("section");
-    // Integer size = request.getHeader("size") == null ? -1 : Integer.valueOf(request.getHeader("size"));
-    // if (section == null || size == -1) {
-    // return new FailResponse("Invalid section provided");
-    // }
-    //
-    // Layout layout = AdminServlet.layoutVars;
-    //
-    // switch (section.toLowerCase()) {
-    // case "1":
-    // case "section1":
-    // layout.setSection1(size);
-    // break;
-    // case "2":
-    // case "section2":
-    // layout.setSection2(size);
-    // break;
-    // case "2r":
-    // case "section2rows":
-    // layout.setSection2Rows(size);
-    // break;
-    // case "2p":
-    // case "section2pathwidth":
-    // layout.setSection2PathWidth(size);
-    // break;
-    // case "3":
-    // case "section3":
-    // layout.setSection3(size);
-    // break;
-    // default:
-    // return new FailResponse("Invalid section provided");
-    // }
-    //
-    // return new SuccessResponse("Size successfully set");
-    // }
     
-    // public static Response handleTestDbRequest(HttpServletRequest request) {
-    //
-    // StringBuilder s = new StringBuilder();
-    // PreparedStatement prepStatement = null;
-    // try {
-    // // Class.forName("com.mysql.jdbc.Driver");
-    //
-    // prepStatement = conn.prepareStatement("SELECT * FROM comments;");
-    //
-    // ResultSet result = prepStatement.executeQuery();
-    //
-    // List<Map<String, String>> readResult = new ArrayList<Map<String, String>>();
-    // while (result.next()) {
-    // Map<String, String> lineResult = new HashMap<String, String>();
-    // lineResult.put("id", result.getString("id"));
-    // lineResult.put("MYUSER", result.getString("MYUSER"));
-    // lineResult.put("EMAIL", result.getString("EMAIL"));
-    // lineResult.put("WEBPAGE", result.getString("WEBPAGE"));
-    // lineResult.put("DATUM", result.getString("DATUM"));
-    // lineResult.put("SUMMARY", result.getString("SUMMARY"));
-    // lineResult.put("COMMENTS", result.getString("COMMENTS"));
-    // readResult.add(lineResult);
-    // }
-    //
-    // prepStatement =
-    // conn.prepareStatement("INSERT INTO comments (MYUSER, EMAIL, WEBPAGE, DATUM, SUMMARY, COMMENTS) VALUES (?, ?, ?, ?, ?, ?);");
-    // prepStatement.setString(1, "ben");
-    // prepStatement.setString(2, "ben@gmail.com");
-    // prepStatement.setString(3, "http://www.ben.com");
-    // prepStatement.setDate(4, new Date(System.currentTimeMillis()));
-    // prepStatement.setString(5, "BLAH.");
-    // prepStatement.setString(6, "Test");
-    // Integer insertResult = prepStatement.executeUpdate();
-    //
-    // HashMap<String, Object> returnMap = new HashMap<String, Object>();
-    // returnMap.put("success", 1);
-    // returnMap.put("instruction", prepStatement.toString());
-    // returnMap.put("read code", readResult);
-    // returnMap.put("insert code", insertResult);
-    // returnMap.put("timestamp", System.currentTimeMillis());
-    //
-    // return new Gson().toJson(returnMap);
-    // } catch (Exception e) {
-    // s.append("Error: ");
-    // for (StackTraceElement element : e.getStackTrace()) {
-    // s.append(element.toString());
-    // s.append("\n");
-    // }
-    //
-    // HashMap<String, Object> returnMap = new HashMap<String, Object>();
-    // returnMap.put("success", 1);
-    // returnMap.put("instruction", prepStatement != null ? prepStatement.toString() : "null");
-    // returnMap.put("error", s.toString());
-    // returnMap.put("timestamp", System.currentTimeMillis());
-    // return new Gson().toJson(returnMap);
-    // }
+    public static Response listTerms() {
+    
+        ResultSet rs = null;
+        try {
+            
+            // Organize categories into hashmap
+            rs = SQLManager.getConn().createStatement().executeQuery("SELECT year, quarter FROM Terms;");
+            
+            List<Term> terms = new ArrayList<Term>();
+            
+            while (rs.next()) {
+                String year = rs.getString("year");
+                String quarter = rs.getString("quarter");
+                
+                terms.add(new Term(year, quarter));
+            }
+            
+            Collections.sort(terms);
+            
+            SuccessResponse response = new SuccessResponse();
+            response.addToReturnData("terms", terms);
+            
+            return response;
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
+            
+            return new FailResponse(e);
+            
+        }
+    }
 }

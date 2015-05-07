@@ -2,7 +2,6 @@ package managers;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import misc.BCrypt;
 import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -40,11 +38,8 @@ public class AuthManager {
                 getAuthToken =
                         SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                                 "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
-            } catch (SQLException e) {
-                ServletEvent event = new ServletEvent();
-                event.setDetail("Type", "Exception");
-                event.setDetail("Exception", e.getStackTrace());
-                ServletLog.logEvent(event);
+            } catch (Exception e) {
+                ServletLog.logEvent(e);
             }
         }
     }
@@ -77,11 +72,8 @@ public class AuthManager {
             Integer insertResult = statement.executeUpdate();
             
             return new SuccessResponse("Rows changed: " + insertResult);
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
@@ -131,11 +123,8 @@ public class AuthManager {
             response.addCookie("authToken", sessionKey);
             
             return response;
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
@@ -185,11 +174,8 @@ public class AuthManager {
             }
             
             return new SuccessResponse();
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }

@@ -2,14 +2,12 @@ package servlets.users;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import managers.SQLManager;
 import misc.BCrypt;
 import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -45,11 +43,8 @@ public class UsersRequestHandler {
             }
             
             return new SuccessResponse("Rows changed: " + insertResult);
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
@@ -74,11 +69,8 @@ public class UsersRequestHandler {
             }
             
             return new SuccessResponse("success");
-        } catch (SQLException e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }

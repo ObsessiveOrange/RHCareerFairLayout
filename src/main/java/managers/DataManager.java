@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Category;
 import adt.Company;
 import adt.Response;
@@ -76,10 +75,7 @@ public class DataManager {
             updateStatement.setString(6, "selectedTerm");
             updateStatement.executeUpdate();
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
         }
     }
     
@@ -102,14 +98,27 @@ public class DataManager {
             r.close();
             
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
         }
     }
     
-    public static Response updateTermVars(String dbName, Sheet termVars) throws SQLException {
+    public static boolean checkDBExists(String dbName) throws SQLException, ClassNotFoundException {
+    
+        ResultSet rs = null;
+        
+        PreparedStatement checkDBExists =
+                SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                        "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
+        checkDBExists.setString(1, dbName);
+        rs = checkDBExists.executeQuery();
+        
+        if (rs.next() && rs.getInt("DBCount") > 0) {
+            return true;
+        }
+        return false;
+    }
+    
+    public static Response updateTermVars(String dbName, Sheet termVars) throws SQLException, ClassNotFoundException {
     
         PreparedStatement insertVars =
                 SQLManager.getConn(dbName).prepareStatement(
@@ -125,7 +134,7 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateTableMappings(String dbName, Sheet tableMappings) throws SQLException {
+    public static Response updateTableMappings(String dbName, Sheet tableMappings) throws SQLException, ClassNotFoundException {
     
         PreparedStatement insertTableMapping =
                 SQLManager
@@ -143,7 +152,7 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateCategories(String dbName, List<Category> categories) throws SQLException {
+    public static Response updateCategories(String dbName, List<Category> categories) throws SQLException, ClassNotFoundException {
     
         PreparedStatement insertCategories =
                 SQLManager
@@ -161,7 +170,7 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateCompanies(String dbName, List<Company> companies) throws SQLException {
+    public static Response updateCompanies(String dbName, List<Company> companies) throws SQLException, ClassNotFoundException {
     
         PreparedStatement insertCompanies =
                 SQLManager
@@ -192,7 +201,7 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateCategories_Companies(String dbName, List<Company> companies) throws SQLException {
+    public static Response updateCategories_Companies(String dbName, List<Company> companies) throws SQLException, ClassNotFoundException {
     
         PreparedStatement insertCompanies =
                 SQLManager
@@ -211,7 +220,7 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateCategoriesAndCompanies(String dbName, Sheet categories, Sheet companies) throws SQLException {
+    public static Response updateCategoriesAndCompanies(String dbName, Sheet categories, Sheet companies) throws SQLException, ClassNotFoundException {
     
         HashMap<String, HashMap<String, Integer>> categoryLookupTable = new HashMap<String, HashMap<String, Integer>>();
         List<Company> companyList = new ArrayList<Company>();

@@ -15,7 +15,12 @@ public class SQLManager {
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
     
-    public static Connection getConn(String dbName) throws SQLException {
+    public static Connection getConn() throws ClassNotFoundException, SQLException {
+    
+        return getConn("RHCareerFairLayout");
+    }
+    
+    public static Connection getConn(String dbName) throws SQLException, ClassNotFoundException {
     
         if (connections.get(dbName) == null || connections.get(dbName).isClosed()) {
             setupConnection(dbName);
@@ -24,21 +29,12 @@ public class SQLManager {
         return connections.get(dbName);
     }
     
-    private static boolean setupConnection(String dbName) {
+    private static void setupConnection(String dbName) throws ClassNotFoundException, SQLException {
     
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            
-            connections.put(dbName,
-                    DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName,
-                            dbUserName, dbPassword));
-            return true;
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
+        Class.forName("com.mysql.jdbc.Driver");
+        
+        connections.put(dbName,
+                DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName,
+                        dbUserName, dbPassword));
     }
 }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import managers.DataManager;
 import managers.SQLManager;
 import servlets.ServletLog;
-import servlets.ServletLog.ServletEvent;
 import adt.Category;
 import adt.Company;
 import adt.Layout;
@@ -21,7 +20,6 @@ import adt.TableMapping;
 
 public class DataRequestHandler {
     
-    @SuppressWarnings("unchecked")
     public static Response handleGetDataRequest(HttpServletRequest request) throws IOException {
     
         try {
@@ -123,10 +121,7 @@ public class DataRequestHandler {
             return response;
             
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
         }
@@ -168,10 +163,7 @@ public class DataRequestHandler {
             
             return response;
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
             
@@ -217,10 +209,7 @@ public class DataRequestHandler {
             
             return response;
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
             
@@ -270,10 +259,7 @@ public class DataRequestHandler {
             
             return response;
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
             
@@ -336,10 +322,7 @@ public class DataRequestHandler {
             
             return response;
         } catch (Exception e) {
-            ServletEvent event = new ServletEvent();
-            event.setDetail("Type", "Exception");
-            event.setDetail("Exception", e.getStackTrace());
-            ServletLog.logEvent(event);
+            ServletLog.logEvent(e);
             
             return new FailResponse(e);
             
