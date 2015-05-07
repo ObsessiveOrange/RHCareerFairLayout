@@ -237,6 +237,15 @@ public class AdminRequestHandler {
         String year = Utils.sanitizeString(request.getHeader("year") == null ? request.getHeader("Year") : request.getHeader("year"));
         String quarter = Utils.sanitizeString(request.getHeader("quarter") == null ? request.getHeader("Quarter") : request.getHeader("quarter"));
         try {
+            PreparedStatement checkDBExists =
+                    SQLManager.getConn("RHCareerFairlayout").prepareStatement(
+                            "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
+            checkDBExists.setString(1, quarter + year);
+            
+            if (!checkDBExists.execute()) {
+                return new FailResponse("Database does not exist");
+            }
+            
             PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                     "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
             
