@@ -110,21 +110,21 @@ public abstract class Response {
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         
-        public FailResponse(String description) {
+        public FailResponse(String message) {
         
             super(false);
             addToReturnData("success", 0);
             addToReturnData("errorCode", -1);
-            addToReturnData("description", description);
+            addToReturnData("message", message);
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         
-        public FailResponse(int errorCode, String description) {
+        public FailResponse(int errorCode, String message) {
         
             super(false);
             addToReturnData("success", 0);
             addToReturnData("errorCode", errorCode);
-            addToReturnData("description", description);
+            addToReturnData("message", message);
             addToReturnData("timestamp", System.currentTimeMillis());
         }
         

@@ -8,11 +8,12 @@
             url: "/api/users/admin?method=setTerm",
             type: "POST",
             error: function(_, textStatus, errorThrown) {
-                alert("Error");
                 console.log(textStatus, errorThrown);
             },
             success: function(response, textStatus) {
-                alert("Success");
+                if(success !== 1){
+                    alert("Error: " + response.message);
+                }
                 console.log(response, textStatus);
             },
             headers: {
@@ -34,11 +35,12 @@
                 // Or simply return new FormData($("form")[0]);
             }(),
             error: function(_, textStatus, errorThrown) {
-                alert("Error");
                 console.log(textStatus, errorThrown);
             },
             success: function(response, textStatus) {
-                alert("Success");
+                if(success !== 1){
+                    alert("Error: " + response.message);
+                }
                 console.log(response, textStatus);
             },
             headers: {
