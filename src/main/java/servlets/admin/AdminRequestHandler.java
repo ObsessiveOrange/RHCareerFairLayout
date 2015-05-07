@@ -230,22 +230,27 @@ public class AdminRequestHandler {
     public static Response handleSetTermRequest(HttpServletRequest request) {
     
         if ((request.getHeader("year") == null && request.getHeader("Year") == null) ||
-                (request.getHeader("term") == null && request.getHeader("Term") == null)) {
+                (request.getHeader("quarter") == null && request.getHeader("Quarter") == null)) {
             return new FailResponse("Year or term not provided");
         }
         
         String year = Utils.sanitizeString(request.getHeader("year") == null ? request.getHeader("Year") : request.getHeader("year"));
-        String term = Utils.sanitizeString(request.getHeader("term") == null ? request.getHeader("Term") : request.getHeader("term"));
-        String dbName = term + year;
+        String quarter = Utils.sanitizeString(request.getHeader("quarter") == null ? request.getHeader("Quarter") : request.getHeader("quarter"));
         try {
             PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                     "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
             
-            updateTermRequestStatement.setString(1, "selectedTerm");
-            updateTermRequestStatement.setString(2, dbName);
+            updateTermRequestStatement.setString(1, "selectedYear");
+            updateTermRequestStatement.setString(2, year);
             updateTermRequestStatement.setString(3, "selectedTerm");
-            
             int result = updateTermRequestStatement.executeUpdate();
+            
+            updateTermRequestStatement.setString(1, "selectedQuarter");
+            updateTermRequestStatement.setString(2, quarter);
+            updateTermRequestStatement.setString(3, "selectedTerm");
+            result += updateTermRequestStatement.executeUpdate();
+            
+            DataManager.setSelectedTerm(quarter, year);
             
             Response resp = new SuccessResponse("Term successfully updated");
             resp.addToReturnData("SQL rows affected", result);

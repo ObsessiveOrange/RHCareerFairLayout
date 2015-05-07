@@ -16,7 +16,7 @@
                 console.log(response, textStatus);
             },
             headers: {
-                "term": $("#selectTermTermField").val(),
+                "quarter": $("#selectTermTermField").val(),
                 "year": $("#selectTermYearField").val()
             }
         });
@@ -42,7 +42,7 @@
                 console.log(response, textStatus);
             },
             headers: {
-                "term": $("#uploadDataTermField").val(),
+                "quarter": $("#uploadDataTermField").val(),
                 "year": $("#uploadDataYearField").val()
             }
         });
