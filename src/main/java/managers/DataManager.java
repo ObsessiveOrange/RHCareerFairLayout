@@ -103,11 +103,6 @@ public class DataManager {
         }
     }
     
-    public static String getDBName(String year, String quarter) {
-    
-        return year + "_" + quarter;
-    }
-    
     public static boolean checkDBExists(String year, String quarter) throws SQLException, ClassNotFoundException {
     
         ResultSet rs = null;
@@ -116,7 +111,7 @@ public class DataManager {
                 SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                         "SELECT COUNT(*) AS DBCount FROM Terms WHERE year=? AND quarter=?;");
         checkDBExists.setString(1, year);
-        checkDBExists.setString(2, quarter);
+        checkDBExists.setString(2, Utils.toProperCase(quarter));
         rs = checkDBExists.executeQuery();
         
         if (rs.next() && rs.getInt("DBCount") > 0) {

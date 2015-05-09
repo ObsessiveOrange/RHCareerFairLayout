@@ -103,7 +103,7 @@ public class AdminRequestHandler {
     
     public static Response uploadData(String year, String quarter, Workbook uploadedWorkbook) {
     
-        String dbName = DataManager.getDBName(year, quarter);
+        String dbName = Utils.getDBName(year, quarter);
         
         try {
             if (!DataManager.checkDBExists(year, quarter)) {
@@ -138,7 +138,7 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = year + "_" + quarter;
+            String dbName = Utils.getDBName(year, quarter);
             
             // Create new database
             PreparedStatement stmt = SQLManager.getConn().prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
@@ -218,7 +218,7 @@ public class AdminRequestHandler {
                     + "('Year','" + year + "', 'term'),"
                     + "('Term','" + quarter + "', 'term');");
             
-            return new SuccessResponse("Creation of new term: " + quarter + " " + year + " successful");
+            return new SuccessResponse("Creation of new term: " + year + " " + quarter + " successful");
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
@@ -268,8 +268,8 @@ public class AdminRequestHandler {
             List<Term> terms = new ArrayList<Term>();
             
             while (rs.next()) {
-                String year = Utils.toProperCase(rs.getString("year"));
-                String quarter = Utils.toProperCase(rs.getString("quarter"));
+                String year = rs.getString("year");
+                String quarter = rs.getString("quarter");
                 
                 terms.add(new Term(year, quarter));
             }
