@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import managers.DataManager;
 import managers.SQLManager;
 import misc.DataTable;
+import misc.Utils;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -137,7 +138,7 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = quarter.toLowerCase() + year;
+            String dbName = quarter + year;
             
             // Create new database
             PreparedStatement stmt = SQLManager.getConn().prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
@@ -266,8 +267,8 @@ public class AdminRequestHandler {
             List<Term> terms = new ArrayList<Term>();
             
             while (rs.next()) {
-                String year = rs.getString("year");
-                String quarter = rs.getString("quarter");
+                String year = Utils.toProperCase(rs.getString("year"));
+                String quarter = Utils.toProperCase(rs.getString("quarter"));
                 
                 terms.add(new Term(year, quarter));
             }

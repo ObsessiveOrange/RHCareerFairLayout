@@ -84,10 +84,20 @@ public class AdminServlet extends HttpServlet {
         
         Response responseObject;
         
+        String year = request.getHeader("year");
+        String quarter = request.getHeader("quarter");
+        
+        if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
+            
+            response.getWriter().print(new FailResponse("Invalid parameters provided"));
+        }
+        else {
+            year = year.toLowerCase();
+            quarter = quarter.toLowerCase();
+        }
+        
         switch (method) {
             case "uploadData": {
-                String year = request.getHeader("year");
-                String quarter = request.getHeader("quarter");
                 Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
                 
                 if (!Utils.validateArgs(year, quarter, uploadedWorkbook) || !Utils.validateTerm(year, quarter)) {
@@ -101,9 +111,6 @@ public class AdminServlet extends HttpServlet {
             }
             case "newTerm": {
                 
-                String year = request.getHeader("year");
-                String quarter = request.getHeader("quarter");
-                
                 if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
                     
                     responseObject = new FailResponse("Invalid parameters provided");
@@ -114,15 +121,6 @@ public class AdminServlet extends HttpServlet {
                 break;
             }
             case "setTerm": {
-                
-                String year = request.getHeader("year");
-                String quarter = request.getHeader("quarter");
-                
-                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
-                    
-                    responseObject = new FailResponse("Invalid parameters provided");
-                    break;
-                }
                 responseObject = AdminRequestHandler.setTerm(year, quarter);
                 break;
             }
