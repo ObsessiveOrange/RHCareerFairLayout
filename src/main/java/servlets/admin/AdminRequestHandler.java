@@ -137,7 +137,7 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = quarter + year;
+            String dbName = quarter.toLowerCase() + year;
             
             // Create new database
             PreparedStatement stmt = SQLManager.getConn().prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
@@ -228,7 +228,7 @@ public class AdminRequestHandler {
     public static Response setTerm(String year, String quarter) {
     
         try {
-            if (DataManager.checkDBExists(year + quarter)) {
+            if (!DataManager.checkDBExists(quarter + year)) {
                 return new FailResponse("Invalid term selected.");
             }
             

@@ -109,7 +109,7 @@ public class DataManager {
         PreparedStatement checkDBExists =
                 SQLManager.getConn("RHCareerFairLayout").prepareStatement(
                         "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
-        checkDBExists.setString(1, dbName);
+        checkDBExists.setString(1, dbName.toLowerCase());
         rs = checkDBExists.executeQuery();
         
         if (rs.next() && rs.getInt("DBCount") > 0) {
@@ -122,7 +122,7 @@ public class DataManager {
     
         PreparedStatement insertVars =
                 SQLManager.getConn(dbName).prepareStatement(
-                        "INSERT INTO TermVars (item, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
+                        "INSERT INTO TermVars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
         
         for (int i = 0; i < termVars.getRows(); i++) {
             insertVars.setString(1, termVars.getItem(i, "Item", String.class));
