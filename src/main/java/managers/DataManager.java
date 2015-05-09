@@ -89,7 +89,7 @@ public class DataManager {
             
             while (r.next()) {
                 if (r.getString("item").equalsIgnoreCase("selectedQuarter")) {
-                    selectedQuarter = r.getString("value");
+                    selectedQuarter = Utils.toProperCase(r.getString("value"));
                 }
                 else if (r.getString("item").equalsIgnoreCase("selectedYear")) {
                     selectedYear = r.getString("value");

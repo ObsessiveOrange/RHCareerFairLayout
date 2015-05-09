@@ -92,7 +92,6 @@ public class AdminServlet extends HttpServlet {
             response.getWriter().print(new FailResponse("Invalid parameters provided"));
         }
         else {
-            year = year.toLowerCase();
             quarter = quarter.toLowerCase();
         }
         
