@@ -208,6 +208,7 @@ public class AdminRequestHandler {
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
                     + "item VARCHAR(50) NOT NULL,"
                     + "value VARCHAR(100) NOT NULL,"
+                    + "type VARCHAR(30) NOT NULL,"
                     + "PRIMARY KEY (item)"
                     + ")ENGINE=INNODB;");
             
