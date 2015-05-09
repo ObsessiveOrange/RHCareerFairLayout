@@ -39,6 +39,19 @@ public class Utils {
         return camelCaseString.toString();
     }
     
+    public static String toCamelCaseWithUnderscore(String s) {
+    
+        String[] parts = s.split("_");
+        StringBuilder camelCaseString = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            camelCaseString.append(toProperCase(parts[i]));
+            if (i < parts.length - 1) {
+                camelCaseString.append("_");
+            }
+        }
+        return camelCaseString.toString();
+    }
+    
     public static String toProperCase(String s) {
     
         return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();

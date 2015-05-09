@@ -103,10 +103,10 @@ public class AdminRequestHandler {
     
     public static Response uploadData(String year, String quarter, Workbook uploadedWorkbook) {
     
-        String dbName = quarter + year;
+        String dbName = DataManager.getDBName(year, quarter);
         
         try {
-            if (!DataManager.checkDBExists(dbName)) {
+            if (!DataManager.checkDBExists(year, quarter)) {
                 Response resp = createNewTerm(year, quarter);
                 if (resp.getFromReturnData("success", Integer.class) != 1) {
                     return new FailResponse("Could not create new term");
@@ -138,7 +138,7 @@ public class AdminRequestHandler {
     
         try {
             
-            String dbName = quarter + year;
+            String dbName = year + "_" + quarter;
             
             // Create new database
             PreparedStatement stmt = SQLManager.getConn().prepareStatement("CREATE DATABASE IF NOT EXISTS " + dbName + ";");
@@ -230,7 +230,7 @@ public class AdminRequestHandler {
     public static Response setTerm(String year, String quarter) {
     
         try {
-            if (!DataManager.checkDBExists(quarter + year)) {
+            if (!DataManager.checkDBExists(year, quarter)) {
                 return new FailResponse("Invalid term selected.");
             }
             
@@ -247,7 +247,7 @@ public class AdminRequestHandler {
             updateTermRequestStatement.setString(3, "selectedTerm");
             updateTermRequestStatement.executeUpdate();
             
-            DataManager.setSelectedTerm(quarter, year);
+            DataManager.setSelectedTerm(year, quarter);
             
             return new SuccessResponse("Term successfully updated");
         } catch (Exception e) {

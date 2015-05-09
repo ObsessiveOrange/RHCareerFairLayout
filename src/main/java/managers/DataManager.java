@@ -29,7 +29,7 @@ public class DataManager {
         if (selectedQuarter == null || selectedYear == null) {
             getSelectedTermFromDB();
         }
-        return selectedQuarter + selectedYear;
+        return selectedYear + "_" + selectedQuarter;
     }
     
     /**
@@ -57,7 +57,7 @@ public class DataManager {
     /**
      * @param selectedTerm the selectedTerm to set
      */
-    public static void setSelectedTerm(String selectedQuarter, String selectedYear) {
+    public static void setSelectedTerm(String selectedYear, String selectedQuarter) {
     
         DataManager.selectedQuarter = selectedQuarter;
         DataManager.selectedYear = selectedYear;
@@ -103,14 +103,20 @@ public class DataManager {
         }
     }
     
-    public static boolean checkDBExists(String dbName) throws SQLException, ClassNotFoundException {
+    public static String getDBName(String year, String quarter) {
+    
+        return year + "_" + quarter;
+    }
+    
+    public static boolean checkDBExists(String year, String quarter) throws SQLException, ClassNotFoundException {
     
         ResultSet rs = null;
         
         PreparedStatement checkDBExists =
                 SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                        "SELECT COUNT(*) AS DBCount FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
-        checkDBExists.setString(1, dbName.toLowerCase());
+                        "SELECT COUNT(*) AS DBCount FROM Terms WHERE year=? AND quarter=?;");
+        checkDBExists.setString(1, year);
+        checkDBExists.setString(2, quarter);
         rs = checkDBExists.executeQuery();
         
         if (rs.next() && rs.getInt("DBCount") > 0) {
