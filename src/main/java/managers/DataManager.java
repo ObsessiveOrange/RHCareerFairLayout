@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import misc.Utils;
 import servlets.ServletLog;
 import adt.Category;
 import adt.Company;
@@ -32,18 +33,18 @@ public class DataManager {
     }
     
     /**
-     * @return the selectedTerm
+     * @return the selected quarter, in proper/camel case.
      */
     public static String getSelectedQuarter() {
     
         if (selectedQuarter == null || selectedYear == null) {
             getSelectedTermFromDB();
         }
-        return selectedQuarter;
+        return Utils.toProperCase(selectedQuarter);
     }
     
     /**
-     * @return the selectedTerm
+     * @return the selected year, in proper/camel case.
      */
     public static String getSelectedYear() {
     
