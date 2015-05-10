@@ -46,7 +46,7 @@ public class SQLManager {
         p.setValidationInterval(30000);
         p.setTimeBetweenEvictionRunsMillis(30000);
         p.setMaxActive(100);
-        p.setInitialSize(10);
+        p.setInitialSize(1);
         p.setMaxWait(10000);
         p.setRemoveAbandonedTimeout(60);
         p.setMinEvictableIdleTimeMillis(30000);
