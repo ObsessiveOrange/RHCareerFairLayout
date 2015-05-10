@@ -70,7 +70,7 @@ body {
     width:100%;
 }
 .contentTable tr td{
-    padding: 0 5px 0 5px;
+    padding: 1px 5px 1px 5px;
 }
 .contentTable tr td:not(:last-child){
     white-space: nowrap;
