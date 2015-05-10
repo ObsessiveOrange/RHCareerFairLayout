@@ -66,18 +66,8 @@ body {
 .container {
     position: relative;
 }
-.fullWidthContentTable{
-    width:100%;
-}
-.fullWidthContentTable tr td{
+.contentTable tr td{
     padding: 1px 5px 1px 5px;
-}
-.fullWidthContentTable tr td:not(:last-child){
-    white-space: nowrap;
-    width:1%;
-}
-.fullWidthContentTable tr td:last-child{
-    white-space: nowrap;
 }
 .tableList {
     width: 100%;
