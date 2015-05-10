@@ -69,7 +69,11 @@ body {
 .contentTable{
     width:100%;
 }
+.contentTable tr td{
+    padding: 0 5px 0 5px;
+}
 .contentTable tr td:not(:last-child){
+    white-space: nowrap;
     width:1%;
 }
 .contentTable tr td:last-child{
