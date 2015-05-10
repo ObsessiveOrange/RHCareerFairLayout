@@ -5,15 +5,22 @@
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success === 1) {
-                Object.keys(returnData.categories).forEach(function(typeName){
+                Object.keys(returnData.categories).forEach(function(typeName) {
                     var type = returnData.categories[typeName];
-                    $("#categoriesTable").append("<tr><td colspan='2'><strong>" + typeName + "s:" + "</strong></td></tr>");
-                    Object.keys(type).forEach(function(categoryId){
+                    $("#categoriesTable").append("<tr><td colspan='2'><h3>" + typeName + "s:" + "</h3></td></tr>");
+                    Object.keys(type).forEach(function(categoryId) {
                         var category = type[categoryId];
-                        $("#categoriesTable").append("<tr><td>" + category.name  + "</td><td id='selectedQuarter'></td></tr>");
+                        var categoryRowHtml = "<tr>";
+                        categoryRowHtml += "<td>";
+                        categoryRowHtml += "%nbsp;</td>";
+                        categoryRowHtml += "<td id='category_" + category.name + "'>";
+                        categoryRowHtml += category.name;
+                        categoryRowHtml += "</td>";
+                        categoryRowHtml += "</tr>";
+                        $("#categoriesTable").append(categoryRowHtml);
                     });
+                    $("#categoriesTable").append("<tr><td><br /><br /></td></tr>");
                 });
-                $("#categoriesTable").append("<tr><td><br /><br /></td></tr>");
             } else {
                 alert("Error: Could not retreive data");
             }
