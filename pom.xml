@@ -58,16 +58,6 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.11</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>8.0.22</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-juli</artifactId>
-			<version>8.0.22</version>
-		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
