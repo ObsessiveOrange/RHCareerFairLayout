@@ -7,7 +7,7 @@
             if (returnData.success === 1) {
                 Object.keys(returnData.categories).forEach(function(typeName) {
                     var type = returnData.categories[typeName];
-                    $("#categoriesTable").append("<tr><td colspan='2'><h3>" + typeName + "s:" + "</h3></td></tr>");
+                    $("#categoriesTable").append("<tr><th colspan='2'><h3>" + typeName + "s:" + "</h3></th></tr>");
                     Object.keys(type).forEach(function(categoryId) {
                         var category = type[categoryId];
                         var categoryRowHtml = "<tr>";

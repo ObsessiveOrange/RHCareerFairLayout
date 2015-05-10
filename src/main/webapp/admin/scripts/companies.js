@@ -12,20 +12,20 @@
                             var companies = companiesReturnData.companies;
                             var categories = categoriesReturnData.categories;
                             var headersHtml = "<tr>";
-                            headersHtml += "<td>";
+                            headersHtml += "<th>";
                             headersHtml += "ID:";
-                            headersHtml += "</td>";
-                            headersHtml += "<td>";
+                            headersHtml += "</th>";
+                            headersHtml += "<th>";
                             headersHtml += "Name:";
-                            headersHtml += "</td>";
+                            headersHtml += "</th>";
                             Object.keys(categories).forEach(function(categoryType) {
-                                headersHtml += "<td>";
+                                headersHtml += "<th>";
                                 headersHtml += categoryType + "s:";
-                                headersHtml += "</td>";
+                                headersHtml += "</th>";
                             });
-                            headersHtml += "<td>";
+                            headersHtml += "<th>";
                             headersHtml += "Table Number:";
-                            headersHtml += "</td>";
+                            headersHtml += "</th>";
                             headersHtml += "</tr>";
                             $("#companiesTable").html(headersHtml);
                             Object.keys(companies).forEach(function(companyId) {
