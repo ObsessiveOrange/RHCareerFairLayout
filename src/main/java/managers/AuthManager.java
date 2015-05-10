@@ -59,6 +59,7 @@ public class AuthManager {
             if (users.getInt(1) != 0) {
                 return new FailResponse("Username already exists");
             }
+            users.close();
             
             // Permissions levels:
             // 1 - Users (Edit saved companies, visit list)
@@ -104,6 +105,7 @@ public class AuthManager {
             if (!BCrypt.checkpw(password, result.getString("hashedPw"))) {
                 return new FailResponse("Invalid Username/Password Combination");
             }
+            result.close();
             
             String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
             Timestamp sessionValidDate = new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
@@ -169,6 +171,7 @@ public class AuthManager {
                     break;
                 }
             }
+            result.close();
             if (!hasNextResult) {
                 return new FailResponse("Invalid Token");
             }

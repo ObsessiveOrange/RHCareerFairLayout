@@ -59,11 +59,15 @@
 			<version>3.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>2.1</version>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>8.0.22</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-juli</artifactId>
+			<version>8.0.22</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
