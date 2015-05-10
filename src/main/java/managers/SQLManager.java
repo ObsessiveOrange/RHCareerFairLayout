@@ -45,12 +45,12 @@ public class SQLManager {
         p.setTestOnReturn(false);
         p.setValidationInterval(30000);
         p.setTimeBetweenEvictionRunsMillis(30000);
-        p.setMaxActive(100);
+        p.setMaxActive(1);
         p.setInitialSize(1);
         p.setMaxWait(10000);
         p.setRemoveAbandonedTimeout(60);
         p.setMinEvictableIdleTimeMillis(30000);
-        p.setMinIdle(10);
+        p.setMinIdle(1);
         p.setLogAbandoned(true);
         p.setRemoveAbandoned(true);
         p.setJdbcInterceptors(
