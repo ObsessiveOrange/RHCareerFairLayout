@@ -69,10 +69,10 @@ body {
 .contentTable{
     width:100%;
 }
-.contentTable .tr .td{
+.contentTable tr td{
     white-space: nowrap;
 }
-.contentTable .tr .td:last-child{
+.contentTable tr td:last-child{
     width:100%;
 }
 .tableList {
