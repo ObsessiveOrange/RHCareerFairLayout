@@ -66,6 +66,9 @@ body {
 .container {
     position: relative;
 }
+.contentTable{
+    width:100%;
+}
 .tableList {
     width: 100%;
     padding: 0;

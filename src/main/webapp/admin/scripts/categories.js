@@ -12,7 +12,7 @@
                         var category = type[categoryId];
                         var categoryRowHtml = "<tr>";
                         categoryRowHtml += "<td>";
-                        categoryRowHtml += "%nbsp;</td>";
+                        categoryRowHtml += "&nbsp;</td>";
                         categoryRowHtml += "<td id='category_" + category.name + "'>";
                         categoryRowHtml += category.name;
                         categoryRowHtml += "</td>";
