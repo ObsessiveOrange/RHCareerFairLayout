@@ -1,6 +1,6 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data?method=getCategories",
+        url: "/api/data?method=getCompanies",
         successHandler: function(companiesReturnData) {
             if (companiesReturnData.success === 1) {
                 sendGetRequest({
