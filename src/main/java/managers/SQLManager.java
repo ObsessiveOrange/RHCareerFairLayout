@@ -16,7 +16,7 @@ public class SQLManager {
     private static final String                 dbUserName  = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     private static final String                 dbPassword  = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     
-    private static Map<String, BasicDataSource> connections = new HashMap<String, BasicDataSource>();
+    private static Map<String, BasicDataSource> dataSources = new HashMap<String, BasicDataSource>();
     
     public static Connection getConn() throws ClassNotFoundException, SQLException {
     
@@ -26,7 +26,7 @@ public class SQLManager {
     public static Connection getConn(String dbName) throws ClassNotFoundException, SQLException {
     
         try {
-            if (connections.get(dbName) == null) {
+            if (dataSources.get(dbName) == null) {
                 setupConnection(dbName);
             }
         } catch (SQLException e) {
@@ -35,7 +35,7 @@ public class SQLManager {
             throw e;
         }
         
-        return connections.get(dbName).getConnection();
+        return dataSources.get(dbName).getConnection();
     }
     
     private static void setupConnection(String dbName) throws ClassNotFoundException, SQLException {
@@ -44,14 +44,13 @@ public class SQLManager {
         String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
         connectionPool = new BasicDataSource();
         
+        connectionPool.setDriverClassName("com.mysql.jdbc.Driver");
+        connectionPool.setUrl(dbUrl);
         connectionPool.setUsername(dbUserName);
         connectionPool.setPassword(dbPassword);
-        
-        connectionPool.setDriverClassName("org.postgresql.Driver");
-        connectionPool.setUrl(dbUrl);
         connectionPool.setInitialSize(1);
         
-        connections.put(dbName,
+        dataSources.put(dbName,
                 connectionPool);
     }
 }
