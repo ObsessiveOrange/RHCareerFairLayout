@@ -55,7 +55,6 @@
                                 companyHtml += "</td>";
                                 companyHtml += "</tr>";
                                 $("#companiesTable").append(companyHtml);
-                                $("#companiesTable").append("<tr><td><br /><br /></td></tr>");
                             });
                         } else {
                             alert("Error: Could not retreive data");
