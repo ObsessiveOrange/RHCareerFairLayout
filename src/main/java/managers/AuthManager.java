@@ -16,43 +16,19 @@ import adt.Response.SuccessResponse;
 
 public class AuthManager {
     
-    private static final int         SESSION_VALID_DAYS   = 15;
-    
-    private static PreparedStatement getHashedPWStatement = null;
-    private static PreparedStatement check                = null;
-    private static PreparedStatement newSession           = null;
-    private static PreparedStatement getAuthToken         = null;
-    
-    private static boolean           isSetup              = false;
-    
-    public static void setupAuthManager() {
-    
-        if (!isSetup) {
-            
-            try {
-                getHashedPWStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
-                check = SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
-                newSession =
-                        SQLManager.getConn("RHCareerFairLayout").prepareStatement("INSERT INTO Sessions "
-                                + "VALUES(?, ?, ?, ?);");
-                getAuthToken =
-                        SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                                "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
-            } catch (Exception e) {
-                ServletLog.logEvent(e);
-            }
-        }
-    }
+    private static final int SESSION_VALID_DAYS = 15;
     
     public static Response addUser(HttpServletRequest request) {
     
         try {
-            setupAuthManager();
             
             String userName = request.getHeader("authUser");
             String password = request.getHeader("authPass");
             
             // check to make sure username does not already exist
+            PreparedStatement check =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT COUNT(username) FROM Users WHERE username = ?;");
+            
             check.setString(1, userName);
             ResultSet users = check.executeQuery();
             users.next();
@@ -83,7 +59,6 @@ public class AuthManager {
     public static Response authenticateUser(HttpServletRequest request) {
     
         try {
-            setupAuthManager();
             
             // Response checkTokenResponse;
             // if ((checkTokenResponse = AuthManager.checkToken(request)).success) {
@@ -96,6 +71,9 @@ public class AuthManager {
             if (userName == null || password == null) {
                 return new FailResponse("Invalid Username/Password provided");
             }
+            
+            PreparedStatement getHashedPWStatement =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
             
             getHashedPWStatement.setString(1, userName);
             
@@ -110,6 +88,10 @@ public class AuthManager {
             String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
             Timestamp sessionValidDate = new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
             String sessionClient = request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent");
+            
+            PreparedStatement newSession =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement("INSERT INTO Sessions "
+                            + "VALUES(?, ?, ?, ?);");
             
             newSession.setString(1, userName);
             newSession.setString(2, sessionKey);
@@ -135,7 +117,6 @@ public class AuthManager {
     public static Response checkToken(HttpServletRequest request) {
     
         try {
-            setupAuthManager();
             
             String userName = request.getHeader("authUser");
             String token = request.getHeader("authToken");
@@ -159,6 +140,8 @@ public class AuthManager {
                 return new FailResponse("Token not provided");
             }
             
+            PreparedStatement getAuthToken = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                    "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             getAuthToken.setString(1, userName);
             getAuthToken.setString(2, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
             ResultSet result = getAuthToken.executeQuery();
