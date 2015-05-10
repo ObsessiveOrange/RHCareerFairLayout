@@ -85,7 +85,7 @@ body {
 .innerBorder tr td:first-child, .innerBorder tr th:first-child {
     border-left: 0;
 }
-.innerBorder tr td::last-child, .innerBorder tr th::last-child {
+.innerBorder tr td:last-child, .innerBorder tr th:last-child {
     border-right: 0;
 }
 /**
