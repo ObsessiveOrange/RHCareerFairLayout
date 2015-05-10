@@ -1,30 +1,19 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data?method=getSelectedTerm",
+        url: "/api/data?method=getCategories",
         successHandler: function(returnData) {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success === 1) {
-                $("#selectedQuarter").html(returnData.selectedQuarter);
-                $("#selectedYear").html(returnData.selectedYear);
-            } else {
-                alert("Error: Could not retreive data");
-            }
-        },
-        errorHandler: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus + " : " + errorThrown);
-            $("#contentFrame").load("login.html");
-        }
-    });
-    sendGetRequest({
-        url: "/api/data?method=getStatistics",
-        successHandler: function(returnData) {
-            //
-            //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success === 1) {
-                $("#companyCount").html(returnData.companyCount);
-                $("#layoutTableCount").html(returnData.layoutTableCount);
-                $("#mappedTableCount").html(returnData.mappedTableCount);
+                Object.keys(returnData.categories).forEach(function(typeName){
+                    var type = returnData.categories[typeName];
+                    $("#categoriesTable").append("<tr><td colspan='2'><strong>" + typeName + "s:" + "</strong></td></tr>");
+                    Object.keys(type).forEach(function(categoryId){
+                        var category = type[categoryId];
+                        $("#categoriesTable").append("<tr><td>" + category.name  + "</td><td id='selectedQuarter'></td></tr>");
+                    });
+                });
+                $("#categoriesTable").append("<tr><td><br /><br /></td></tr>");
             } else {
                 alert("Error: Could not retreive data");
             }
