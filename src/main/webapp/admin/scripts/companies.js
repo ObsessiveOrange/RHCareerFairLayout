@@ -24,7 +24,7 @@
                                 headersHtml += "</td>";
                             });
                             headersHtml += "<td>";
-                            headersHtml += "tableNumber";
+                            headersHtml += "Table Number:";
                             headersHtml += "</td>";
                             headersHtml += "</tr>";
                             $("#companiesTable").html(headersHtml);
@@ -40,13 +40,13 @@
                                 Object.keys(categories).forEach(function(categoryType) {
                                     var first = true;
                                     companyHtml += "<td>";
-                                    _.intersection(Object.keys(categories[categoryType]), company.categories).forEach(function(categoryId) {
+                                    _.intersection(_.map(Object.keys(categories[categoryType]), function(str){return Number(str);}), company.categories).forEach(function(categoryId) {
                                         var category = categories[categoryType][categoryId];
                                         if (!first) {
                                             companyHtml += ", ";
                                         }
                                         companyHtml += category.name;
-                                        first = true;
+                                        first = false;
                                     });
                                     companyHtml += "</td>";
                                 });
