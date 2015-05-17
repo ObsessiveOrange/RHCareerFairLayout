@@ -259,11 +259,11 @@ function generateTableLocations() {
                         yScaling: 0
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    tableID++;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     if (totalTablesSize > leftTables && s2PathWidth > 0) {
                         alert("Table spanning across walkway.");
                     }
+                    tableID++;
                 }
                 for (var j = 0; j < rightTables;) {
                     tableLocations[tableID] = {
@@ -276,11 +276,11 @@ function generateTableLocations() {
                         yScaling: 0
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    tableID++;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    if (totalTablesSize > rightTables) {
+                    if (totalTablesSize > leftTables + s2PathWidth + rightTables) {
                         alert("Table spanning across walkway.");
                     }
+                    tableID++;
                 }
             }
         }
