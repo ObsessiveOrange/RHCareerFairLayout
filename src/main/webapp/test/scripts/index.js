@@ -1,35 +1,17 @@
-var $mapTablesCanvas;
-var $mapHighlightsCanvas;
+var $canvasMap;
+var $canvasMap;
 var scaling = 1;
 $(document).ready(function() {
-    $mapTablesCanvas = $("#mapTables");
-    $mapHighlightsCanvas = $("#mapHighlights");
+    $canvasMap = $("#canvasMap");
+    $canvasMap = $("#canvasMap");
     var $container = $("#mapContainer");
     var containerWidth = $container.width() * scaling;
     var containerHeight = $container.width() * (scaling / 2);
     $container.prop("height", containerHeight);
-    $mapTablesCanvas.prop("width", containerWidth).prop("height", containerHeight);
-    $mapHighlightsCanvas.prop("width", containerWidth).prop("height", containerHeight);
-    $mapHighlightsCanvas.drawRect({
-        layer: true,
-        draggable: true,
-        bringToFront: true,
-        name: 'table' + 5 + 'Box',
-        groups: ['table' + 5],
-        dragGroups: ['table' + 5],
-        strokeStyle: '#000',
-        fillStyle: '#585',
-        strokeWidth: 2,
-        x: 100,
-        y: 100,
-        width: 50,
-        height: 75,
-        fromCenter: false,
-        drag: function(layer) {
-            console.log(layer);
-            $mapHighlightsCanvas.drawLayer('table5Box');
-        }
-    });
+    $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
+    $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
+    drawRect(1, 50, 50, 100, 50);
+    drawRect(3, 75, 75, 50, 100);
 });
 window.cleanup = function() {};
 //
@@ -37,29 +19,33 @@ window.cleanup = function() {};
 function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $mapTablesCanvas.drawRect({
+    $canvasMap.drawRect({
         layer: true,
         draggable: true,
-        bringToFront: true,
         name: 'table' + tableNumber + 'Box',
         groups: ['table' + tableNumber],
         dragGroups: ['table' + tableNumber],
         strokeStyle: '#000',
-        fillStyle: '#585',
+        fillStyle: '#DDD',
         strokeWidth: scaling,
         x: x,
         y: y,
         width: width,
         height: height,
-        fromCenter: false
-        //    click : function(layer) {
-        //      alert("You clicked an area!");
-        //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
+        fromCenter: false,
+        dragstart: function(layer) {
+            var name = layer.name.replace("Box", "");
+            
+            bringLayerToFront(name + "Box");
+            bringLayerToFront(name + "Number");
+
+            $canvasMap.drawLayers();
+        }
     });
     //
     //draw tablenumber in box for easy reading.
     if (Number(tableNumber) !== 0) {
-        $mapTablesCanvas.drawText({
+        $canvasMap.drawText({
             layer: true,
             draggable: true,
             bringToFront: true,
@@ -71,8 +57,28 @@ function drawRect(tableNumber, x, y, width, height) {
             y: y + height / 2,
             fontSize: height / 2,
             fontFamily: 'Verdana, sans-serif',
-            text: tableNumber
+            text: tableNumber,
+            dragstart: function(layer) {
+            var name = layer.name.replace("Number", "");
+            
+            bringLayerToFront(name + "Box");
+            bringLayerToFront(name + "Number");
+
+            $canvasMap.drawLayers();
+            }
         });
+    }
+}
+
+function bringLayerToFront(layerName) {
+    var layer = $canvasMap.getLayer(layerName);
+    // Remove layer from its original position
+    $canvasMap.getLayers().splice(layer.index, 1);
+    // Bring layer to front
+    // push() returns the new array length
+    $canvasMap.getLayers().push(layer);
+    for(var i = 0; i < $canvasMap.getLayers().length; i++){
+        $canvasMap.getLayers()[i].index = i;
     }
 }
 //
@@ -94,10 +100,10 @@ function generateTableLocations() {
     var vrtCount = Math.max(s1, s3);
     //
     //calculate width and height of tables based on width of the canvas
-    unitX = $mapTablesCanvas.prop("width") / 100;
+    unitX = $canvasMap.prop("width") / 100;
     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
     var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
-    unitY = $mapTablesCanvas.prop("width") / 2 / 100;
+    unitY = $canvasMap.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
     var tableHeight = unitY * 70 / vrtCount;
     //
@@ -204,7 +210,7 @@ function drawTables() {
     //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $mapTablesCanvas.drawText({
+    $canvasMap.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
@@ -214,7 +220,7 @@ function drawTables() {
         text: 'Rest Area'
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $mapTablesCanvas.drawText({
+    $canvasMap.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
@@ -223,7 +229,7 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
-    $mapTablesCanvas.drawLayers();
+    $canvasMap.drawLayers();
 }
 // Create a rectangle layer
 // $('canvas').drawRect({

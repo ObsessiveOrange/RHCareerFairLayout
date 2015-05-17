@@ -23,35 +23,46 @@ var scaling = 1;
     });
 })();
 window.cleanup = function() {};
+
+function bringLayerToFront(layerName) {
+    var layer = $canvasMap.getLayer(layerName);
+    // Remove layer from its original position
+    $canvasMap.getLayers().splice(layer.index, 1);
+    // Bring layer to front
+    // push() new one to end
+    $canvasMap.getLayers().push(layer);
+    // Update all layers indecies.
+    for (var i = 0; i < $canvasMap.getLayers().length; i++) {
+        $canvasMap.getLayers()[i].index = i;
+    }
+}
 //
 //draw tables and table numbers
 function drawRect(tableNumber, x, y, width, height) {
     //
-    //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $canvasMap.drawRect({
-        layer: true,
-        draggable: true,
-        name: 'table' + tableNumber + 'Box',
-        groups: ['table' + tableNumber],
-        dragGroups: ['table' + tableNumber],
-        strokeStyle: '#000',
-        fillStyle: '#585',
-        strokeWidth: scaling,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        fromCenter: false,
-        dragstart: function(layer) {
-            var name = layer.name.replace("Box", "");
-            console.log(name);
-            $canvasMap.drawLayer(name + "Box");
-            $canvasMap.drawLayer(name + "Number");
-        }
-    });
-    //
     //draw tablenumber in box for easy reading.
     if (Number(tableNumber) !== 0) {
+        $canvasMap.drawRect({
+            layer: true,
+            draggable: true,
+            name: 'table' + tableNumber + 'Box',
+            groups: ['table' + tableNumber],
+            dragGroups: ['table' + tableNumber],
+            strokeStyle: '#000',
+            fillStyle: '#DDD',
+            strokeWidth: scaling,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            fromCenter: false,
+            dragstart: function(layer) {
+                var name = layer.name.replace("Box", "");
+                bringLayerToFront(name + "Box");
+                bringLayerToFront(name + "Number");
+                $canvasMap.drawLayers();
+            }
+        });
         $canvasMap.drawText({
             layer: true,
             draggable: true,
@@ -66,10 +77,23 @@ function drawRect(tableNumber, x, y, width, height) {
             text: tableNumber,
             dragstart: function(layer) {
                 var name = layer.name.replace("Number", "");
-                console.log(name);
-                $canvasMap.drawLayer(name + "Box");
-                $canvasMap.drawLayer(name + "Number");
+                bringLayerToFront(name + "Box");
+                bringLayerToFront(name + "Number");
+                $canvasMap.drawLayers();
             }
+        });
+    } else {
+        //
+        //draw unfilled rectangle - fill is on bottom "highlights" layer
+        $mapTablesCanvas.drawRect({
+            //    layer: true,
+            strokeStyle: '#000',
+            strokeWidth: scaling,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            fromCenter: false
         });
     }
 }

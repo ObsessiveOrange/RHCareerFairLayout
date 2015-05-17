@@ -1,16 +1,13 @@
 var careerFairData;
-var $mapTablesCanvas;
-var $mapHighlightsCanvas;
-var scaling = 2;
+var $canvasMap;
+var scaling = 1;
 (window.setup = function() {
-    $mapTablesCanvas = $("#mapTables");
-    $mapHighlightsCanvas = $("#mapHighlights");
+    $canvasMap = $("#canvasMap");
     var $container = $("#mapContainer");
     var containerWidth = $container.width() * scaling;
     var containerHeight = $container.width() * (scaling / 2);
     $container.prop("height", containerHeight);
-    $mapTablesCanvas.prop("width", containerWidth).prop("height", containerHeight);
-    $mapHighlightsCanvas.prop("width", containerWidth).prop("height", containerHeight);
+    $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
@@ -31,10 +28,9 @@ window.cleanup = function() {};
 function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $mapTablesCanvas.drawRect({
+    $canvasMap.drawRect({
         layer: true,
         draggable: true,
-        bringToFront: true,
         name: 'table' + tableNumber + 'Box',
         groups: ['table' + tableNumber],
         dragGroups: ['table' + tableNumber],
@@ -45,18 +41,20 @@ function drawRect(tableNumber, x, y, width, height) {
         y: y,
         width: width,
         height: height,
-        fromCenter: false
-        //    click : function(layer) {
-        //      alert("You clicked an area!");
-        //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
+        fromCenter: false,
+        dragstart: function(layer) {
+            var name = layer.name.replace("Box", "");
+            console.log(name);
+            $canvasMap.drawLayer(name + "Box");
+            $canvasMap.drawLayer(name + "Number");
+        }
     });
     //
     //draw tablenumber in box for easy reading.
     if (Number(tableNumber) !== 0) {
-        $mapTablesCanvas.drawText({
+        $canvasMap.drawText({
             layer: true,
             draggable: true,
-            bringToFront: true,
             name: 'table' + tableNumber + 'Number',
             groups: ['table' + tableNumber],
             dragGroups: ['table' + tableNumber],
@@ -65,7 +63,13 @@ function drawRect(tableNumber, x, y, width, height) {
             y: y + height / 2,
             fontSize: height / 2,
             fontFamily: 'Verdana, sans-serif',
-            text: tableNumber
+            text: tableNumber,
+            dragstart: function(layer) {
+                var name = layer.name.replace("Number", "");
+                console.log(name);
+                $canvasMap.drawLayer(name + "Box");
+                $canvasMap.drawLayer(name + "Number");
+            }
         });
     }
 }
@@ -88,10 +92,10 @@ function generateTableLocations() {
     var vrtCount = Math.max(s1, s3);
     //
     //calculate width and height of tables based on width of the canvas
-    unitX = $mapTablesCanvas.prop("width") / 100;
+    unitX = $canvasMap.prop("width") / 100;
     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
     var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
-    unitY = $mapTablesCanvas.prop("width") / 2 / 100;
+    unitY = $canvasMap.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
     var tableHeight = unitY * 70 / vrtCount;
     //
@@ -198,7 +202,7 @@ function drawTables() {
     //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $mapTablesCanvas.drawText({
+    $canvasMap.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
@@ -208,7 +212,7 @@ function drawTables() {
         text: 'Rest Area'
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $mapTablesCanvas.drawText({
+    $canvasMap.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
@@ -217,7 +221,7 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
-    $mapTablesCanvas.drawLayers();
+    $canvasMap.drawLayers();
 }
 // Create a rectangle layer
 // $('canvas').drawRect({
