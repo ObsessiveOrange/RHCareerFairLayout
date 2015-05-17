@@ -1,6 +1,6 @@
 var $canvasMap;
-var $canvasMap;
 var scaling = 1;
+var savedTableLocation;
 $(document).ready(function() {
     $canvasMap = $("#canvasMap");
     $canvasMap = $("#canvasMap");
@@ -35,11 +35,14 @@ function drawRect(tableNumber, x, y, width, height) {
         fromCenter: false,
         dragstart: function(layer) {
             var name = layer.name.replace("Box", "");
-            
             bringLayerToFront(name + "Box");
             bringLayerToFront(name + "Number");
-
             $canvasMap.drawLayers();
+            saveTableLocation(name);
+        },
+        dragstop: function(layer) {
+            var name = layer.name.replace("Box", "");
+            restoreTableLocation(name);
         }
     });
     //
@@ -59,15 +62,42 @@ function drawRect(tableNumber, x, y, width, height) {
             fontFamily: 'Verdana, sans-serif',
             text: tableNumber,
             dragstart: function(layer) {
-            var name = layer.name.replace("Number", "");
-            
-            bringLayerToFront(name + "Box");
-            bringLayerToFront(name + "Number");
-
-            $canvasMap.drawLayers();
+                var name = layer.name.replace("Number", "");
+                bringLayerToFront(name + "Box");
+                bringLayerToFront(name + "Number");
+                $canvasMap.drawLayers();
+                saveTableLocation(name);
+            },
+            dragstop: function(layer) {
+                var name = layer.name.replace("Box", "");
+                restoreTableLocation(name);
             }
         });
     }
+}
+
+function saveTableLocation(tableName) {
+    var boxLayer = $canvasMap.getLayer(tableName + "Box");
+    var textLayer = $canvasMap.getLayer(tableName + "Number");
+    savedTableLocation = {
+        boxX: boxLayer.x,
+        boxY: boxLayer.y,
+        textX: textLayer.x,
+        textY: textLayer.y,
+    };
+}
+
+function restoreTableLocation(tableName) {
+    var boxLayer = $canvasMap.getLayer(tableName + "Box");
+    var textLayer = $canvasMap.getLayer(tableName + "Number");
+    $canvasMap.setLayer(boxLayer, {
+        x: savedTableLocation.boxX,
+        y: savedTableLocation.boxY
+    });
+    $canvasMap.setLayer(textLayer, {
+        x: savedTableLocation.textX,
+        y: savedTableLocation.textY
+    });
 }
 
 function bringLayerToFront(layerName) {
@@ -77,7 +107,7 @@ function bringLayerToFront(layerName) {
     // Bring layer to front
     // push() returns the new array length
     $canvasMap.getLayers().push(layer);
-    for(var i = 0; i < $canvasMap.getLayers().length; i++){
+    for (var i = 0; i < $canvasMap.getLayers().length; i++) {
         $canvasMap.getLayers()[i].index = i;
     }
 }
