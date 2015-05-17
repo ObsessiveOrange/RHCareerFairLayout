@@ -65,6 +65,7 @@ function mergeTables(table1, table2) {
         });
         redrawTable(table1);
         redrawTable(table2);
+        mergeTable1 = null;
         return;
     }
     careerFairData.termVars.layout.locationTableMapping[table1].tableSize += careerFairData.termVars.layout.locationTableMapping[table2].tableSize;
