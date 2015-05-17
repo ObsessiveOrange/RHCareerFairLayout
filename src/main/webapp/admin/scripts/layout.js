@@ -247,7 +247,7 @@ function generateTableLocations() {
             else {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
-                var totalTablesSize;
+                var totalTablesSize = 0;
                 for (var j = 0; j < leftTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
