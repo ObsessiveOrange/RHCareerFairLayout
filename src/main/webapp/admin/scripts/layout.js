@@ -60,6 +60,10 @@ function mergeTables(table1, table2) {
         return;
     }
     careerFairData.termVars.layout.locationTableMapping[table1].tableSize += careerFairData.termVars.layout.locationTableMapping[table2].tableSize;
+    for (var i = table2; i < careerFairData.termVars.layout.locationTableMapping.length - 1; i++) {
+        careerFairData.termVars.layout.locationTableMapping[i] = careerFairData.termVars.layout.locationTableMapping[i + 1];
+    }
+    delete careerFairData.termVars.layout.locationTableMapping[careerFairData.termVars.layout.locationTableMapping.length - 1];
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
