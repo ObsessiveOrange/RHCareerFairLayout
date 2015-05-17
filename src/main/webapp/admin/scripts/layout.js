@@ -56,7 +56,7 @@ function checkOverlap(layer1, layer2) {
 }
 
 function mergeTables(table1, table2) {
-    if (Math.abs(table2 - table1) !== 1) {
+    if (Math.abs(table2 - table1) !== 1 || tableLocations[table1].group !== tableLocations[table2].group) {
         $canvasMap.setLayer("table" + table1 + "Box", {
             fillStyle: '#DDD'
         });
@@ -223,7 +223,8 @@ function generateTableLocations() {
                 width: tableWidth,
                 height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                 xScaling: 1,
-                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                group: "section1"
             };
             i += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
             tableID += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -248,7 +249,8 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 1
+                        yScaling: 1,
+                        group: "section2row" + i
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -268,7 +270,8 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 1
+                        yScaling: 1,
+                        group: "section2row" + i + "L"
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -285,7 +288,8 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 1
+                        yScaling: 1,
+                        group: "section2row" + i + "R"
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -310,7 +314,8 @@ function generateTableLocations() {
                 width: tableWidth,
                 height: tableHeight * tableSize,
                 xScaling: 1,
-                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                group: "section3"
             };
             i += tableSize;
             tableID++;
