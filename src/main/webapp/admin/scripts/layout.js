@@ -92,10 +92,12 @@ function drawRect(tableNumber, x, y, width, height) {
                     if(mergeTable1 === null){
                         mergeTable1 = tableNumber;
                         $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
+                        $canvasMap.drawLayer("table" + tableNumber + "Box");
                     }
                     else{
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#DDD'});
+                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {fillStyle: '#DDD'});
+                        $canvasMap.drawLayer("table" + mergeTable1 + "Box");
                         mergeTable1 = null;
                     }
                 }
@@ -121,10 +123,12 @@ function drawRect(tableNumber, x, y, width, height) {
                     if(mergeTable1 === null){
                         mergeTable1 = tableNumber;
                         $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
+                        $canvasMap.drawLayer("table" + tableNumber + "Box");
                     }
                     else{
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#DDD'});
+                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {fillStyle: '#DDD'});
+                        $canvasMap.drawLayer("table" + mergeTable1 + "Box");
                         mergeTable1 = null;
                     }
                 }
