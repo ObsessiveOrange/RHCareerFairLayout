@@ -31,7 +31,7 @@ window.cleanup = function() {};
 function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $mapTablesCanvas.drawLine({
+    $mapTablesCanvas.drawRect({
         layer: true,
         draggable: true,
         bringToFront: true,
@@ -39,16 +39,13 @@ function drawRect(tableNumber, x, y, width, height) {
         groups: ['table' + tableNumber],
         dragGroups: ['table' + tableNumber],
         strokeStyle: '#000',
+        fillStyle: '#585',
         strokeWidth: scaling,
-        x1: x,
-        y1: y,
-        x2: x + width,
-        y2: y,
-        x3: x + width,
-        y3: y + height,
-        x4: x,
-        y4: y + height,
-        closed: true
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        fromCenter: false
         //    click : function(layer) {
         //      alert("You clicked an area!");
         //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
@@ -220,7 +217,6 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
-
     $mapTablesCanvas.drawLayers();
 }
 // Create a rectangle layer
