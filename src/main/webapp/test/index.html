@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="../lib/underscore-min.js"></script>
+        <script src="../lib/jCanvas.min.js"></script>
+        <script src="../lib/jCanvas-invertedMask.js"></script>
+        <script src="../lib/PersistentStorage.js"></script>
+        <script src="../lib/ArrayExtensions.js"></script>
+        <!--    <script src="/lib/List.min.js"></script>
+        <script src="scripts/gAnalytics.js"></script>
+        <script src="scripts/tutorials.js"></script> -->
+        <script src="scripts/index.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <meta charset=utf-8 />
+        <meta name="author" content="Benedict Wong" />
+        <meta name="created" content="2015" />
+        <title>Rose Hulman Career Fair Layout</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    </head>
+    <body>
+        <!-- navigation bar -->
+        <div class="navBarContainer container" id="navBarContainer">
+            <img src="../images/rhLogo.png" class="rhLogo" alt="RH Logo" />
+            <span class="verticalAlignBottom" id="careerFairDescription">Career Fair Admin</span>
+        </div>
+        <div class="bodyContent">
+            <div class="container menuContainer" id="menuContainer">
+                <table class="menuList">
+                    <tr class="level1 menuLink" id="overview">
+                        <td colspan="2">
+                            Overview
+                        </td>
+                    </tr>
+                    <tr class="level1 groupHeader" id="dataGroupHeader">
+                        <td id="dataGroupHeaderArrow">
+                            ▼
+                        </td>
+                        <td>
+                            Career Fair data
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink dataItem" id="yearTerm">
+                        <td>
+                        </td>
+                        <td>
+                            Year/Term
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink dataItem" id="categories">
+                        <td>
+                        </td>
+                        <td>
+                            Categories
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink dataItem" id="companies">
+                        <td>
+                        </td>
+                        <td>
+                            Companies
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink dataItem" id="layout">
+                        <td>
+                        </td>
+                        <td>
+                            Layout
+                        </td>
+                    </tr>
+                    <tr class="level1 groupHeader" id="usersGroupHeader">
+                        <td id="usersGroupHeaderArrow">
+                            ▼
+                        </td>
+                        <td>
+                            User Administration
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink usersItem" id="users">
+                        <td>
+                        </td>
+                        <td>
+                            User accounts
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink usersItem" id="admins">
+                        <td>
+                        </td>
+                        <td>
+                            Admin access
+                        </td>
+                    </tr>
+                    <tr class="level1 groupHeader" id="advancedGroupHeader">
+                        <td id="advancedGroupHeaderArrow">
+                            ▼
+                        </td>
+                        <td>
+                            Advanced Options
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink advancedItem" id="dbSize">
+                        <td>
+                        </td>
+                        <td>
+                            DB Sizes
+                        </td>
+                    </tr>
+                    <tr class="level2 menuLink advancedItem" id="purge">
+                        <td>
+                        </td>
+                        <td>
+                            Purge old data
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="container contentFrame" id="contentFrame">
+
+                <div class="mapContainer container" id="mapContainer">
+                    <canvas id="companyOverlay" class="canvasMap canvasOverlay" style="z-index: 2;"></canvas>
+                    <canvas id="mapTables" class="canvasMap canvasOverlay" style="z-index: 1;"></canvas>
+                    <canvas id="mapHighlights" class="canvasMap canvasBase"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="footer">Designed for Rose-Hulman Institute of Technology<br />By Benedict Wong, '18</div>
+    </body>
+</html>
