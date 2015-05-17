@@ -24,9 +24,9 @@ var scaling = 1;
 })();
 window.cleanup = function() {};
 
-function bringTableToFront(tableName) {
-    bringLayerToFront(tableName + "Box");
-    bringLayerToFront(tableName + "Text");
+function bringTableToFront(tableNumber) {
+    bringLayerToFront("table" + tableNumber + "Box");
+    bringLayerToFront("table" + tableNumber + "Text");
     $canvasMap.drawLayers();
 }
 
@@ -43,18 +43,16 @@ function bringLayerToFront(layerName) {
     }
 }
 
-function restoreTableLocation(tableLayer) {
-    var tableNumber = tableLayer.data.tableNumber;
+function restoreTableLocation(tableNumber) {
     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
     $canvasMap.setLayer("table" + tableNumber + "Box", {
         x: location.x,
         y: location.y
     });
     $canvasMap.setLayer("table" + tableNumber + "Text", {
-        x: location.x + location.width/2,
-        y: location.y + location.height/2
+        x: location.x + location.width / 2,
+        y: location.y + location.height / 2
     });
-    $canvasMap.drawLayers();
 }
 //
 //draw tables and table numbers
@@ -80,11 +78,11 @@ function drawRect(tableNumber, x, y, width, height) {
             height: height,
             fromCenter: false,
             dragstart: function(layer) {
-                var name = layer.name.replace("Box", "");
-                bringTableToFront(name);
+                bringTableToFront(tableLayer.data.tableNumber);
             },
             dragstop: function(layer) {
-                restoreTableLocation(layer);
+                restoreTableLocation(tableLayer.data.tableNumber);
+                $canvasMap.drawLayers();
             }
         });
         $canvasMap.drawText({
@@ -103,11 +101,11 @@ function drawRect(tableNumber, x, y, width, height) {
             fontFamily: 'Verdana, sans-serif',
             text: tableNumber,
             dragstart: function(layer) {
-                var name = layer.name.replace("Text", "");
-                bringTableToFront(name);
+                bringTableToFront(tableLayer.data.tableNumber);
             },
             dragstop: function(layer) {
-                restoreTableLocation(layer);
+                restoreTableLocation(tableLayer.data.tableNumber);
+                $canvasMap.drawLayers();
             }
         });
     } else {
