@@ -277,7 +277,7 @@ function drawTables() {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationID]) == "undefined") ? "" : careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber);
+        var tableNumber = (location.locationID >= tableLocations.length ? 0 : location.locationID);
         drawRect(tableNumber, location.x, location.y, location.width, location.height);
     });
     //
