@@ -46,7 +46,14 @@ function bringLayerToFront(layerName) {
 function restoreTableLocation(tableLayer) {
     var tableNumber = tableLayer.data.tableNumber;
     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
-    drawRect(tableNumber, location.x, location.y, location.width, location.height);
+    $canvasMap.setLayer(boxLayer, {
+        x: location.x,
+        y: location.y
+    });
+    $canvasMap.setLayer(textLayer, {
+        x: location.x + location.width/2,
+        y: location.y + location.height/2
+    });
 }
 //
 //draw tables and table numbers
