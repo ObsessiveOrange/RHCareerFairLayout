@@ -54,6 +54,17 @@ function checkOverlap(layer1, layer2) {
     }
     return false;
 }
+
+function mergeTables(table1, table2) {
+    if (Math.abs(table2 - table1) !== 1) {
+        return;
+    }
+    locationTableMapping[table1].tableSize += locationTableMapping[table2].tableSize;
+    $canvasMap.removeLayers();
+    generateTableLocations();
+    drawTables();
+    mergeTable1 = null;
+}
 // function restoreTableLocation(tableNumber) {
 //     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
 //     $canvasMap.setLayer("table" + tableNumber + "Box", {
@@ -94,12 +105,16 @@ function drawRect(tableNumber, x, y, width, height) {
                         });
                         redrawTable(tableNumber);
                     } else {
+                        var table1 = tableNumber > mergeTable1 ? mergeTable1 : tableNumber;
+                        var table2 = tableNumber > mergeTable1 ? tableNumber : mergeTable1;
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
-                            fillStyle: '#DDD'
-                        });
-                        redrawTable(mergeTable1);
-                        mergeTable1 = null;
+                        mergeTables(table1, table2);
+                        //     console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        //     $canvasMap.setLayer("table" + mergeTable1 + "Box", {
+                        //         fillStyle: '#DDD'
+                        //     });
+                        //     redrawTable(mergeTable1);
+                        //     mergeTable1 = null;
                     }
                 }
             }
@@ -126,12 +141,14 @@ function drawRect(tableNumber, x, y, width, height) {
                         });
                         redrawTable(tableNumber);
                     } else {
+                        var table1 = tableNumber > mergeTable1 ? mergeTable1 : tableNumber;
+                        var table2 = tableNumber > mergeTable1 ? tableNumber : mergeTable1;
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
-                            fillStyle: '#DDD'
-                        });
-                        redrawTable(mergeTable1);
-                        mergeTable1 = null;
+                        mergeTables(table1, table2);
+                        // $canvasMap.setLayer("table" + mergeTable1 + "Box", {
+                        //     fillStyle: '#DDD'
+                        // });
+                        // redrawTable(mergeTable1);
                     }
                 }
             }
@@ -140,7 +157,7 @@ function drawRect(tableNumber, x, y, width, height) {
         //
         //draw unfilled rectangle - fill is on bottom "highlights" layer
         $canvasMap.drawRect({
-               layer: true,
+            layer: true,
             strokeStyle: '#000',
             strokeWidth: scaling,
             data: {
@@ -284,7 +301,7 @@ function drawTables() {
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
     $canvasMap.drawText({
-           layer: true,
+        layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
         y: 87.5 * unitY,
@@ -294,7 +311,7 @@ function drawTables() {
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
     $canvasMap.drawText({
-           layer: true,
+        layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
         y: 87.5 * unitY,
