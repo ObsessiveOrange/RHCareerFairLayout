@@ -66,6 +66,7 @@ function restoreTableLocation(tableName) {
         x: savedTableLocation.textX,
         y: savedTableLocation.textY
     });
+    $canvasMap.drawLayers();
 }
 //
 //draw tables and table numbers
