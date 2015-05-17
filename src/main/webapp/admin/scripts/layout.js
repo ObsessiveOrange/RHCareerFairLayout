@@ -100,7 +100,7 @@ function drawRect(tableNumber, x, y, width, height) {
                         $canvasMap.setLayer("table" + mergeTable1 + "Box", {
                             fillStyle: '#DDD'
                         });
-                        redrawTable(tableNumber);
+                        redrawTable(mergeTable1);
                         mergeTable1 = null;
                     }
                 }
@@ -133,7 +133,7 @@ function drawRect(tableNumber, x, y, width, height) {
                         $canvasMap.setLayer("table" + mergeTable1 + "Box", {
                             fillStyle: '#DDD'
                         });
-                        redrawTable(tableNumber);
+                        redrawTable(mergeTable1);
                         mergeTable1 = null;
                     }
                 }
