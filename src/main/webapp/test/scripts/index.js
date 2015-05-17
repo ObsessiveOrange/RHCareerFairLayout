@@ -12,6 +12,7 @@ $(document).ready(function() {
     $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
     drawRect(1, 50, 50, 100, 50);
     drawRect(3, 75, 75, 50, 100);
+    drawRect(2, 150, 75, 50, 100);
 });
 window.cleanup = function() {};
 //
@@ -20,6 +21,7 @@ function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
     $canvasMap.drawRect({
+        type: "rectangle",
         layer: true,
         draggable: true,
         name: 'table' + tableNumber + 'Box',
@@ -28,6 +30,9 @@ function drawRect(tableNumber, x, y, width, height) {
         strokeStyle: '#000',
         fillStyle: '#DDD',
         strokeWidth: scaling,
+            data: {
+                tableNumber: tableNumber
+            },
         x: x,
         y: y,
         width: width,
@@ -43,6 +48,7 @@ function drawRect(tableNumber, x, y, width, height) {
         dragstop: function(layer) {
             var name = layer.name.replace("Box", "");
             restoreTableLocation(name);
+                checkOverlap(layer);
         }
     });
     //
@@ -56,6 +62,9 @@ function drawRect(tableNumber, x, y, width, height) {
             groups: ['table' + tableNumber],
             dragGroups: ['table' + tableNumber],
             fillStyle: '#000000',
+            data: {
+                tableNumber: tableNumber
+            },
             x: x + width / 2,
             y: y + height / 2,
             fontSize: height / 2,
@@ -71,9 +80,19 @@ function drawRect(tableNumber, x, y, width, height) {
             dragstop: function(layer) {
                 var name = layer.name.replace("Box", "");
                 restoreTableLocation(name);
+                checkOverlap(layer);
             }
         });
     }
+}
+
+function checkOverlap(layer1){
+    $canvasMap.getLayers().forEach(function(layer2){
+        if(layer2.type != 'rectangle' || Math.abs(layer1.data.tableNumber - layer2.data.tableNumber) !== 1){return;}
+        if(layer1.eventX >= layer2.x && layer1.eventX <= (layer2.x + layer2.width) && layer1.eventY >= layer2.y && layer1.eventY <= (layer2.y + layer2.height)){
+            console.log("Within bounds of " + layer2.name);
+        }
+    });
 }
 
 function saveTableLocation(tableName) {

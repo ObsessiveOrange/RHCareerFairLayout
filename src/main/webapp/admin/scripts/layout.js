@@ -1,6 +1,9 @@
 var careerFairData;
 var $canvasMap;
 var scaling = 1;
+var mergeToolActive = false;
+var mergeTable1 = null;
+
 (window.setup = function() {
     $canvasMap = $("#canvasMap");
     var $container = $("#mapContainer");
@@ -24,11 +27,11 @@ var scaling = 1;
 })();
 window.cleanup = function() {};
 
-function bringTableToFront(tableNumber) {
-    bringLayerToFront("table" + tableNumber + "Box");
-    bringLayerToFront("table" + tableNumber + "Text");
-    $canvasMap.drawLayers();
-}
+// function bringTableToFront(tableNumber) {
+//     bringLayerToFront("table" + tableNumber + "Box");
+//     bringLayerToFront("table" + tableNumber + "Text");
+//     $canvasMap.drawLayers();
+// }
 
 function bringLayerToFront(layerName) {
     var layer = $canvasMap.getLayer(layerName);
@@ -43,17 +46,24 @@ function bringLayerToFront(layerName) {
     }
 }
 
-function restoreTableLocation(tableNumber) {
-    var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
-    $canvasMap.setLayer("table" + tableNumber + "Box", {
-        x: location.x,
-        y: location.y
-    });
-    $canvasMap.setLayer("table" + tableNumber + "Text", {
-        x: location.x + location.width / 2,
-        y: location.y + location.height / 2
-    });
+function checkOverlap(layer1, layer2) {
+    if (layer1.eventX >= layer2.x && layer1.eventX <= (layer2.x + layer2.width) && layer1.eventY >= layer2.y && layer1.eventY <= (layer2.y + layer2.height)) {
+        return true;
+    }
+    return false;
 }
+
+// function restoreTableLocation(tableNumber) {
+//     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
+//     $canvasMap.setLayer("table" + tableNumber + "Box", {
+//         x: location.x,
+//         y: location.y
+//     });
+//     $canvasMap.setLayer("table" + tableNumber + "Text", {
+//         x: location.x + location.width / 2,
+//         y: location.y + location.height / 2
+//     });
+// }
 //
 //draw tables and table numbers
 function drawRect(tableNumber, x, y, width, height) {
@@ -62,10 +72,8 @@ function drawRect(tableNumber, x, y, width, height) {
     if (Number(tableNumber) !== 0) {
         $canvasMap.drawRect({
             layer: true,
-            draggable: true,
             name: 'table' + tableNumber + 'Box',
             groups: ['table' + tableNumber],
-            dragGroups: ['table' + tableNumber],
             strokeStyle: '#000',
             fillStyle: '#DDD',
             strokeWidth: scaling,
@@ -77,20 +85,26 @@ function drawRect(tableNumber, x, y, width, height) {
             width: width,
             height: height,
             fromCenter: false,
-            dragstart: function(layer) {
-                bringTableToFront(layer.data.tableNumber);
-            },
-            dragstop: function(layer) {
-                restoreTableLocation(layer.data.tableNumber);
-                $canvasMap.drawLayers();
+            click: function(layer) {
+                if(mergeToolActive){
+                    var tableNumber = layer.data.tableNumber;
+
+                    if(mergeTable1 === null){
+                        mergeTable1 = tableNumber;
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
+                    }
+                    else{
+                        console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#DDD'});
+                        mergeTable1 = null;
+                    }
+                }
             }
         });
         $canvasMap.drawText({
             layer: true,
-            draggable: true,
             name: 'table' + tableNumber + 'Text',
             groups: ['table' + tableNumber],
-            dragGroups: ['table' + tableNumber],
             fillStyle: '#000000',
             data: {
                 tableNumber: tableNumber
@@ -100,12 +114,20 @@ function drawRect(tableNumber, x, y, width, height) {
             fontSize: height / 2,
             fontFamily: 'Verdana, sans-serif',
             text: tableNumber,
-            dragstart: function(layer) {
-                bringTableToFront(layer.data.tableNumber);
-            },
-            dragstop: function(layer) {
-                restoreTableLocation(layer.data.tableNumber);
-                $canvasMap.drawLayers();
+            click: function(layer) {
+                if(mergeToolActive){
+                    var tableNumber = layer.data.tableNumber;
+
+                    if(mergeTable1 === null){
+                        mergeTable1 = tableNumber;
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
+                    }
+                    else{
+                        console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#DDD'});
+                        mergeTable1 = null;
+                    }
+                }
             }
         });
     } else {
