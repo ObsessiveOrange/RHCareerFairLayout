@@ -247,6 +247,7 @@ function generateTableLocations() {
             else {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
+                var leftTablesSize
                 for (var j = 0; j < leftTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
@@ -259,11 +260,12 @@ function generateTableLocations() {
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
+                    leftTablesSize = j;
                 }
                 for (var j = 0; j < rightTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
-                        x: offsetX + ((leftTables + j) * tableWidth),
+                        x: offsetX + ((leftTablesSize + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
