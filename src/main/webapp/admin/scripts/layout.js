@@ -63,7 +63,7 @@ function mergeTables(table1, table2) {
     for (var i = table2; i < Object.keys(careerFairData.termVars.layout.locationTableMapping).length - 1; i++) {
         careerFairData.termVars.layout.locationTableMapping[i] = careerFairData.termVars.layout.locationTableMapping[i + 1];
     }
-    delete careerFairData.termVars.layout.locationTableMapping[careerFairData.termVars.layout.locationTableMapping.length - 1];
+    delete careerFairData.termVars.layout.locationTableMapping[Object.keys(careerFairData.termVars.layout.locationTableMapping).length - 1];
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
