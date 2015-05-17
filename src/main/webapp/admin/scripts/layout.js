@@ -85,7 +85,7 @@ function drawRect(tableNumber, x, y, width, height) {
     } else {
         //
         //draw unfilled rectangle - fill is on bottom "highlights" layer
-        $mapTablesCanvas.drawRect({
+        $canvasMap.drawRect({
             //    layer: true,
             strokeStyle: '#000',
             strokeWidth: scaling,
