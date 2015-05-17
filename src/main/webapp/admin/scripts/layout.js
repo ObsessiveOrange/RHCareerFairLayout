@@ -2,6 +2,10 @@ var careerFairData;
 var $mapTablesCanvas;
 var $mapHighlightsCanvas;
 (window.setup = function() {
+
+    $mapTablesCanvas = $("#mapTables");
+    $mapHighlightsCanvas = $("#mapHighlights");
+    
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
