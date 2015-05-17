@@ -317,8 +317,7 @@ function drawTables() {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var tableID = (location.tableID > Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.tableID);
-        drawRect(tableID, location.x, location.y, location.width, location.height, location.xScaling, location.yScaling);
+        drawRect(location);
     });
     //
     // rest & registration areas
