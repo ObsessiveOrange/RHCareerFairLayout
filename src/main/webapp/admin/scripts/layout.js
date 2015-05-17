@@ -262,11 +262,10 @@ function generateTableLocations() {
             else {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
-                var totalTablesSize = 0;
                 for (var j = 0; j < leftTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
-                        x: offsetX + (totalTablesSize * tableWidth),
+                        x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
@@ -275,16 +274,12 @@ function generateTableLocations() {
                         group: "section2row" + i + "L"
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    if (totalTablesSize > leftTables) {
-                        alert("Table spanning across walkway.");
-                    }
                     tableID++;
                 }
                 for (var j = 0; j < rightTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
-                        x: offsetX + ((totalTablesSize + s2PathWidth) * tableWidth),
+                        x: offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
@@ -293,10 +288,6 @@ function generateTableLocations() {
                         group: "section2row" + i + "R"
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    if (totalTablesSize > leftTables + s2PathWidth + rightTables) {
-                        alert("Table spanning across walkway.");
-                    }
                     tableID++;
                 }
             }
