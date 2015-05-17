@@ -74,9 +74,7 @@ function drawRect(tableNumber, x, y, width, height) {
         $canvasMap.drawRect({
             layer: true,
             name: 'table' + tableNumber + 'Box',
-            groups: ['table' + tableNumber],
             strokeStyle: '#000',
-            fillStyle: '#DDD',
             strokeWidth: scaling,
             data: {
                 tableNumber: tableNumber
@@ -109,7 +107,6 @@ function drawRect(tableNumber, x, y, width, height) {
         $canvasMap.drawText({
             layer: true,
             name: 'table' + tableNumber + 'Text',
-            groups: ['table' + tableNumber],
             fillStyle: '#000000',
             data: {
                 tableNumber: tableNumber
@@ -143,9 +140,12 @@ function drawRect(tableNumber, x, y, width, height) {
         //
         //draw unfilled rectangle - fill is on bottom "highlights" layer
         $canvasMap.drawRect({
-            //    layer: true,
+               layer: true,
             strokeStyle: '#000',
             strokeWidth: scaling,
+            data: {
+                tableNumber: tableNumber
+            },
             x: x,
             y: y,
             width: width,
@@ -277,14 +277,14 @@ function drawTables() {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var tableNumber = (location.locationID >= Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.locationID);
+        var tableNumber = (location.locationID > Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.locationID);
         drawRect(tableNumber, location.x, location.y, location.width, location.height);
     });
     //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
     $canvasMap.drawText({
-        //    layer: true,
+           layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
         y: 87.5 * unitY,
@@ -294,7 +294,7 @@ function drawTables() {
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
     $canvasMap.drawText({
-        //    layer: true,
+           layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
         y: 87.5 * unitY,
