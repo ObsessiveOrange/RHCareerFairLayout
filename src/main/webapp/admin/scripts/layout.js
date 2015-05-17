@@ -1,6 +1,7 @@
 var careerFairData;
 var $mapTablesCanvas;
 var $mapHighlightsCanvas;
+var scaling = 2;
 (window.setup = function() {
 
     $mapTablesCanvas = $("#mapTables");
