@@ -247,7 +247,7 @@ function generateTableLocations() {
             else {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
-                var leftTablesSize
+                var totalTablesSize;
                 for (var j = 0; j < leftTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
@@ -260,12 +260,15 @@ function generateTableLocations() {
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
-                    leftTablesSize = j;
+                    totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+                    if (totalTablesSize > leftTables && s2PathWidth > 0) {
+                        alert("Table spanning across walkway.");
+                    }
                 }
                 for (var j = 0; j < rightTables;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
-                        x: offsetX + ((leftTablesSize + j) * tableWidth),
+                        x: offsetX + ((totalTablesSize + s2PathWidth + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
@@ -274,6 +277,10 @@ function generateTableLocations() {
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
+                    totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+                    if (totalTablesSize > rightTables) {
+                        alert("Table spanning across walkway.");
+                    }
                 }
             }
         }
