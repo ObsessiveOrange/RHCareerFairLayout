@@ -14,8 +14,8 @@ var tableLocations;
 var selectedCompanyIDs;
 var filteredCompanyIDs = [];
 var filters;
-var $mapTables;
-var $mapHighlights;
+var $mapTablesCanvas;
+var $mapHighlightsCanvas;
 var unitX;
 var unitY;
 var scaling = 2;
@@ -23,14 +23,14 @@ var clearCacheFlag;
 $(document).ready(function() {
     //
     //set size and width of canvas elements and containing div
-    $mapTables = $("#mapTables");
-    $mapHighlights = $("#mapHighlights");
+    $mapTablesCanvas = $("#mapTables");
+    $mapHighlightsCanvas = $("#mapHighlights");
     var $container = $("#mapContainer");
     var containerWidth = $container.width() * scaling;
     var containerHeight = $container.width() * (scaling / 2);
     $container.prop("height", containerHeight);
-    $mapTables.prop("width", containerWidth).prop("height", containerHeight);
-    $mapHighlights.prop("width", containerWidth).prop("height", containerHeight);
+    $mapTablesCanvas.prop("width", containerWidth).prop("height", containerHeight);
+    $mapHighlightsCanvas.prop("width", containerWidth).prop("height", containerHeight);
     //
     //try to retrieve data from persistent storage
     loadAfterPageSwitch();
@@ -139,14 +139,14 @@ function getNewData() {
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
             careerFairData = data;
-            //
+           //
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
             setupPage();
         }
     });
 }
-//
+// 
 //setup the page
 function setupPage() {
     //
@@ -165,7 +165,7 @@ function setupPage() {
     //
     //setup the map for the first time
     generateTableLocations();
-    drawTables($mapTables);
+    drawTables($mapTablesCanvas);
     highlightTables();
     initTutorials("Main");
 }
@@ -297,7 +297,7 @@ function toggleCheckbox(id) {
 function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
-    $mapTables.drawLine({
+    $mapTablesCanvas.drawLine({
         //    layer: true,
         strokeStyle: '#000',
         strokeWidth: scaling,
@@ -317,7 +317,7 @@ function drawRect(tableNumber, x, y, width, height) {
     //
     //draw tablenumber in box for easy reading.
     if (Number(tableNumber) !== 0) {
-        $mapTables.drawText({
+        $mapTablesCanvas.drawText({
             //      layer: true,
             fillStyle: '#000000',
             x: x + width / 2,
@@ -347,10 +347,10 @@ function generateTableLocations() {
     var vrtCount = Math.max(s1, s3);
     //
     //calculate width and height of tables based on width of the canvas
-    unitX = $mapTables.prop("width") / 100;
+    unitX = $mapTablesCanvas.prop("width") / 100;
     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
     var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
-    unitY = $mapTables.prop("width") / 2 / 100;
+    unitY = $mapTablesCanvas.prop("width") / 2 / 100;
     //30% of space allocated to registration and rest area.
     var tableHeight = unitY * 70 / vrtCount;
     //
@@ -446,7 +446,7 @@ function generateTableLocations() {
 }
 //
 //draw actual tables, then draw registration and rest areas
-function drawTables($mapTables) {
+function drawTables($mapTablesCanvas) {
     //
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
@@ -457,7 +457,7 @@ function drawTables($mapTables) {
     //
     // rest & registration areas
     drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
-    $mapTables.drawText({
+    $mapTablesCanvas.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 62.5 * unitX,
@@ -467,7 +467,7 @@ function drawTables($mapTables) {
         text: 'Rest Area'
     });
     drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
-    $mapTables.drawText({
+    $mapTablesCanvas.drawText({
         //    layer: true,
         fillStyle: '#000000',
         x: 20 * unitX,
@@ -480,7 +480,7 @@ function drawTables($mapTables) {
 //
 //Highlight all tables in selected companies array
 function highlightTables() {
-    $mapHighlights.clearCanvas();
+    $mapHighlightsCanvas.clearCanvas();
     selectedCompanyIDs.forEach(function(id) {
         highlightTable(id, "#0F0");
     });
@@ -491,7 +491,7 @@ function highlightTable(id, color) {
     //
     //get the actual table we need to highlight, not the  company'sid.
     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[careerFairData.companies[id].tableNumber].location];
-    $mapHighlights.drawRect({
+    $mapHighlightsCanvas.drawRect({
         fillStyle: color,
         x: location.x,
         y: location.y,
