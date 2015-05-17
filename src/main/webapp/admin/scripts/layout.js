@@ -31,7 +31,6 @@ function drawRect(tableNumber, x, y, width, height) {
     $canvasMap.drawRect({
         layer: true,
         draggable: true,
-        bringToFront: true,
         name: 'table' + tableNumber + 'Box',
         groups: ['table' + tableNumber],
         dragGroups: ['table' + tableNumber],
@@ -42,10 +41,13 @@ function drawRect(tableNumber, x, y, width, height) {
         y: y,
         width: width,
         height: height,
-        fromCenter: false
-        //    click : function(layer) {
-        //      alert("You clicked an area!");
-        //    } //Box and text both need to be a layer for this to work. Redrawing doesn't quite work as expected, which is why this is disabled.
+        fromCenter: false,
+        dragstart: function(layer) {
+            var name = layer.name.replace("Box", "");
+            console.log(name);
+            $canvasMap.drawLayer(name + "Box");
+            $canvasMap.drawLayer(name + "Number");
+        }
     });
     //
     //draw tablenumber in box for easy reading.
@@ -53,7 +55,6 @@ function drawRect(tableNumber, x, y, width, height) {
         $canvasMap.drawText({
             layer: true,
             draggable: true,
-            bringToFront: true,
             name: 'table' + tableNumber + 'Number',
             groups: ['table' + tableNumber],
             dragGroups: ['table' + tableNumber],
@@ -62,7 +63,13 @@ function drawRect(tableNumber, x, y, width, height) {
             y: y + height / 2,
             fontSize: height / 2,
             fontFamily: 'Verdana, sans-serif',
-            text: tableNumber
+            text: tableNumber,
+            dragstart: function(layer) {
+                var name = layer.name.replace("Number", "");
+                console.log(name);
+                $canvasMap.drawLayer(name + "Box");
+                $canvasMap.drawLayer(name + "Number");
+            }
         });
     }
 }

@@ -25,8 +25,9 @@ $(document).ready(function() {
         width: 50,
         height: 75,
         fromCenter: false,
-        click: function(layer) {
-            console.log("clicked " + layer);
+        drag: function(layer) {
+            console.log(layer);
+            $mapHighlightsCanvas.drawLayer('table5Box');
         }
     });
 });
