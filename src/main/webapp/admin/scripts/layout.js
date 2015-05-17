@@ -25,9 +25,9 @@ var mergeTable1 = null;
     });
 })();
 window.cleanup = function() {};
-// function bringTableToFront(tableNumber) {
-//     bringLayerToFront("table" + tableNumber + "Box");
-//     bringLayerToFront("table" + tableNumber + "Text");
+// function bringTableToFront(tableID) {
+//     bringLayerToFront("table" + tableID + "Box");
+//     bringLayerToFront("table" + tableID + "Text");
 //     $canvasMap.drawLayers();
 // }
 function bringLayerToFront(layerName) {
@@ -43,9 +43,9 @@ function bringLayerToFront(layerName) {
     }
 }
 
-function redrawTable(tableNumber) {
-    $canvasMap.drawLayer("table" + tableNumber + "Box");
-    $canvasMap.drawLayer("table" + tableNumber + "Text");
+function redrawTable(tableID) {
+    $canvasMap.drawLayer("table" + tableID + "Box");
+    $canvasMap.drawLayer("table" + tableID + "Text");
 }
 
 function checkOverlap(layer1, layer2) {
@@ -65,30 +65,30 @@ function mergeTables(table1, table2) {
     drawTables();
     mergeTable1 = null;
 }
-// function restoreTableLocation(tableNumber) {
-//     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
-//     $canvasMap.setLayer("table" + tableNumber + "Box", {
+// function restoreTableLocation(tableID) {
+//     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableID].location];
+//     $canvasMap.setLayer("table" + tableID + "Box", {
 //         x: location.x,
 //         y: location.y
 //     });
-//     $canvasMap.setLayer("table" + tableNumber + "Text", {
+//     $canvasMap.setLayer("table" + tableID + "Text", {
 //         x: location.x + location.width / 2,
 //         y: location.y + location.height / 2
 //     });
 // }
 //
 //draw tables and table numbers
-function drawRect(tableNumber, x, y, width, height) {
+function drawRect(tableID, x, y, width, height, scaling) {
     //
-    //draw tablenumber in box for easy reading.
-    if (Number(tableNumber) !== 0) {
+    //draw tableID in box for easy reading.
+    if (Number(tableID) !== 0) {
         $canvasMap.drawRect({
             layer: true,
-            name: 'table' + tableNumber + 'Box',
+            name: 'table' + tableID + 'Box',
             strokeStyle: '#000',
             strokeWidth: scaling,
             data: {
-                tableNumber: tableNumber
+                tableID: tableID
             },
             x: x,
             y: y,
@@ -97,19 +97,19 @@ function drawRect(tableNumber, x, y, width, height) {
             fromCenter: false,
             click: function(layer) {
                 if (mergeToolActive) {
-                    var tableNumber = layer.data.tableNumber;
+                    var tableID = layer.data.tableID;
                     if (mergeTable1 === null) {
-                        mergeTable1 = tableNumber;
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {
+                        mergeTable1 = tableID;
+                        $canvasMap.setLayer("table" + tableID + "Box", {
                             fillStyle: '#0F0'
                         });
-                        redrawTable(tableNumber);
+                        redrawTable(tableID);
                     } else {
-                        var table1 = tableNumber > mergeTable1 ? mergeTable1 : tableNumber;
-                        var table2 = tableNumber > mergeTable1 ? tableNumber : mergeTable1;
-                        console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        var table1 = tableID > mergeTable1 ? mergeTable1 : tableID;
+                        var table2 = tableID > mergeTable1 ? tableID : mergeTable1;
+                        console.log("Merge table " + mergeTable1 + " and " + tableID);
                         mergeTables(table1, table2);
-                        //     console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        //     console.log("Merge table " + mergeTable1 + " and " + tableID);
                         //     $canvasMap.setLayer("table" + mergeTable1 + "Box", {
                         //         fillStyle: '#DDD'
                         //     });
@@ -121,29 +121,29 @@ function drawRect(tableNumber, x, y, width, height) {
         });
         $canvasMap.drawText({
             layer: true,
-            name: 'table' + tableNumber + 'Text',
+            name: 'table' + tableID + 'Text',
             fillStyle: '#000000',
             data: {
-                tableNumber: tableNumber
+                tableID: tableID
             },
             x: x + width / 2,
             y: y + height / 2,
-            fontSize: height / 2,
+            fontSize: height / scaling / 2,
             fontFamily: 'Verdana, sans-serif',
-            text: tableNumber,
+            text: tableID,
             click: function(layer) {
                 if (mergeToolActive) {
-                    var tableNumber = layer.data.tableNumber;
+                    var tableID = layer.data.tableID;
                     if (mergeTable1 === null) {
-                        mergeTable1 = tableNumber;
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {
+                        mergeTable1 = tableID;
+                        $canvasMap.setLayer("table" + tableID + "Box", {
                             fillStyle: '#0F0'
                         });
-                        redrawTable(tableNumber);
+                        redrawTable(tableID);
                     } else {
-                        var table1 = tableNumber > mergeTable1 ? mergeTable1 : tableNumber;
-                        var table2 = tableNumber > mergeTable1 ? tableNumber : mergeTable1;
-                        console.log("Merge table " + mergeTable1 + " and " + tableNumber);
+                        var table1 = tableID > mergeTable1 ? mergeTable1 : tableID;
+                        var table2 = tableID > mergeTable1 ? tableID : mergeTable1;
+                        console.log("Merge table " + mergeTable1 + " and " + tableID);
                         mergeTables(table1, table2);
                         // $canvasMap.setLayer("table" + mergeTable1 + "Box", {
                         //     fillStyle: '#DDD'
@@ -161,7 +161,7 @@ function drawRect(tableNumber, x, y, width, height) {
             strokeStyle: '#000',
             strokeWidth: scaling,
             data: {
-                tableNumber: tableNumber
+                tableID: tableID
             },
             x: x,
             y: y,
@@ -209,7 +209,8 @@ function generateTableLocations() {
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
             tableID += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -232,7 +233,8 @@ function generateTableLocations() {
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        height: tableHeight
+                        height: tableHeight,
+                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -249,7 +251,8 @@ function generateTableLocations() {
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        height: tableHeight
+                        height: tableHeight,
+                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -260,7 +263,8 @@ function generateTableLocations() {
                         x: offsetX + ((leftTables + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        height: tableHeight
+                        height: tableHeight,
+                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -279,7 +283,8 @@ function generateTableLocations() {
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * tableSize
+                height: tableHeight * tableSize,
+                scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += tableSize;
             tableID++;
@@ -294,8 +299,8 @@ function drawTables() {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var tableNumber = (location.tableID > Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.tableID);
-        drawRect(tableNumber, location.x, location.y, location.width, location.height);
+        var tableID = (location.tableID > Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.tableID);
+        drawRect(tableID, location.x, location.y, location.width, location.height, location.scaling);
     });
     //
     // rest & registration areas
