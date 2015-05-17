@@ -1,6 +1,5 @@
 var careerFairData;
 var $canvasMap;
-var savedTableLocation;
 var scaling = 1;
 (window.setup = function() {
     $canvasMap = $("#canvasMap");
@@ -44,29 +43,10 @@ function bringLayerToFront(layerName) {
     }
 }
 
-function saveTableLocation(tableName) {
-    var boxLayer = $canvasMap.getLayer(tableName + "Box");
-    var textLayer = $canvasMap.getLayer(tableName + "Number");
-    savedTableLocation = {
-        boxX: boxLayer.x,
-        boxY: boxLayer.y,
-        textX: textLayer.x,
-        textY: textLayer.y
-    };
-}
-
-function restoreTableLocation(tableName) {
-    var boxLayer = $canvasMap.getLayer(tableName + "Box");
-    var textLayer = $canvasMap.getLayer(tableName + "Number");
-    $canvasMap.setLayer(boxLayer, {
-        x: savedTableLocation.boxX,
-        y: savedTableLocation.boxY
-    });
-    $canvasMap.setLayer(textLayer, {
-        x: savedTableLocation.textX,
-        y: savedTableLocation.textY
-    });
-    $canvasMap.drawLayers();
+function restoreTableLocation(tableLayer) {
+    var tableNumber = tableLayer.data.tableNumber;
+    var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
+    drawRect(tableNumber, location.x, location.y, location.width, location.height);
 }
 //
 //draw tables and table numbers
@@ -83,6 +63,9 @@ function drawRect(tableNumber, x, y, width, height) {
             strokeStyle: '#000',
             fillStyle: '#DDD',
             strokeWidth: scaling,
+            data: {
+                tableNumber: tableNumber
+            },
             x: x,
             y: y,
             width: width,
@@ -91,11 +74,9 @@ function drawRect(tableNumber, x, y, width, height) {
             dragstart: function(layer) {
                 var name = layer.name.replace("Box", "");
                 bringTableToFront(name);
-                saveTableLocation(name);
             },
             dragstop: function(layer) {
-                var name = layer.name.replace("Box", "");
-                restoreTableLocation(name);
+                restoreTableLocation(layer);
             }
         });
         $canvasMap.drawText({
@@ -105,6 +86,9 @@ function drawRect(tableNumber, x, y, width, height) {
             groups: ['table' + tableNumber],
             dragGroups: ['table' + tableNumber],
             fillStyle: '#000000',
+            data: {
+                tableNumber: tableNumber
+            },
             x: x + width / 2,
             y: y + height / 2,
             fontSize: height / 2,
@@ -113,11 +97,9 @@ function drawRect(tableNumber, x, y, width, height) {
             dragstart: function(layer) {
                 var name = layer.name.replace("Number", "");
                 bringTableToFront(name);
-                saveTableLocation(name);
             },
             dragstop: function(layer) {
-                var name = layer.name.replace("Box", "");
-                restoreTableLocation(name);
+                restoreTableLocation(layer);
             }
         });
     } else {
@@ -140,7 +122,7 @@ function drawRect(tableNumber, x, y, width, height) {
 function generateTableLocations() {
     //
     //reset tableLocations variable - may have changed
-    tableLocations = {};
+    tableLocations = [];
     //
     //convenience assignments
     var s1 = Number(careerFairData.termVars.layout.section1);
