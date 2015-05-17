@@ -78,7 +78,7 @@ function mergeTables(table1, table2) {
 // }
 //
 //draw tables and table numbers
-function drawRect(tableID, x, y, width, height, scaling) {
+function drawRect(tableID, x, y, width, height, xScaling, yScaling) {
     //
     //draw tableID in box for easy reading.
     if (Number(tableID) !== 0) {
@@ -128,7 +128,7 @@ function drawRect(tableID, x, y, width, height, scaling) {
             },
             x: x + width / 2,
             y: y + height / 2,
-            fontSize: height / scaling / 2,
+            fontSize: height / yScaling / 2,
             fontFamily: 'Verdana, sans-serif',
             text: tableID,
             click: function(layer) {
@@ -210,7 +210,8 @@ function generateTableLocations() {
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
                 height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                xScaling: 0,
+                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
             tableID += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -234,7 +235,8 @@ function generateTableLocations() {
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
-                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        yScaling: 0
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -252,7 +254,8 @@ function generateTableLocations() {
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
-                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        yScaling: 0
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -264,7 +267,8 @@ function generateTableLocations() {
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
-                        scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        yScaling: 0
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -284,7 +288,8 @@ function generateTableLocations() {
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
                 height: tableHeight * tableSize,
-                scaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
+                xScaling: 0,
+                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += tableSize;
             tableID++;
@@ -300,7 +305,7 @@ function drawTables() {
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
         var tableID = (location.tableID > Object.keys(careerFairData.termVars.layout.locationTableMapping).length ? 0 : location.tableID);
-        drawRect(tableID, location.x, location.y, location.width, location.height, location.scaling);
+        drawRect(tableID, location.x, location.y, location.width, location.height, location.xScaling, location.yScaling);
     });
     //
     // rest & registration areas
