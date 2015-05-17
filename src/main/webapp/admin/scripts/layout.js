@@ -3,7 +3,6 @@ var $mapTablesCanvas;
 var $mapHighlightsCanvas;
 var scaling = 2;
 (window.setup = function() {
-
     $mapTablesCanvas = $("#mapTables");
     $mapHighlightsCanvas = $("#mapHighlights");
     var $container = $("#mapContainer");
@@ -12,7 +11,6 @@ var scaling = 2;
     $container.prop("height", containerHeight);
     $mapTablesCanvas.prop("width", containerWidth).prop("height", containerHeight);
     $mapHighlightsCanvas.prop("width", containerWidth).prop("height", containerHeight);
-    
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
@@ -34,7 +32,12 @@ function drawRect(tableNumber, x, y, width, height) {
     //
     //draw unfilled rectangle - fill is on bottom "highlights" layer
     $mapTablesCanvas.drawLine({
-        //    layer: true,
+        layer: true,
+        draggable: true,
+        bringToFront: true,
+        name: 'table' + tableNumber + 'Box',
+        groups: ['table' + tableNumber],
+        dragGroups: ['table' + tableNumber],
         strokeStyle: '#000',
         strokeWidth: scaling,
         x1: x,
@@ -54,7 +57,12 @@ function drawRect(tableNumber, x, y, width, height) {
     //draw tablenumber in box for easy reading.
     if (Number(tableNumber) !== 0) {
         $mapTablesCanvas.drawText({
-            //      layer: true,
+            layer: true,
+            draggable: true,
+            bringToFront: true,
+            name: 'table' + tableNumber + 'Number',
+            groups: ['table' + tableNumber],
+            dragGroups: ['table' + tableNumber],
             fillStyle: '#000000',
             x: x + width / 2,
             y: y + height / 2,
@@ -212,6 +220,8 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
+
+    $mapTablesCanvas.drawLayers();
 }
 // Create a rectangle layer
 // $('canvas').drawRect({
