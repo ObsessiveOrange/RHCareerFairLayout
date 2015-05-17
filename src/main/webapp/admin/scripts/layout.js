@@ -3,7 +3,6 @@ var $canvasMap;
 var scaling = 1;
 var mergeToolActive = false;
 var mergeTable1 = null;
-
 (window.setup = function() {
     $canvasMap = $("#canvasMap");
     var $container = $("#mapContainer");
@@ -26,13 +25,11 @@ var mergeTable1 = null;
     });
 })();
 window.cleanup = function() {};
-
 // function bringTableToFront(tableNumber) {
 //     bringLayerToFront("table" + tableNumber + "Box");
 //     bringLayerToFront("table" + tableNumber + "Text");
 //     $canvasMap.drawLayers();
 // }
-
 function bringLayerToFront(layerName) {
     var layer = $canvasMap.getLayer(layerName);
     // Remove layer from its original position
@@ -46,13 +43,17 @@ function bringLayerToFront(layerName) {
     }
 }
 
+function redrawTable(tableNumber) {
+    $canvasMap.drawLayer("table" + tableNumber + "Box");
+    $canvasMap.drawLayer("table" + tableNumber + "Text");
+}
+
 function checkOverlap(layer1, layer2) {
     if (layer1.eventX >= layer2.x && layer1.eventX <= (layer2.x + layer2.width) && layer1.eventY >= layer2.y && layer1.eventY <= (layer2.y + layer2.height)) {
         return true;
     }
     return false;
 }
-
 // function restoreTableLocation(tableNumber) {
 //     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableNumber].location];
 //     $canvasMap.setLayer("table" + tableNumber + "Box", {
@@ -86,18 +87,20 @@ function drawRect(tableNumber, x, y, width, height) {
             height: height,
             fromCenter: false,
             click: function(layer) {
-                if(mergeToolActive){
+                if (mergeToolActive) {
                     var tableNumber = layer.data.tableNumber;
-
-                    if(mergeTable1 === null){
+                    if (mergeTable1 === null) {
                         mergeTable1 = tableNumber;
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
-                        $canvasMap.drawLayer("table" + tableNumber + "Box");
-                    }
-                    else{
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {
+                            fillStyle: '#0F0'
+                        });
+                        redrawTable(tableNumber);
+                    } else {
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {fillStyle: '#DDD'});
-                        $canvasMap.drawLayer("table" + mergeTable1 + "Box");
+                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
+                            fillStyle: '#DDD'
+                        });
+                        redrawTable(tableNumber);
                         mergeTable1 = null;
                     }
                 }
@@ -117,18 +120,20 @@ function drawRect(tableNumber, x, y, width, height) {
             fontFamily: 'Verdana, sans-serif',
             text: tableNumber,
             click: function(layer) {
-                if(mergeToolActive){
+                if (mergeToolActive) {
                     var tableNumber = layer.data.tableNumber;
-
-                    if(mergeTable1 === null){
+                    if (mergeTable1 === null) {
                         mergeTable1 = tableNumber;
-                        $canvasMap.setLayer("table" + tableNumber + "Box", {fillStyle: '#0F0'});
-                        $canvasMap.drawLayer("table" + tableNumber + "Box");
-                    }
-                    else{
+                        $canvasMap.setLayer("table" + tableNumber + "Box", {
+                            fillStyle: '#0F0'
+                        });
+                        redrawTable(tableNumber);
+                    } else {
                         console.log("Merge table " + mergeTable1 + " and " + tableNumber);
-                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {fillStyle: '#DDD'});
-                        $canvasMap.drawLayer("table" + mergeTable1 + "Box");
+                        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
+                            fillStyle: '#DDD'
+                        });
+                        redrawTable(tableNumber);
                         mergeTable1 = null;
                     }
                 }
