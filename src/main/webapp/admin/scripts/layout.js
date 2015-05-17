@@ -57,6 +57,14 @@ function checkOverlap(layer1, layer2) {
 
 function mergeTables(table1, table2) {
     if (Math.abs(table2 - table1) !== 1) {
+        $canvasMap.setLayer("table" + table1 + "Box", {
+            fillStyle: '#DDD'
+        });
+        $canvasMap.setLayer("table" + table2 + "Box", {
+            fillStyle: '#DDD'
+        });
+        redrawTable(table1);
+        redrawTable(table2);
         return;
     }
     careerFairData.termVars.layout.locationTableMapping[table1].tableSize += careerFairData.termVars.layout.locationTableMapping[table2].tableSize;
@@ -231,7 +239,7 @@ function generateTableLocations() {
         for (var i = 0; i < s2Rows; i++) {
             //
             //outer rows have no walkway
-            if (i === 0 || i == s2Rows - 1) {
+            if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
                     tableLocations[tableID] = {
                         tableID: tableID,
@@ -264,7 +272,7 @@ function generateTableLocations() {
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-                    if (totalTablesSize > leftTables && s2PathWidth > 0) {
+                    if (totalTablesSize > leftTables) {
                         alert("Table spanning across walkway.");
                     }
                     tableID++;
