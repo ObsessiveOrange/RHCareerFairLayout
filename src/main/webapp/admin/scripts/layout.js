@@ -222,7 +222,7 @@ function generateTableLocations() {
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
                 height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                xScaling: 0,
+                xScaling: 1,
                 yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -248,7 +248,7 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 0
+                        yScaling: 1
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableID++;
@@ -268,7 +268,7 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 0
+                        yScaling: 1
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -285,7 +285,7 @@ function generateTableLocations() {
                         width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
                         height: tableHeight,
                         xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
-                        yScaling: 0
+                        yScaling: 1
                     };
                     j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     totalTablesSize += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
@@ -309,7 +309,7 @@ function generateTableLocations() {
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
                 height: tableHeight * tableSize,
-                xScaling: 0,
+                xScaling: 1,
                 yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize
             };
             i += tableSize;
@@ -329,7 +329,15 @@ function drawTables() {
     });
     //
     // rest & registration areas
-    drawRect(0, 40 * unitX, 80 * unitY, 45 * unitX, 15 * unitY);
+    drawRect({
+        tableID: 0,
+        x: 40 * unitX,
+        y: 80 * unitY,
+        width: 45 * unitX,
+        height: 15 * unitY,
+        xScaling: 1,
+        yScaling: 1
+    });
     $canvasMap.drawText({
         layer: true,
         fillStyle: '#000000',
@@ -339,7 +347,15 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Rest Area'
     });
-    drawRect(0, 5 * unitX, 80 * unitY, 30 * unitX, 15 * unitY);
+    drawRect({
+        tableID: 0,
+        x: 5 * unitX,
+        y: 80 * unitY,
+        width: 30 * unitX,
+        height: 15 * unitY,
+        xScaling: 1,
+        yScaling: 1
+    });
     $canvasMap.drawText({
         layer: true,
         fillStyle: '#000000',
