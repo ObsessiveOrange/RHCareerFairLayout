@@ -6,6 +6,12 @@ var scaling = 2;
 
     $mapTablesCanvas = $("#mapTables");
     $mapHighlightsCanvas = $("#mapHighlights");
+    var $container = $("#mapContainer");
+    var containerWidth = $container.width() * scaling;
+    var containerHeight = $container.width() * (scaling / 2);
+    $container.prop("height", containerHeight);
+    $mapTablesCanvas.prop("width", containerWidth).prop("height", containerHeight);
+    $mapHighlightsCanvas.prop("width", containerWidth).prop("height", containerHeight);
     
     sendGetRequest({
         url: "/api/data?method=getData",

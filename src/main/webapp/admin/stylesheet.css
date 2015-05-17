@@ -143,55 +143,16 @@ body {
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
 }
-.searchBar {
-    width: calc(100% - 34px);
-    padding: 10px 15px;
-    border: solid 2px #EEE;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    background-color: #EEE;
-    font-size: 2.0em;
+.mapContainer {
+    position: relative;
+    width: 100%;
 }
-.searchBar:focus {
-    outline: none;
-    border: solid 2px #5555FF;
-    background-color: #FDFFD6;
+.mapContainer:before {
+    display: block;
+    padding-top: 50%;
 }
-.companyListHighlight {
-    width: 50px;
-    font-weight: bold;
-    color: #38C;
-}
-.companyListCompanyID {
-    width: 0;
-    display: none;
-    visibility: hidden;
-}
-.companyListTable {
-    width: 100px;
-}
-/*.companyListInfo {
-    width: 50px;
-}*/
-
-/**
- * FILTERS
- * Body customization
- */
-
-.filtersListExpandColumn {
-    width: 100px;
-}
-.filtersListSelectColumn {
-    font-weight: bold;
-    color: #38C;
-}
-.filtersListGroupRow {
-    font-weight: bold;
-    background-color: #F9FFBF;
-}
-.filtersListGroupRow td {
-    border-bottom: solid 1px #222;
+.canvasMap {
+    width: 100%;
 }
 /**
  *

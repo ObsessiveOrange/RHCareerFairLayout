@@ -165,7 +165,7 @@ function setupPage() {
     //
     //setup the map for the first time
     generateTableLocations();
-    drawTables($mapTablesCanvas);
+    drawTables();
     highlightTables();
     initTutorials("Main");
 }
@@ -446,7 +446,7 @@ function generateTableLocations() {
 }
 //
 //draw actual tables, then draw registration and rest areas
-function drawTables($mapTablesCanvas) {
+function drawTables() {
     //
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
