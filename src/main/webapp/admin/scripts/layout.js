@@ -78,10 +78,10 @@ function drawRect(tableNumber, x, y, width, height) {
             height: height,
             fromCenter: false,
             dragstart: function(layer) {
-                bringTableToFront(tableLayer.data.tableNumber);
+                bringTableToFront(layer.data.tableNumber);
             },
             dragstop: function(layer) {
-                restoreTableLocation(tableLayer.data.tableNumber);
+                restoreTableLocation(layer.data.tableNumber);
                 $canvasMap.drawLayers();
             }
         });
@@ -101,10 +101,10 @@ function drawRect(tableNumber, x, y, width, height) {
             fontFamily: 'Verdana, sans-serif',
             text: tableNumber,
             dragstart: function(layer) {
-                bringTableToFront(tableLayer.data.tableNumber);
+                bringTableToFront(layer.data.tableNumber);
             },
             dragstop: function(layer) {
-                restoreTableLocation(tableLayer.data.tableNumber);
+                restoreTableLocation(layer.data.tableNumber);
                 $canvasMap.drawLayers();
             }
         });
