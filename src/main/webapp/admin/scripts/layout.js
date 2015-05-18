@@ -94,7 +94,7 @@ function mergeTables(table1, table2) {
 function drawRect(tableObj) {
     //
     //draw tableID in box for easy reading.
-    if (tableObj.tableID <= Object.keys(careerFairData.termVars.layout.locationTableMapping).length) {
+    if (tableID !== 0 || tableObj.tableID <= Object.keys(careerFairData.termVars.layout.locationTableMapping).length) {
         $canvasMap.drawRect({
             layer: true,
             name: 'table' + tableObj.tableID + 'Box',
