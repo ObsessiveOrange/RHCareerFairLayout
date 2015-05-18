@@ -151,8 +151,8 @@ body {
     flex: 1 1 auto;
 }
 .rightOptionsFrame{
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 .mapContainer {
     position: relative;
