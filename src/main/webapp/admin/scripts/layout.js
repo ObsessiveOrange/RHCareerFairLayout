@@ -240,7 +240,8 @@ function generateTableLocations() {
     if (s2Rows > 0 && s2 > 0) {
         for (var i = 0; i < s2Rows; i++) {
             //
-            //outer rows have no walkway
+            //Outer rows have no walkway.
+            //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
                     tableLocations[tableID] = {
