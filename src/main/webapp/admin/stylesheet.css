@@ -151,6 +151,8 @@ body {
     flex: 1 1 auto;
 }
 .rightOptionsFrame{
+    display: -webkit-flex;
+    display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
 }
