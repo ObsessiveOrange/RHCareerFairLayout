@@ -23,8 +23,30 @@ var mergeTable1 = null;
             drawTables();
         }
     });
+
+
 })();
 window.cleanup = function() {};
+
+
+function setupLinks() {
+    $(".groupHeader").click(function(event) {
+        var sourceID = event.delegateTarget.id;
+        var target = sourceID.replace("GroupHeader", "");
+        if ($("#" + sourceID + "Arrow").html().trim() == "▼") {
+            $("." + target + "Item").hide();
+            $("#" + sourceID + "Arrow").html("►");
+        } else {
+            $("." + target + "Item").show();
+            $("#" + sourceID + "Arrow").html("▼");
+        }
+    });
+    $(".menuLink").click(function(event) {
+        var sourceID = event.delegateTarget.id;
+        loadContentWithJS(sourceID);
+    });
+}
+
 // function bringTableToFront(tableID) {
 //     bringLayerToFront("table" + tableID + "Box");
 //     bringLayerToFront("table" + tableID + "Text");
