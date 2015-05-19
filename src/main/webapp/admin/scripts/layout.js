@@ -71,7 +71,7 @@ function generateUndefinedTableMappings() {
     //sum up tables
     totalCount += s1;
     totalCount += s2 * 2;
-    totalCount += (s2 - s2PathWidth) * s2Rows - 2;
+    totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
     for (var i = 1; i <= totalCount; i++) {
         if((typeof careerFairData.termVars.layout.locationTableMapping[i]) == "undefined"){
@@ -198,14 +198,7 @@ function drawRect(tableObj) {
                     } else {
                         var table1 = tableID > mergeTable1 ? mergeTable1 : tableID;
                         var table2 = tableID > mergeTable1 ? tableID : mergeTable1;
-                        console.log("Merge table " + mergeTable1 + " and " + tableID);
                         mergeTables(table1, table2);
-                        //     console.log("Merge table " + mergeTable1 + " and " + tableID);
-                        //     $canvasMap.setLayer("table" + mergeTable1 + "Box", {
-                        //         fillStyle: '#DDD'
-                        //     });
-                        //     redrawTable(mergeTable1);
-                        //     mergeTable1 = null;
                     }
                 } else if (splitToolActive) {
                     splitTable(layer.data.tableID);
