@@ -123,7 +123,11 @@ body {
 }
 .menuList tr:hover {
     color: #000;
-    background-color: #CFF;
+    background-color: #DDD;
+}
+.menuList tr .selected {
+    color: #000;
+    background-color: #CDD;
 }
 .menuList tr:last-child {
     border-bottom: solid 1px #CCC;
