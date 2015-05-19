@@ -73,8 +73,14 @@ function generateUndefinedTableMappings() {
     totalCount += s2 * 2;
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
+
     for (var i = 1; i <= totalCount; i++) {
-        if((typeof careerFairData.termVars.layout.locationTableMapping[i]) == "undefined"){
+        if((typeof careerFairData.termVars.layout.locationTableMapping[i]) != "undefined"){
+            if(careerFairData.termVars.layout.locationTableMapping[i].tableSize > 1){
+                totalCount -= careerFairData.termVars.layout.locationTableMapping[i].tableSize-1;
+            }
+        }
+        else{
             careerFairData.termVars.layout.locationTableMapping[i] = {
                 location: i,
                 tableNumber: i,
