@@ -198,6 +198,9 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.companyListNameColumn{
+    max-width: 200px;
+}
 /**
  *
  * Footer customization

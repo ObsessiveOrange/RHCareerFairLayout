@@ -92,7 +92,7 @@ function generateUndefinedTableMappings() {
 function populateCompanyList() {
     Object.keys(careerFairData.companies).forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
-        $("#companyListContainer").append("<tr class=level2' id='companyListRow_" + companyID + "'><td id='companyListName_" + companyID + "'>" + company.name + "</td><td id='companyListTableSelector_" + companyID + "'>< select id='companyListTableDropdown_" + companyID + "' class='companyListTableDropdown'></select></td></tr>");
+        $("#companyListContainer").append("<tr class=level2' id='companyListRow_" + companyID + "'><td id='companyListName_" + companyID + "'>" + company.name + "</td><td id='companyListTableSelector_" + companyID + "'><select id='companyListTableDropdown_" + companyID + "' class='companyListTableDropdown'></select></td></tr>");
     });
     //add null value
     $(".companyListTableDropdown").append("<option value='-1'></option>");
