@@ -5,6 +5,8 @@ var selectionToolActive = true;
 var mergeToolActive = false;
 var splitToolActive = false;
 var mergeTable1 = null;
+var tableLocations = [];
+var companyLocations = [];
 (window.setup = function() {
     $canvasMap = $("#canvasMap");
     var $container = $("#mapContainer");
@@ -237,6 +239,7 @@ function generateTableLocations() {
     //
     //reset tableLocations variable - may have changed
     tableLocations = [];
+    companyLocations = [];
     //
     //convenience assignments
     var s1 = Number(careerFairData.termVars.layout.section1);
