@@ -117,7 +117,7 @@ function splitTable(table) {
     var shiftCount = careerFairData.termVars.layout.locationTableMapping[table].tableSize - 1;
     careerFairData.termVars.layout.locationTableMapping[table].tableSize = 1;
     for (var i = Object.keys(careerFairData.termVars.layout.locationTableMapping).length; i > table; i--) {
-        careerFairData.termVars.layout.locationTableMapping[i+shiftCount] = careerFairData.termVars.layout.locationTableMapping[i];
+        careerFairData.termVars.layout.locationTableMapping[i + shiftCount] = careerFairData.termVars.layout.locationTableMapping[i];
     }
     for (var i = 0; i < shiftCount; i++) {
         careerFairData.termVars.layout.locationTableMapping[table + 1 + i] = {
@@ -180,11 +180,20 @@ function drawRect(tableObj) {
                         //     redrawTable(mergeTable1);
                         //     mergeTable1 = null;
                     }
-                }
-                else if(splitToolActive){
+                } else if (splitToolActive) {
                     splitTable(layer.data.tableID);
                 }
-            }
+            },
+            mouseover: function(layer) {
+                $canvasMap.setLayer(layer, {
+                    fillStyle: '#CCC'
+                });
+            },
+            mouseout: function(layer) {
+                $canvasMap.setLayer(layer, {
+                    fillStyle: '#DDD'
+                });
+            },
         });
         $canvasMap.drawText({
             layer: true,
