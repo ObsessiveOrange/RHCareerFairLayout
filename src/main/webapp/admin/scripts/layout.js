@@ -114,11 +114,15 @@ function splitTable(table) {
     if (careerFairData.termVars.layout.locationTableMapping[table].tableSize === 1) {
         return;
     }
+    var shiftCount = careerFairData.termVars.layout.locationTableMapping[table].tableSize;
     careerFairData.termVars.layout.locationTableMapping[table].tableSize = 1;
-    for (var i = 0; i < careerFairData.termVars.layout.locationTableMapping[table].tableSize - 1; i++) {
+    for (var i = Object.keys(careerFairData.termVars.layout.locationTableMapping).length; i > table; i--) {
+        careerFairData.termVars.layout.locationTableMapping[i+shiftCount] = careerFairData.termVars.layout.locationTableMapping[i];
+    }
+    for (var i = table+1; i < table + shiftCount + 1; i++) {
         var nextTable = Object.keys(careerFairData.termVars.layout.locationTableMapping).length + 1;
-        careerFairData.termVars.layout.locationTableMapping[Object.keys(careerFairData.termVars.layout.locationTableMapping).length + 1] = {
-            location: nextTable,
+        careerFairData.termVars.layout.locationTableMapping[i] = {
+            location: i,
             tableSize: 1
         };
     }

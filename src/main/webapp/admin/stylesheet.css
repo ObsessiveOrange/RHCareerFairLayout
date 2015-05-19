@@ -153,6 +153,10 @@ body {
     word-wrap: break-word;
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
 }
 .rightOptionsContentFrame{
     display: -webkit-flex;
