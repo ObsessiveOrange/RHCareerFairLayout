@@ -27,7 +27,7 @@ $(document).ready(function() {
 });
 
 function setupLinks() {
-    $(".groupHeader").click(function(event) {
+    $(document.body).on("click", ".groupHeader", function(event) {
         var sourceID = event.delegateTarget.id;
         var target = sourceID.replace("GroupHeader", "");
         if ($("#" + sourceID + "Arrow").html().trim() == "▼") {

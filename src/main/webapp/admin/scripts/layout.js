@@ -1,7 +1,9 @@
 var careerFairData;
 var $canvasMap;
 var scaling = 1;
+var selectionToolActive = true;
 var mergeToolActive = false;
+var splitToolActive = false;
 var mergeTable1 = null;
 (window.setup = function() {
     $canvasMap = $("#canvasMap");
@@ -23,30 +25,38 @@ var mergeTable1 = null;
             drawTables();
         }
     });
-
-
+    setupLinks();
 })();
 window.cleanup = function() {};
 
-
 function setupLinks() {
-    $(".groupHeader").click(function(event) {
+    $(".toolsItem").click(function(event) {
         var sourceID = event.delegateTarget.id;
-        var target = sourceID.replace("GroupHeader", "");
-        if ($("#" + sourceID + "Arrow").html().trim() == "▼") {
-            $("." + target + "Item").hide();
-            $("#" + sourceID + "Arrow").html("►");
-        } else {
-            $("." + target + "Item").show();
-            $("#" + sourceID + "Arrow").html("▼");
+        selectionToolActive = false;
+        mergeToolActive = false;
+        splitToolActive = false;
+        
+        switch (sourceID) {
+            case "selectionTool":
+                selectionToolActive = true;
+                mergeToolActive = false;
+                splitToolActive = false;
+                break;
+            case "mergeTool":
+                selectionToolActive = false;
+                mergeToolActive = true;
+                splitToolActive = false;
+                break;
+            case "splitTool":
+                selectionToolActive = false;
+                mergeToolActive = false;
+                splitToolActive = true;
+                break;
+            default:
+                break;
         }
     });
-    $(".menuLink").click(function(event) {
-        var sourceID = event.delegateTarget.id;
-        loadContentWithJS(sourceID);
-    });
 }
-
 // function bringTableToFront(tableID) {
 //     bringLayerToFront("table" + tableID + "Box");
 //     bringLayerToFront("table" + tableID + "Text");
