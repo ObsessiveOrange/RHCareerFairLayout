@@ -109,6 +109,23 @@ function mergeTables(table1, table2) {
     drawTables();
     mergeTable1 = null;
 }
+
+function splitTable(table) {
+    if (careerFairData.termVars.layout.locationTableMapping[table].tableSize === 1) {
+        return;
+    }
+    careerFairData.termVars.layout.locationTableMapping[table].tableSize = 1;
+    for (var i = 0; i < careerFairData.termVars.layout.locationTableMapping[table].tableSize - 1; i++) {
+        var nextTable = Object.keys(careerFairData.termVars.layout.locationTableMapping).length + 1;
+        careerFairData.termVars.layout.locationTableMapping[Object.keys(careerFairData.termVars.layout.locationTableMapping).length + 1] = {
+            location: nextTable,
+            tableSize: 1
+        };
+    }
+    $canvasMap.removeLayers();
+    generateTableLocations();
+    drawTables();
+}
 // function restoreTableLocation(tableID) {
 //     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableID].location];
 //     $canvasMap.setLayer("table" + tableID + "Box", {
