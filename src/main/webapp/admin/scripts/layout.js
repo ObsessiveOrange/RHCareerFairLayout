@@ -181,6 +181,9 @@ function drawRect(tableObj) {
                         //     mergeTable1 = null;
                     }
                 }
+                else if(splitToolActive){
+                    splitTable(layer.data.tableID);
+                }
             }
         });
         $canvasMap.drawText({
@@ -195,27 +198,7 @@ function drawRect(tableObj) {
             fontSize: tableObj.height / tableObj.yScaling / 2,
             fontFamily: 'Verdana, sans-serif',
             text: tableObj.tableID,
-            click: function(layer) {
-                if (mergeToolActive) {
-                    var tableID = layer.data.tableID;
-                    if (mergeTable1 === null) {
-                        mergeTable1 = tableID;
-                        $canvasMap.setLayer("table" + tableID + "Box", {
-                            fillStyle: '#0F0'
-                        });
-                        redrawTable(tableID);
-                    } else {
-                        var table1 = tableID > mergeTable1 ? mergeTable1 : tableID;
-                        var table2 = tableID > mergeTable1 ? tableID : mergeTable1;
-                        console.log("Merge table " + mergeTable1 + " and " + tableID);
-                        mergeTables(table1, table2);
-                        // $canvasMap.setLayer("table" + mergeTable1 + "Box", {
-                        //     fillStyle: '#DDD'
-                        // });
-                        // redrawTable(mergeTable1);
-                    }
-                }
-            }
+            intangible: true
         });
     } else {
         //
