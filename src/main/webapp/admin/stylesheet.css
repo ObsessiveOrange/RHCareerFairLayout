@@ -158,14 +158,8 @@ body {
     -webkit-flex-direction: row;
     flex-direction: row;
 }
-.rightOptionsContentFrame {
-    flex: 1 1 auto;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-}
 .rightOptionsFrame {
+    flex: 1 1 auto;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
