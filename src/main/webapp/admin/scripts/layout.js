@@ -192,7 +192,7 @@ function drawRect(tableObj) {
                 }
             },
             mouseout: function(layer) {
-                if (layer.fillStyle === '#DDD') {
+                if (layer.fillStyle === '#CCC') {
                     $canvasMap.setLayer(layer, {
                         fillStyle: 'transparent'
                     });
