@@ -1,6 +1,6 @@
 var careerFairData;
 var $canvasMap;
-var scaling = 1;
+var scaling = 2;
 var selectionToolActive = true;
 var mergeToolActive = false;
 var splitToolActive = false;
