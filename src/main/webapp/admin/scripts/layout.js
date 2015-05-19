@@ -35,29 +35,20 @@ function setupLinks() {
         selectionToolActive = false;
         mergeToolActive = false;
         splitToolActive = false;
+        $("#selectionTool").removeClass("selected");
+        $("#mergeTool").removeClass("selected");
+        $("#splitTool").removeClass("selected");
         switch (sourceID) {
             case "selectionTool":
                 selectionToolActive = true;
-                mergeToolActive = false;
-                splitToolActive = false;
                 $("#selectionTool").addClass("selected");
-                $("#mergeTool").removeClass("selected");
-                $("#splitTool").removeClass("selected");
                 break;
             case "mergeTool":
-                selectionToolActive = false;
                 mergeToolActive = true;
-                splitToolActive = false;
-                $("#selectionTool").removeClass("selected");
                 $("#mergeTool").addClass("selected");
-                $("#splitTool").removeClass("selected");
                 break;
             case "splitTool":
-                selectionToolActive = false;
-                mergeToolActive = false;
                 splitToolActive = true;
-                $("#selectionTool").removeClass("selected");
-                $("#mergeTool").removeClass("selected");
                 $("#splitTool").addClass("selected");
                 break;
             default:

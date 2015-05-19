@@ -125,7 +125,7 @@ body {
     color: #000;
     background-color: #DDD;
 }
-.menuList tr .selected {
+.menuList tr.selected {
     color: #000;
     background-color: #CDD;
 }
