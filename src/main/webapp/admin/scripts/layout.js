@@ -8,12 +8,6 @@ var mergeTable1 = null;
 var tableLocations = [];
 var companyLocations = [];
 (window.setup = function() {
-    $canvasMap = $("#canvasMap");
-    var $container = $("#mapContainer");
-    var containerWidth = $container.width() * scaling;
-    var containerHeight = $container.width() * (scaling / 2);
-    $container.prop("height", containerHeight);
-    $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
     sendGetRequest({
         url: "/api/data?method=getData",
         successHandler: function(data) {
@@ -25,6 +19,16 @@ var companyLocations = [];
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
+            //
+            //setup canvas sizing
+            $canvasMap = $("#canvasMap");
+            var $container = $("#mapContainer");
+            var containerWidth = $container.width() * scaling;
+            var containerHeight = $container.width() * (scaling / 2);
+            $container.prop("height", containerHeight);
+            $canvasMap.prop("width", containerWidth).prop("height", containerHeight);
+
+            //draw on canvas
             generateTableLocations();
             drawTables();
         }
