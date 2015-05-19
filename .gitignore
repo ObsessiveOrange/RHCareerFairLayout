@@ -23,4 +23,5 @@ $RECYCLE.BIN/
 # Eclipse
 .classpath
 .settings
-.settings/*
+.idea
+*.iml

@@ -21,6 +21,7 @@ var companyLocations = [];
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
             careerFairData = data;
             generateUndefinedTableMappings();
+            populateCompanyList();
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
@@ -73,20 +74,30 @@ function generateUndefinedTableMappings() {
     totalCount += s2 * 2;
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
-
     for (var i = 1; i <= totalCount; i++) {
-        if((typeof careerFairData.termVars.layout.locationTableMapping[i]) != "undefined"){
-            if(careerFairData.termVars.layout.locationTableMapping[i].tableSize > 1){
-                totalCount -= careerFairData.termVars.layout.locationTableMapping[i].tableSize-1;
+        if ((typeof careerFairData.termVars.layout.locationTableMapping[i]) != "undefined") {
+            if (careerFairData.termVars.layout.locationTableMapping[i].tableSize > 1) {
+                totalCount -= careerFairData.termVars.layout.locationTableMapping[i].tableSize - 1;
             }
-        }
-        else{
+        } else {
             careerFairData.termVars.layout.locationTableMapping[i] = {
                 location: i,
                 tableNumber: i,
                 tableSize: 1
             };
         }
+    }
+}
+
+function populateCompanyList() {
+    Object.keys(careerFairData.companies).forEach(function(companyID) {
+        var company = careerFairData.companies[companyID];
+        $("#companyListContainer").append("<tr class=level2' id='companyListRow_" + companyID + "'><td id='companyListName_" + companyID + "'>" + company.name + "</td><td id='companyListTableSelector_" + companyID + "'>< select id='companyListTableDropdown_" + companyID + "' class='companyListTableDropdown'></select></td></tr>");
+    });
+    //add null value
+    $(".companyListTableDropdown").append("<option value='-1'></option>");
+    for (var i = 1; i <= Object.keys(careerFairData.termVars.layout.locationTableMapping).length; i++) {
+        $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
     }
 }
 // function bringTableToFront(tableID) {

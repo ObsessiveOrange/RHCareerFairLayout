@@ -193,6 +193,11 @@ body {
     top: 0;
     left: 0;
 }
+.companyListContainer{
+    overflow: scroll;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 /**
  *
  * Footer customization
