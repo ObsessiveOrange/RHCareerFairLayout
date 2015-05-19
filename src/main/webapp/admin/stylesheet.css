@@ -162,6 +162,9 @@ body {
     -webkit-flex-direction: row;
     flex-direction: row;
 }
+.optionsContainer{
+    min-width: 200px;
+}
 .mapContainer {
     position: relative;
     width: 100%;
