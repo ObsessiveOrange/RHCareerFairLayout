@@ -20,6 +20,7 @@ var companyLocations = [];
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
             careerFairData = data;
+            generateUndefinedTableMappings();
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             careerFairData.lastFetchTime = new Date().getTime();
@@ -57,6 +58,30 @@ function setupLinks() {
                 break;
         }
     });
+}
+
+function generateUndefinedTableMappings() {
+    var s1 = Number(careerFairData.termVars.layout.section1);
+    var s2 = Number(careerFairData.termVars.layout.section2);
+    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
+    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
+    var s3 = Number(careerFairData.termVars.layout.section3);
+    //create temp var for total count
+    var totalCount = 0;
+    //sum up tables
+    totalCount += s1;
+    totalCount += s2 * 2;
+    totalCount += (s2 - s2PathWidth) * s2Rows - 2;
+    totalCount += s3;
+    for (var i = 1; i <= totalCount; i++) {
+        if((typeof careerFairData.termVars.layout.locationTableMapping[i]) == "undefined"){
+            careerFairData.termVars.layout.locationTableMapping[i] = {
+                location: i,
+                tableNumber: i,
+                tableSize: 1
+            };
+        }
+    }
 }
 // function bringTableToFront(tableID) {
 //     bringLayerToFront("table" + tableID + "Box");
@@ -262,23 +287,25 @@ function generateTableLocations() {
     //
     //
     var tableID = 1;
+    var tableSize = 1;
     var offsetX = 5 * unitX;
     //
     // section 1
     if (s1 > 0) {
         for (var i = 0; i < s1;) {
+            tableSize = careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
             tableLocations[tableID] = {
                 tableID: tableID,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                height: tableHeight * tableSize,
                 xScaling: 1,
-                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                yScaling: tableSize,
                 group: "section1"
             };
-            i += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
-            tableID += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+            i += tableSize;
+            tableID += tableSize;
         }
         offsetX += tableWidth + 5 * unitX;
     }
@@ -294,17 +321,18 @@ function generateTableLocations() {
             //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
+                    tableSize = careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableLocations[tableID] = {
                         tableID: tableID,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        width: tableWidth * tableSize,
                         height: tableHeight,
-                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        xScaling: tableSize,
                         yScaling: 1,
                         group: "section2row" + i
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+                    j += tableSize;
                     tableID++;
                 }
             }
@@ -314,31 +342,33 @@ function generateTableLocations() {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
                 for (var j = 0; j < leftTables;) {
+                    tableSize = careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableLocations[tableID] = {
                         tableID: tableID,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        width: tableWidth * tableSize,
                         height: tableHeight,
-                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        xScaling: tableSize,
                         yScaling: 1,
                         group: "section2row" + i + "L"
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+                    j += tableSize;
                     tableID++;
                 }
                 for (var j = 0; j < rightTables;) {
+                    tableSize = careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
                     tableLocations[tableID] = {
                         tableID: tableID,
                         x: offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        width: tableWidth * tableSize,
                         height: tableHeight,
-                        xScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                        xScaling: tableSize,
                         yScaling: 1,
                         group: "section2row" + i + "R"
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
+                    j += tableSize;
                     tableID++;
                 }
             }
@@ -349,7 +379,7 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-            var tableSize = (((typeof careerFairData.termVars.layout.locationTableMapping[tableID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[tableID].tableSize);
+            tableSize = careerFairData.termVars.layout.locationTableMapping[tableID].tableSize;
             tableLocations[tableID] = {
                 tableID: tableID,
                 x: offsetX,
@@ -357,7 +387,7 @@ function generateTableLocations() {
                 width: tableWidth,
                 height: tableHeight * tableSize,
                 xScaling: 1,
-                yScaling: careerFairData.termVars.layout.locationTableMapping[tableID].tableSize,
+                yScaling: tableSize,
                 group: "section3"
             };
             i += tableSize;

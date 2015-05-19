@@ -142,11 +142,11 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.menuList .level1 {
+.level1 {
     font-weight: bold;
     font-size: 20px;
 }
-.menuList .level2 {
+.level2 {
     font-size: 16px;
 }
 .contentFrame {
