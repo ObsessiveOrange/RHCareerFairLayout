@@ -85,13 +85,13 @@ body {
 .innerBorder tr:first-child th {
     border-top: 0;
 }
-.innerBorder tr: : last-child td {
+.innerBorder tr: :last-child td {
     border-bottom: 0;
 }
 .innerBorder tr td:first-child, .innerBorder tr th:first-child {
     border-left: 0;
 }
-.innerBorder tr td: last-child, .innerBorder tr th: last-child {
+.innerBorder tr td:last-child, .innerBorder tr th:last-child {
     border-right: 0;
 }
 /**
@@ -111,8 +111,8 @@ body {
     flex: 0 0 auto;
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 .menuList {
     position: relative;
@@ -131,7 +131,7 @@ body {
 .menuList .selected {
     background-color: #CDD;
 }
-.menuList tr: last-child {
+.menuList tr:last-child {
     border-bottom: solid 1px #CCC;
 }
 .menuList td {
