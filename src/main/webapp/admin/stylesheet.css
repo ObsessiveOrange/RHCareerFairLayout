@@ -104,9 +104,9 @@ body {
     position: relative;
     padding: 25px 10px 25px 10px;
     background-color: #BBB;
-    -webkit-box-shadow: 5px 0 5px 0 #888;
-    -moz-box-shadow: 5px 0 5px 0 #888;
-    box-shadow: 5px 0 5px 0 #888;
+    -webkit-box-shadow: 5px 5px 5px 0 #888;
+    -moz-box-shadow: 5px 5px 5px 0 #888;
+    box-shadow: 5px 5px 5px 0 #888;
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
 }
@@ -149,6 +149,12 @@ body {
     word-wrap: break-word;
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
+}
+.rightOptionsContentFrame{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
 }
 .rightOptionsFrame{
     display: -webkit-flex;
