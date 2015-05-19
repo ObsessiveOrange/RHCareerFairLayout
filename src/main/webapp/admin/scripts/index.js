@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 function setupLinks() {
     $(document.body).on("click", ".groupHeader", function(event) {
-        var sourceID = event.delegateTarget.id;
+        var sourceID = event.currentTarget.id;
         var target = sourceID.replace("GroupHeader", "");
         if ($("#" + sourceID + "Arrow").html().trim() == "▼") {
             $("." + target + "Item").hide();
@@ -39,7 +39,7 @@ function setupLinks() {
         }
     });
     $(".menuLink").click(function(event) {
-        var sourceID = event.delegateTarget.id;
+        var sourceID = event.currentTarget.id;
         loadContentWithJS(sourceID);
     });
 }
