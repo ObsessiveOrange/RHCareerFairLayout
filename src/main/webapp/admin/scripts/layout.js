@@ -96,7 +96,7 @@ function populateCompanyList() {
     Object.keys(careerFairData.companies).forEach(function(companyID) {
         var company = careerFairData.companies[companyID];
         var currentTable = company.tableNumber;
-        $("#companyListContainer").append("<tr class=level2' id='companyListRow_" + companyID + "'><td id='companyListName_" + companyID + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyID + "'><input type='number' id='companyListTableInput_" + companyID + "' value='" + currentTable + "' size='3' maxlength='3'/></td></tr>");
+        $("#companyListContainer").append("<tr class=level2' id='companyListRow_" + companyID + "'><td id='companyListName_" + companyID + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyID + "'><input type='text' id='companyListTableInput_" + companyID + "' value='" + currentTable + "' size='2' maxlength='4'/></td></tr>");
     });
     //add null value
     // $(".companyListTableDropdown").append("<option value='-1'></option>");
