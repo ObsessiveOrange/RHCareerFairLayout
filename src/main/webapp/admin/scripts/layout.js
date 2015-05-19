@@ -120,7 +120,6 @@ function splitTable(table) {
         careerFairData.termVars.layout.locationTableMapping[i+shiftCount] = careerFairData.termVars.layout.locationTableMapping[i];
     }
     for (var i = table+1; i < table + shiftCount + 1; i++) {
-        var nextTable = Object.keys(careerFairData.termVars.layout.locationTableMapping).length + 1;
         careerFairData.termVars.layout.locationTableMapping[i] = {
             location: i,
             tableSize: 1

@@ -158,19 +158,20 @@ body {
     -webkit-flex-direction: row;
     flex-direction: row;
 }
-.rightOptionsContentFrame{
+.rightOptionsContentFrame {
+    flex: 1 1 auto;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
     flex-direction: row;
 }
-.rightOptionsFrame{
+.rightOptionsFrame {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
     flex-direction: row;
 }
-.optionsContainer{
+.optionsContainer {
     min-width: 200px;
 }
 .mapContainer {
