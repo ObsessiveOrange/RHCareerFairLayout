@@ -185,14 +185,18 @@ function drawRect(tableObj) {
                 }
             },
             mouseover: function(layer) {
-                $canvasMap.setLayer(layer, {
-                    fillStyle: '#CCC'
-                });
+                if (layer.fillstyle = 'transparent') {
+                    $canvasMap.setLayer(layer, {
+                        fillStyle: '#CCC'
+                    });
+                }
             },
             mouseout: function(layer) {
-                $canvasMap.setLayer(layer, {
-                    fillStyle: '#DDD'
-                });
+                if (layer.fillStyle === '#DDD') {
+                    $canvasMap.setLayer(layer, {
+                        fillStyle: 'transparent'
+                    });
+                }
             },
         });
         $canvasMap.drawText({
