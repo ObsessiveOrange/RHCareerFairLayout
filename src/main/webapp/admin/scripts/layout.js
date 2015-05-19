@@ -185,7 +185,7 @@ function drawRect(tableObj) {
                 }
             },
             mouseover: function(layer) {
-                if (layer.fillstyle = 'transparent') {
+                if (layer.fillstyle == 'transparent') {
                     $canvasMap.setLayer(layer, {
                         fillStyle: '#CCC'
                     });
