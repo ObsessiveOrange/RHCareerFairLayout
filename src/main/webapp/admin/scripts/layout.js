@@ -164,7 +164,7 @@ function drawRect(tableObj) {
                     var tableID = layer.data.tableID;
                     if (mergeTable1 === null) {
                         mergeTable1 = tableID;
-                        $canvasMap.setLayer("table" + tableID + "Box", {
+                        $canvasMap.setLayer(layer, {
                             fillStyle: '#0F0'
                         });
                         redrawTable(tableID);
@@ -185,7 +185,7 @@ function drawRect(tableObj) {
                 }
             },
             mouseover: function(layer) {
-                if (typeof layer.fillstyle == "undefined" || layer.fillstyle == 'transparent') {
+                if (layer.fillStyle == 'transparent') {
                     $canvasMap.setLayer(layer, {
                         fillStyle: '#CCC'
                     });
