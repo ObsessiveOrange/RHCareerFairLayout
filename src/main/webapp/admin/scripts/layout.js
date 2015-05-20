@@ -95,7 +95,7 @@ function setupTableMappings() {
             };
         }
     }
-    careerFairData.termVars.layout.tableMapping = new NWayMap(careerFairData.termVars.layout.tableMapping, Object.keys(careerFairData.termVars.layout.tableMappings[0]));
+    careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings, Object.keys(careerFairData.termVars.layout.tableMappings[0]));
 }
 
 function populateCompanyList() {
