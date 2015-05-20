@@ -167,7 +167,6 @@ public class AdminRequestHandler {
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies ("
                     + "id INT NOT NULL,"
                     + "name VARCHAR(100) NOT NULL,"
-                    + "tableNo INT,"
                     + "description TEXT,"
                     + "PRIMARY KEY (id)"
                     + ")ENGINE=INNODB;");

@@ -84,16 +84,15 @@ public class DataRequestHandler {
             
             // Organize companies into hashmap
             PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, tableNo, description FROM Companies;");
+                    "SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
                 Integer id = getCompaniesRS.getInt("id");
                 String name = getCompaniesRS.getString("name");
                 String description = getCompaniesRS.getString("description");
-                Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
-                Company c = new Company(id, name, description, tableNo);
+                Company c = new Company(id, name, description, null);
                 companyMap.put(c.getId(), c);
             }
             
