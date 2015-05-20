@@ -143,7 +143,7 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE tableNo=values(tableNo), tableSize=values(tableSize);");
+                                "INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE companyId=values(companyId), tableSize=values(tableSize);");
         HashMap<Integer, Integer> tableCompanyMap = new HashMap<Integer, Integer>();
         for (Company c : companies) {
             tableCompanyMap.put(c.getTableNumber(), c.getId());
