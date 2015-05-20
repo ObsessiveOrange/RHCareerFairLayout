@@ -157,7 +157,7 @@ public class DataManager {
                 insertTableMapping.setInt(2, companyID);
             }
             else {
-                insertTableMapping.setNull(3, java.sql.Types.INTEGER);
+                insertTableMapping.setNull(2, java.sql.Types.INTEGER);
             }
             insertTableMapping.setInt(3, tableMappings.getItem(i, "Table Size", Integer.class));
             insertTableMapping.executeUpdate();
