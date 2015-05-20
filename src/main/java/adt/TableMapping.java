@@ -2,11 +2,11 @@ package adt;
 
 public class TableMapping {
     
-    public int tableNumber;
-    public int companyId;
-    public int tableSize;
+    public Integer tableNumber;
+    public Integer companyId;
+    public Integer tableSize;
     
-    public TableMapping(int tableNumber, int companyId, int tableSize) {
+    public TableMapping(Integer tableNumber, Integer companyId, Integer tableSize) {
     
         this.tableNumber = tableNumber;
         this.companyId = companyId;

@@ -58,7 +58,7 @@ public class DataRequestHandler {
             
             while (getTableMappingsRS.next()) {
                 Integer tableNumber = getTableMappingsRS.getInt("tableNumber");
-                Integer companyId = getTableMappingsRS.getInt("companyId");
+                Integer companyId = getTableMappingsRS.getInt("companyId") == 0 ? null : getTableMappingsRS.getInt("companyId");
                 Integer tableSize = getTableMappingsRS.getInt("tableSize");
                 TableMapping mapping = new TableMapping(tableNumber, companyId, tableSize);
                 
@@ -245,7 +245,7 @@ public class DataRequestHandler {
             
             while (getTableMappingsRS.next()) {
                 Integer tableNumber = getTableMappingsRS.getInt("tableNumber");
-                Integer companyId = getTableMappingsRS.getInt("companyId");
+                Integer companyId = getTableMappingsRS.getInt("companyId") == 0 ? null : getTableMappingsRS.getInt("companyId");
                 Integer tableSize = getTableMappingsRS.getInt("tableSize");
                 TableMapping mapping = new TableMapping(tableNumber, companyId, tableSize);
                 
