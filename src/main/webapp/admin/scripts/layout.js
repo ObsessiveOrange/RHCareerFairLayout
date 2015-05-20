@@ -78,9 +78,9 @@ function setupTableMappings() {
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
     for (var i = 1; i <= totalCount; i++) {
-        if ((typeof careerFairData.termVars.layout.tableMapping[i]) != "undefined") {
-            if (careerFairData.termVars.layout.tableMapping[i].tableSize > 1) {
-                totalCount -= careerFairData.termVars.layout.tableMapping[i].tableSize - 1;
+        if ((typeof careerFairData.termVars.layout.tableMappings[i]) != "undefined") {
+            if (careerFairData.termVars.layout.tableMappings[i].tableSize > 1) {
+                totalCount -= careerFairData.termVars.layout.tableMappings[i].tableSize - 1;
             }
         } else {
             // careerFairData.termVars.layout.tableMappings[i] = {
@@ -88,14 +88,14 @@ function setupTableMappings() {
             //     tableNumber: i,
             //     tableSize: 1
             // };
-            careerFairData.termVars.layout.tableMapping[i] = {
+            careerFairData.termVars.layout.tableMappings[i] = {
                 table: i,
                 companyId: null,
                 tableSize: 1
             };
         }
     }
-    careerFairData.termVars.layout.tableMapping = new NWayMap(careerFairData.termVars.layout.tableMapping, Object.keys(careerFairData.termVars.layout.tableMapping[0]));
+    careerFairData.termVars.layout.tableMapping = new NWayMap(careerFairData.termVars.layout.tableMapping, Object.keys(careerFairData.termVars.layout.tableMappings[0]));
 }
 
 function populateCompanyList() {
