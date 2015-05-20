@@ -42,10 +42,11 @@ NWayMap.prototype.get = function(header, key) {
 NWayMap.prototype.remove = function(header, key) {
     var prevValue = null;
     for (var i = 0; i < this.headersArray.length; i++) {
-        if(this.get(header, key) !== null){
-            prevValue = this.get(header, key);
+        var thisHeader = this.headersArray[i];
+        if(this.get(thisHeader, key) !== null){
+            prevValue = this.get(thisHeader, key);
         }
-        delete this.dataByHeaders[header][key];
+        delete this.dataByHeaders[thisHeader][key];
     }
     return prevValue;
 };
