@@ -101,6 +101,7 @@ public class AdminRequestHandler {
         return new FailResponse(-100, "Expected content of type multipart/form-data");
     }
     
+    @SuppressWarnings("unchecked")
     public static Response uploadData(String year, String quarter, Workbook uploadedWorkbook) {
     
         String dbName = Utils.getDBName(year, quarter);
@@ -114,19 +115,24 @@ public class AdminRequestHandler {
             }
             
             Response updateTermVarsResponse = DataManager.updateTermVars(dbName, uploadedWorkbook.getSheet("Variables"));
-            Response updateTableMappingsResponse = DataManager.updateTableMappings(dbName, uploadedWorkbook.getSheet("TableMappings"));
+            if (!updateTermVarsResponse.success) {
+                FailResponse failResponse = new FailResponse("Failed updating TermVars");
+                failResponse.addToReturnData("updateTermVarsResponse", updateTermVarsResponse);
+            }
             Response updateCategoriesAndCompaniesResponse =
                     DataManager.updateCategoriesAndCompanies(dbName, uploadedWorkbook.getSheet("Categories"), uploadedWorkbook.getSheet("Companies"));
-            
-            if (updateTermVarsResponse.success && updateTableMappingsResponse.success && updateCategoriesAndCompaniesResponse.success) {
-                return new SuccessResponse("Term data uploaded successfully.");
+            if (!updateCategoriesAndCompaniesResponse.success) {
+                FailResponse failResponse = new FailResponse("Failed updating Categories and Companies");
+                failResponse.addToReturnData("updateCategoriesAndCompaniesResponse", updateCategoriesAndCompaniesResponse);
             }
-            
-            Response failed = new FailResponse(-1);
-            failed.addToReturnData("updateTermVarsResponse", updateTermVarsResponse);
-            failed.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
-            failed.addToReturnData("updateCategoriesAndCompaniesResponse", updateCategoriesAndCompaniesResponse);
-            return failed;
+            Response updateTableMappingsResponse =
+                    DataManager.updateTableMappings(dbName, uploadedWorkbook.getSheet("TableMappings"),
+                            updateCategoriesAndCompaniesResponse.getFromReturnData("companyList", List.class));
+            if (!updateTableMappingsResponse.success) {
+                FailResponse failResponse = new FailResponse("Failed updating Table Mappings");
+                failResponse.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
+            }
+            return new SuccessResponse("Term data uploaded successfully.");
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
@@ -199,10 +205,11 @@ public class AdminRequestHandler {
                     + ")ENGINE=INNODB;");
             
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
-                    + "location INT NOT NULL,"
-                    + "tableNo INT NOT NULL,"
+                    + "tableNumber INT NOT NULL,"
+                    + "companyId INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
-                    + "PRIMARY KEY (location)"
+                    + "PRIMARY KEY (location),"
+                    + "FOREIGN KEY "
                     + ")ENGINE=INNODB;");
             
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("

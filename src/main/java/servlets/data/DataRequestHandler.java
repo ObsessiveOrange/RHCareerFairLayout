@@ -53,17 +53,16 @@ public class DataRequestHandler {
             
             // Retreive TableMapping from DB
             PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT location, tableNo, tableSize FROM TableMappings;");
+                    "SELECT tableNumber,companyId, tableSize FROM TableMappings;");
             ResultSet getTableMappingsRS = getTableMappings.executeQuery();
             
             while (getTableMappingsRS.next()) {
-                Integer location = getTableMappingsRS.getInt("location");
-                Integer tableNo = getTableMappingsRS.getInt("tableNo");
+                Integer tableNumber = getTableMappingsRS.getInt("tableNumber");
+                Integer companyId = getTableMappingsRS.getInt("companyId");
                 Integer tableSize = getTableMappingsRS.getInt("tableSize");
-                TableMapping mapping = new TableMapping(location, tableNo, tableSize);
+                TableMapping mapping = new TableMapping(tableNumber, companyId, tableSize);
                 
-                layout.getLocationTableMapping().put(location, mapping);
-                layout.getTableLocationMapping().put(tableNo, mapping);
+                layout.getTableMappings().add(mapping);
             }
             
             // Organize categories into hashmap
@@ -80,7 +79,7 @@ public class DataRequestHandler {
                 if (categoryMap.get(type) == null) {
                     categoryMap.put(type, new HashMap<Integer, Category>());
                 }
-                categoryMap.get(type).put(c.getID(), c);
+                categoryMap.get(type).put(c.getId(), c);
             }
             
             // Organize companies into hashmap
@@ -95,7 +94,7 @@ public class DataRequestHandler {
                 Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
                 Company c = new Company(id, name, description, tableNo);
-                companyMap.put(c.getID(), c);
+                companyMap.put(c.getId(), c);
             }
             
             // Add categoryIDs to company objects
@@ -155,7 +154,7 @@ public class DataRequestHandler {
                 if (categoryMap.get(type) == null) {
                     categoryMap.put(type, new HashMap<Integer, Category>());
                 }
-                categoryMap.get(type).put(c.getID(), c);
+                categoryMap.get(type).put(c.getId(), c);
             }
             
             SuccessResponse response = new SuccessResponse();
@@ -188,7 +187,7 @@ public class DataRequestHandler {
                 Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
                 Company c = new Company(id, name, description, tableNo);
-                companyMap.put(c.getID(), c);
+                companyMap.put(c.getId(), c);
             }
             
             // Add categoryIDs to company objects
@@ -241,17 +240,16 @@ public class DataRequestHandler {
             
             // Retreive TableMapping from DB
             PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT location, tableNo, tableSize FROM TableMappings;");
+                    "SELECT tableNumber, companyId, tableSize FROM TableMappings;");
             ResultSet getTableMappingsRS = getTableMappings.executeQuery();
             
             while (getTableMappingsRS.next()) {
-                Integer location = getTableMappingsRS.getInt("location");
-                Integer tableNo = getTableMappingsRS.getInt("tableNo");
+                Integer tableNumber = getTableMappingsRS.getInt("tableNumber");
+                Integer companyId = getTableMappingsRS.getInt("companyId");
                 Integer tableSize = getTableMappingsRS.getInt("tableSize");
-                TableMapping mapping = new TableMapping(location, tableNo, tableSize);
+                TableMapping mapping = new TableMapping(tableNumber, companyId, tableSize);
                 
-                layout.getLocationTableMapping().put(location, mapping);
-                layout.getTableLocationMapping().put(tableNo, mapping);
+                layout.getTableMappings().add(mapping);
             }
             
             SuccessResponse response = new SuccessResponse();
@@ -304,7 +302,7 @@ public class DataRequestHandler {
                 Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
                 Company c = new Company(id, name, description, tableNo);
-                companyMap.put(c.getID(), c);
+                companyMap.put(c.getId(), c);
             }
             
             PreparedStatement getMappedTables = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(

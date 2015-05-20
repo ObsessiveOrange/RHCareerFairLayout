@@ -136,17 +136,29 @@ public class DataManager {
         return new SuccessResponse();
     }
     
-    public static Response updateTableMappings(String dbName, Sheet tableMappings) throws SQLException, ClassNotFoundException {
+    public static Response updateTableMappings(String dbName, Sheet tableMappings, List<Company> companies) throws SQLException,
+            ClassNotFoundException {
     
         PreparedStatement insertTableMapping =
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO TableMappings (location, tableNo, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE tableNo=values(tableNo), tableSize=values(tableSize);");
+                                "INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE tableNo=values(tableNo), tableSize=values(tableSize);");
+        HashMap<Integer, Integer> tableCompanyMap = new HashMap<Integer, Integer>();
+        for (Company c : companies) {
+            tableCompanyMap.put(c.getTableNumber(), c.getId());
+        }
         
         for (int i = 0; i < tableMappings.getRows(); i++) {
-            insertTableMapping.setInt(1, tableMappings.getItem(i, "Location", Integer.class));
-            insertTableMapping.setInt(2, tableMappings.getItem(i, "Table Number", Integer.class));
+            Integer companyID = tableCompanyMap.get(i);
+            
+            insertTableMapping.setInt(1, tableMappings.getItem(i, "Table Number", Integer.class));
+            if (companyID != null) {
+                insertTableMapping.setInt(2, companyID);
+            }
+            else {
+                insertTableMapping.setNull(3, java.sql.Types.INTEGER);
+            }
             insertTableMapping.setInt(3, tableMappings.getItem(i, "Table Size", Integer.class));
             insertTableMapping.executeUpdate();
         }
@@ -163,7 +175,7 @@ public class DataManager {
                                 "INSERT INTO Categories (id, name, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), type=values(type);");
         
         for (Category c : categories) {
-            insertCategories.setInt(1, c.getID());
+            insertCategories.setInt(1, c.getId());
             insertCategories.setString(2, c.getName());
             insertCategories.setString(3, c.getType());
             insertCategories.executeUpdate();
@@ -178,24 +190,17 @@ public class DataManager {
                 SQLManager
                         .getConn(dbName)
                         .prepareStatement(
-                                "INSERT INTO Companies (id, name, tableNo, description) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), tableNo=values(tableNo), description=values(description);");
+                                "INSERT INTO Companies (id, name, description) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), description=values(description);");
         
         for (Company c : companies) {
-            insertCompanies.setInt(1, c.getID());
+            insertCompanies.setInt(1, c.getId());
             insertCompanies.setString(2, c.getName());
             
-            if (c.getTableNumber() != null) {
-                insertCompanies.setInt(3, c.getTableNumber());
-            }
-            else {
-                insertCompanies.setNull(3, java.sql.Types.INTEGER);
-            }
-            
             if (c.getDescription() != null) {
-                insertCompanies.setString(4, c.getDescription());
+                insertCompanies.setString(3, c.getDescription());
             }
             else {
-                insertCompanies.setNull(4, java.sql.Types.BLOB);
+                insertCompanies.setNull(3, java.sql.Types.BLOB);
             }
             insertCompanies.executeUpdate();
         }
@@ -212,9 +217,9 @@ public class DataManager {
                                 "INSERT IGNORE INTO Categories_Companies (categoryId, companyId) VALUES (?, ?)");
         
         for (Company company : companies) {
-            for (Integer categoryID : company.getCategories()) {
-                insertCompanies.setInt(1, categoryID);
-                insertCompanies.setInt(2, company.getID());
+            for (Integer categoryId : company.getCategories()) {
+                insertCompanies.setInt(1, categoryId);
+                insertCompanies.setInt(2, company.getId());
                 insertCompanies.executeUpdate();
             }
         }
@@ -237,7 +242,7 @@ public class DataManager {
                 categoryLookupTable.put(type, new HashMap<String, Integer>());
             }
             
-            categoryLookupTable.get(type).put(name, newCategory.getID());
+            categoryLookupTable.get(type).put(name, newCategory.getId());
             
             categoryList.add(newCategory);
         }
@@ -299,7 +304,9 @@ public class DataManager {
         Response updateCompaniesResponse = updateCompanies(dbName, companyList);
         Response updateCategories_CompaniesResponse = updateCategories_Companies(dbName, companyList);
         if (updateCategoriesResponse.success && updateCompaniesResponse.success && updateCategories_CompaniesResponse.success) {
-            return new SuccessResponse();
+            SuccessResponse response = new SuccessResponse();
+            response.addToReturnData("companyList", companyList);
+            return response;
         }
         
         Response failed = new FailResponse(-1);

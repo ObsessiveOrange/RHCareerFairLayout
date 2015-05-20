@@ -27,7 +27,7 @@ public class Item implements Serializable {
         this.lastUpdateTime = System.currentTimeMillis();
     }
     
-    public int getID() {
+    public int getId() {
     
         return (int) id;
     }

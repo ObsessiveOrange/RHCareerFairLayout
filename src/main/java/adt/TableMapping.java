@@ -2,14 +2,14 @@ package adt;
 
 public class TableMapping {
     
-    public int location;
     public int tableNumber;
+    public int companyId;
     public int tableSize;
     
-    public TableMapping(int location, int tableNumber, int tableSize) {
+    public TableMapping(int tableNumber, int companyId, int tableSize) {
     
-        this.location = location;
         this.tableNumber = tableNumber;
+        this.companyId = companyId;
         this.tableSize = tableSize;
     }
 }

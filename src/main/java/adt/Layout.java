@@ -1,17 +1,16 @@
 package adt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Layout {
     
-    private int                        section1             = 0;
-    private int                        section2             = 0;
-    private int                        section2_Rows         = 0;
-    private int                        section2_PathWidth    = 0;
-    private int                        section3             = 0;
-    private Map<Integer, TableMapping> locationTableMapping = new HashMap<Integer, TableMapping>();
-    private Map<Integer, TableMapping> tableLocationMapping = new HashMap<Integer, TableMapping>();
+    private int                     section1           = 0;
+    private int                     section2           = 0;
+    private int                     section2_Rows      = 0;
+    private int                     section2_PathWidth = 0;
+    private int                     section3           = 0;
+    private ArrayList<TableMapping> tableMappings      = new ArrayList<TableMapping>();
     
     public Layout(HashMap<String, Object> layoutMap) {
     
@@ -75,17 +74,9 @@ public class Layout {
     /**
      * @return the locationTableMapping
      */
-    public Map<Integer, TableMapping> getLocationTableMapping() {
+    public ArrayList<TableMapping> getTableMappings() {
     
-        return locationTableMapping;
-    }
-    
-    /**
-     * @return the tableLocationMapping
-     */
-    public Map<Integer, TableMapping> getTableLocationMapping() {
-    
-        return tableLocationMapping;
+        return tableMappings;
     }
     
     public int getTableCount() {

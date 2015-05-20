@@ -100,21 +100,21 @@ function generateTableLocations() {
     var tableHeight = unitY * 70 / vrtCount;
     //
     //
-    var locationID = 1;
+    var locationId = 1;
     var offsetX = 5 * unitX;
     //
     // section 1
     if (s1 > 0) {
         for (var i = 0; i < s1;) {
-            tableLocations[locationID] = {
-                locationID: locationID,
+            tableLocations[locationId] = {
+                locationId: locationId,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
-                height: tableHeight * careerFairData.termVars.layout.locationTableMapping[locationID].tableSize
+                height: tableHeight * careerFairData.termVars.layout.locationTableMapping[locationId].tableSize
             };
-            i += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
-            locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
+            i += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
+            locationId += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
         }
         offsetX += tableWidth + 5 * unitX;
     }
@@ -129,15 +129,15 @@ function generateTableLocations() {
             //outer rows have no walkway
             if (i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
-                    tableLocations[locationID] = {
-                        locationID: locationID,
+                    tableLocations[locationId] = {
+                        locationId: locationId,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationID].tableSize,
+                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationId].tableSize,
                         height: tableHeight
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
-                    locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
+                    j += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
+                    locationId += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
                 }
             }
             //
@@ -146,26 +146,26 @@ function generateTableLocations() {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
                 for (var j = 0; j < leftTables;) {
-                    tableLocations[locationID] = {
-                        locationID: locationID,
+                    tableLocations[locationId] = {
+                        locationId: locationId,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationID].tableSize,
+                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationId].tableSize,
                         height: tableHeight
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
-                    locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
+                    j += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
+                    locationId += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
                 }
                 for (var j = 0; j < rightTables;) {
-                    tableLocations[locationID] = {
-                        locationID: locationID,
+                    tableLocations[locationId] = {
+                        locationId: locationId,
                         x: offsetX + ((leftTables + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationID].tableSize,
+                        width: tableWidth * careerFairData.termVars.layout.locationTableMapping[locationId].tableSize,
                         height: tableHeight
                     };
-                    j += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
-                    locationID += careerFairData.termVars.layout.locationTableMapping[locationID].tableSize;
+                    j += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
+                    locationId += careerFairData.termVars.layout.locationTableMapping[locationId].tableSize;
                 }
             }
         }
@@ -175,16 +175,16 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-            var tableSize = (((typeof careerFairData.termVars.layout.locationTableMapping[locationID]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationID].tableSize);
-            tableLocations[locationID] = {
-                locationID: locationID,
+            var tableSize = (((typeof careerFairData.termVars.layout.locationTableMapping[locationId]) == "undefined") ? 1 : careerFairData.termVars.layout.locationTableMapping[locationId].tableSize);
+            tableLocations[locationId] = {
+                locationId: locationId,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
                 height: tableHeight * tableSize
             };
             i += tableSize;
-            locationID += tableSize;
+            locationId += tableSize;
         }
     }
     offsetX += tableWidth + 5 * unitX;
@@ -196,7 +196,7 @@ function drawTables() {
     //draw company tables based on generated locations
     Object.keys(tableLocations).forEach(function(key) {
         var location = tableLocations[key];
-        var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationID]) == "undefined") ? "" : careerFairData.termVars.layout.locationTableMapping[location.locationID].tableNumber);
+        var tableNumber = (((typeof careerFairData.termVars.layout.locationTableMapping[location.locationId]) == "undefined") ? "" : careerFairData.termVars.layout.locationTableMapping[location.locationId].tableNumber);
         drawRect(tableNumber, location.x, location.y, location.width, location.height);
     });
     //

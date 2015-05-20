@@ -28,19 +28,19 @@ $(document).ready(function() {
 
 function setupLinks() {
     $(document.body).on("click", ".groupHeader", function(event) {
-        var sourceID = event.currentTarget.id;
-        var target = sourceID.replace("GroupHeader", "");
-        if ($("#" + sourceID + "Arrow").html().trim() == "▼") {
+        var sourceId = event.currentTarget.id;
+        var target = sourceId.replace("GroupHeader", "");
+        if ($("#" + sourceId + "Arrow").html().trim() == "▼") {
             $("." + target + "Item").hide();
-            $("#" + sourceID + "Arrow").html("►");
+            $("#" + sourceId + "Arrow").html("►");
         } else {
             $("." + target + "Item").show();
-            $("#" + sourceID + "Arrow").html("▼");
+            $("#" + sourceId + "Arrow").html("▼");
         }
     });
     $(".menuLink").click(function(event) {
-        var sourceID = event.currentTarget.id;
-        loadContentWithJS(sourceID);
+        var sourceId = event.currentTarget.id;
+        loadContentWithJS(sourceId);
     });
 }
 //

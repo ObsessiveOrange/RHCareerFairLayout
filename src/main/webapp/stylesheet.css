@@ -176,7 +176,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     font-weight: bold;
     color: #38C;
 }
-.companyListCompanyID {
+.companyListCompanyId {
     width: 0;
     display: none;
     visibility: hidden;
