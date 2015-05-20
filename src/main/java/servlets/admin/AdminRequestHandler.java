@@ -209,7 +209,7 @@ public class AdminRequestHandler {
                     + "companyId INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
                     + "PRIMARY KEY (location),"
-                    + "FOREIGN KEY "
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
