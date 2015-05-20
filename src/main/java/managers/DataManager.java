@@ -294,7 +294,7 @@ public class DataManager {
             companyCategories.addAll(majorsList);
             companyCategories.addAll(workAuthList);
             companyCategories.addAll(posTypeList);
-            Integer tableNumber = companies.getItem(i, "Table", Integer.class);
+            Integer tableNumber = companies.getItem(i, "Table Number", Integer.class);
             
             Company newCompany = new Company(i + 100, name, companyCategories, null, tableNumber);
             companyList.add(newCompany);
