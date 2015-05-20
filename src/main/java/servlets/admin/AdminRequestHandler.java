@@ -206,8 +206,8 @@ public class AdminRequestHandler {
             
             newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
                     + "tableNumber INT NOT NULL,"
-                    + "companyId INT NOT NULL,"
-                    + "tableSize INT NOT NULL,"
+                    + "companyId INT,"
+                    + "tableSize INT NOT NULL DEFAULT 1,"
                     + "PRIMARY KEY (tableNumber),"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
@@ -225,7 +225,7 @@ public class AdminRequestHandler {
                     + "('Year','" + year + "', 'term'),"
                     + "('Term','" + quarter + "', 'term');");
             
-            return new SuccessResponse("Creation of new term: " + year + " " + quarter + " successful");
+            return new SuccessResponse("Creation of new term: " + quarter + " " + year + " successful");
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
