@@ -208,7 +208,7 @@ public class AdminRequestHandler {
                     + "tableNumber INT NOT NULL,"
                     + "companyId INT NOT NULL,"
                     + "tableSize INT NOT NULL,"
-                    + "PRIMARY KEY (location),"
+                    + "PRIMARY KEY (tableNumber),"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
                     + ")ENGINE=INNODB;");
             
