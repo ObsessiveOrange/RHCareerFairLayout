@@ -154,6 +154,7 @@ function mergeTables(table1, table2) {
         return;
     }
     careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).tableSize += careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).tableSize;
+    careerFairData.termVars.layout.tableMappings.remove("tableNumber", table2);
     for (var i = table2; i < careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length; i++) {
         var prev = careerFairData.termVars.layout.tableMappings.remove("tableNumber", i + 1);
         prev.tableNumber -= 1;

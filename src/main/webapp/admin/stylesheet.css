@@ -194,7 +194,7 @@ body {
     left: 0;
 }
 .companyListContainer {
-    overflow: scroll;
+    overflow-y: scroll;
     text-overflow: ellipsis;
     white-space: nowrap;
     -webkit-flex: 1 0 0;
