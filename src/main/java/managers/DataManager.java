@@ -16,8 +16,6 @@ import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
 import adt.Sheet;
 
-import com.google.gson.Gson;
-
 public class DataManager {
     
     private static String selectedQuarter = null;
@@ -150,7 +148,6 @@ public class DataManager {
         for (Company c : companies) {
             tableCompanyMap.put(c.getTableNumber(), c.getId());
         }
-        System.out.println(new Gson().toJson(tableCompanyMap));
         
         for (int i = 0; i < tableMappings.getRows(); i++) {
             Integer companyID = tableCompanyMap.get(i);
