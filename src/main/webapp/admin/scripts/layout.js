@@ -203,7 +203,7 @@ function splitTable(table) {
 function drawRect(tableObj) {
     //
     //draw tableId in box for easy reading.
-    if (tableObj.tableId !== 0 && tableObj.tableId <= Object.keys(careerFairData.termVars.layout.tableMappings).length) {
+    if (tableObj.tableId !== 0 && tableObj.tableId <= careerFairData.termVars.layout.tableMappings.getKeys().length) {
         $canvasMap.drawRect({
             layer: true,
             name: 'table' + tableObj.tableId + 'Box',
