@@ -89,12 +89,12 @@ function setupTableMappings() {
             //     tableNumber: i,
             //     tableSize: 1
             // };
-            careerFairData.termVars.layout.tableMappings[i] = {
+            careerFairData.termVars.layout.tableMappings.push({
                 //i counts from 
                 tableNumber: i+1,
                 companyId: null,
                 tableSize: 1
-            };
+            });
         }
     }
     careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings, ["tableNumber", "companyId"]);
