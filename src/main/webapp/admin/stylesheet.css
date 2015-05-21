@@ -149,8 +149,11 @@ body {
 .level2 {
     font-size: 16px;
 }
-.level2 tr:first-child{
+.level2 td:first-child{
     padding-left: 30px;
+}
+.level2 td input[type=text]{
+    text-align: right;
 }
 .contentFrame {
     position: relative;
@@ -204,7 +207,7 @@ body {
     flex: 1 0 0;
 }
 .companyListNameColumn {
-    max-width: 200px;
+    max-width: 175px;
 }
 /**
  *
