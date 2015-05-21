@@ -169,7 +169,7 @@ body {
     flex-direction: row;
 }
 .optionsContainer {
-    min-width: 200px;
+    width: 300px;
 }
 .mapContainer {
     position: relative;
