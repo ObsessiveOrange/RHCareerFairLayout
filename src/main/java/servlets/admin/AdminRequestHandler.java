@@ -132,7 +132,11 @@ public class AdminRequestHandler {
                 FailResponse failResponse = new FailResponse("Failed updating Table Mappings");
                 failResponse.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
             }
-            return new SuccessResponse("Term data uploaded successfully.");
+            
+            SuccessResponse response = new SuccessResponse("Term data uploaded successfully.");
+            response.addToReturnData("companies", updateCategoriesAndCompaniesResponse.getFromReturnData("companyList", List.class));
+            
+            return response;
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
