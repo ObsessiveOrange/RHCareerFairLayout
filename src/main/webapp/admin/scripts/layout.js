@@ -110,6 +110,23 @@ function populateCompanyList() {
     //     $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
     // }
 }
+
+function updateCompanyList() {
+    for (var i = 0; i < careerFairData.companies.length; i++) {
+        var table = careerFairData.termVars.layout.tableMappings.get("companyId", careerFairData.companies[i]);
+        if(table !== null){
+            $("companyListTableInput_" + companyId).val(table);
+        }
+        else{
+            $("companyListTableInput_" + companyId).val("");
+        }
+    }
+    //add null value
+    // $(".companyListTableDropdown").append("<option value='-1'></option>");
+    // for (var i = 1; i <= Object.keys(careerFairData.termVars.layout.tableMappings).length; i++) {
+    //     $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
+    // }
+}
 // function bringTableToFront(tableId) {
 //     bringLayerToFront("table" + tableId + "Box");
 //     bringLayerToFront("table" + tableId + "Text");
