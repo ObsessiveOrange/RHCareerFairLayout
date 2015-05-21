@@ -8,6 +8,8 @@ var mergeTable1 = null;
 var tableLocations = [];
 var companyLocations = [];
 var prevTableColor;
+var highlightedColor = "#0BF";
+var hoverColor = "#BBB";
 (window.setup = function() {
     sendGetRequest({
         url: "/api/data?method=getData",
@@ -248,7 +250,7 @@ function drawRect(tableObj) {
                     if (mergeTable1 === null) {
                         mergeTable1 = tableId;
                         $canvasMap.setLayer(layer, {
-                            fillStyle: '#0BF'
+                            fillStyle: highlightedColor
                         });
                         redrawTable(tableId);
                     } else {
@@ -263,11 +265,11 @@ function drawRect(tableObj) {
             mouseover: function(layer) {
                 prevTableColor = layer.fillStyle;
                 $canvasMap.setLayer(layer, {
-                    fillStyle: '#BBB'
+                    fillStyle: hoverColor
                 });
             },
             mouseout: function(layer) {
-                if (layer.fillStyle === '#CCC') {
+                if (layer.fillStyle === hoverColor) {
                     $canvasMap.setLayer(layer, {
                         fillStyle: prevTableColor
                     });
