@@ -114,12 +114,13 @@ function populateCompanyList() {
 function updateCompanyList() {
     var companyListLength = Object.keys(careerFairData.companies).length;
     for (var i = 0; i < companyListLength; i++) {
-        var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", careerFairData.companies[i]);
+        var companyId = careerFairData.companies[i];
+        var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", companyId);
         if(mapping !== null){
-            $("companyListTableInput_" + mapping.companyId).val(mapping.tableNumber);
+            $("companyListTableInput_" + companyId).val(mapping.tableNumber);
         }
         else{
-            $("companyListTableInput_" + mapping.companyId).val("");
+            $("companyListTableInput_" + companyId).val("");
         }
     }
     //add null value
