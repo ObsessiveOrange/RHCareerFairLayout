@@ -102,7 +102,7 @@ function populateCompanyList() {
     Object.keys(careerFairData.companies).forEach(function(companyId) {
         var company = careerFairData.companies[companyId];
         var currentTable = company.tableNumber;
-        $("#companyListContainer").append("<tr class=level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.termVars.layout.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.termVars.layout.tableMappings.get("companyId", companyId).tableNumber) + "' size='2' maxlength='4'/></td></tr>");
+        $("#companyListContainer").append("<tr class='level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.termVars.layout.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.termVars.layout.tableMappings.get("companyId", companyId).tableNumber) + "' size='2' maxlength='4'/></td></tr>");
     });
     //add null value
     // $(".companyListTableDropdown").append("<option value='-1'></option>");
