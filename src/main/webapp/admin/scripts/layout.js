@@ -181,7 +181,7 @@ function splitTable(table) {
     }
     for (var i = 0; i < shiftCount; i++) {
         careerFairData.termVars.layout.tableMappings.put({
-            location: table + 1 + i,
+            tableNumber: table + 1 + i,
             tableSize: 1
         });
     }
