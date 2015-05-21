@@ -176,16 +176,15 @@ public class DataRequestHandler {
             
             // Organize companies into hashmap
             PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, tableNo, description FROM Companies;");
+                    "SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
                 Integer id = getCompaniesRS.getInt("id");
                 String name = getCompaniesRS.getString("name");
                 String description = getCompaniesRS.getString("description");
-                Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
-                Company c = new Company(id, name, description, tableNo);
+                Company c = new Company(id, name, description, null);
                 companyMap.put(c.getId(), c);
             }
             
@@ -268,7 +267,7 @@ public class DataRequestHandler {
         try {
             HashMap<String, Object> layoutMap = new HashMap<String, Object>();
             Layout layout = null;
-            Integer mappedTableCount = 0;
+            Integer usedTableCount = 0;
             
             // Organize termVars into hashmap
             PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
@@ -291,16 +290,15 @@ public class DataRequestHandler {
             
             // Organize companies into hashmap
             PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, tableNo, description FROM Companies;");
+                    "SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
                 Integer id = getCompaniesRS.getInt("id");
                 String name = getCompaniesRS.getString("name");
                 String description = getCompaniesRS.getString("description");
-                Integer tableNo = getCompaniesRS.getInt("tableNo");
                 
-                Company c = new Company(id, name, description, tableNo);
+                Company c = new Company(id, name, description, null);
                 companyMap.put(c.getId(), c);
             }
             
@@ -309,13 +307,13 @@ public class DataRequestHandler {
             ResultSet getMappedTablesRS = getMappedTables.executeQuery();
             
             while (getMappedTablesRS.next()) {
-                mappedTableCount = getMappedTablesRS.getInt("NumTables");
+                usedTableCount = getMappedTablesRS.getInt("NumTables");
             }
             
             SuccessResponse response = new SuccessResponse();
-            response.addToReturnData("layoutTableCount", layout.getTableCount());
-            response.addToReturnData("mappedTableCount", mappedTableCount);
             response.addToReturnData("companyCount", companyMap.size());
+            response.addToReturnData("totalTableCount", layout.getTableCount());
+            response.addToReturnData("usedTableCount", usedTableCount);
             
             return response;
         } catch (Exception e) {
