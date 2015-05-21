@@ -116,10 +116,10 @@ function updateCompanyList() {
     for (var i = 0; i < companyListLength; i++) {
         var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", careerFairData.companies[i]);
         if(mapping !== null){
-            $("companyListTableInput_" + companyId).val(mapping.tableNumber);
+            $("companyListTableInput_" + mapping.companyId).val(mapping.tableNumber);
         }
         else{
-            $("companyListTableInput_" + companyId).val("");
+            $("companyListTableInput_" + mapping.companyId).val("");
         }
     }
     //add null value
