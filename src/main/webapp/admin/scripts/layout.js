@@ -78,7 +78,7 @@ function setupTableMappings() {
     totalCount += s2 * 2;
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
-    for (var i = 1; i <= totalCount; i++) {
+    for (var i = 0; i < totalCount; i++) {
         if ((typeof careerFairData.termVars.layout.tableMappings[i]) != "undefined") {
             if (careerFairData.termVars.layout.tableMappings[i].tableSize > 1) {
                 totalCount -= careerFairData.termVars.layout.tableMappings[i].tableSize - 1;
@@ -90,7 +90,8 @@ function setupTableMappings() {
             //     tableSize: 1
             // };
             careerFairData.termVars.layout.tableMappings[i] = {
-                tableNumber: i,
+                //i counts from 
+                tableNumber: i+1,
                 companyId: null,
                 tableSize: 1
             };
