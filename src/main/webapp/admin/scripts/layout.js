@@ -490,7 +490,7 @@ function drawTables() {
         fontFamily: 'Verdana, sans-serif',
         text: 'Registration'
     });
-    $canvasMap.drawLayers();
+    highlightUsedTables();
 }
 
 function highlightUsedTables() {

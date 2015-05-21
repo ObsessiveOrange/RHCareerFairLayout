@@ -303,11 +303,11 @@ public class DataRequestHandler {
             }
             
             PreparedStatement getMappedTables = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT SUM(tableSize) as NumTables FROM TableMappings;");
+                    "SELECT COUNT(companyId) as NumUsedTables FROM TableMappings;");
             ResultSet getMappedTablesRS = getMappedTables.executeQuery();
             
             while (getMappedTablesRS.next()) {
-                usedTableCount = getMappedTablesRS.getInt("NumTables");
+                usedTableCount = getMappedTablesRS.getInt("NumUsedTables");
             }
             
             SuccessResponse response = new SuccessResponse();
