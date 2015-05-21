@@ -40,13 +40,10 @@ NWayMap.prototype.get = function(header, key) {
     return (typeof this.dataByHeaders[header][key] === 'undefined' || this.dataByHeaders[header][key] === null) ? null : this.dataByHeaders[header][key];
 };
 NWayMap.prototype.remove = function(header, key) {
-    var prevValue = null;
+    var prevValue = this.get(thisHeader, key);
     for (var i = 0; i < this.headersArray.length; i++) {
         var thisHeader = this.headersArray[i];
-        if(this.get(thisHeader, key) !== null){
-            prevValue = this.get(thisHeader, key);
-        }
-        delete this.dataByHeaders[thisHeader][key];
+        delete this.dataByHeaders[thisHeader][prevValue[thisHeader]];
     }
     return prevValue;
 };
