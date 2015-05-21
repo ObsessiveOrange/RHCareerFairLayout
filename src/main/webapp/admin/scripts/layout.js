@@ -185,6 +185,7 @@ function mergeTables(table1, table2) {
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
+    updateCompanyList();
     mergeTable1 = null;
 }
 
@@ -208,6 +209,7 @@ function splitTable(table) {
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
+    updateCompanyList();
 }
 // function restoreTableLocation(tableId) {
 //     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableId].location];
