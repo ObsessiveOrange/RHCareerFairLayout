@@ -40,7 +40,7 @@ NWayMap.prototype.get = function(header, key) {
     return (typeof this.dataByHeaders[header][key] === 'undefined' || this.dataByHeaders[header][key] === null) ? null : this.dataByHeaders[header][key];
 };
 NWayMap.prototype.remove = function(header, key) {
-    var prevValue = this.get(thisHeader, key);
+    var prevValue = this.get(header, key);
     for (var i = 0; i < this.headersArray.length; i++) {
         var thisHeader = this.headersArray[i];
         delete this.dataByHeaders[thisHeader][prevValue[thisHeader]];
