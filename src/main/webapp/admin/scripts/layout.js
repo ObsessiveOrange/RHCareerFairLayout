@@ -90,7 +90,7 @@ function setupTableMappings() {
             //     tableSize: 1
             // };
             careerFairData.termVars.layout.tableMappings[i] = {
-                table: i,
+                tableNumber: i,
                 companyId: null,
                 tableSize: 1
             };
@@ -262,7 +262,7 @@ function drawRect(tableObj) {
             mouseover: function(layer) {
                 prevTableColor = layer.fillStyle;
                 $canvasMap.setLayer(layer, {
-                    fillStyle: '#CCC'
+                    fillStyle: '#BBB'
                 });
             },
             mouseout: function(layer) {
