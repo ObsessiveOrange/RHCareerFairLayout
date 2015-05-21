@@ -7,6 +7,7 @@ var splitToolActive = false;
 var mergeTable1 = null;
 var tableLocations = [];
 var companyLocations = [];
+var prevTableColor;
 (window.setup = function() {
     sendGetRequest({
         url: "/api/data?method=getData",
@@ -117,10 +118,9 @@ function updateCompanyList() {
     for (var i = 0; i < companyListLength; i++) {
         var companyId = companyIDs[i];
         var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", companyId);
-        if(mapping !== null){
+        if (mapping !== null) {
             $("#companyListTableInput_" + companyId).val(mapping.tableNumber);
-        }
-        else{
+        } else {
             $("#companyListTableInput_" + companyId).val("");
         }
     }
@@ -247,7 +247,7 @@ function drawRect(tableObj) {
                     if (mergeTable1 === null) {
                         mergeTable1 = tableId;
                         $canvasMap.setLayer(layer, {
-                            fillStyle: '#0F0'
+                            fillStyle: '#0BF'
                         });
                         redrawTable(tableId);
                     } else {
@@ -260,16 +260,15 @@ function drawRect(tableObj) {
                 }
             },
             mouseover: function(layer) {
-                if (layer.fillStyle == 'transparent') {
-                    $canvasMap.setLayer(layer, {
-                        fillStyle: '#CCC'
-                    });
-                }
+                prevTableColor = layer.fillStyle;
+                $canvasMap.setLayer(layer, {
+                    fillStyle: '#CCC'
+                });
             },
             mouseout: function(layer) {
                 if (layer.fillStyle === '#CCC') {
                     $canvasMap.setLayer(layer, {
-                        fillStyle: 'transparent'
+                        fillStyle: prevTableColor
                     });
                 }
             }
@@ -492,6 +491,16 @@ function drawTables() {
         text: 'Registration'
     });
     $canvasMap.drawLayers();
+}
+
+function highlightUsedTables() {
+    var mappingObjs = careerFairData.termVars.layout.tableMappings.getValues("tableNumber");
+    var mappingObjsLength = mappingObjs.length;
+    for (var i = 0; i < mappingObjsLength; i++) {
+        $canvasMap.setLayer('table' + mappingObjs[i].tableNumber + 'Box', {
+            fillStyle: '#0F0'
+        });
+    }
 }
 // Create a rectangle layer
 // $('canvas').drawRect({
