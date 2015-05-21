@@ -112,9 +112,10 @@ function populateCompanyList() {
 }
 
 function updateCompanyList() {
-    var companyListLength = Object.keys(careerFairData.companies).length;
+    var companyIDs = Object.keys(careerFairData.companies);
+    var companyListLength = companyIDs.length;
     for (var i = 0; i < companyListLength; i++) {
-        var companyId = careerFairData.companies[i];
+        var companyId = companyIDs[i];
         var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", companyId);
         if(mapping !== null){
             $("companyListTableInput_" + companyId).val(mapping.tableNumber);
