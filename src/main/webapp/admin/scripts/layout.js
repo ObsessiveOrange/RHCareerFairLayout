@@ -497,10 +497,13 @@ function highlightUsedTables() {
     var mappingObjs = careerFairData.termVars.layout.tableMappings.getValues("tableNumber");
     var mappingObjsLength = mappingObjs.length;
     for (var i = 0; i < mappingObjsLength; i++) {
-        $canvasMap.setLayer('table' + mappingObjs[i].tableNumber + 'Box', {
-            fillStyle: '#0F0'
-        });
+        if (typeof mappingObjs[i].companyId !== 'undefined' && mappingObjs[i].companyId !== null) {
+            $canvasMap.setLayer('table' + mappingObjs[i].tableNumber + 'Box', {
+                fillStyle: '#0F0'
+            });
+        }
     }
+    $canvasMap.drawLayers();
 }
 // Create a rectangle layer
 // $('canvas').drawRect({
