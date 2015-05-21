@@ -150,7 +150,7 @@ public class DataManager {
         }
         
         for (int i = 0; i < tableMappings.getRows(); i++) {
-            Integer companyID = tableCompanyMap.get(i);
+            Integer companyID = tableCompanyMap.get(tableMappings.getItem(i, "Table Number", Integer.class));
             insertTableMapping.setInt(1, tableMappings.getItem(i, "Table Number", Integer.class));
             if (companyID != null) {
                 insertTableMapping.setInt(2, companyID);
