@@ -2,7 +2,10 @@
     $("#pageContents").on("click", "#login", function() {
         sendPostRequest({
             url: "/api/data?method=login",
-            headers: {},
+            headers: {
+                authUser: $("#username").val(),
+                authPass: $("#password").val()
+            },
             successHandler: function(returnData) {
                 //
                 //set last fetch time, so we know to refresh beyond a certain validity time
