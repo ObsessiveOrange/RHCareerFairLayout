@@ -47,7 +47,7 @@ function setupLinks() {
     });
     $(".menuAction").click(function(event) {
         var sourceId = event.currentTarget.id;
-        window["sourceId"]();
+        window[sourceId]();
     });
 }
 

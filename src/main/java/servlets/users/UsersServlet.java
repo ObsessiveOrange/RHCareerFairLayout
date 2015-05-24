@@ -87,6 +87,9 @@ public class UsersServlet extends HttpServlet {
             case "login":
                 responseObject = AuthManager.authenticateUser(request);
                 break;
+            case "logout":
+                responseObject = AuthManager.logoutUser(request);
+                break;
             case "registerUser":
                 responseObject = AuthManager.addUser(request);
                 break;
