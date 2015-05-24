@@ -1,7 +1,7 @@
 (window.setup = function() {
     $("#pageContents").on("click", "#login", function() {
         sendPostRequest({
-            url: "/api/data?method=login",
+            url: "/api/users?method=login",
             headers: {
                 authUser: $("#username").val(),
                 authPass: $("#password").val()
