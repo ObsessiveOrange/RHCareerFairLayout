@@ -74,8 +74,8 @@ public class AdminServlet extends HttpServlet {
         }
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-        if (fileUploadResponse.getFromReturnData("errorCode", Integer.class) != null
-                && fileUploadResponse.getFromReturnData("errorCode", Integer.class) != -100) {
+        if (fileUploadResponse.getFromReturnData("success", Integer.class) != 1
+                || !Utils.validateObjects(fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class)).success) {
             response.getWriter().print(fileUploadResponse);
             return;
         }
@@ -90,17 +90,13 @@ public class AdminServlet extends HttpServlet {
                 String year = request.getHeader("year");
                 String quarter = request.getHeader("quarter");
                 
-                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
-                    
-                    response.getWriter().print(new FailResponse("Invalid parameters provided"));
-                }
-                Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
-                
-                if (!Utils.validateArgs(year, quarter, uploadedWorkbook) || !Utils.validateTerm(year, quarter)) {
-                    
-                    responseObject = new FailResponse("Invalid parameters provided");
+                Response checkResponse;
+                if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).success
+                        || !Utils.validateTerm(year, quarter).success) {
+                    responseObject = checkResponse;
                     break;
                 }
+                Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
                 
                 responseObject = AdminRequestHandler.uploadData(year, quarter, uploadedWorkbook);
                 break;
@@ -110,14 +106,10 @@ public class AdminServlet extends HttpServlet {
                 String year = request.getHeader("year");
                 String quarter = request.getHeader("quarter");
                 
-                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
-                    
-                    response.getWriter().print(new FailResponse("Invalid parameters provided"));
-                }
-                
-                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
-                    
-                    responseObject = new FailResponse("Invalid parameters provided");
+                Response checkResponse;
+                if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).success
+                        || !Utils.validateTerm(year, quarter).success) {
+                    responseObject = checkResponse;
                     break;
                 }
                 
@@ -129,9 +121,11 @@ public class AdminServlet extends HttpServlet {
                 String year = request.getHeader("year");
                 String quarter = request.getHeader("quarter");
                 
-                if (!Utils.validateArgs(year, quarter) || !Utils.validateTerm(year, quarter)) {
-                    
-                    response.getWriter().print(new FailResponse("Invalid parameters provided"));
+                Response checkResponse;
+                if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).success
+                        || !Utils.validateTerm(year, quarter).success) {
+                    responseObject = checkResponse;
+                    break;
                 }
                 responseObject = AdminRequestHandler.setTerm(year, quarter);
                 break;

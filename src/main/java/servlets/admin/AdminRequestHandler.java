@@ -83,8 +83,7 @@ public class AdminRequestHandler {
                         else {
                             DataTable arr = new DataTable();
                             // respObj.addToReturnData(name, Streams.asString(stream));
-                            respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '"
-                                    + item.getName() + "'");
+                            respObj.addToReturnData("Item " + i, "File field '" + name + "' with file name '" + item.getName() + "'");
                             // Process the input stream
                             arr.importFromFile(new BufferedReader(new InputStreamReader(stream)), "\t", true, "\"");
                             
@@ -98,7 +97,7 @@ public class AdminRequestHandler {
                 return new FailResponse(e);
             }
         }
-        return new FailResponse(-100, "Expected content of type multipart/form-data");
+        return new SuccessResponse();
     }
     
     @SuppressWarnings("unchecked")
@@ -157,73 +156,39 @@ public class AdminRequestHandler {
             stmt.executeUpdate();
             
             Statement newTermStatement = SQLManager.getConn(dbName).createStatement();
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories ("
-                    + "id INT NOT NULL,"
-                    + "name VARCHAR(100) NOT NULL,"
-                    + "type VARCHAR(50) NOT NULL,"
-                    + "PRIMARY KEY (id),"
-                    + "UNIQUE (name, type)"
-                    + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories (" + "id INT NOT NULL," + "name VARCHAR(100) NOT NULL,"
+                    + "type VARCHAR(50) NOT NULL," + "PRIMARY KEY (id)," + "UNIQUE (name, type)" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies ("
-                    + "id INT NOT NULL,"
-                    + "name VARCHAR(100) NOT NULL,"
-                    + "description TEXT,"
-                    + "PRIMARY KEY (id)"
-                    + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies (" + "id INT NOT NULL," + "name VARCHAR(100) NOT NULL,"
+                    + "description TEXT," + "PRIMARY KEY (id)" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Representatives ("
-                    + "id INT NOT NULL,"
-                    + "name VARCHAR(50) NOT NULL,"
-                    + "roseGrad BOOLEAN NOT NULL,"
-                    + "PRIMARY KEY (id)"
-                    + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Representatives (" + "id INT NOT NULL," + "name VARCHAR(50) NOT NULL,"
+                    + "roseGrad BOOLEAN NOT NULL," + "PRIMARY KEY (id)" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories_Companies ("
-                    + "categoryId int NOT NULL,"
-                    + "companyId int NOT NULL,"
-                    + "PRIMARY KEY (categoryId, companyId),"
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Categories_Companies (" + "categoryId int NOT NULL,"
+                    + "companyId int NOT NULL," + "PRIMARY KEY (categoryId, companyId),"
                     + "FOREIGN KEY (categoryId) REFERENCES Categories(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies_Representatives ("
-                    + "companyId INT NOT NULL,"
-                    + "repId INT NOT NULL,"
-                    + "PRIMARY KEY (companyId, repId),"
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS Companies_Representatives (" + "companyId INT NOT NULL,"
+                    + "repId INT NOT NULL," + "PRIMARY KEY (companyId, repId),"
                     + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-                    + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+                    + "FOREIGN KEY (repId) REFERENCES Representatives(id) ON UPDATE CASCADE ON DELETE CASCADE" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS UserCompanyList ("
-                    + "username VARCHAR(30) NOT NULL,"
-                    + "companyId INT NOT NULL,"
-                    + "priority INT NOT NULL,"
-                    + "PRIMARY KEY (username, companyId),"
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS UserCompanyList (" + "username VARCHAR(30) NOT NULL,"
+                    + "companyId INT NOT NULL," + "priority INT NOT NULL," + "PRIMARY KEY (username, companyId),"
                     + "FOREIGN KEY (username) REFERENCES RHCareerFairLayout.Users(username) ON UPDATE CASCADE ON DELETE CASCADE,"
-                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings ("
-                    + "tableNumber INT NOT NULL,"
-                    + "companyId INT,"
-                    + "tableSize INT NOT NULL DEFAULT 1,"
-                    + "PRIMARY KEY (tableNumber),"
-                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE"
-                    + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TableMappings (" + "tableNumber INT NOT NULL," + "companyId INT,"
+                    + "tableSize INT NOT NULL DEFAULT 1," + "PRIMARY KEY (tableNumber),"
+                    + "FOREIGN KEY (companyId) REFERENCES Companies(id) ON UPDATE CASCADE ON DELETE CASCADE" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars ("
-                    + "item VARCHAR(50) NOT NULL,"
-                    + "value VARCHAR(100) NOT NULL,"
-                    + "type VARCHAR(30) NOT NULL,"
-                    + "PRIMARY KEY (item)"
-                    + ")ENGINE=INNODB;");
+            newTermStatement.executeUpdate("CREATE TABLE IF NOT EXISTS TermVars (" + "item VARCHAR(50) NOT NULL," + "value VARCHAR(100) NOT NULL,"
+                    + "type VARCHAR(30) NOT NULL," + "PRIMARY KEY (item)" + ")ENGINE=INNODB;");
             
-            newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars"
-                    + "(item, value, type) "
-                    + "VALUES "
-                    + "('Year','" + year + "', 'term'),"
-                    + "('Term','" + quarter + "', 'term');");
+            newTermStatement.executeUpdate("INSERT INTO " + dbName + ".TermVars" + "(item, value, type) " + "VALUES " + "('Year','" + year
+                    + "', 'term')," + "('Term','" + quarter + "', 'term');");
             
             return new SuccessResponse("Creation of new term: " + quarter + " " + year + " successful");
         } catch (Exception e) {
@@ -241,8 +206,9 @@ public class AdminRequestHandler {
                 return new FailResponse("Invalid term selected.");
             }
             
-            PreparedStatement updateTermRequestStatement = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                    "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
+            PreparedStatement updateTermRequestStatement =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                            "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
             
             updateTermRequestStatement.setString(1, "selectedYear");
             updateTermRequestStatement.setString(2, year);

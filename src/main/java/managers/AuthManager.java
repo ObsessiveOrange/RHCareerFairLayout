@@ -199,20 +199,7 @@ public class AuthManager {
             getAuthToken.setString(2, userName);
             getAuthToken.setString(3, token);
             getAuthToken.setString(4, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
-            ResultSet result = getAuthToken.executeQuery();
-            
-            boolean hasNextResult;
-            while (hasNextResult = result.next()) {
-                
-                if (token.equals(result.getString("sessionKey"))
-                        && result.getTimestamp("sessionValidDate").after(new Timestamp(System.currentTimeMillis()))) {
-                    break;
-                }
-            }
-            result.close();
-            if (!hasNextResult) {
-                return new FailResponse("Invalid Token");
-            }
+            getAuthToken.executeUpdate();
             
             return new SuccessResponse();
         } catch (Exception e) {

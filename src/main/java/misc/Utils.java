@@ -1,5 +1,11 @@
 package misc;
 
+import javax.servlet.http.HttpServletRequest;
+
+import adt.Response;
+import adt.Response.FailResponse;
+import adt.Response.SuccessResponse;
+
 public class Utils {
     
     public static String sanitizeString(String input) {
@@ -7,26 +13,101 @@ public class Utils {
         return input.replaceAll("\\W", "");
     }
     
-    public static boolean validateArgs(Object... objects) {
+    public static Response validateStrings(Integer minLength, Integer maxLength, HttpServletRequest request, String... headers) {
+    
+        SuccessResponse resp = new SuccessResponse();
+        
+        for (String h : headers) {
+            String s = request.getHeader(h);
+            
+            if (s == null) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (minLength != null && s.length() < minLength) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (maxLength != null && s.length() > maxLength) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else {
+                resp.addToReturnData(h, s);
+            }
+        }
+        return resp;
+    }
+    
+    public static Response validateIntegers(Integer minValue, Integer maxValue, HttpServletRequest request, String... headers) {
+    
+        SuccessResponse resp = new SuccessResponse();
+        for (String h : headers) {
+            Integer value;
+            
+            try {
+                value = Integer.valueOf(request.getHeader(h));
+            } catch (NumberFormatException e) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            
+            if (value == null) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (minValue != null && value < minValue) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (maxValue != null && value > maxValue) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else {
+                resp.addToReturnData(h, value);
+            }
+        }
+        return resp;
+    }
+    
+    public static Response validateDoubles(Double minValue, Double maxValue, HttpServletRequest request, String... headers) {
+    
+        SuccessResponse resp = new SuccessResponse();
+        for (String h : headers) {
+            Double value;
+            
+            try {
+                value = Double.valueOf(request.getHeader(h));
+            } catch (NumberFormatException e) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            
+            if (value == null || value == Double.NaN || value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (minValue != null && value < minValue) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else if (maxValue != null && value > maxValue) {
+                return new FailResponse("Invalid value provided for required header " + h + ".");
+            }
+            else {
+                resp.addToReturnData(h, value);
+            }
+        }
+        return resp;
+    }
+    
+    public static Response validateObjects(Object... objects) {
     
         for (Object o : objects) {
             if (o == null) {
-                return false;
-            }
-            if (o instanceof String && ((String) o).isEmpty()) {
-                return false;
-            }
-            if (o instanceof Double && (((Double) o).isInfinite() || ((Double) o).isNaN())) {
-                return false;
+                return new FailResponse("Invalid value provided for required object: null");
             }
         }
-        
-        return true;
+        return new SuccessResponse();
     }
     
-    public static boolean validateTerm(String year, String quarter) {
+    public static Response validateTerm(String year, String quarter) {
     
-        return (year.matches("\\d{4}") && quarter.matches("(?i:Spring|Fall|Winter)"));
+        if (!(year.matches("\\d{4}") && quarter.matches("(?i:Spring|Fall|Winter)"))) {
+            return new FailResponse("Invalid year/quarter format.");
+        }
+        return new SuccessResponse();
     }
     
     public static String toCamelCase(String s) {
