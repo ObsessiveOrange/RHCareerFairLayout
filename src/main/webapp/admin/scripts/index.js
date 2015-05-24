@@ -12,16 +12,16 @@ $(document).ready(function() {
             var returnData = data;
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success !== 0) {
+            if (returnData.success === 1) {
                 loadContentWithJS("overview");
                 setupLinks();
             } else {
-                $("#contentFrame").load("login.html");
+                loadContentWithJS("login");
             }
         },
         errorHandler: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus + " : " + errorThrown);
-            $("#contentFrame").load("login.html");
+            alert(textStatus + " : " + errorThrown);
+            loadContentWithJS("login");
         }
     });
 });
