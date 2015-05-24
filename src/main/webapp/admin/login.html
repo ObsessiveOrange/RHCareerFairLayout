@@ -2,9 +2,11 @@
 <html>
     <body>
         <div class="container" id="pageContents" style="flex: 1 1 auto">
-            <input required type="text" placeholder="username" id="usernameField" class="horizontalAlignCenter" /><br />
-            <input required type="password" placeholder="password" id="passwordField" class="horizontalAlignCenter" /><br />
-            <input type="submit" id="login" value="Login"  class="horizontalAlignCenter" />
+            <form name="loginForm" onSubmit="return false;">
+                <input required type="text" placeholder="username" id="usernameField" class="horizontalAlignCenter" /><br />
+                <input required type="password" placeholder="password" id="passwordField" class="horizontalAlignCenter" /><br />
+                <input type="submit" id="login" value="Login"  class="horizontalAlignCenter" />
+            </form>
         </div>
     </body>
 </html>
