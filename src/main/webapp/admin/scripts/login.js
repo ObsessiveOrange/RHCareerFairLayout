@@ -3,8 +3,8 @@
         sendPostRequest({
             url: "/api/users?method=login",
             headers: {
-                authUser: $("#username").val(),
-                authPass: $("#password").val()
+                authUser: $("#usernameField").val(),
+                authPass: $("#passwordField").val()
             },
             successHandler: function(returnData) {
                 //
