@@ -165,15 +165,12 @@ function checkOverlap(layer1, layer2) {
 
 function mergeTables(table1, table2) {
     if (Math.abs(table2 - table1) !== 1 || tableLocations[table1].group !== tableLocations[table2].group) {
-        $canvasMap.setLayer("table" + table1 + "Box", {
-            fillStyle: '#DDD'
+        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
+            fillStyle: prevTableColor
         });
-        $canvasMap.setLayer("table" + table2 + "Box", {
-            fillStyle: '#DDD'
-        });
-        redrawTable(table1);
-        redrawTable(table2);
+        redrawTable(mergeTable1);
         mergeTable1 = null;
+        alert("Tables must be next to each other to be merged.");
         return;
     }
     careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).tableSize += careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).tableSize;
