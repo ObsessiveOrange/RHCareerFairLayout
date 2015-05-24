@@ -13,7 +13,7 @@
                     loadContentWithJS("overview");
                     setupLinks();
                 } else {
-                    loadContentWithJS("login");
+                    alert(returnData.message);
                 }
             }
         });
