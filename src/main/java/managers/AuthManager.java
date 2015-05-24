@@ -89,9 +89,7 @@ public class AuthManager {
             Timestamp sessionValidDate = new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
             String sessionClient = request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent");
             
-            PreparedStatement newSession =
-                    SQLManager.getConn("RHCareerFairLayout").prepareStatement("INSERT INTO Sessions "
-                            + "VALUES(?, ?, ?, ?);");
+            PreparedStatement newSession = SQLManager.getConn("RHCareerFairLayout").prepareStatement("INSERT INTO Sessions " + "VALUES(?, ?, ?, ?);");
             
             newSession.setString(1, userName);
             newSession.setString(2, sessionKey);
@@ -140,10 +138,67 @@ public class AuthManager {
                 return new FailResponse("Token not provided");
             }
             
-            PreparedStatement getAuthToken = SQLManager.getConn("RHCareerFairLayout").prepareStatement(
-                    "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
+            PreparedStatement getAuthToken =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                            "SELECT sessionKey, sessionValidDate FROM Sessions WHERE username = ? AND sessionClient = ?;");
             getAuthToken.setString(1, userName);
             getAuthToken.setString(2, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
+            ResultSet result = getAuthToken.executeQuery();
+            
+            boolean hasNextResult;
+            while (hasNextResult = result.next()) {
+                
+                if (token.equals(result.getString("sessionKey"))
+                        && result.getTimestamp("sessionValidDate").after(new Timestamp(System.currentTimeMillis()))) {
+                    break;
+                }
+            }
+            result.close();
+            if (!hasNextResult) {
+                return new FailResponse("Invalid Token");
+            }
+            
+            return new SuccessResponse();
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
+            
+            return new FailResponse(e);
+        }
+    }
+    
+    public static Response logoutUser(HttpServletRequest request) {
+    
+        try {
+            
+            String userName = request.getHeader("authUser");
+            String token = request.getHeader("authToken");
+            
+            if (request.getCookies() != null) {
+                for (Cookie c : request.getCookies()) {
+                    if (c.getName().equals("authUser")) {
+                        userName = c.getValue();
+                    }
+                    if (c.getName().equals("authToken")) {
+                        token = c.getValue();
+                    }
+                }
+            }
+            
+            if (userName == null) {
+                return new FailResponse("Username not provided");
+            }
+            
+            if (token == null) {
+                return new FailResponse("Token not provided");
+            }
+            
+            PreparedStatement getAuthToken =
+                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                            "UPDATE Sessions SET sessionValidDate = ? WHERE username = ? AND sessionKey = ? AND sessionClient = ?;");
+            getAuthToken.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            getAuthToken.setString(2, userName);
+            getAuthToken.setString(3, token);
+            getAuthToken.setString(4, request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED" : request.getHeader("User-Agent"));
             ResultSet result = getAuthToken.executeQuery();
             
             boolean hasNextResult;
