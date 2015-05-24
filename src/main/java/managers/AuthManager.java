@@ -78,9 +78,9 @@ public class AuthManager {
             getHashedPWStatement.setString(1, userName);
             
             ResultSet result = getHashedPWStatement.executeQuery();
-            result.next();
+            boolean hasNext = result.next();
             
-            if (!BCrypt.checkpw(password, result.getString("hashedPw"))) {
+            if (!hasNext || !BCrypt.checkpw(password, result.getString("hashedPw"))) {
                 return new FailResponse("Invalid Username/Password Combination");
             }
             result.close();
