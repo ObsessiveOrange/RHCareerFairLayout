@@ -1,4 +1,11 @@
+
 function NWayMap(input, headersArray) {
+    this.isNWayMap = true;
+    if (input.isNWayMap) {
+        this.headersArray = input.headersArray;
+        this.dataByHeaders = input.dataByHeaders;
+        return this;
+    }
     this.headersArray = headersArray;
     this.dataByHeaders = {};
     var objArr;

@@ -8,6 +8,7 @@
         <script src="lib/List.min.js"></script>
         <script src="lib/PersistentStorage.js"></script>
         <script src="lib/ArrayExtensions.js"></script>
+        <script src="lib/NWayMap.js"></script>
         <script src="scripts/gAnalytics.js"></script>
         <script src="scripts/tutorials.js"></script>
         <script src="scripts/index.js"></script>
@@ -28,8 +29,7 @@
         </div>
         <!-- canvases, one overlayed on another for easier updating -->
         <div class="mapContainer container" id="mapContainer">
-            <canvas id="mapTables" class="canvasMap" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
-            <canvas id="mapHighlights" class="canvasMap" style="position: relative; top: 0; left: 0; z-index: 0; background-color: #EEE;"></canvas>
+            <canvas id="canvasMap" class="canvasMap"></canvas>
         </div>
         <!-- company list, related search bars and buttons -->
         <div class="bodyContent container">

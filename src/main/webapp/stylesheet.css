@@ -156,6 +156,7 @@ tr:last-child td, .tableLastRowRoundBottomLeft td, .tableLastRowRoundBottomRight
     width: 100%;
     border: 0px solid #EEE;
     border-radius: 10px;
+    background-color: #EEE;
 }
 .searchBar {
     width: calc(100% - 34px);

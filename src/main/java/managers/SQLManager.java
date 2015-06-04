@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class SQLManager {
     
-    private static final String            dbHost      = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-    private static final String            dbPort      = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-    private static final String            dbUserName  = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-    private static final String            dbPassword  = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+    private static String                  dbHost      = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    private static String                  dbPort      = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+    private static String                  dbUserName  = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+    private static String                  dbPassword  = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
     
@@ -33,8 +33,15 @@ public class SQLManager {
     
         Class.forName("com.mysql.jdbc.Driver");
         
-        connections.put(dbName,
-                DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName,
-                        dbUserName, dbPassword));
+        if (System.getenv("OPENSHIFT_MYSQL_DB_HOST") == null) {
+            System.out.println("Switching to localhost");
+            
+            dbHost = "localhost";
+            dbPort = "3306";
+            dbUserName = "root";
+            dbPassword = "password";
+        }
+        
+        connections.put(dbName, DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName, dbUserName, dbPassword));
     }
 }

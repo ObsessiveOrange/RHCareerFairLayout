@@ -352,7 +352,7 @@ function generateTableLocations() {
                 group: "section1"
             };
             i += tableSize;
-            tableId += tableSize;
+            tableId++;
         }
         offsetX += tableWidth + 5 * unitX;
     }
