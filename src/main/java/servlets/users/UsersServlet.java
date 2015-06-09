@@ -5,12 +5,12 @@ import java.io.IOException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
+import servlets.ServletUtils;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
@@ -40,7 +40,7 @@ public class UsersServlet extends HttpServlet {
         // check if the user has already been authenticated.
         if (!(authResponse = AuthManager.checkToken(request)).success) {
             // if fails authentication check, return the error.
-            response.getWriter().print(authResponse);
+            ServletUtils.sendResponse(response, authResponse);
             return;
         }
         
@@ -53,12 +53,7 @@ public class UsersServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
         }
-        if (responseObject.cookies != null) {
-            for (Cookie c : responseObject.cookies) {
-                response.addCookie(c);
-            }
-        }
-        response.getWriter().print(responseObject);
+        ServletUtils.sendResponse(response, responseObject);
     }
     
     @Override
@@ -71,7 +66,7 @@ public class UsersServlet extends HttpServlet {
             Response authResponse;
             if (!(authResponse = AuthManager.checkToken(request)).success) {
                 
-                response.getWriter().print(authResponse);
+                ServletUtils.sendResponse(response, authResponse);
                 return;
             }
         }
@@ -97,11 +92,6 @@ public class UsersServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
         }
-        if (responseObject.cookies != null) {
-            for (Cookie c : responseObject.cookies) {
-                response.addCookie(c);
-            }
-        }
-        response.getWriter().print(responseObject);
+        ServletUtils.sendResponse(response, responseObject);
     }
 }

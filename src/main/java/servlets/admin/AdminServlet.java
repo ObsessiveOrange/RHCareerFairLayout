@@ -1,6 +1,7 @@
 package servlets.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.MultipartConfig;
@@ -12,9 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
 import misc.Utils;
+import servlets.ServletUtils;
 import adt.Response;
 import adt.Response.FailResponse;
+import adt.TableMapping;
+import adt.TableMappingsWrapper;
 import adt.Workbook;
+
+import com.google.gson.Gson;
 
 @WebServlet("/api/users/admin")
 @MultipartConfig
@@ -41,7 +47,7 @@ public class AdminServlet extends HttpServlet {
         Response authResponse;
         if (!(authResponse = AuthManager.checkToken(request)).success) {
             
-            response.getWriter().print(authResponse);
+            ServletUtils.sendResponse(response, authResponse);
             return;
         }
         
@@ -58,7 +64,7 @@ public class AdminServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
         }
-        response.getWriter().print(responseObject);
+        ServletUtils.sendResponse(response, responseObject);
     }
     
     @Override
@@ -69,14 +75,14 @@ public class AdminServlet extends HttpServlet {
         Response authResponse;
         if (!(authResponse = AuthManager.checkToken(request)).success) {
             
-            response.getWriter().print(authResponse);
+            ServletUtils.sendResponse(response, authResponse);
             return;
         }
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-        if (fileUploadResponse.getFromReturnData("success", Integer.class) != 1
-                || !Utils.validateObjects(fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class)).success) {
-            response.getWriter().print(fileUploadResponse);
+        
+        if (!fileUploadResponse.success) {
+            ServletUtils.sendResponse(response, fileUploadResponse);
             return;
         }
         
@@ -130,11 +136,25 @@ public class AdminServlet extends HttpServlet {
                 responseObject = AdminRequestHandler.setTerm(year, quarter);
                 break;
             }
+            case "updateTableMappings": {
+                
+                String bodyData = ServletUtils.getBodyData(request);
+                
+                ArrayList<TableMapping> mappings = new Gson().fromJson(bodyData, TableMappingsWrapper.class).updatedMappings;
+                
+                if (!Utils.validateObjects(mappings).success) {
+                    
+                    ServletUtils.sendResponse(response, new FailResponse("Mapping null, check input"));
+                }
+                
+                responseObject = AdminRequestHandler.updateTableMappingsHandler(mappings);
+                break;
+            }
             default: {
                 responseObject = new FailResponse("Invalid POST method supplied: " + method);
                 break;
             }
         }
-        response.getWriter().print(responseObject);
+        ServletUtils.sendResponse(response, responseObject);
     }
 }

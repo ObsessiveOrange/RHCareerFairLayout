@@ -102,7 +102,7 @@ body {
 
 .menuContainer {
     position: relative;
-    padding: 25px 10px 25px 10px;
+    padding: 10px 10px 10px 10px;
     background-color: #BBB;
     -webkit-box-shadow: 5px 5px 5px 0 #888;
     -moz-box-shadow: 5px 5px 5px 0 #888;
@@ -153,10 +153,10 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
-.level2 td:first-child{
+.level2 td:first-child {
     padding-left: 30px;
 }
-.level2 td input[type=text]{
+.level2 td input[type=text] {
     text-align: right;
 }
 .contentFrame {
@@ -212,6 +212,30 @@ body {
 }
 .companyListNameColumn {
     max-width: 175px;
+}
+.submissionControlsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.submissionControlsTable .submissionControlCancel {
+    padding: 7px 0;
+    background-color: rgb(255, 200, 200);
+    background-color: rgba(255, 200, 200, 0.5);
+    text-align: center;
+    cursor: pointer;
+}
+.submissionControlsTable td.submissionControlCancel:hover {
+    background-color: rgb(255, 200, 200);
+}
+.submissionControlsTable .submissionControlSubmit {
+    padding: 7px 0;
+    background-color: rgb(200, 255, 200);
+    background-color: rgba(200, 255, 200, 0.5);
+    text-align: center;
+    cursor: pointer;
+}
+.submissionControlsTable td.submissionControlSubmit:hover {
+    background-color: rgb(200, 255, 200);
 }
 /**
  *

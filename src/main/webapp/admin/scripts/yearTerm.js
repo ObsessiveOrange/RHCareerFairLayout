@@ -30,7 +30,7 @@
                 if (response.success !== 1) {
                     alert("Error: " + response.message);
                 }
-                console.log(response, textStatus);
+                alert(response.message);
             },
             headers: {
                 "quarter": $("#selectTermField").val().split(" ")[0],
@@ -57,7 +57,7 @@
                 if (response.success !== 1) {
                     alert("Error: " + response.message);
                 }
-                console.log(response, textStatus);
+                alert(response.message);
             },
             headers: {
                 "quarter": $("#uploadDataQuarterField").val(),

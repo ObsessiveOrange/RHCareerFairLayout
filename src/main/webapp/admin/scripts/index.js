@@ -27,8 +27,8 @@ $(document).ready(function() {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
             if (returnData.success === 1) {
-                loadContentWithJS("overview");
                 setupLinks();
+                loadContentWithJS("overview");
             } else {
                 loadContentWithJS("login");
             }

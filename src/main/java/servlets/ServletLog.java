@@ -1,6 +1,7 @@
 package servlets;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -35,6 +36,7 @@ public class ServletLog {
         event.setDetail("Type", "Exception");
         event.setDetail("Exception stack trace", e.getStackTrace());
         event.setDetail("Exception message", e.getMessage());
+        event.setDetail("DateTime", new Date().toString());
         logEvent(event);
     }
     

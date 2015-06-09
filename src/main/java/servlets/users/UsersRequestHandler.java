@@ -17,30 +17,34 @@ public class UsersRequestHandler {
     public static Response handleRegisterUserRequest(HttpServletRequest request) {
     
         try {
+            PreparedStatement statement;
             
             String user = request.getHeader("authUser");
             String pass = request.getHeader("authPass");
             
             // check to make sure username does not already exist
-            // PreparedStatement check = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(id) FROM Users WHERE username = '" + user + "';");
-            // ResultSet users = check.executeQuery();
-            // users.next();
-            // if (users.getInt(1) != 0) {
-            // return new FailResponse("Username already exists");
-            // }
+            statement = SQLManager.getConn("Users").prepareStatement("SELECT COUNT(id) FROM Users WHERE username = '" + user + "';");
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            if (rs.getInt(1) != 0) {
+                return new FailResponse("Username already exists");
+            }
+            rs.close();
+            statement.close();
             
             // Permissions levels:
             // 1 - Users (Edit saved companies, visit list)
             // 10 - Admin (Edit user permssions, edit company/category list)
             // Always add as users, require admin access to elevate
-            PreparedStatement statement =
-                    SQLManager.getConn("Users").prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
+            statement = SQLManager.getConn("Users").prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
             statement.setString(1, user);
             statement.setString(2, BCrypt.hashpw(pass, BCrypt.gensalt()));
             Integer insertResult = statement.executeUpdate();
             if (insertResult == 0) {
                 return new FailResponse("Username already exists");
             }
+            rs.close();
+            statement.close();
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (Exception e) {
@@ -61,11 +65,11 @@ public class UsersRequestHandler {
             PreparedStatement prepStatement =
                     SQLManager.getConn("Users").prepareStatement("SELECT hashedPw FROM Users WHERE username = '" + user + "';");
             
-            ResultSet result = prepStatement.executeQuery();
-            result.next();
+            ResultSet rs = prepStatement.executeQuery();
+            rs.next();
             
-            if (BCrypt.checkpw(pass, result.getString("hashedPw"))) {
-                
+            if (!BCrypt.checkpw(pass, rs.getString("hashedPw"))) {
+                return new FailResponse("Username and password do not match");
             }
             
             return new SuccessResponse("success");

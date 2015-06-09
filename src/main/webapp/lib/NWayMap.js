@@ -1,4 +1,3 @@
-
 function NWayMap(input, headersArray) {
     this.isNWayMap = true;
     if (input.isNWayMap) {
@@ -48,6 +47,9 @@ NWayMap.prototype.get = function(header, key) {
 };
 NWayMap.prototype.remove = function(header, key) {
     var prevValue = this.get(header, key);
+    if (prevValue === null) {
+        return null;
+    }
     for (var i = 0; i < this.headersArray.length; i++) {
         var thisHeader = this.headersArray[i];
         delete this.dataByHeaders[thisHeader][prevValue[thisHeader]];

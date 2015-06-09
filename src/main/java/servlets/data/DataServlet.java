@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import servlets.ServletUtils;
 import adt.Response;
 import adt.Response.FailResponse;
 
@@ -72,6 +73,6 @@ public class DataServlet extends HttpServlet {
         }
         
         // Set return content type and send data;
-        response.getWriter().print(responseObject);
+        ServletUtils.sendResponse(response, responseObject);
     }
 }

@@ -268,8 +268,8 @@ function updateCompanyList() {
     filteredCompanyIds.sort(function(a, b) {
         var o1 = careerFairData.companies[a].name.toLowerCase();
         var o2 = careerFairData.companies[b].name.toLowerCase();
-        var p1 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", a).tableNumber);
-        var p2 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", b).tableNumber);
+        var p1 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", a) === null ? 0 : careerFairData.termVars.layout.tableMappings.get("companyId", a).tableNumber);
+        var p2 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", b) === null ? 0 : careerFairData.termVars.layout.tableMappings.get("companyId", b).tableNumber);
         if (o1 < o2) return -1;
         if (o1 > o2) return 1;
         if (p1 < p2) return -1;

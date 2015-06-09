@@ -4,12 +4,16 @@ var scaling = 1;
 var selectionToolActive = true;
 var mergeToolActive = false;
 var splitToolActive = false;
-var mergeTable1 = null;
+var selectedTable1 = null;
 var tableLocations = [];
 var companyLocations = [];
-var prevTableColor;
-var highlightedColor = "#0BF";
-var hoverColor = "#BBB";
+var mousedOverTable = null;
+var clickedColor = "#0BF";
+var hoverClickedColor = "#06B";
+var usedColor = "#0F0";
+var hoverUsedColor = "#0B0";
+var unusedColor = "transparent";
+var hoverUnusedColor = "#BBB";
 (window.setup = function() {
     sendGetRequest({
         url: "/api/data?method=getData",
@@ -37,10 +41,22 @@ var hoverColor = "#BBB";
     });
     setupLinks();
 })();
-window.cleanup = function() {};
+window.cleanup = function() {
+    $(".toolsItems").off();
+    $("#companyListContainer").off();
+    $(".submissionControlCancel").off();
+    $(".submissionControlSubmit").off();
+};
 
 function setupLinks() {
     $(".toolsItem").click(function(event) {
+        //
+        //cleanup current selections
+        setTableColor(selectedTable1);
+        redrawTable(selectedTable1);
+        selectedTable1 = null;
+        //
+        //set new tool active status
         var sourceId = event.delegateTarget.id;
         selectionToolActive = false;
         mergeToolActive = false;
@@ -64,6 +80,12 @@ function setupLinks() {
             default:
                 break;
         }
+    });
+    $(".submissionControlCancel").click(function(event) {
+        loadContentWithJS("layout");
+    });
+    $(".submissionControlSubmit").click(function(event) {
+        submitUpdatedMappings();
     });
 }
 
@@ -93,7 +115,7 @@ function setupTableMappings() {
             // };
             careerFairData.termVars.layout.tableMappings.push({
                 //i counts from 
-                tableNumber: i+1,
+                tableNumber: i + 1,
                 companyId: null,
                 tableSize: 1
             });
@@ -102,17 +124,112 @@ function setupTableMappings() {
     careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings, ["tableNumber", "companyId"]);
 }
 
+function submitUpdatedMappings() {
+    var allCompanies = Object.keys(careerFairData.companies);
+    for (var i = 0; i < allCompanies.length; i++) {
+        if (careerFairData.termVars.layout.tableMappings.get("companyId", allCompanies[i]) === null) {
+            alert("Aborting - Not all companies have been assigned. Main page will not work.");
+            return;
+        }
+    }
+    $.ajax({
+        url: "/api/users/admin?method=updateTableMappings",
+        type: "POST",
+        contentType: "application/json",
+        processData: false,
+        data: JSON.stringify({
+            updatedMappings: careerFairData.termVars.layout.tableMappings.getValues("tableNumber")
+        }),
+        error: function(_, textStatus, errorThrown) {
+            console.log(textStatus + ":" + errorThrown);
+        },
+        success: function(response, textStatus) {
+            alert(response.message);
+        }
+    });
+}
+
 function populateCompanyList() {
     Object.keys(careerFairData.companies).forEach(function(companyId) {
         var company = careerFairData.companies[companyId];
         var currentTable = company.tableNumber;
-        $("#companyListContainer").append("<tr class='level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.termVars.layout.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.termVars.layout.tableMappings.get("companyId", companyId).tableNumber) + "' size='2' maxlength='4'/></td></tr>");
+        $("#companyListContainer").append("<tr class='level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' class='companyListTableInput' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.termVars.layout.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.termVars.layout.tableMappings.get("companyId", companyId).tableNumber) + "' size='2' maxlength='4'/></td></tr>");
+        if (Number($("#companyListTableInput_" + companyId).val()) === 0) {
+            $("#companyListTableInput_" + companyId).parent().parent().css("background", "#F00");
+        }
+    });
+    $("#companyListContainer").on("change", ".companyListTableInput", function(event) {
+        var tableNumber = Number($(event.currentTarget).val());
+        var companyId = Number($(event.currentTarget).prop("id").replace("companyListTableInput_", ""));
+        moveCompany(companyId, tableNumber);
     });
     //add null value
     // $(".companyListTableDropdown").append("<option value='-1'></option>");
     // for (var i = 1; i <= Object.keys(careerFairData.termVars.layout.tableMappings).length; i++) {
     //     $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
     // }
+}
+
+function moveCompany(companyId, newTable) {
+    if (newTable > 0 && newTable <= careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length) {
+        var newTableMapping = careerFairData.termVars.layout.tableMappings.get("tableNumber", newTable);
+        var oldTableMapping = careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+        if (typeof(newTableMapping.companyId) !== "undefined" && newTableMapping.companyId !== null) {
+            if (confirm("Overwrite another entry?")) {
+                var orphanedCompanyId = newTableMapping.companyId;
+                careerFairData.termVars.layout.tableMappings.remove("tableNumber", newTable);
+                careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+                newTableMapping.companyId = companyId;
+                careerFairData.termVars.layout.tableMappings.put(newTableMapping);
+                if (oldTableMapping !== null) {
+                    oldTableMapping.companyId = null;
+                    careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+                }
+                $("#companyListTableInput_" + orphanedCompanyId).val("");
+                $("#companyListTableInput_" + orphanedCompanyId).parent().parent().css("background", "#F00");
+            } else {
+                return false;
+            }
+        } else {
+            careerFairData.termVars.layout.tableMappings.remove("tableNumber", newTable);
+            careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+            newTableMapping.companyId = companyId;
+            careerFairData.termVars.layout.tableMappings.put(newTableMapping);
+            if (oldTableMapping !== null) {
+                oldTableMapping.companyId = null;
+                careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+            }
+        }
+        $("#companyListTableInput_" + companyId).parent().parent().css("background", "");
+    } else {
+        if (newTable !== 0) {
+            alert("Invalid table number entered: " + newTable);
+            $(event.currentTarget).val("");
+            return false;
+        }
+        //
+        //if nothing entered ("") or actually entered 0, remove company from map.
+        var oldTableMapping = careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+        if (oldTableMapping !== null) {
+            oldTableMapping.companyId = null;
+            careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+        }
+        $("#companyListTableInput_" + orphanedCompanyId).parent().parent().css("background", "#F00");
+    }
+    highlightUsedTables();
+    var allCompanies = Object.keys(careerFairData.companies);
+    var allCompaniesMapped = true;
+    for (var i = 0; i < allCompanies.length; i++) {
+        if (careerFairData.termVars.layout.tableMappings.get("companyId", allCompanies[i]) === null) {
+            allCompaniesMapped = false;
+        }
+    }
+    if (allCompaniesMapped) {
+        $("#companyListGroupHeader").css("background", "");
+    } else {
+        $("#companyListGroupHeader").css("background", "#F00");
+    }
+    return true;
 }
 
 function updateCompanyList() {
@@ -164,14 +281,24 @@ function checkOverlap(layer1, layer2) {
 }
 
 function mergeTables(table1, table2) {
-    if (Math.abs(table2 - table1) !== 1 || tableLocations[table1].group !== tableLocations[table2].group) {
-        $canvasMap.setLayer("table" + mergeTable1 + "Box", {
-            fillStyle: prevTableColor
-        });
-        redrawTable(mergeTable1);
-        mergeTable1 = null;
+    if (Math.abs(table2 - table1) !== 1 || tableLocations[table1].section !== tableLocations[table2].section || tableLocations[table1].row !== tableLocations[table2].row || tableLocations[table1].group !== tableLocations[table2].group) {
+        if (selectedTable1 == table1) {
+            selectedTable1 = null;
+            setTableColor(table1);
+            redrawTable(table1);
+        } else {
+            selectedTable1 = null;
+            setTableColor(table2);
+            redrawTable(table2);
+        }
         alert("Tables must be next to each other to be merged.");
         return;
+    }
+    //if there is a company in table2, warn that it will remove it.
+    if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId) !== 'undefined' && careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId !== null) {
+        alert("Warning: The company in the higher numbered table will be evicted.");
+        $("#companyListTableInput_" + careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId).parent().parent().css("background", "#F00");
+        $("#companyListGroupHeader").css("background", "#F00");
     }
     careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).tableSize += careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).tableSize;
     //remove higher-numbered table, shift everything down by 1 to account for "removed" table that is being merged.
@@ -181,12 +308,13 @@ function mergeTables(table1, table2) {
         prev.tableNumber -= 1;
         careerFairData.termVars.layout.tableMappings.put(prev);
     }
+    mousedOverTable = table1;
+    selectedTable1 = null;
     // delete careerFairData.termVars.layout.tableMappings.get("tableNumber", Object.keys(careerFairData.termVars.layout.tableMappings).length];
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
     updateCompanyList();
-    mergeTable1 = null;
 }
 
 function splitTable(table) {
@@ -206,6 +334,7 @@ function splitTable(table) {
             tableSize: 1
         });
     }
+    mousedOverTable = null;
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
@@ -242,35 +371,50 @@ function drawRect(tableObj) {
             height: tableObj.height,
             fromCenter: false,
             click: function(layer) {
-                if (mergeToolActive) {
+                if (mergeToolActive || selectionToolActive) {
                     var tableId = layer.data.tableId;
-                    if (mergeTable1 === null) {
-                        mergeTable1 = tableId;
-                        $canvasMap.setLayer(layer, {
-                            fillStyle: highlightedColor
-                        });
-                        redrawTable(tableId);
+                    if (selectedTable1 === null) {
+                        if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId) === 'undefined' || careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId === null) {
+                            return;
+                        }
+                        selectedTable1 = tableId;
+                        setTableColor(selectedTable1);
+                        redrawTable(selectedTable1);
                     } else {
-                        var table1 = tableId > mergeTable1 ? mergeTable1 : tableId;
-                        var table2 = tableId > mergeTable1 ? tableId : mergeTable1;
-                        mergeTables(table1, table2);
+                        if (mergeToolActive) {
+                            var table1 = tableId > selectedTable1 ? selectedTable1 : tableId;
+                            var table2 = tableId > selectedTable1 ? tableId : selectedTable1;
+                            mergeTables(table1, table2);
+                        }
+                        if (selectionToolActive) {
+                            var table1 = selectedTable1;
+                            var table2 = layer.data.tableId;
+                            if (moveCompany(careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).companyId, tableId)) {
+                                selectedTable1 = null;
+                                setTableColor(table1);
+                                setTableColor(table2);
+                                redrawTable(table1);
+                                redrawTable(table2);
+                            }
+                        }
                     }
                 } else if (splitToolActive) {
                     splitTable(layer.data.tableId);
                 }
             },
             mouseover: function(layer) {
-                prevTableColor = layer.fillStyle;
-                $canvasMap.setLayer(layer, {
-                    fillStyle: hoverColor
-                });
+                var tableId = layer.data.tableId;
+                mousedOverTable = tableId;
+                setTableColor(tableId);
+                redrawTable(tableId);
+                drawTag(tableId);
             },
             mouseout: function(layer) {
-                if (layer.fillStyle === hoverColor) {
-                    $canvasMap.setLayer(layer, {
-                        fillStyle: prevTableColor
-                    });
-                }
+                var tableId = layer.data.tableId;
+                mousedOverTable = null;
+                setTableColor(tableId);
+                redrawTable(tableId);
+                removeTag();
             }
         });
         $canvasMap.drawText({
@@ -283,7 +427,6 @@ function drawRect(tableObj) {
             x: tableObj.x + tableObj.width / 2,
             y: tableObj.y + tableObj.height / 2,
             fontSize: tableObj.height / tableObj.yScaling / 2,
-            fontFamily: 'Verdana, sans-serif',
             text: tableObj.tableId,
             intangible: true
         });
@@ -304,6 +447,121 @@ function drawRect(tableObj) {
             fromCenter: false
         });
     }
+}
+
+function removeTag() {
+    $canvasMap.removeLayer("tagShape");
+    $canvasMap.removeLayer("tagText");
+}
+
+function drawTag(tableId) {
+    if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId) === 'undefined' || careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId === null) {
+        return;
+    }
+    var s1 = Number(careerFairData.termVars.layout.section1);
+    var s2 = Number(careerFairData.termVars.layout.section2);
+    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
+    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
+    var s3 = Number(careerFairData.termVars.layout.section3);
+    var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
+    var vrtCount = Math.max(s1, s3);
+    var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
+    var tableHeight = unitY * 70 / vrtCount;
+    var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+    var points = {};
+    switch (tableLocations[tableId].section) {
+        case 1:
+            var startX = tableLocations[tableId].x + (tableLocations[tableId].xScaling * tableWidth);
+            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight)/2;
+            points = {
+                x1: startX,
+                y1: startY,
+                x2: startX + tableWidth / 2,
+                y2: startY - tableWidth / 2,
+                x3: startX + unitY * 25,
+                y3: startY - tableWidth / 2,
+                x4: startX + unitY * 25,
+                y4: startY + tableWidth / 2,
+                x5: startX + tableWidth / 2,
+                y5: startY + tableWidth / 2
+            };
+            break;
+        case 2:
+            var startX = tableLocations[tableId].x + (tableLocations[tableId].xScaling * tableWidth) / 2;
+            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight);
+            points = {
+                x1: startX,
+                y1: startY,
+                x2: startX + tableWidth / 2,
+                y2: startY + tableWidth / 2,
+                x3: startX + tableWidth / 2,
+                y3: startY + unitY * 25,
+                x4: startX - tableWidth / 2,
+                y4: startY + unitY * 25,
+                x5: startX - tableWidth / 2,
+                y5: startY + tableWidth / 2
+            };
+            break;
+        case 3:
+            var startX = tableLocations[tableId].x;
+            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight)/2;
+            points = {
+                x1: startX,
+                y1: startY,
+                x2: startX - tableWidth / 2,
+                y2: startY - tableWidth / 2,
+                x3: startX - unitY * 25,
+                y3: startY - tableWidth / 2,
+                x4: startX - unitY * 25,
+                y4: startY + tableWidth / 2,
+                x5: startX - tableWidth / 2,
+                y5: startY + tableWidth / 2
+            };
+            break;
+        default:
+            break;
+    }
+    $canvasMap.drawLine({
+        layer: true,
+        name: 'tagShape',
+        strokeStyle: '#000',
+        strokeWidth: 1,
+        fillStyle: '#AAF',
+        closed: true,
+        x1: points.x1,
+        y1: points.y1,
+        x2: points.x2,
+        y2: points.y2,
+        x3: points.x3,
+        y3: points.y3,
+        x4: points.x4,
+        y4: points.y4,
+        x5: points.x5,
+        y5: points.y5,
+    });
+    var lines = parseInt(tableWidth / $canvasMap.measureText({
+        fontSize: tableHeight / 2,
+        text: 'text'
+    }).height, 10);
+    $canvasMap.drawText({
+        layer: true,
+        name: 'tagText',
+        fillStyle: '#000',
+        x: startX,
+        y: startY + tableWidth / 2 + (pathWidth - tableWidth / 2) / 2,
+        maxWidth: unitY * 25 - tableWidth / 2,
+        fontSize: tableHeight / 2,
+        text: getWrappedText({
+            text: careerFairData.companies[careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId].name,
+            maxWidth: pathWidth - tableWidth / 2,
+            maxLines: lines,
+            fontSize: tableHeight / 2,
+            breakWord: true
+        }),
+        // Rotate the text by 30 degrees
+        rotate: tableLocations[tableId].section == 2 ? 90 : 0
+    });
+    $canvasMap.drawLayers();
 }
 //
 //generate positions of all tables.
@@ -349,7 +607,9 @@ function generateTableLocations() {
                 height: tableHeight * tableSize,
                 xScaling: 1,
                 yScaling: tableSize,
-                group: "section1"
+                section: 1,
+                row: 0,
+                group: 0
             };
             i += tableSize;
             tableId++;
@@ -377,7 +637,9 @@ function generateTableLocations() {
                         height: tableHeight,
                         xScaling: tableSize,
                         yScaling: 1,
-                        group: "section2row" + i
+                        section: 2,
+                        row: i,
+                        group: 0
                     };
                     j += tableSize;
                     tableId++;
@@ -398,7 +660,9 @@ function generateTableLocations() {
                         height: tableHeight,
                         xScaling: tableSize,
                         yScaling: 1,
-                        group: "section2row" + i + "L"
+                        section: 2,
+                        row: i,
+                        group: 1
                     };
                     j += tableSize;
                     tableId++;
@@ -413,7 +677,9 @@ function generateTableLocations() {
                         height: tableHeight,
                         xScaling: tableSize,
                         yScaling: 1,
-                        group: "section2row" + i + "R"
+                        section: 2,
+                        row: i,
+                        group: 2
                     };
                     j += tableSize;
                     tableId++;
@@ -435,7 +701,9 @@ function generateTableLocations() {
                 height: tableHeight * tableSize,
                 xScaling: 1,
                 yScaling: tableSize,
-                group: "section3"
+                section: 3,
+                row: 0,
+                group: 0
             };
             i += tableSize;
             tableId++;
@@ -493,15 +761,45 @@ function drawTables() {
     highlightUsedTables();
 }
 
+function setTableColor(tableId) {
+    if (tableId === selectedTable1) {
+        if (tableId === mousedOverTable) {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: hoverClickedColor
+            });
+        } else {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: clickedColor
+            });
+        }
+    } else if (typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId !== 'undefined' && careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId !== null) {
+        if (tableId === mousedOverTable) {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: hoverUsedColor
+            });
+        } else {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: usedColor
+            });
+        }
+    } else {
+        if (tableId === mousedOverTable) {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: hoverUnusedColor
+            });
+        } else {
+            $canvasMap.setLayer('table' + tableId + 'Box', {
+                fillStyle: unusedColor
+            });
+        }
+    }
+}
+
 function highlightUsedTables() {
     var mappingObjs = careerFairData.termVars.layout.tableMappings.getValues("tableNumber");
     var mappingObjsLength = mappingObjs.length;
     for (var i = 0; i < mappingObjsLength; i++) {
-        if (typeof mappingObjs[i].companyId !== 'undefined' && mappingObjs[i].companyId !== null) {
-            $canvasMap.setLayer('table' + mappingObjs[i].tableNumber + 'Box', {
-                fillStyle: '#0F0'
-            });
-        }
+        setTableColor(mappingObjs[i].tableNumber);
     }
     $canvasMap.drawLayers();
 }
@@ -547,3 +845,102 @@ function highlightUsedTables() {
 //     });
 //     $('canvas').drawLayers();
 // }
+// Wraps a string of text within a defined width
+function getWrappedText(params) {
+    var defaults = $.jCanvas.defaults;
+    Object.keys(params).forEach(function(element, index) {
+        defaults[element] = params[element];
+    });
+    params = defaults;
+    var ctx = $canvasMap[0].getContext('2d');
+    ctx.textBaseline = params.baseline;
+    ctx.textAlign = params.align;
+    // Otherwise, use the given font attributes
+    if (!isNaN(Number(params.fontSize))) {
+        // Give font size units if it doesn't have any
+        params.fontSize += 'px';
+    }
+    // Set font using given font properties
+    ctx.font = params.fontStyle + ' ' + params.fontSize + ' ' + params.fontFamily;
+    var allText = params.text,
+        // Maximum line width ( optional )
+        maxWidth = params.maxWidth,
+        // Lines created by manual line breaks ( \n )
+        manualLines = allText.split('\n'),
+        // All lines created manually and by wrapping
+        allLines = [],
+        // Other variables
+        lines, line, l,
+        text, words, w;
+    // Loop through manually-broken lines
+    for (l = 0; l < manualLines.length; l += 1) {
+        text = manualLines[l];
+        // Split line into list of words
+        words = text.split(' ');
+        lines = [];
+        line = '';
+        // If text is short enough initially
+        // Or, if the text consists of only one word
+        if (words.length === 1 || ctx.measureText(text).width <= maxWidth) {
+            // No need to wrap text
+            lines = [text];
+        } else {
+            // Wrap lines
+            for (w = 0; w < words.length; w += 1) {
+                // If word is too long, and break-word is true, break the word and hyphenate it.
+                if (((ctx.measureText(words[w]).width > maxWidth) || (ctx.measureText(line + words[w]).width > maxWidth && (typeof params.maxLines) !== 'undefined' && Number(params.maxLines) === (lines.length + 1))) && (typeof params.breakWord) !== 'undefined' && params.breakWord === true) {
+                    // Add words to line until the line is too wide
+                    if (ctx.measureText(line + words[w].substr(0, 1) + '-').width <= maxWidth) {
+                        while (ctx.measureText(line + words[w].substr(0, 1) + '-').width <= maxWidth) {
+                            line += words[w].substr(0, 1);
+                            words[w] = words[w].substring(1);
+                        }
+                        line += '-';
+                    }
+                    lines.push(line.trim());
+                    // Start new line and repeat process
+                    line = '';
+                    w--;
+                } else {
+                    // Once line gets too wide, push word to next line
+                    if (ctx.measureText(line + words[w]).width > maxWidth) {
+                        // This check prevents empty lines from being created
+                        if (line !== '') {
+                            lines.push(line.trim());
+                        }
+                        // Start new line and repeat process
+                        line = '';
+                    }
+                    // Add words to line until the line is too wide
+                    if (ctx.measureText(words[w]).width <= maxWidth) {
+                        line += words[w];
+                        // Do not add a space after the last word
+                        if (w !== (words.length - 1)) {
+                            line += ' ';
+                        }
+                    } else {
+                        w--;
+                    }
+                }
+            }
+            // The last word should always be pushed
+            lines.push(line.trim());
+        }
+        //trim down to maxLines, if set.
+        if ((typeof params.maxLines) !== 'undefined' && Number(params.maxLines) < lines.length) {
+            lines.splice(Number(params.maxLines), lines.length);
+            if (ctx.measureText(lines[lines.length - 1] + "...").width <= maxWidth) {
+                lines[lines.length - 1] = lines[lines.length - 1].trim() + "...";
+            } else if (ctx.measureText(lines[lines.length - 1] + "..").width <= maxWidth) {
+                lines[lines.length - 1] = lines[lines.length - 1].substr(0, lines[lines.length - 1].length - 1).trim() + "...";
+            } else if (ctx.measureText(lines[lines.length - 1] + ".").width <= maxWidth) {
+                lines[lines.length - 1] = lines[lines.length - 1].substr(0, lines[lines.length - 1].length - 2).trim() + "...";
+            } else {
+                lines[lines.length - 1] = lines[lines.length - 1].substr(0, lines[lines.length - 1].length - 3).trim() + "...";
+            }
+        }
+        // Remove extra space at the end of each line
+        allLines = allLines.concat(lines.join('\n'));
+    }
+    return allLines;
+}

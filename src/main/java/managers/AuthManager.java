@@ -36,17 +36,18 @@ public class AuthManager {
                 return new FailResponse("Username already exists");
             }
             users.close();
+            check.close();
             
             // Permissions levels:
             // 1 - Users (Edit saved companies, visit list)
             // 10 - Admin (Edit user permssions, edit company/category list)
             // Always add as users, require admin access to elevate
-            PreparedStatement statement =
+            PreparedStatement addUser =
                     SQLManager.getConn("RHCareerFairLayout")
                             .prepareStatement("INSERT INTO Users (username, hashedPw, permissions) VALUES (?, ?, 1);");
-            statement.setString(1, userName);
-            statement.setString(2, BCrypt.hashpw(password, BCrypt.gensalt()));
-            Integer insertResult = statement.executeUpdate();
+            addUser.setString(1, userName);
+            addUser.setString(2, BCrypt.hashpw(password, BCrypt.gensalt()));
+            Integer insertResult = addUser.executeUpdate();
             
             return new SuccessResponse("Rows changed: " + insertResult);
         } catch (Exception e) {
@@ -84,6 +85,7 @@ public class AuthManager {
                 return new FailResponse("Invalid Username/Password Combination");
             }
             result.close();
+            getHashedPWStatement.close();
             
             String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
             Timestamp sessionValidDate = new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
@@ -97,6 +99,8 @@ public class AuthManager {
             newSession.setString(4, sessionClient);
             
             newSession.executeUpdate();
+            
+            newSession.close();
             
             SuccessResponse response = new SuccessResponse();
             

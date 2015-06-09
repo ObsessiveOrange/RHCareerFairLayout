@@ -28,6 +28,7 @@ import servlets.ServletLog;
 import adt.Response;
 import adt.Response.FailResponse;
 import adt.Response.SuccessResponse;
+import adt.TableMapping;
 import adt.Term;
 import adt.Workbook;
 
@@ -132,7 +133,7 @@ public class AdminRequestHandler {
                 failResponse.addToReturnData("updateTableMappingsResponse", updateTableMappingsResponse);
             }
             
-            return new SuccessResponse("Term data uploaded successfully.");
+            return new SuccessResponse("Term data successfully uploaded.");
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
@@ -207,7 +208,7 @@ public class AdminRequestHandler {
             }
             
             PreparedStatement updateTermRequestStatement =
-                    SQLManager.getConn("RHCareerFairLayout").prepareStatement(
+                    SQLManager.getConn().prepareStatement(
                             "INSERT INTO Vars (item, value, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=values(value), type=values(type);");
             
             updateTermRequestStatement.setString(1, "selectedYear");
@@ -253,6 +254,44 @@ public class AdminRequestHandler {
             response.addToReturnData("terms", terms);
             
             return response;
+        } catch (Exception e) {
+            ServletLog.logEvent(e);
+            
+            return new FailResponse(e);
+            
+        }
+    }
+    
+    public static Response updateTableMappingsHandler(ArrayList<TableMapping> mappings) {
+    
+        try {
+            
+            PreparedStatement stmt;
+            ResultSet rs = null;
+            
+            // Organize categories into hashmap
+            stmt =
+                    SQLManager
+                            .getConn(DataManager.getSelectedTerm())
+                            .prepareStatement(
+                                    "INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE companyId = values(companyId), tableSize = values(tableSize)");
+            
+            for (TableMapping m : mappings) {
+                
+                stmt.setInt(1, m.tableNumber);
+                if (m.companyId == null) {
+                    stmt.setNull(2, java.sql.Types.INTEGER);
+                    
+                }
+                else {
+                    stmt.setInt(2, m.companyId);
+                    
+                }
+                stmt.setInt(3, m.tableSize);
+                stmt.executeUpdate();
+            }
+            
+            return new SuccessResponse("Table Mappings successfully updated");
         } catch (Exception e) {
             ServletLog.logEvent(e);
             
