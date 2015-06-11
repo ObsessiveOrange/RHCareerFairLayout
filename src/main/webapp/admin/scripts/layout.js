@@ -483,7 +483,9 @@ function drawTag(tableId) {
                 x4: startX + unitY * 25,
                 y4: startY + tableWidth / 2,
                 x5: startX + tableWidth / 2,
-                y5: startY + tableWidth / 2
+                y5: startY + tableWidth / 2,
+                textX: startX + tableWidth / 4 + unitY * 12.5, 
+                textY: startY
             };
             break;
         case 2:
@@ -499,7 +501,9 @@ function drawTag(tableId) {
                 x4: startX - tableWidth / 2,
                 y4: startY + unitY * 25,
                 x5: startX - tableWidth / 2,
-                y5: startY + tableWidth / 2
+                y5: startY + tableWidth / 2,
+                textX: startX, 
+                textY: startY + tableWidth / 4 + unitY * 12.5
             };
             break;
         case 3:
@@ -515,7 +519,9 @@ function drawTag(tableId) {
                 x4: startX - unitY * 25,
                 y4: startY + tableWidth / 2,
                 x5: startX - tableWidth / 2,
-                y5: startY + tableWidth / 2
+                y5: startY + tableWidth / 2,
+                textX: startX - tableWidth / 4 - unitY * 12.5, 
+                textY: startY
             };
             break;
         default:
@@ -547,8 +553,8 @@ function drawTag(tableId) {
         layer: true,
         name: 'tagText',
         fillStyle: '#000',
-        x: startX,
-        y: startY + tableWidth / 2 + (pathWidth - tableWidth / 2) / 2,
+        x: points.textX,
+        y: points.textY,
         maxWidth: unitY * 25 - tableWidth / 2,
         fontSize: tableHeight / 2,
         text: getWrappedText({
