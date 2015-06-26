@@ -7,12 +7,12 @@ import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import managers.AuthManager;
 import misc.Utils;
+import servlets.Servlet;
 import servlets.ServletUtils;
 import adt.Response;
 import adt.Response.FailResponse;
@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 @WebServlet("/api/users/admin")
 @MultipartConfig
 @ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
-public class AdminServlet extends HttpServlet {
+public class AdminServlet extends Servlet {
     
     /**
      * 
@@ -64,7 +64,7 @@ public class AdminServlet extends HttpServlet {
                 responseObject = new FailResponse("Invalid GET method supplied: " + method);
                 break;
         }
-        ServletUtils.sendResponse(response, responseObject);
+        sendResponse(response, responseObject);
     }
     
     @Override
@@ -80,7 +80,6 @@ public class AdminServlet extends HttpServlet {
         }
         
         Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-        
         if (!fileUploadResponse.success) {
             ServletUtils.sendResponse(response, fileUploadResponse);
             return;
@@ -155,6 +154,6 @@ public class AdminServlet extends HttpServlet {
                 break;
             }
         }
-        ServletUtils.sendResponse(response, responseObject);
+        sendResponse(response, responseObject);
     }
 }

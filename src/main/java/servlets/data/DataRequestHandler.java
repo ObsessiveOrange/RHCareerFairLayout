@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import managers.DataManager;
 import managers.SQLManager;
 import servlets.ServletLog;
@@ -20,7 +18,7 @@ import adt.TableMapping;
 
 public class DataRequestHandler {
     
-    public static Response handleGetDataRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetDataRequest() throws IOException {
     
         try {
             HashMap<String, Object> termVars = new HashMap<String, Object>();
@@ -29,8 +27,8 @@ public class DataRequestHandler {
             HashMap<String, Object> layoutMap = new HashMap<String, Object>();
             
             // Organize termVars into hashmap
-            PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT item, value, type FROM TermVars;");
+            PreparedStatement getTermVars =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT item, value, type FROM TermVars;");
             ResultSet getTermVarsRS = getTermVars.executeQuery();
             
             while (getTermVarsRS.next()) {
@@ -52,8 +50,8 @@ public class DataRequestHandler {
             termVars.put("layout", layout);
             
             // Retreive TableMapping from DB
-            PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT tableNumber,companyId, tableSize FROM TableMappings;");
+            PreparedStatement getTableMappings =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT tableNumber,companyId, tableSize FROM TableMappings;");
             ResultSet getTableMappingsRS = getTableMappings.executeQuery();
             
             while (getTableMappingsRS.next()) {
@@ -66,8 +64,8 @@ public class DataRequestHandler {
             }
             
             // Organize categories into hashmap
-            PreparedStatement getCategories = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, type FROM Categories;");
+            PreparedStatement getCategories =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT id, name, type FROM Categories;");
             ResultSet getCategoriesRS = getCategories.executeQuery();
             
             while (getCategoriesRS.next()) {
@@ -83,8 +81,8 @@ public class DataRequestHandler {
             }
             
             // Organize companies into hashmap
-            PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, description FROM Companies;");
+            PreparedStatement getCompanies =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
@@ -97,8 +95,8 @@ public class DataRequestHandler {
             }
             
             // Add categoryIDs to company objects
-            PreparedStatement getCategories_Companies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT categoryId, companyId FROM Categories_Companies;");
+            PreparedStatement getCategories_Companies =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT categoryId, companyId FROM Categories_Companies;");
             ResultSet getCategories_CompaniesRS = getCategories_Companies.executeQuery();
             
             while (getCategories_CompaniesRS.next()) {
@@ -110,8 +108,7 @@ public class DataRequestHandler {
             }
             
             SuccessResponse response = new SuccessResponse();
-            response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " "
-                    + termVars.get("Year"));
+            response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
             response.addToReturnData("categories", categoryMap);
             response.addToReturnData("companies", companyMap);
             response.addToReturnData("termVars", termVars);
@@ -125,7 +122,7 @@ public class DataRequestHandler {
         }
     }
     
-    public static Response handleGetSelectedTermRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetSelectedTermRequest() throws IOException {
     
         SuccessResponse response = new SuccessResponse();
         response.addToReturnData("selectedQuarter", DataManager.getSelectedQuarter());
@@ -134,14 +131,14 @@ public class DataRequestHandler {
         return response;
     }
     
-    public static Response handleGetCategoriesRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetCategoriesRequest() throws IOException {
     
         try {
             HashMap<String, HashMap<Integer, Category>> categoryMap = new HashMap<String, HashMap<Integer, Category>>();
             
             // Organize categories into hashmap
-            PreparedStatement getCategories = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, type FROM Categories;");
+            PreparedStatement getCategories =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT id, name, type FROM Categories;");
             ResultSet getCategoriesRS = getCategories.executeQuery();
             
             while (getCategoriesRS.next()) {
@@ -168,15 +165,15 @@ public class DataRequestHandler {
         }
     }
     
-    public static Response handleGetCompaniesRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetCompaniesRequest() throws IOException {
     
         try {
             
             HashMap<Integer, Company> companyMap = new HashMap<Integer, Company>();
             
             // Organize companies into hashmap
-            PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, description FROM Companies;");
+            PreparedStatement getCompanies =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
@@ -189,8 +186,8 @@ public class DataRequestHandler {
             }
             
             // Add categoryIDs to company objects
-            PreparedStatement getCategories_Companies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT categoryId, companyId FROM Categories_Companies;");
+            PreparedStatement getCategories_Companies =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT categoryId, companyId FROM Categories_Companies;");
             ResultSet getCategories_CompaniesRS = getCategories_Companies.executeQuery();
             
             while (getCategories_CompaniesRS.next()) {
@@ -213,15 +210,15 @@ public class DataRequestHandler {
         }
     }
     
-    public static Response handleGetLayoutRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetLayoutRequest() throws IOException {
     
         try {
             
             HashMap<String, Object> layoutMap = new HashMap<String, Object>();
             
             // Organize termVars into hashmap
-            PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT item, value, type FROM TermVars;");
+            PreparedStatement getTermVars =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT item, value, type FROM TermVars;");
             ResultSet getTermVarsRS = getTermVars.executeQuery();
             
             while (getTermVarsRS.next()) {
@@ -237,8 +234,9 @@ public class DataRequestHandler {
             Layout layout = new Layout(layoutMap);
             
             // Retreive TableMapping from DB
-            PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT tableNumber, companyId, tableSize FROM TableMappings;");
+            PreparedStatement getTableMappings =
+                    SQLManager.getConn(DataManager.getSelectedTerm())
+                            .prepareStatement("SELECT tableNumber, companyId, tableSize FROM TableMappings;");
             ResultSet getTableMappingsRS = getTableMappings.executeQuery();
             
             while (getTableMappingsRS.next()) {
@@ -262,7 +260,7 @@ public class DataRequestHandler {
         }
     }
     
-    public static Response handleGetStatisticsRequest(HttpServletRequest request) throws IOException {
+    public static Response handleGetStatisticsRequest() throws IOException {
     
         try {
             HashMap<String, Object> layoutMap = new HashMap<String, Object>();
@@ -270,8 +268,8 @@ public class DataRequestHandler {
             Integer usedTableCount = 0;
             
             // Organize termVars into hashmap
-            PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT item, value, type FROM TermVars;");
+            PreparedStatement getTermVars =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT item, value, type FROM TermVars;");
             ResultSet getTermVarsRS = getTermVars.executeQuery();
             
             while (getTermVarsRS.next()) {
@@ -289,8 +287,8 @@ public class DataRequestHandler {
             HashMap<Integer, Company> companyMap = new HashMap<Integer, Company>();
             
             // Organize companies into hashmap
-            PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT id, name, description FROM Companies;");
+            PreparedStatement getCompanies =
+                    SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement("SELECT id, name, description FROM Companies;");
             ResultSet getCompaniesRS = getCompanies.executeQuery();
             
             while (getCompaniesRS.next()) {
@@ -302,8 +300,9 @@ public class DataRequestHandler {
                 companyMap.put(c.getId(), c);
             }
             
-            PreparedStatement getMappedTables = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
-                    "SELECT COUNT(companyId) as NumUsedTables FROM TableMappings;");
+            PreparedStatement getMappedTables =
+                    SQLManager.getConn(DataManager.getSelectedTerm())
+                            .prepareStatement("SELECT COUNT(companyId) as NumUsedTables FROM TableMappings;");
             ResultSet getMappedTablesRS = getMappedTables.executeQuery();
             
             while (getMappedTablesRS.next()) {

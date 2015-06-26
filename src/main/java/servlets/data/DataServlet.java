@@ -10,17 +10,16 @@ package servlets.data;
 import java.io.IOException;
 
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import servlets.ServletUtils;
+import servlets.Servlet;
 import adt.Response;
 import adt.Response.FailResponse;
 
 //Use Servlet 3.0 annotations
 @WebServlet("/api/data")
-public class DataServlet extends HttpServlet {
+public class DataServlet extends Servlet {
     
     /**
      * 
@@ -49,22 +48,22 @@ public class DataServlet extends HttpServlet {
         // select method based on the parameters sent.
         switch (method) {
             case "getSelectedTerm":
-                responseObject = DataRequestHandler.handleGetSelectedTermRequest(request);
+                responseObject = DataRequestHandler.handleGetSelectedTermRequest();
                 break;
             case "getCategories":
-                responseObject = DataRequestHandler.handleGetCategoriesRequest(request);
+                responseObject = DataRequestHandler.handleGetCategoriesRequest();
                 break;
             case "getCompanies":
-                responseObject = DataRequestHandler.handleGetCompaniesRequest(request);
+                responseObject = DataRequestHandler.handleGetCompaniesRequest();
                 break;
             case "getLayout":
-                responseObject = DataRequestHandler.handleGetLayoutRequest(request);
+                responseObject = DataRequestHandler.handleGetLayoutRequest();
                 break;
             case "getStatistics":
-                responseObject = DataRequestHandler.handleGetStatisticsRequest(request);
+                responseObject = DataRequestHandler.handleGetStatisticsRequest();
                 break;
             case "getData":
-                responseObject = DataRequestHandler.handleGetDataRequest(request);
+                responseObject = DataRequestHandler.handleGetDataRequest();
                 break;
             // If invalid method header, return with an error;
             default:
@@ -73,6 +72,6 @@ public class DataServlet extends HttpServlet {
         }
         
         // Set return content type and send data;
-        ServletUtils.sendResponse(response, responseObject);
+        sendResponse(response, responseObject);
     }
 }
