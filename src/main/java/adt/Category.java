@@ -1,6 +1,6 @@
 package adt;
 
-public class Category extends Item implements Comparable<Category> {
+public class Category extends Entry implements Comparable<Category> {
     
     /**
      * 

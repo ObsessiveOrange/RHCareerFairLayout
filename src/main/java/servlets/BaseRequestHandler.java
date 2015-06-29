@@ -2,8 +2,8 @@ package servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
-import adt.Response;
-import adt.Response.SuccessResponse;
+import common.Response;
+import common.Response.SuccessResponse;
 
 public class BaseRequestHandler {
     

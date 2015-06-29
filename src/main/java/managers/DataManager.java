@@ -11,10 +11,10 @@ import misc.Utils;
 import servlets.ServletLog;
 import adt.Category;
 import adt.Company;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 import adt.Sheet;
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 
 public class DataManager {
     

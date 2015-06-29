@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import adt.Response;
-import adt.Response.FailResponse;
 import adt.TableMapping;
 import adt.TableMappingsWrapper;
 import adt.Workbook;
+import common.Response;
+import common.Response.FailResponse;
 import managers.AuthManager;
 import misc.RequestBody;
 import misc.Utils;

@@ -25,12 +25,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import servlets.ServletLog;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 import adt.TableMapping;
 import adt.Term;
 import adt.Workbook;
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 
 public class AdminRequestHandler {
     

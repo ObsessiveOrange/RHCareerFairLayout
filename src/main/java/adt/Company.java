@@ -3,7 +3,7 @@ package adt;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Company extends Item implements Comparable<Company> {
+public class Company extends Entry implements Comparable<Company> {
     
     /**
      * 

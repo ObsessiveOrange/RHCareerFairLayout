@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 import managers.AuthManager;
 import servlets.ServletUtils;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 
 @WebServlet("/api/users")
 @ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))

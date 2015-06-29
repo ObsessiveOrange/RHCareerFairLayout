@@ -23,22 +23,29 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		
+
 		<!-- Jersey for JAX-RS implementation -->
+		<dependency>
+			<groupId>org.glassfish.jersey.bundles</groupId>
+			<artifactId>jaxrs-ri</artifactId>
+			<version>2.13</version>
+		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
 			<artifactId>jersey-container-servlet</artifactId>
 			<version>2.18</version>
 		</dependency>
-		<!-- Required only when you are using JAX-RS Client 
 		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
 			<version>2.18</version>
-		</dependency> -->
-		
-		
+		</dependency>
+
+		<!-- Required only when you are using JAX-RS Client <dependency> <groupId>org.glassfish.jersey.core</groupId> 
+			<artifactId>jersey-client</artifactId> <version>2.18</version> </dependency> -->
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

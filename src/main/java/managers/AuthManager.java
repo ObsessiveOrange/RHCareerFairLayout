@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 import misc.BCrypt;
 import servlets.ServletLog;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 
 public class AuthManager {
     

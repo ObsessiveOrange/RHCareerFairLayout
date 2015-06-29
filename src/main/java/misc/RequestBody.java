@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import adt.FailResult;
-import adt.Result;
-import adt.SuccessResult;
-
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
+
+import common.FailResult;
+import common.Result;
+import common.SuccessResult;
 
 public class RequestBody {
     

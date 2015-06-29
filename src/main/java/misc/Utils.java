@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 
 public class Utils {
 

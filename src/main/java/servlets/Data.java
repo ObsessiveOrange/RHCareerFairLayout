@@ -4,24 +4,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 import adt.Category;
 import adt.Company;
 import adt.Layout;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 import adt.TableMapping;
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 import managers.DataManager;
 import managers.SQLManager;
 
-@Path("/api2/data")
+@Path("/data")
 public class Data {
 
+    @Context
+    private HttpServletResponse response;
+
     @GET
+    @Produces("application/json")
     @Path("get_data")
     public Response getData() {
 
@@ -57,6 +64,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_selected_term")
     public Response getSelectedTerm() {
 	try {
@@ -89,6 +97,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_category_list")
     public Response getCategoryList() {
 
@@ -125,6 +134,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_company_list")
     public Response getCompanyList() {
 
@@ -172,6 +182,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_company_details/{companyId}")
     public Response getCompanyDetails(@PathParam("companyId") String companyIdStr) {
 
@@ -202,12 +213,10 @@ public class Data {
 	    getCategories.setInt(1, companyId);
 	    ResultSet getCategoriesRS = getCategories.executeQuery();
 
-	    if (getCategoriesRS.next()) {
+	    while (getCategoriesRS.next()) {
 		Integer categoryId = getCategoriesRS.getInt("categoryId");
 
 		company.getCategories().add(categoryId);
-	    } else {
-		return new FailResponse("Invalid companyId provided: No results found");
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
@@ -223,6 +232,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_layout")
     public Response getLayout() {
 
@@ -272,6 +282,7 @@ public class Data {
     }
 
     @GET
+    @Produces("application/json")
     @Path("get_statistics")
     public Response getStatistics() {
 

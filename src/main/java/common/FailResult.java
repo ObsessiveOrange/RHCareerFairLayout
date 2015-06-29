@@ -1,4 +1,4 @@
-package adt;
+package common;
 
 public class FailResult<T> extends Result<T> {
 

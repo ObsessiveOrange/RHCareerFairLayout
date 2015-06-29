@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.google.gson.Gson;
 
-public class Item implements Serializable {
+public class Entry implements Serializable {
     
     /**
      * 
@@ -21,7 +21,7 @@ public class Item implements Serializable {
     }
     
     /************************************************* Instance methods ***********************************************/
-    public Item(long id) {
+    public Entry(long id) {
     
         this.id = id;
         this.lastUpdateTime = System.currentTimeMillis();

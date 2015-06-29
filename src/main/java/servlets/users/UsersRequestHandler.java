@@ -5,12 +5,12 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import common.Response;
+import common.Response.FailResponse;
+import common.Response.SuccessResponse;
 import managers.SQLManager;
 import misc.BCrypt;
 import servlets.ServletLog;
-import adt.Response;
-import adt.Response.FailResponse;
-import adt.Response.SuccessResponse;
 
 public class UsersRequestHandler {
     

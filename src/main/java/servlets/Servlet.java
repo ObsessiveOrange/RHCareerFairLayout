@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
-import adt.Response;
+import common.Response;
 
 public class Servlet extends HttpServlet {
     

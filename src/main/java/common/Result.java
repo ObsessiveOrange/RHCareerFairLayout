@@ -1,4 +1,4 @@
-package adt;
+package common;
 
 public abstract class Result<T> {
     
