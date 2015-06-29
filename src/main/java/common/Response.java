@@ -3,40 +3,88 @@ package common;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class Response {
-
-    public final boolean success;
+public abstract class Response extends HashMap<String, Object> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1043878399393774201L;
+    @JsonIgnore
     public ArrayList<Cookie> cookies = null;
-    public final Map<String, Object> returnData = new HashMap<String, Object>();
 
-    public Response(boolean success) {
+    public Response(int status, long timestamp) {
 
-	this.success = success;
+	this.put("status", status);
+	this.put("timestamp", timestamp);
     }
 
-    public Response addToReturnData(String key, Object value) {
-
-	returnData.put(key, value);
-	return this;
+    public boolean isSuccess() {
+	return getInt("status") == 1;
     }
 
-    public Object getFromReturnData(String key) {
+    public Integer getInt(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof Integer) {
+	    return (Integer) returnItem;
+	} else {
+	    return Integer.valueOf(String.valueOf(returnItem));
+	}
+    }
 
-	Object returnItem = returnData.get(key);
-	return (returnItem != null) ? returnItem : null;
+    public Long getLong(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof Long) {
+	    return (Long) returnItem;
+	} else {
+	    return Long.valueOf(String.valueOf(returnItem));
+	}
+    }
+
+    public BigDecimal getBigDecimal(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof BigDecimal) {
+	    return (BigDecimal) returnItem;
+	} else {
+	    return new BigDecimal(String.valueOf(returnItem));
+	}
+    }
+
+    public Double getDouble(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof Double) {
+	    return (Double) returnItem;
+	} else {
+	    return Double.valueOf(String.valueOf(returnItem));
+	}
+    }
+
+    public Boolean getBoolean(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof Boolean) {
+	    return (Boolean) returnItem;
+	} else {
+	    return Boolean.valueOf(String.valueOf(returnItem));
+	}
+    }
+
+    public String getString(String key) {
+	Object returnItem = get(key);
+	if (returnItem instanceof Integer) {
+	    return (String) returnItem;
+	} else {
+	    return String.valueOf(returnItem);
+	}
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getFromReturnData(String key, Class<T> returnClass) {
+    public <T> T get(String key, Class<T> returnClass) {
 
-	Object returnItem = returnData.get(key);
+	Object returnItem = get(key);
 	if (returnItem != null) {
 
 	    if (returnItem.getClass().equals(returnClass)) {
@@ -60,27 +108,22 @@ public abstract class Response {
 	return null;
     }
 
-    @Override
-    public String toString() {
-
-	return new Gson().toJson(returnData);
-    }
-
     public static class SuccessResponse extends Response {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6108222601410083578L;
 
 	public SuccessResponse() {
 
-	    super(true);
-	    addToReturnData("success", 1);
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(1, System.currentTimeMillis());
 	}
 
 	public SuccessResponse(String message) {
 
-	    super(true);
-	    addToReturnData("success", 1);
-	    addToReturnData("message", message);
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(1, System.currentTimeMillis());
+	    put("message", message);
 	}
 
 	public Response addCookie(String key, String value) {
@@ -101,40 +144,34 @@ public abstract class Response {
 
     public static class FailResponse extends Response {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1029372537435325034L;
+
 	public FailResponse(int errorCode) {
 
-	    super(false);
-	    addToReturnData("success", 0);
-	    addToReturnData("errorCode", errorCode);
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(errorCode, System.currentTimeMillis());
 	}
 
 	public FailResponse(String message) {
 
-	    super(false);
-	    addToReturnData("success", 0);
-	    addToReturnData("errorCode", -1);
-	    addToReturnData("message", message);
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(-1, System.currentTimeMillis());
+	    put("errorCode", -1);
+	    put("message", message);
 	}
 
 	public FailResponse(int errorCode, String message) {
 
-	    super(false);
-	    addToReturnData("success", 0);
-	    addToReturnData("errorCode", errorCode);
-	    addToReturnData("message", message);
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(errorCode, System.currentTimeMillis());
+	    put("message", message);
 	}
 
 	public FailResponse(Exception exception) {
 
-	    super(false);
-	    addToReturnData("success", 0);
-
-	    addToReturnData("exception message", exception.getMessage());
-	    addToReturnData("exception stack trace", exception.getStackTrace());
-	    addToReturnData("timestamp", System.currentTimeMillis());
+	    super(-1, System.currentTimeMillis());
+	    put("exception message", exception.getMessage());
+	    put("exception stack trace", exception.getStackTrace());
 	}
     }
 }

@@ -1,12 +1,12 @@
 (window.setup = function() {
     sendGetRequest({
         url: "/api/data?method=getCategories",
-        successHandler: function(returnData) {
+        successHandler: function(data) {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success === 1) {
-                Object.keys(returnData.categories).forEach(function(typeName) {
-                    var type = returnData.categories[typeName];
+            if (data.success === 1) {
+                Object.keys(data.categoryList).forEach(function(typeName) {
+                    var type = data.categoryList[typeName];
                     $("#categoriesTable").append("<tr><td colspan='2'><h3>" + typeName + "s:" + "</h3></td></tr>");
                     Object.keys(type).forEach(function(categoryId) {
                         var category = type[categoryId];

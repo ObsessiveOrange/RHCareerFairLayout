@@ -49,7 +49,7 @@ $(document).ready(function() {
     //
     //else, if careerFairData has been loaded, just setup the page using cached data
     else {
-        careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings);
+        careerFairData.layout.tableMappings = new NWayMap(careerFairData.layout.tableMappings);
         setupPage();
     }
     $("#companySearchBar").click(function() {
@@ -75,7 +75,7 @@ $(document).ready(function() {
                 //
                 //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIds.forEach(function(id) {
-                    if (!careerFairData.companies[id].checked) {
+                    if (!careerFairData.companyList[id].checked) {
                         markCheckboxChecked(id);
                     }
                 });
@@ -91,7 +91,7 @@ $(document).ready(function() {
                 //
                 //for performance (?) reasons, only mark it selected if it has not already been marked. Otherwise, would have to iterate through selected array multiple unnecessary times.
                 filteredCompanyIds.forEach(function(id) {
-                    if (careerFairData.companies[id].checked) {
+                    if (careerFairData.companyList[id].checked) {
                         markCheckboxUnchecked(id);
                     }
                 });
@@ -132,7 +132,7 @@ function prepareForPageSwitch() {
 //Get data from server, setup page
 function getNewData() {
     sendGetRequest({
-        url: "/api/data?method=getData",
+        url: "/api/data/all",
         successHandler: function(data) {
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
@@ -170,11 +170,11 @@ function setupPage() {
 }
 
 function setupTableMappings() {
-    var s1 = Number(careerFairData.termVars.layout.section1);
-    var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.section3);
+    var s1 = Number(careerFairData.layout.section1);
+    var s2 = Number(careerFairData.layout.section2);
+    var s2Rows = Number(careerFairData.layout.section2Rows);
+    var s2PathWidth = Number(careerFairData.layout.section2PathWidth);
+    var s3 = Number(careerFairData.layout.section3);
     //create temp var for total count
     var totalCount = 0;
     //sum up tables
@@ -183,17 +183,17 @@ function setupTableMappings() {
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
     for (var i = 0; i < totalCount; i++) {
-        if ((typeof careerFairData.termVars.layout.tableMappings[i]) != "undefined") {
-            if (careerFairData.termVars.layout.tableMappings[i].tableSize > 1) {
-                totalCount -= careerFairData.termVars.layout.tableMappings[i].tableSize - 1;
+        if ((typeof careerFairData.layout.tableMappings[i]) != "undefined") {
+            if (careerFairData.layout.tableMappings[i].tableSize > 1) {
+                totalCount -= careerFairData.layout.tableMappings[i].tableSize - 1;
             }
         } else {
-            // careerFairData.termVars.layout.tableMappings[i] = {
+            // careerFairData.layout.tableMappings[i] = {
             //     location: i,
             //     tableNumber: i,
             //     tableSize: 1
             // };
-            careerFairData.termVars.layout.tableMappings.push({
+            careerFairData.layout.tableMappings.push({
                 //i counts from 
                 tableNumber: i + 1,
                 companyId: null,
@@ -201,7 +201,7 @@ function setupTableMappings() {
             });
         }
     }
-    careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings, ["tableNumber", "companyId"]);
+    careerFairData.layout.tableMappings = new NWayMap(careerFairData.layout.tableMappings, ["tableNumber", "companyId"]);
 }
 
 function updateCompanyList() {
@@ -212,7 +212,7 @@ function updateCompanyList() {
     //if no filters applied or only has "changed" flag, skip all the checks for performance reasons.
     //will have either 0, 1, or n+1 elements, where n is the number of types of filters.
     if ((typeof filters.changed) == "undefined" || filters.changed == false) {
-        filteredCompanyIds = Object.keys(careerFairData.companies);
+        filteredCompanyIds = Object.keys(careerFairData.companyList);
         selectedCompanyIds = filteredCompanyIds.slice();
     }
     //
@@ -226,10 +226,10 @@ function updateCompanyList() {
             filteredCompanyIds = [];
             //
             //Iterate through all the companies,
-            Object.keys(careerFairData.companies).forEach(function(companyId) {
+            Object.keys(careerFairData.companyList).forEach(function(companyId) {
                 //
                 //get the actual company object,
-                var company = careerFairData.companies[companyId];
+                var company = careerFairData.companyList[companyId];
                 var showCompany = true;
                 //
                 //check if companies are in at least one of the filters in each type
@@ -244,7 +244,7 @@ function updateCompanyList() {
                             //
                             //else, make sure the intersection of the filters (categories) selected in the type group and the categories the company is in overlap 
                             //otherwise, set it to false
-                        } else if (_.intersection(filters[filterType], company.categories).length === 0) {
+                        } else if (_.intersection(filters[filterType], company.categoryList).length === 0) {
                             showCompany = false;
                         }
                     }
@@ -266,10 +266,10 @@ function updateCompanyList() {
     //
     //sort filteredCompanyIds before creating the array
     filteredCompanyIds.sort(function(a, b) {
-        var o1 = careerFairData.companies[a].name.toLowerCase();
-        var o2 = careerFairData.companies[b].name.toLowerCase();
-        var p1 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", a) === null ? 0 : careerFairData.termVars.layout.tableMappings.get("companyId", a).tableNumber);
-        var p2 = Number(careerFairData.termVars.layout.tableMappings.get("companyId", b) === null ? 0 : careerFairData.termVars.layout.tableMappings.get("companyId", b).tableNumber);
+        var o1 = careerFairData.companyList[a].name.toLowerCase();
+        var o2 = careerFairData.companyList[b].name.toLowerCase();
+        var p1 = Number(careerFairData.layout.tableMappings.get("companyId", a) === null ? 0 : careerFairData.layout.tableMappings.get("companyId", a).tableNumber);
+        var p2 = Number(careerFairData.layout.tableMappings.get("companyId", b) === null ? 0 : careerFairData.layout.tableMappings.get("companyId", b).tableNumber);
         if (o1 < o2) return -1;
         if (o1 > o2) return 1;
         if (p1 < p2) return -1;
@@ -279,10 +279,10 @@ function updateCompanyList() {
     //
     //add each company that is valid in the context of the selected filters to the list
     filteredCompanyIds.forEach(function(companyId) {
-        var company = careerFairData.companies[companyId];
+        var company = careerFairData.companyList[companyId];
         // Not in use - includes [i], which is currently not supported.
         //companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyId'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + company.tableNumber + "</td><td class='center companyListInfo'>[i]</td></tr>");
-        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyId'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + careerFairData.termVars.layout.tableMappings.get("companyId", company.id).tableNumber + "</td></tr>");
+        companyListBody.append("<tr><td class='center companyListHighlight' onclick='toggleCheckbox(" + company.id + ")' id='showOnMapCheckbox_" + company.id + "'>☐</td><td class='companyListCompanyId'>" + company.id + "</td><td class='companyListCompanyName' onclick='toggleCheckbox(" + company.id + ")'>" + company.name + "</td><td class='center companyListTable'>" + careerFairData.layout.tableMappings.get("companyId", company.id).tableNumber + "</td></tr>");
     });
     //
     //Check the ones that are in the list - if no filter change, will check previously selected entries only.
@@ -300,7 +300,7 @@ function markCheckboxChecked(id) {
     $("#showOnMapCheckbox_" + id).text("☑");
     //add to set of selected companies
     selectedCompanyIds.addToOrderedSet(id);
-    careerFairData.companies[id].checked = true;
+    careerFairData.companyList[id].checked = true;
 }
 //
 //deselect the checkbox for compnay with given id
@@ -309,14 +309,14 @@ function markCheckboxUnchecked(id) {
     $("#showOnMapCheckbox_" + id).text("☐");
     //remove from set of selected companies
     selectedCompanyIds.removeFromOrderedSet(id);
-    careerFairData.companies[id].checked = false;
+    careerFairData.companyList[id].checked = false;
 }
 //
 //toggle the checkbox
 function toggleCheckbox(id) {
     //
     //toggle based on current text value
-    if (careerFairData.companies[id].checked) {
+    if (careerFairData.companyList[id].checked) {
         markCheckboxUnchecked(id);
         //
         //highlight newly checked checkbox
@@ -333,7 +333,7 @@ function toggleCheckbox(id) {
 function drawRect(tableObj) {
     //
     //draw tableId in box for easy reading.
-    if (tableObj.tableId !== 0 && tableObj.tableId <= careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length) {
+    if (tableObj.tableId !== 0 && tableObj.tableId <= careerFairData.layout.tableMappings.getKeys("tableNumber").length) {
         $canvasMap.drawRect({
             layer: true,
             name: 'table' + tableObj.tableId + 'Box',
@@ -419,11 +419,11 @@ function generateTableLocations() {
     tableLocations = [];
     //
     //convenience assignments
-    var s1 = Number(careerFairData.termVars.layout.section1);
-    var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.section3);
+    var s1 = Number(careerFairData.layout.section1);
+    var s2 = Number(careerFairData.layout.section2);
+    var s2Rows = Number(careerFairData.layout.section2Rows);
+    var s2PathWidth = Number(careerFairData.layout.section2PathWidth);
+    var s3 = Number(careerFairData.layout.section3);
     //
     //count number of vertical and horizontal tables there are
     var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
@@ -445,7 +445,7 @@ function generateTableLocations() {
     // section 1
     if (s1 > 0) {
         for (var i = 0; i < s1;) {
-            tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
+            tableSize = careerFairData.layout.tableMappings.get("tableNumber", tableId).tableSize;
             tableLocations[tableId] = {
                 tableId: tableId,
                 x: offsetX,
@@ -473,7 +473,7 @@ function generateTableLocations() {
             //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
+                    tableSize = careerFairData.layout.tableMappings.get("tableNumber", tableId).tableSize;
                     tableLocations[tableId] = {
                         tableId: tableId,
                         x: offsetX + (j * tableWidth),
@@ -494,7 +494,7 @@ function generateTableLocations() {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
                 for (var j = 0; j < leftTables;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
+                    tableSize = careerFairData.layout.tableMappings.get("tableNumber", tableId).tableSize;
                     tableLocations[tableId] = {
                         tableId: tableId,
                         x: offsetX + (j * tableWidth),
@@ -509,7 +509,7 @@ function generateTableLocations() {
                     tableId++;
                 }
                 for (var j = 0; j < rightTables;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
+                    tableSize = careerFairData.layout.tableMappings.get("tableNumber", tableId).tableSize;
                     tableLocations[tableId] = {
                         tableId: tableId,
                         x: offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
@@ -531,7 +531,7 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-            tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
+            tableSize = careerFairData.layout.tableMappings.get("tableNumber", tableId).tableSize;
             tableLocations[tableId] = {
                 tableId: tableId,
                 x: offsetX,
@@ -601,12 +601,12 @@ function drawTables() {
 //Highlight all tables in selected companies array
 function highlightTables() {
     selectedCompanyIds.forEach(function(id) {
-        $canvasMap.setLayer('table' + careerFairData.termVars.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
+        $canvasMap.setLayer('table' + careerFairData.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
             fillStyle: "#0F0"
         });
     });
     _.difference(filteredCompanyIds, selectedCompanyIds).forEach(function(id) {
-        $canvasMap.setLayer('table' + careerFairData.termVars.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
+        $canvasMap.setLayer('table' + careerFairData.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
             fillStyle: "transparent"
         });
     });
@@ -620,10 +620,10 @@ function redrawTable(tableId) {
 //
 //highlight a specific table (used to minimize redrawing for toggling company selected)
 function highlightTable(id, color) {
-    $canvasMap.setLayer('table' + careerFairData.termVars.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
+    $canvasMap.setLayer('table' + careerFairData.layout.tableMappings.get("companyId", id).tableNumber + 'Box', {
         fillStyle: color
     });
-    redrawTable(careerFairData.termVars.layout.tableMappings.get("companyId", id).tableNumber);
+    redrawTable(careerFairData.layout.tableMappings.get("companyId", id).tableNumber);
 }
 //
 //send get request

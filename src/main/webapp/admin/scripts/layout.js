@@ -16,7 +16,7 @@ var unusedColor = "transparent";
 var hoverUnusedColor = "#BBB";
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data?method=getData",
+        url: "/api/data/all",
         successHandler: function(data) {
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
@@ -92,8 +92,8 @@ function setupLinks() {
 function setupTableMappings() {
     var s1 = Number(careerFairData.termVars.layout.section1);
     var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
+    var s2Rows = Number(careerFairData.termVars.layout.section2Rows);
+    var s2PathWidth = Number(careerFairData.termVars.layout.section2PathWidth);
     var s3 = Number(careerFairData.termVars.layout.section3);
     //create temp var for total count
     var totalCount = 0;

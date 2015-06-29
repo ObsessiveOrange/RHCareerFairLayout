@@ -1,15 +1,15 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data?method=getCompanies",
+        url: "/api/data/companies",
         successHandler: function(companiesReturnData) {
             if (companiesReturnData.success === 1) {
                 sendGetRequest({
-                    url: "/api/data?method=getCategories",
+                    url: "/api/data/categories",
                     successHandler: function(categoriesReturnData) {
                         //
                         //set last fetch time, so we know to refresh beyond a certain validity time
                         if (categoriesReturnData.success === 1) {
-                            var companies = companiesReturnData.companies;
+                            var companies = companiesReturnData.companyList;
                             var categories = categoriesReturnData.categories;
                             var headersHtml = "<tr>";
                             headersHtml += "<th>";

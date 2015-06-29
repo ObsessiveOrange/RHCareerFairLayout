@@ -46,7 +46,7 @@ public class AdminServlet extends Servlet {
 	response.setContentType("application/json");
 
 	Response authResponse;
-	if (!(authResponse = AuthManager.checkToken(request)).success) {
+	if (!(authResponse = AuthManager.checkToken(request)).isSuccess()) {
 
 	    ServletUtils.sendResponse(response, authResponse);
 	    return;
@@ -74,14 +74,14 @@ public class AdminServlet extends Servlet {
 	response.setContentType("application/json");
 
 	Response authResponse;
-	if (!(authResponse = AuthManager.checkToken(request)).success) {
+	if (!(authResponse = AuthManager.checkToken(request)).isSuccess()) {
 
 	    ServletUtils.sendResponse(response, authResponse);
 	    return;
 	}
 
 	Response fileUploadResponse = AdminRequestHandler.handleUploadRequest(request);
-	if (!fileUploadResponse.success) {
+	if (!fileUploadResponse.isSuccess()) {
 	    ServletUtils.sendResponse(response, fileUploadResponse);
 	    return;
 	}
@@ -104,7 +104,7 @@ public class AdminServlet extends Servlet {
 		responseObject = new FailResponse("Missing or invalid POST body parameters.");
 	    }
 
-	    Workbook uploadedWorkbook = fileUploadResponse.getFromReturnData("uploadedWorkbook", Workbook.class);
+	    Workbook uploadedWorkbook = fileUploadResponse.get("uploadedWorkbook", Workbook.class);
 
 	    responseObject = AdminRequestHandler.uploadData(year, quarter, uploadedWorkbook);
 	    break;
@@ -115,8 +115,8 @@ public class AdminServlet extends Servlet {
 	    String quarter = request.getHeader("quarter");
 
 	    Response checkResponse;
-	    if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).success
-		    || !Utils.validateTerm(year, quarter).success) {
+	    if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).isSuccess()
+		    || !Utils.validateTerm(year, quarter).isSuccess()) {
 		responseObject = checkResponse;
 		break;
 	    }
@@ -130,8 +130,8 @@ public class AdminServlet extends Servlet {
 	    String quarter = request.getHeader("quarter");
 
 	    Response checkResponse;
-	    if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).success
-		    || !Utils.validateTerm(year, quarter).success) {
+	    if (!(checkResponse = Utils.validateStrings(null, null, request, "year", "quarter")).isSuccess()
+		    || !Utils.validateTerm(year, quarter).isSuccess()) {
 		responseObject = checkResponse;
 		break;
 	    }
@@ -145,7 +145,7 @@ public class AdminServlet extends Servlet {
 	    ArrayList<TableMapping> mappings = new Gson().fromJson(bodyData,
 		    TableMappingsWrapper.class).updatedMappings;
 
-	    if (!Utils.validateObjects(mappings).success) {
+	    if (!Utils.validateObjects(mappings).isSuccess()) {
 
 		ServletUtils.sendResponse(response, new FailResponse("Mapping null, check input"));
 	    }

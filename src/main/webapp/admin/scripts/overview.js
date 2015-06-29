@@ -1,6 +1,6 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data?method=getSelectedTerm",
+        url: "/api/data/selected_term",
         successHandler: function(returnData) {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time
@@ -17,7 +17,7 @@
         }
     });
     sendGetRequest({
-        url: "/api/data?method=getStatistics",
+        url: "/api/data/statistics",
         successHandler: function(returnData) {
             //
             //set last fetch time, so we know to refresh beyond a certain validity time

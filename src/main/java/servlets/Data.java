@@ -29,8 +29,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_data")
-    public Response getData() {
+    @Path("all")
+    public Response data() {
 
 	try {
 	    HashMap<String, Object> termVars = new HashMap<String, Object>();
@@ -49,10 +49,10 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
-	    response.addToReturnData("categoryList", getCategoryList().getFromReturnData("categoryList"));
-	    response.addToReturnData("companyList", getCompanyList().getFromReturnData("companyList"));
-	    response.addToReturnData("layout", getLayout().getFromReturnData("layout"));
+	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
+	    response.put("categoryList", categoryList().get("categoryList"));
+	    response.put("companyList", companyList().get("companyList"));
+	    response.put("layout", layout().get("layout"));
 
 	    return response;
 
@@ -65,8 +65,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_selected_term")
-    public Response getSelectedTerm() {
+    @Path("selected_term")
+    public Response selectedTerm() {
 	try {
 	    HashMap<String, Object> termVars = new HashMap<String, Object>();
 
@@ -84,8 +84,8 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
-	    response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
+	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
+	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
 
 	    return response;
 
@@ -98,8 +98,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_category_list")
-    public Response getCategoryList() {
+    @Path("category_list")
+    public Response categoryList() {
 
 	try {
 	    HashMap<String, HashMap<Integer, Category>> categoryMap = new HashMap<String, HashMap<Integer, Category>>();
@@ -122,7 +122,7 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("categories", categoryMap);
+	    response.put("categoryList", categoryMap);
 
 	    return response;
 	} catch (Exception e) {
@@ -135,8 +135,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_company_list")
-    public Response getCompanyList() {
+    @Path("company_list")
+    public Response companyList() {
 
 	try {
 
@@ -170,7 +170,7 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("companies", companyMap);
+	    response.put("companyList", companyMap);
 
 	    return response;
 	} catch (Exception e) {
@@ -183,8 +183,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_company_details/{companyId}")
-    public Response getCompanyDetails(@PathParam("companyId") String companyIdStr) {
+    @Path("company_details/{companyId}")
+    public Response companyDetails(@PathParam("companyId") String companyIdStr) {
 
 	try {
 	    int companyId = Integer.valueOf(companyIdStr);
@@ -220,7 +220,7 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("companyDetails", company);
+	    response.put("companyDetails", company);
 
 	    return response;
 	} catch (Exception e) {
@@ -233,8 +233,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_layout")
-    public Response getLayout() {
+    @Path("layout")
+    public Response layout() {
 
 	try {
 
@@ -270,7 +270,7 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("layout", layout);
+	    response.put("layout", layout);
 
 	    return response;
 	} catch (Exception e) {
@@ -283,8 +283,8 @@ public class Data {
 
     @GET
     @Produces("application/json")
-    @Path("get_statistics")
-    public Response getStatistics() {
+    @Path("statistics")
+    public Response statistics() {
 
 	try {
 	    HashMap<String, Object> layoutMap = new HashMap<String, Object>();
@@ -333,9 +333,9 @@ public class Data {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("companyCount", companyMap.size());
-	    response.addToReturnData("totalTableCount", layout.getTableCount());
-	    response.addToReturnData("usedTableCount", usedTableCount);
+	    response.put("companyCount", companyMap.size());
+	    response.put("totalTableCount", layout.getTableCount());
+	    response.put("usedTableCount", usedTableCount);
 
 	    return response;
 	} catch (Exception e) {

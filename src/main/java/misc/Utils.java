@@ -32,7 +32,7 @@ public class Utils {
 	    } else if (maxLength != null && s.length() > maxLength) {
 		return new FailResponse("Invalid value provided for required header " + h + ".");
 	    } else {
-		resp.addToReturnData(h, s);
+		resp.put(h, s);
 	    }
 	}
 	return resp;
@@ -58,7 +58,7 @@ public class Utils {
 	    } else if (maxValue != null && value > maxValue) {
 		return new FailResponse("Invalid value provided for required header " + h + ".");
 	    } else {
-		resp.addToReturnData(h, value);
+		resp.put(h, value);
 	    }
 	}
 	return resp;
@@ -85,7 +85,7 @@ public class Utils {
 	    } else if (maxValue != null && value > maxValue) {
 		return new FailResponse("Invalid value provided for required header " + h + ".");
 	    } else {
-		resp.addToReturnData(h, value);
+		resp.put(h, value);
 	    }
 	}
 	return resp;

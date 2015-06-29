@@ -16,82 +16,82 @@ import managers.AuthManager;
 import servlets.ServletUtils;
 
 @WebServlet("/api/users")
-@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL) )
 public class UsersServlet extends HttpServlet {
-    
+
     /**
      * 
      */
     private static final long serialVersionUID = -2790596508036351419L;
-    
+
     /** Getter & Setter Methods **/
-    
+
     public UsersServlet() throws IOException {
-    
-        super();
+
+	super();
     }
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-        response.setContentType("application/json");
-        
-        Response authResponse;
-        // check if the user has already been authenticated.
-        if (!(authResponse = AuthManager.checkToken(request)).success) {
-            // if fails authentication check, return the error.
-            ServletUtils.sendResponse(response, authResponse);
-            return;
-        }
-        
-        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
-        
-        Response responseObject;
-        
-        switch (method) {
-            default:
-                responseObject = new FailResponse("Invalid GET method supplied: " + method);
-                break;
-        }
-        ServletUtils.sendResponse(response, responseObject);
+
+	response.setContentType("application/json");
+
+	Response authResponse;
+	// check if the user has already been authenticated.
+	if (!(authResponse = AuthManager.checkToken(request)).isSuccess()) {
+	    // if fails authentication check, return the error.
+	    ServletUtils.sendResponse(response, authResponse);
+	    return;
+	}
+
+	String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
+
+	Response responseObject;
+
+	switch (method) {
+	default:
+	    responseObject = new FailResponse("Invalid GET method supplied: " + method);
+	    break;
+	}
+	ServletUtils.sendResponse(response, responseObject);
     }
-    
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-        response.setContentType("application/json");
-        
-        if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
-                && !request.getParameter("method").equalsIgnoreCase("registerUser")) {
-            Response authResponse;
-            if (!(authResponse = AuthManager.checkToken(request)).success) {
-                
-                ServletUtils.sendResponse(response, authResponse);
-                return;
-            }
-        }
-        
-        String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
-        
-        Response responseObject;
-        
-        switch (method) {
-            case "checkAuthentication":
-                responseObject = new SuccessResponse("Authenticated");
-                break;
-            case "login":
-                responseObject = AuthManager.authenticateUser(request);
-                break;
-            case "logout":
-                responseObject = AuthManager.logoutUser(request);
-                break;
-            case "registerUser":
-                responseObject = AuthManager.addUser(request);
-                break;
-            default:
-                responseObject = new FailResponse("Invalid POST method supplied: " + method);
-                break;
-        }
-        ServletUtils.sendResponse(response, responseObject);
+
+	response.setContentType("application/json");
+
+	if (request.getParameter("method") != null && !request.getParameter("method").equalsIgnoreCase("login")
+		&& !request.getParameter("method").equalsIgnoreCase("registerUser")) {
+	    Response authResponse;
+	    if (!(authResponse = AuthManager.checkToken(request)).isSuccess()) {
+
+		ServletUtils.sendResponse(response, authResponse);
+		return;
+	    }
+	}
+
+	String method = request.getParameter("method") != null ? request.getParameter("method") : "null";
+
+	Response responseObject;
+
+	switch (method) {
+	case "checkAuthentication":
+	    responseObject = new SuccessResponse("Authenticated");
+	    break;
+	case "login":
+	    responseObject = AuthManager.authenticateUser(request);
+	    break;
+	case "logout":
+	    responseObject = AuthManager.logoutUser(request);
+	    break;
+	case "registerUser":
+	    responseObject = AuthManager.addUser(request);
+	    break;
+	default:
+	    responseObject = new FailResponse("Invalid POST method supplied: " + method);
+	    break;
+	}
+	ServletUtils.sendResponse(response, responseObject);
     }
 }

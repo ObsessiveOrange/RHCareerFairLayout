@@ -6,13 +6,13 @@ import common.Response;
 import common.Response.SuccessResponse;
 
 public class BaseRequestHandler {
-    
+
     public static Response handleViewLogRequest(HttpServletRequest request) {
-    
-        Response response = new SuccessResponse();
-        
-        response.addToReturnData("Log", ServletLog.getLogJson());
-        
-        return response;
+
+	Response response = new SuccessResponse();
+
+	response.put("Log", ServletLog.getLogJson());
+
+	return response;
     }
 }

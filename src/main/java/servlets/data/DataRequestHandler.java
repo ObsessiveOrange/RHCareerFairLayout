@@ -108,10 +108,10 @@ public class DataRequestHandler {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
-	    response.addToReturnData("categories", categoryMap);
-	    response.addToReturnData("companies", companyMap);
-	    response.addToReturnData("termVars", termVars);
+	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
+	    response.put("categories", categoryMap);
+	    response.put("companies", companyMap);
+	    response.put("termVars", termVars);
 
 	    return response;
 
@@ -125,8 +125,8 @@ public class DataRequestHandler {
     public static Response handleGetSelectedTermRequest() throws IOException {
 
 	SuccessResponse response = new SuccessResponse();
-	response.addToReturnData("selectedQuarter", DataManager.getSelectedQuarter());
-	response.addToReturnData("selectedYear", DataManager.getSelectedYear());
+	response.put("selectedQuarter", DataManager.getSelectedQuarter());
+	response.put("selectedYear", DataManager.getSelectedYear());
 
 	return response;
     }
@@ -154,7 +154,7 @@ public class DataRequestHandler {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("categories", categoryMap);
+	    response.put("categories", categoryMap);
 
 	    return response;
 	} catch (Exception e) {
@@ -199,7 +199,7 @@ public class DataRequestHandler {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("companies", companyMap);
+	    response.put("companies", companyMap);
 
 	    return response;
 	} catch (Exception e) {
@@ -246,7 +246,7 @@ public class DataRequestHandler {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("layout", layout);
+	    response.put("layout", layout);
 
 	    return response;
 	} catch (Exception e) {
@@ -306,9 +306,9 @@ public class DataRequestHandler {
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.addToReturnData("companyCount", companyMap.size());
-	    response.addToReturnData("totalTableCount", layout.getTableCount());
-	    response.addToReturnData("usedTableCount", usedTableCount);
+	    response.put("companyCount", companyMap.size());
+	    response.put("totalTableCount", layout.getTableCount());
+	    response.put("usedTableCount", usedTableCount);
 
 	    return response;
 	} catch (Exception e) {

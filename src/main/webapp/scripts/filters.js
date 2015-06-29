@@ -72,7 +72,7 @@ function createFilterList() {
     var $filtersListBody = $("#filtersListBody");
     //
     //go through each category, and create filter groups, then populate with the filters
-    Object.keys(careerFairData.categories).sort().forEach(function(filterGroup) {
+    Object.keys(careerFairData.categoryList).sort().forEach(function(filterGroup) {
         //
         //add this new group to the array
         filterGroupArray.push(filterGroup);
@@ -89,14 +89,14 @@ function createFilterList() {
         $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupId + "Row' onclick='toggleFilterGroupId(" + filterGroupId + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupId + "'>►</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         //
         //populate filter group
-        Object.keys(careerFairData.categories[filterGroup]).forEach(function(filterId) {
+        Object.keys(careerFairData.categoryList[filterGroup]).forEach(function(filterId) {
             //
             //force filterId to a number - persistent storage will restore the object with these Ids as numbers, while the keys in categories may be as text. 
             //(or maybe it's the other way round? Either way, this is important)
             filterId = Number(filterId);
             //
             //Create filter rows
-            $filtersListBody.append("<tr class='filterGroup" + filterGroupId + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterId + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterId + "'>☐</td><td class='filtersListFilterColumn'>" + careerFairData.categories[filterGroup][filterId].name + "</td></tr>");
+            $filtersListBody.append("<tr class='filterGroup" + filterGroupId + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterId + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterId + "'>☐</td><td class='filtersListFilterColumn'>" + careerFairData.categoryList[filterGroup][filterId].name + "</td></tr>");
             //
             //if it was previously selected, check it off.
             if (filters[filterGroup].indexOf(filterId) != -1) {
@@ -118,7 +118,7 @@ function showFilterGroup(groupId) {
     $(".filterGroup" + groupId + "Element").show(250);
     //
     //for last category, toggle the rounded corners.
-    if (groupId == Object.keys(careerFairData.categories).length) {
+    if (groupId == Object.keys(careerFairData.categoryList).length) {
         $("#filtersListGroup" + groupId + "Row").removeClass("tableLastRowRoundBottomLeft");
     }
 }
@@ -132,7 +132,7 @@ function hideFilterGroup(groupId) {
     $(".filterGroup" + groupId + "Element").hide(250);
     //
     //for last category, toggle the rounded corners.
-    if (groupId == Object.keys(careerFairData.categories).length) {
+    if (groupId == Object.keys(careerFairData.categoryList).length) {
         $("#filtersListGroup" + groupId + "Row").addClass("tableLastRowRoundBottomLeft");
     }
 }
