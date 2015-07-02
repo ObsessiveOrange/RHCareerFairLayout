@@ -3,7 +3,6 @@ package managers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -49,69 +48,6 @@ public class AuthManager {
 	    Integer insertResult = addUser.executeUpdate();
 
 	    return new SuccessResponse("Rows changed: " + insertResult);
-	} catch (Exception e) {
-	    ServletLog.logEvent(e);
-
-	    return new FailResponse(e);
-	}
-    }
-
-    public static Response authenticateUser(HttpServletRequest request) {
-
-	try {
-
-	    // Response checkTokenResponse;
-	    // if ((checkTokenResponse =
-	    // AuthManager.checkToken(request)).success) {
-	    // return checkTokenResponse;
-	    // }
-
-	    String userName = request.getHeader("authUser");
-	    String password = request.getHeader("authPass");
-
-	    if (userName == null || password == null) {
-		return new FailResponse("Invalid Username/Password provided");
-	    }
-
-	    PreparedStatement getHashedPWStatement = SQLManager.getConn("RHCareerFairLayout")
-		    .prepareStatement("SELECT hashedPw FROM Users WHERE username = ?;");
-
-	    getHashedPWStatement.setString(1, userName);
-
-	    ResultSet result = getHashedPWStatement.executeQuery();
-	    boolean hasNext = result.next();
-
-	    if (!hasNext || !BCrypt.checkpw(password, result.getString("hashedPw"))) {
-		return new FailResponse("Invalid Username/Password Combination");
-	    }
-	    result.close();
-	    getHashedPWStatement.close();
-
-	    String sessionKey = BCrypt.hashpw(userName + System.currentTimeMillis(), BCrypt.gensalt());
-	    Timestamp sessionValidDate = new Timestamp(
-		    System.currentTimeMillis() + TimeUnit.DAYS.toMillis(SESSION_VALID_DAYS));
-	    String sessionClient = request.getHeader("User-Agent") == null ? "NO USER-AGENT PROVIDED"
-		    : request.getHeader("User-Agent");
-
-	    PreparedStatement newSession = SQLManager.getConn("RHCareerFairLayout")
-		    .prepareStatement("INSERT INTO Sessions " + "VALUES(?, ?, ?, ?);");
-
-	    newSession.setString(1, userName);
-	    newSession.setString(2, sessionKey);
-	    newSession.setTimestamp(3, sessionValidDate);
-	    newSession.setString(4, sessionClient);
-
-	    newSession.executeUpdate();
-
-	    newSession.close();
-
-	    SuccessResponse response = new SuccessResponse();
-
-	    response.put("token", sessionKey);
-	    response.addCookie("authUser", userName);
-	    response.addCookie("authToken", sessionKey);
-
-	    return response;
 	} catch (Exception e) {
 	    ServletLog.logEvent(e);
 

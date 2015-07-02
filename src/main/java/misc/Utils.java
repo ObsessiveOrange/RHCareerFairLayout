@@ -1,5 +1,6 @@
 package misc;
 
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -142,6 +143,17 @@ public class Utils {
 	return year + "_" + toProperCase(quarter);
     }
 
+    public static Response checkResultSuccess(ResultSet rs) throws SQLException {
+	if (hasColumn(rs, "status") && rs.next() && rs.getInt("status") < 0) {
+	    if (hasColumn(rs, "message")) {
+		return new FailResponse(rs.getString("message"));
+	    }
+	    return new FailResponse("Failed, but no SQL Error given");
+	}
+
+	return new SuccessResponse();
+    }
+
     public static boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
 
 	ResultSetMetaData rsmd = rs.getMetaData();
@@ -152,6 +164,18 @@ public class Utils {
 	    }
 	}
 	return false;
+    }
+
+    public static ResultSet getNextResultSet(CallableStatement stmt) throws SQLException {
+	boolean haveMoreResultSets = stmt.getMoreResults();
+	while (true) {
+	    if (!haveMoreResultSets && stmt.getUpdateCount() == -1) {
+		return null;
+	    } else if (haveMoreResultSets) {
+		return stmt.getResultSet();
+	    }
+	    haveMoreResultSets = stmt.getMoreResults();
+	}
     }
 
 }
