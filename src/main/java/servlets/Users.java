@@ -166,7 +166,7 @@ public class Users {
     @POST
     @Produces("application/json")
     @Path("logout")
-    public Response logout(@HeaderParam("authUser") String authUser, @HeaderParam("authToken") String authToken,
+    public Response logout(@CookieParam("authUser") String authUser, @CookieParam("authToken") String authToken,
 	    @HeaderParam("User-Agent") String userAgent) {
 
 	try {
