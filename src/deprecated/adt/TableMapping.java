@@ -1,4 +1,4 @@
-package adt;
+package adt.deprecated;
 
 public class TableMapping {
     

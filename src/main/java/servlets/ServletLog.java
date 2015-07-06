@@ -1,81 +1,71 @@
 package servlets;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.sql.CallableStatement;
 
-import com.google.gson.Gson;
+import managers.SQLManager;
 
 public class ServletLog {
-    
-    private static final int               MAX_LOG_SIZE = 5000;
-    
-    private static final Set<ServletEvent> log          = Collections.newSetFromMap(new LinkedHashMap<ServletEvent, Boolean>() {
-                                                            
-                                                            private static final long serialVersionUID = -2642465950081345680L;
-                                                            
-                                                            @Override
-                                                            protected boolean removeEldestEntry(Map.Entry<ServletEvent, Boolean> eldest) {
-                                                            
-                                                                return size() > MAX_LOG_SIZE;
-                                                            }
-                                                        });     ;
-    
+
     public static void logEvent(ServletEvent event) {
-    
-        log.add(event);
+
+	try {
+	    CallableStatement stmt;
+
+	    stmt = SQLManager.getConn().prepareCall("CALL Log_LogEvent(?, ?, ?);");
+	    stmt.setString(1, event.type);
+	    stmt.setString(2, event.message);
+	    stmt.setString(3, event.detailMessage);
+
+	    stmt.executeQuery();
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    System.err.println("Error logging event");
+	    e.printStackTrace();
+	}
+
     }
-    
+
+    public static void logEvent(String type, String message, String detailMessage) {
+
+	ServletEvent event = new ServletEvent(type, message, detailMessage);
+	logEvent(event);
+    }
+
     public static void logEvent(Exception e) {
-    
-        ServletEvent event = new ServletEvent();
-        event.setDetail("Type", "Exception");
-        event.setDetail("Exception stack trace", e.getStackTrace());
-        event.setDetail("Exception message", e.getMessage());
-        event.setDetail("DateTime", new Date().toString());
-        logEvent(event);
+
+	ServletEvent event = new ServletEvent("Exception", e.getMessage(), e.getStackTrace().toString());
+	logEvent(event);
     }
-    
-    public static String getLogJson() {
-    
-        return new Gson().toJson(log);
-    }
-    
+
     public static class ServletEvent {
-        
-        private final HashMap<String, Object> details   = new HashMap<String, Object>();
-        private final long                    timestamp = System.currentTimeMillis();
-        
-        public void setDetail(String key, Object value) {
-        
-            details.put(key, value);
-        }
-        
-        public long getTimestamp() {
-        
-            return timestamp;
-        }
-    }
-    
-    public static <T> LinkedHashSet<T> getSizeLimitedLinkedHashSet(final int size, Class<T> type) {
-    
-        Collections.newSetFromMap(new LinkedHashMap<T, Boolean>() {
-            
-            /**
-                 * 
-                 */
-            private static final long serialVersionUID = 3774547165048604458L;
-            
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<T, Boolean> eldest) {
-            
-                return size() > size;
-            }
-        });
-        return null;
+
+	private final String type, message, detailMessage;
+
+	public ServletEvent(String type, String message, String detailMessage) {
+	    this.type = type;
+	    this.message = message;
+	    this.detailMessage = detailMessage;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+	    return type;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+	    return message;
+	}
+
+	/**
+	 * @return the detailMessage
+	 */
+	public String getDetailMessage() {
+	    return detailMessage;
+	}
     }
 }

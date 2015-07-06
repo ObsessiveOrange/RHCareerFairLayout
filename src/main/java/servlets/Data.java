@@ -1,11 +1,12 @@
 package servlets;
 
-import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,13 +14,18 @@ import javax.ws.rs.core.Context;
 
 import adt.Category;
 import adt.Company;
-import adt.Layout;
-import adt.TableMapping;
+import adt.DataVar;
+import adt.Table;
+import adt.wrappers.CategoryMap;
+import adt.wrappers.CompanyMap;
+import adt.wrappers.DataVarMap;
+import adt.wrappers.TableArray;
 import common.Response;
 import common.Response.FailResponse;
 import common.Response.SuccessResponse;
 import managers.DataManager;
 import managers.SQLManager;
+import misc.Utils;
 
 @Path("/data")
 public class Data {
@@ -30,31 +36,61 @@ public class Data {
     @GET
     @Produces("application/json")
     @Path("all")
-    public Response data() {
+    public Response get_AllData() {
 
 	try {
-	    HashMap<String, Object> termVars = new HashMap<String, Object>();
-
-	    // Organize termVars into hashmap
-	    PreparedStatement getTermVars;
-	    getTermVars = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT item, value FROM TermVars WHERE type != 'layout';");
-	    ResultSet getTermVarsRS = getTermVars.executeQuery();
-
-	    while (getTermVarsRS.next()) {
-		String item = getTermVarsRS.getString("item");
-		String value = getTermVarsRS.getString("value");
-
-		termVars.put(item, value);
-	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
-	    response.put("categoryList", categoryList().get("categoryList"));
-	    response.put("companyList", companyList().get("companyList"));
-	    response.put("layout", layout().get("layout"));
+
+	    Response r;
+	    r = get_SelectedTerm();
+	    if (!r.isSuccess()) {
+		return r;
+	    } else {
+		response.put("title", r.get("title"));
+	    }
+
+	    r = get_CategoryList();
+	    if (!r.isSuccess()) {
+		return r;
+	    } else {
+		response.put("categoryList", r.get("categoryList"));
+	    }
+
+	    r = get_CompanyList();
+	    if (!r.isSuccess()) {
+		return r;
+	    } else {
+		response.put("companyList", r.get("companyList"));
+	    }
+
+	    r = get_Layout();
+	    if (!r.isSuccess()) {
+		return r;
+	    } else {
+		response.put("layoutVars", r.get("layoutVars"));
+		response.put("tableMappings", r.get("tableMappings"));
+	    }
 
 	    return response;
+
+	} catch (Exception e) {
+	    ServletLog.logEvent(e);
+
+	    return new FailResponse(e);
+	}
+    }
+
+    @POST
+    @Consumes("multipart/form-data")
+    @Produces("application/json")
+    @Path("all")
+    public Response post_AllData() {
+
+	try {
+
+	    // TODO: Implement
+	    return new FailResponse("Not implemented yet");
 
 	} catch (Exception e) {
 	    ServletLog.logEvent(e);
@@ -66,26 +102,35 @@ public class Data {
     @GET
     @Produces("application/json")
     @Path("selected_term")
-    public Response selectedTerm() {
+    public Response get_SelectedTerm() {
 	try {
-	    HashMap<String, Object> termVars = new HashMap<String, Object>();
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    // Organize termVars into hashmap
-	    PreparedStatement getTermVars;
-	    getTermVars = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT item, value FROM TermVars WHERE type != 'layout';");
-	    ResultSet getTermVarsRS = getTermVars.executeQuery();
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_SelectedTerm();");
 
-	    while (getTermVarsRS.next()) {
-		String item = getTermVarsRS.getString("item");
-		String value = getTermVarsRS.getString("value");
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
+	    }
 
-		termVars.put(item, value);
+	    String quarter = "", year = "";
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		if (Utils.hasColumn(rs, "item")) {
+		    while (rs.next()) {
+			if (rs.getString("item").equalsIgnoreCase("Term_Quarter")) {
+			    quarter = rs.getString("value");
+			} else if (rs.getString("item").equalsIgnoreCase("Term_Year")) {
+			    year = rs.getString("value");
+			}
+		    }
+		}
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
-	    response.put("title", "Career Fair " + termVars.get("Term") + " " + termVars.get("Year"));
+	    response.put("title", "Career Fair " + quarter + " " + year);
 
 	    return response;
 
@@ -99,178 +144,192 @@ public class Data {
     @GET
     @Produces("application/json")
     @Path("category_list")
-    public Response categoryList() {
-
+    public Response get_CategoryList() {
 	try {
-	    HashMap<String, HashMap<Integer, Category>> categoryMap = new HashMap<String, HashMap<Integer, Category>>();
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    // Organize categories into hashmap
-	    PreparedStatement getCategories = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT id, name, type FROM Categories;");
-	    ResultSet getCategoriesRS = getCategories.executeQuery();
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_CategoryList();");
 
-	    while (getCategoriesRS.next()) {
-		Integer id = getCategoriesRS.getInt("id");
-		String name = getCategoriesRS.getString("name");
-		String type = getCategoriesRS.getString("type");
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
+	    }
 
-		Category c = new Category(id, name, type);
-		if (categoryMap.get(type) == null) {
-		    categoryMap.put(type, new HashMap<Integer, Category>());
+	    CategoryMap categoryMap = new CategoryMap();
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    Category c = new Category(rs.getLong("id"), rs.getString("name"), rs.getString("type"));
+
+		    categoryMap.put(c.getId(), c);
 		}
-		categoryMap.get(type).put(c.getId(), c);
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
 	    response.put("categoryList", categoryMap);
 
 	    return response;
+
 	} catch (Exception e) {
 	    ServletLog.logEvent(e);
 
 	    return new FailResponse(e);
-
 	}
     }
 
     @GET
     @Produces("application/json")
     @Path("company_list")
-    public Response companyList() {
-
+    public Response get_CompanyList() {
 	try {
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    HashMap<Integer, Company> companyMap = new HashMap<Integer, Company>();
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_CompanyList();");
 
-	    // Organize companies into hashmap
-	    PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT id, name, description FROM Companies;");
-	    ResultSet getCompaniesRS = getCompanies.executeQuery();
-
-	    while (getCompaniesRS.next()) {
-		Integer id = getCompaniesRS.getInt("id");
-		String name = getCompaniesRS.getString("name");
-		String description = getCompaniesRS.getString("description");
-
-		Company c = new Company(id, name, description, null);
-		companyMap.put(c.getId(), c);
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
 	    }
 
-	    // Add categoryIDs to company objects
-	    PreparedStatement getCategories_Companies = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT categoryId, companyId FROM Categories_Companies;");
-	    ResultSet getCategories_CompaniesRS = getCategories_Companies.executeQuery();
+	    CompanyMap companyMap = new CompanyMap();
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    Company c = new Company(rs.getLong("id"), rs.getString("name"), rs.getString("description"),
+			    rs.getLong("tableId"));
 
-	    while (getCategories_CompaniesRS.next()) {
-		Integer categoryId = getCategories_CompaniesRS.getInt("categoryId");
-		Integer companyId = getCategories_CompaniesRS.getInt("companyId");
+		    companyMap.put(c.getId(), c);
+		}
+	    }
 
-		Company c = companyMap.get(companyId);
-		c.getCategories().add(categoryId);
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    companyMap.get(rs.getLong("companyId")).getCategories().add(rs.getLong("categoryId"));
+		}
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
 	    response.put("companyList", companyMap);
 
 	    return response;
+
 	} catch (Exception e) {
 	    ServletLog.logEvent(e);
 
 	    return new FailResponse(e);
-
 	}
     }
 
     @GET
     @Produces("application/json")
     @Path("company_details/{companyId}")
-    public Response companyDetails(@PathParam("companyId") String companyIdStr) {
+    public Response get_CompanyDetails(@PathParam("companyId") String companyIdStr) {
 
 	try {
-	    int companyId = Integer.valueOf(companyIdStr);
-
-	    Company company = null;
-
-	    // Organize companies into hashmap
-	    PreparedStatement getCompany = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT id, name, description FROM Companies WHERE id = ?;");
-	    getCompany.setInt(1, companyId);
-	    ResultSet getCompanyRS = getCompany.executeQuery();
-
-	    if (getCompanyRS.next()) {
-		Integer id = getCompanyRS.getInt("id");
-		String name = getCompanyRS.getString("name");
-		String description = getCompanyRS.getString("description");
-
-		company = new Company(id, name, description, null);
-	    } else {
-		return new FailResponse("Invalid companyId provided: No results found");
+	    Long companyId;
+	    try {
+		companyId = Long.valueOf(companyIdStr);
+	    } catch (NumberFormatException e) {
+		return new FailResponse("Company ID invalid - non-integer value");
 	    }
 
-	    // Add categoryIDs to company objects
-	    PreparedStatement getCategories = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT categoryId FROM Categories_Companies WHERE companyId = ?;");
-	    getCategories.setInt(1, companyId);
-	    ResultSet getCategoriesRS = getCategories.executeQuery();
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    while (getCategoriesRS.next()) {
-		Integer categoryId = getCategoriesRS.getInt("categoryId");
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_CompanyDetails(?);");
+	    stmt.setLong(1, companyId);
 
-		company.getCategories().add(categoryId);
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
+	    }
+
+	    Company company = null;
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    company = new Company(rs.getLong("id"), rs.getString("name"), rs.getString("description"),
+			    rs.getLong("tableId"));
+		}
+		if (company == null) {
+		    return new FailResponse("Error retreiving company instance");
+		}
+	    }
+
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    company.getCategories().add(rs.getLong("categoryId"));
+		}
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.put("companyDetails", company);
+	    response.put("company", company);
 
 	    return response;
 	} catch (Exception e) {
 	    ServletLog.logEvent(e);
 
 	    return new FailResponse(e);
-
 	}
     }
 
     @GET
     @Produces("application/json")
     @Path("layout")
-    public Response layout() {
+    public Response get_Layout() {
 
 	try {
 
-	    HashMap<String, Object> layoutMap = new HashMap<String, Object>();
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    // Organize termVars into hashmap
-	    PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT item, value, type FROM TermVars WHERE type='layout';");
-	    ResultSet getTermVarsRS = getTermVars.executeQuery();
+	    DataVarMap layout = new DataVarMap();
+	    TableArray tableMappings = new TableArray();
 
-	    while (getTermVarsRS.next()) {
-		String item = getTermVarsRS.getString("item");
-		String value = getTermVarsRS.getString("value");
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_LayoutVars();");
 
-		layoutMap.put(item, Integer.valueOf(value));
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
 	    }
 
-	    Layout layout = new Layout(layoutMap);
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    DataVar var = new DataVar(rs.getString("item"), rs.getString("value"));
 
-	    // Retreive TableMapping from DB
-	    PreparedStatement getTableMappings = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT tableNumber, companyId, tableSize FROM TableMappings;");
-	    ResultSet getTableMappingsRS = getTableMappings.executeQuery();
+		    layout.put(var);
+		}
+	    }
 
-	    while (getTableMappingsRS.next()) {
-		Integer tableNumber = getTableMappingsRS.getInt("tableNumber");
-		Integer companyId = getTableMappingsRS.getInt("companyId") == 0 ? null
-			: getTableMappingsRS.getInt("companyId");
-		Integer tableSize = getTableMappingsRS.getInt("tableSize");
-		TableMapping mapping = new TableMapping(tableNumber, companyId, tableSize);
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_TableMappings();");
 
-		layout.getTableMappings().add(mapping);
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
+	    }
+
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    Long tableId = rs.getLong("tableId") == 0 && rs.wasNull() ? null : rs.getLong("tableId");
+		    Long companyId = rs.getLong("companyId") == 0 && rs.wasNull() ? null : rs.getLong("companyId");
+		    Integer tableSize = rs.getInt("tableSize") == 0 && rs.wasNull() ? null : rs.getInt("tableSize");
+
+		    Table table = new Table(tableId, companyId, tableSize);
+
+		    tableMappings.add(table);
+		}
 	    }
 
 	    SuccessResponse response = new SuccessResponse();
-	    response.put("layout", layout);
+	    response.put("layoutVars", layout);
+	    response.put("tableMappings", tableMappings);
 
 	    return response;
 	} catch (Exception e) {
@@ -284,57 +343,36 @@ public class Data {
     @GET
     @Produces("application/json")
     @Path("statistics")
-    public Response statistics() {
+    public Response get_Statistics() {
 
 	try {
-	    HashMap<String, Object> layoutMap = new HashMap<String, Object>();
-	    Layout layout = null;
-	    Integer usedTableCount = 0;
 
-	    // Organize termVars into hashmap
-	    PreparedStatement getTermVars = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT item, value, type FROM TermVars;");
-	    ResultSet getTermVarsRS = getTermVars.executeQuery();
+	    CallableStatement stmt;
+	    ResultSet rs;
+	    Response respObj;
 
-	    while (getTermVarsRS.next()) {
-		String item = getTermVarsRS.getString("item");
-		String value = getTermVarsRS.getString("value");
-		String type = getTermVarsRS.getString("type");
+	    Integer companyCount = null, totalTableCount = null, usedTableCount = null;
 
-		if (type.equalsIgnoreCase("layout")) {
-		    layoutMap.put(item, Integer.valueOf(value));
+	    // Check session is valid
+	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareCall("CALL Data_Get_Statistics();");
+
+	    rs = stmt.executeQuery();
+	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+		return respObj;
+	    }
+
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		if (rs.next()) {
+
+		    companyCount = rs.getInt("companyCount");
+		    totalTableCount = rs.getInt("totalTableCount");
+		    usedTableCount = rs.getInt("usedTableCount");
 		}
 	    }
 
-	    layout = new Layout(layoutMap);
-
-	    HashMap<Integer, Company> companyMap = new HashMap<Integer, Company>();
-
-	    // Organize companies into hashmap
-	    PreparedStatement getCompanies = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT id, name, description FROM Companies;");
-	    ResultSet getCompaniesRS = getCompanies.executeQuery();
-
-	    while (getCompaniesRS.next()) {
-		Integer id = getCompaniesRS.getInt("id");
-		String name = getCompaniesRS.getString("name");
-		String description = getCompaniesRS.getString("description");
-
-		Company c = new Company(id, name, description, null);
-		companyMap.put(c.getId(), c);
-	    }
-
-	    PreparedStatement getMappedTables = SQLManager.getConn(DataManager.getSelectedTerm())
-		    .prepareStatement("SELECT COUNT(companyId) as NumUsedTables FROM TableMappings;");
-	    ResultSet getMappedTablesRS = getMappedTables.executeQuery();
-
-	    while (getMappedTablesRS.next()) {
-		usedTableCount = getMappedTablesRS.getInt("NumUsedTables");
-	    }
-
 	    SuccessResponse response = new SuccessResponse();
-	    response.put("companyCount", companyMap.size());
-	    response.put("totalTableCount", layout.getTableCount());
+	    response.put("companyCount", companyCount);
+	    response.put("totalTableCount", totalTableCount);
 	    response.put("usedTableCount", usedTableCount);
 
 	    return response;
@@ -342,7 +380,7 @@ public class Data {
 	    ServletLog.logEvent(e);
 
 	    return new FailResponse(e);
-
 	}
+
     }
 }

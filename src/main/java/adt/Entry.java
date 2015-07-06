@@ -1,50 +1,43 @@
 package adt;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.google.gson.Gson;
+import servlets.ServletLog;
 
-public class Entry implements Serializable {
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 8775375254185524748L;
-    private static final Gson gson             = new Gson();
-    
-    private long              id;
-    private long              lastUpdateTime;
-    
-    public enum ItemType {
-        category,
-        entry
+public class Entry {
+    protected Long id;
+
+    /*************************************************
+     * Instance methods
+     ***********************************************/
+    public Entry() {
+	this.id = null;
     }
-    
-    /************************************************* Instance methods ***********************************************/
-    public Entry(long id) {
-    
-        this.id = id;
-        this.lastUpdateTime = System.currentTimeMillis();
+
+    public Entry(Long id) {
+
+	this.id = id;
     }
-    
-    public int getId() {
-    
-        return (int) id;
+
+    public Long getId() {
+
+	return id;
     }
-    
-    public long getLastUpdateTime() {
-    
-        return lastUpdateTime;
+
+    public void getId(Long id) {
+
+	this.id = id;
     }
-    
-    public void wasEdited() {
-    
-        lastUpdateTime = System.currentTimeMillis();
-    }
-    
+
     @Override
     public String toString() {
-    
-        return gson.toJson(this);
+	try {
+	    return new ObjectMapper().writeValueAsString(this);
+	} catch (JsonProcessingException e) {
+	    ServletLog.logEvent(e);
+
+	    return null;
+	}
     }
 }

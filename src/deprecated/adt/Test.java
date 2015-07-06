@@ -2,7 +2,7 @@ package servlets;
 
 import java.io.IOException;
 
-import misc.RequestBody;
+import adt.deprecated.RequestBody;
 
 public class Test {
     

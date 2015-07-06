@@ -1,36 +1,41 @@
 package adt;
 
 public class Category extends Entry implements Comparable<Category> {
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -7441122606014580042L;
-    private String            name;
-    private String            type;
-    
-    public Category(Integer id, String name, String type) {
-    
-        super(id);
-        
-        this.name = name;
-        this.type = type;
-        
+    protected String type;
+    protected String name;
+
+    public Category(Long id, String name, String type) {
+
+	super(id);
+
+	this.type = type;
+	this.name = name;
+
     }
-    
+
     public String getName() {
-    
-        return name;
+
+	return name;
     }
-    
+
+    public void setName(String name) {
+
+	this.name = name;
+    }
+
     public String getType() {
-    
-        return type;
+
+	return type;
     }
-    
+
+    public void setType(String type) {
+
+	this.type = type;
+    }
+
     @Override
     public int compareTo(Category other) {
-    
-        return name.compareTo(other.getName());
+
+	return name.compareTo(other.getName());
     }
 }

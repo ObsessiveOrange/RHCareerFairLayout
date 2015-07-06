@@ -1,4 +1,4 @@
-package misc;
+package adt.deprecated;
 
 import java.io.BufferedReader;
 import java.io.IOException;

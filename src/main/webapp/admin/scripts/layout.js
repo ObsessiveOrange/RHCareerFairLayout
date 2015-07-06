@@ -90,11 +90,11 @@ function setupLinks() {
 }
 
 function setupTableMappings() {
-    var s1 = Number(careerFairData.termVars.layout.section1);
-    var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.section3);
+    var s1 = Number(careerFairData.layoutVars.Layout_Section1);
+    var s2 = Number(careerFairData.layoutVars.Layout_Section2);
+    var s2Rows = Number(careerFairData.layoutVars.Layout_Section2Rows);
+    var s2PathWidth = Number(careerFairData.layoutVars.Layout_Section2PathWidth);
+    var s3 = Number(careerFairData.layoutVars.Layout_Section3);
     //create temp var for total count
     var totalCount = 0;
     //sum up tables
@@ -103,31 +103,31 @@ function setupTableMappings() {
     totalCount += (s2 - s2PathWidth) * (s2Rows - 2);
     totalCount += s3;
     for (var i = 0; i < totalCount; i++) {
-        if ((typeof careerFairData.termVars.layout.tableMappings[i]) != "undefined") {
-            if (careerFairData.termVars.layout.tableMappings[i].tableSize > 1) {
-                totalCount -= careerFairData.termVars.layout.tableMappings[i].tableSize - 1;
+        if ((typeof careerFairData.tableMappings[i]) != "undefined") {
+            if (careerFairData.tableMappings[i].tableSize > 1) {
+                totalCount -= careerFairData.tableMappings[i].tableSize - 1;
             }
         } else {
-            // careerFairData.termVars.layout.tableMappings[i] = {
+            // careerFairData.tableMappings[i] = {
             //     location: i,
-            //     tableNumber: i,
+            //     id: i,
             //     tableSize: 1
             // };
-            careerFairData.termVars.layout.tableMappings.push({
+            careerFairData.tableMappings.push({
                 //i counts from 
-                tableNumber: i + 1,
+                id: i + 1,
                 companyId: null,
                 tableSize: 1
             });
         }
     }
-    careerFairData.termVars.layout.tableMappings = new NWayMap(careerFairData.termVars.layout.tableMappings, ["tableNumber", "companyId"]);
+    careerFairData.tableMappings = new NWayMap(careerFairData.tableMappings, ["id", "companyId"]);
 }
 
 function submitUpdatedMappings() {
     var allCompanies = Object.keys(careerFairData.companies);
     for (var i = 0; i < allCompanies.length; i++) {
-        if (careerFairData.termVars.layout.tableMappings.get("companyId", allCompanies[i]) === null) {
+        if (careerFairData.tableMappings.get("companyId", allCompanies[i]) === null) {
             alert("Aborting - Not all companies have been assigned. Main page will not work.");
             return;
         }
@@ -138,7 +138,7 @@ function submitUpdatedMappings() {
         contentType: "application/json",
         processData: false,
         data: JSON.stringify({
-            updatedMappings: careerFairData.termVars.layout.tableMappings.getValues("tableNumber")
+            updatedMappings: careerFairData.tableMappings.getValues("id")
         }),
         error: function(_, textStatus, errorThrown) {
             console.log(textStatus + ":" + errorThrown);
@@ -152,38 +152,38 @@ function submitUpdatedMappings() {
 function populateCompanyList() {
     Object.keys(careerFairData.companies).forEach(function(companyId) {
         var company = careerFairData.companies[companyId];
-        var currentTable = company.tableNumber;
-        $("#companyListContainer").append("<tr class='level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' class='companyListTableInput' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.termVars.layout.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.termVars.layout.tableMappings.get("companyId", companyId).tableNumber) + "' size='2' maxlength='4'/></td></tr>");
+        var currentTable = company.id;
+        $("#companyListContainer").append("<tr class='level2 companyListItem' id='companyListRow_" + companyId + "'><td id='companyListName_" + companyId + "' class='companyListNameColumn'>" + company.name + "</td><td id='companyListTableSelector_" + companyId + "'><input type='text' class='companyListTableInput' id='companyListTableInput_" + companyId + "' value='" + (careerFairData.tableMappings.get("companyId", companyId) === null ? "" : careerFairData.tableMappings.get("companyId", companyId).id) + "' size='2' maxlength='4'/></td></tr>");
         if (Number($("#companyListTableInput_" + companyId).val()) === 0) {
             $("#companyListTableInput_" + companyId).parent().parent().css("background", "#F00");
         }
     });
     $("#companyListContainer").on("change", ".companyListTableInput", function(event) {
-        var tableNumber = Number($(event.currentTarget).val());
+        var id = Number($(event.currentTarget).val());
         var companyId = Number($(event.currentTarget).prop("id").replace("companyListTableInput_", ""));
-        moveCompany(companyId, tableNumber);
+        moveCompany(companyId, id);
     });
     //add null value
     // $(".companyListTableDropdown").append("<option value='-1'></option>");
-    // for (var i = 1; i <= Object.keys(careerFairData.termVars.layout.tableMappings).length; i++) {
+    // for (var i = 1; i <= Object.keys(careerFairData.tableMappings).length; i++) {
     //     $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
     // }
 }
 
 function moveCompany(companyId, newTable) {
-    if (newTable > 0 && newTable <= careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length) {
-        var newTableMapping = careerFairData.termVars.layout.tableMappings.get("tableNumber", newTable);
-        var oldTableMapping = careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+    if (newTable > 0 && newTable <= careerFairData.tableMappings.getKeys("id").length) {
+        var newTableMapping = careerFairData.tableMappings.get("id", newTable);
+        var oldTableMapping = careerFairData.tableMappings.remove("companyId", companyId);
         if (typeof(newTableMapping.companyId) !== "undefined" && newTableMapping.companyId !== null) {
             if (confirm("Overwrite another entry?")) {
                 var orphanedCompanyId = newTableMapping.companyId;
-                careerFairData.termVars.layout.tableMappings.remove("tableNumber", newTable);
-                careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+                careerFairData.tableMappings.remove("id", newTable);
+                careerFairData.tableMappings.remove("companyId", companyId);
                 newTableMapping.companyId = companyId;
-                careerFairData.termVars.layout.tableMappings.put(newTableMapping);
+                careerFairData.tableMappings.put(newTableMapping);
                 if (oldTableMapping !== null) {
                     oldTableMapping.companyId = null;
-                    careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+                    careerFairData.tableMappings.put(oldTableMapping);
                 }
                 $("#companyListTableInput_" + orphanedCompanyId).val("");
                 $("#companyListTableInput_" + orphanedCompanyId).parent().parent().css("background", "#F00");
@@ -191,13 +191,13 @@ function moveCompany(companyId, newTable) {
                 return false;
             }
         } else {
-            careerFairData.termVars.layout.tableMappings.remove("tableNumber", newTable);
-            careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+            careerFairData.tableMappings.remove("id", newTable);
+            careerFairData.tableMappings.remove("companyId", companyId);
             newTableMapping.companyId = companyId;
-            careerFairData.termVars.layout.tableMappings.put(newTableMapping);
+            careerFairData.tableMappings.put(newTableMapping);
             if (oldTableMapping !== null) {
                 oldTableMapping.companyId = null;
-                careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+                careerFairData.tableMappings.put(oldTableMapping);
             }
         }
         $("#companyListTableInput_" + companyId).parent().parent().css("background", "");
@@ -209,10 +209,10 @@ function moveCompany(companyId, newTable) {
         }
         //
         //if nothing entered ("") or actually entered 0, remove company from map.
-        var oldTableMapping = careerFairData.termVars.layout.tableMappings.remove("companyId", companyId);
+        var oldTableMapping = careerFairData.tableMappings.remove("companyId", companyId);
         if (oldTableMapping !== null) {
             oldTableMapping.companyId = null;
-            careerFairData.termVars.layout.tableMappings.put(oldTableMapping);
+            careerFairData.tableMappings.put(oldTableMapping);
         }
         $("#companyListTableInput_" + orphanedCompanyId).parent().parent().css("background", "#F00");
     }
@@ -220,7 +220,7 @@ function moveCompany(companyId, newTable) {
     var allCompanies = Object.keys(careerFairData.companies);
     var allCompaniesMapped = true;
     for (var i = 0; i < allCompanies.length; i++) {
-        if (careerFairData.termVars.layout.tableMappings.get("companyId", allCompanies[i]) === null) {
+        if (careerFairData.tableMappings.get("companyId", allCompanies[i]) === null) {
             allCompaniesMapped = false;
         }
     }
@@ -237,22 +237,22 @@ function updateCompanyList() {
     var companyListLength = companyIDs.length;
     for (var i = 0; i < companyListLength; i++) {
         var companyId = companyIDs[i];
-        var mapping = careerFairData.termVars.layout.tableMappings.get("companyId", companyId);
+        var mapping = careerFairData.tableMappings.get("companyId", companyId);
         if (mapping !== null) {
-            $("#companyListTableInput_" + companyId).val(mapping.tableNumber);
+            $("#companyListTableInput_" + companyId).val(mapping.id);
         } else {
             $("#companyListTableInput_" + companyId).val("");
         }
     }
     //add null value
     // $(".companyListTableDropdown").append("<option value='-1'></option>");
-    // for (var i = 1; i <= Object.keys(careerFairData.termVars.layout.tableMappings).length; i++) {
+    // for (var i = 1; i <= Object.keys(careerFairData.tableMappings).length; i++) {
     //     $(".companyListTableDropdown").append("<option value='-1'>" + i + "</option>");
     // }
 }
-// function bringTableToFront(tableId) {
-//     bringLayerToFront("table" + tableId + "Box");
-//     bringLayerToFront("table" + tableId + "Text");
+// function bringTableToFront(id) {
+//     bringLayerToFront("table" + id + "Box");
+//     bringLayerToFront("table" + id + "Text");
 //     $canvasMap.drawLayers();
 // }
 function bringLayerToFront(layerName) {
@@ -268,9 +268,9 @@ function bringLayerToFront(layerName) {
     }
 }
 
-function redrawTable(tableId) {
-    $canvasMap.drawLayer("table" + tableId + "Box");
-    $canvasMap.drawLayer("table" + tableId + "Text");
+function redrawTable(id) {
+    $canvasMap.drawLayer("table" + id + "Box");
+    $canvasMap.drawLayer("table" + id + "Text");
 }
 
 function checkOverlap(layer1, layer2) {
@@ -295,22 +295,22 @@ function mergeTables(table1, table2) {
         return;
     }
     //if there is a company in table2, warn that it will remove it.
-    if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId) !== 'undefined' && careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId !== null) {
+    if ((typeof careerFairData.tableMappings.get("id", table2).companyId) !== 'undefined' && careerFairData.tableMappings.get("id", table2).companyId !== null) {
         alert("Warning: The company in the higher numbered table will be evicted.");
-        $("#companyListTableInput_" + careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).companyId).parent().parent().css("background", "#F00");
+        $("#companyListTableInput_" + careerFairData.tableMappings.get("id", table2).companyId).parent().parent().css("background", "#F00");
         $("#companyListGroupHeader").css("background", "#F00");
     }
-    careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).tableSize += careerFairData.termVars.layout.tableMappings.get("tableNumber", table2).tableSize;
+    careerFairData.tableMappings.get("id", table1).tableSize += careerFairData.tableMappings.get("id", table2).tableSize;
     //remove higher-numbered table, shift everything down by 1 to account for "removed" table that is being merged.
-    careerFairData.termVars.layout.tableMappings.remove("tableNumber", table2);
-    for (var i = table2; i <= careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length; i++) {
-        var prev = careerFairData.termVars.layout.tableMappings.remove("tableNumber", i + 1);
-        prev.tableNumber -= 1;
-        careerFairData.termVars.layout.tableMappings.put(prev);
+    careerFairData.tableMappings.remove("id", table2);
+    for (var i = table2; i <= careerFairData.tableMappings.getKeys("id").length; i++) {
+        var prev = careerFairData.tableMappings.remove("id", i + 1);
+        prev.id -= 1;
+        careerFairData.tableMappings.put(prev);
     }
     mousedOverTable = table1;
     selectedTable1 = null;
-    // delete careerFairData.termVars.layout.tableMappings.get("tableNumber", Object.keys(careerFairData.termVars.layout.tableMappings).length];
+    // delete careerFairData.tableMappings.get("id", Object.keys(careerFairData.tableMappings).length];
     $canvasMap.removeLayers();
     generateTableLocations();
     drawTables();
@@ -318,19 +318,19 @@ function mergeTables(table1, table2) {
 }
 
 function splitTable(table) {
-    if (careerFairData.termVars.layout.tableMappings.get("tableNumber", table).tableSize === 1) {
+    if (careerFairData.tableMappings.get("id", table).tableSize === 1) {
         return;
     }
-    var shiftCount = careerFairData.termVars.layout.tableMappings.get("tableNumber", table).tableSize - 1;
-    careerFairData.termVars.layout.tableMappings.get("tableNumber", table).tableSize = 1;
-    for (var i = careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length; i > table; i--) {
-        var prev = careerFairData.termVars.layout.tableMappings.remove("tableNumber", i);
-        prev.tableNumber += shiftCount;
-        careerFairData.termVars.layout.tableMappings.put(prev);
+    var shiftCount = careerFairData.tableMappings.get("id", table).tableSize - 1;
+    careerFairData.tableMappings.get("id", table).tableSize = 1;
+    for (var i = careerFairData.tableMappings.getKeys("id").length; i > table; i--) {
+        var prev = careerFairData.tableMappings.remove("id", i);
+        prev.id += shiftCount;
+        careerFairData.tableMappings.put(prev);
     }
     for (var i = 0; i < shiftCount; i++) {
-        careerFairData.termVars.layout.tableMappings.put({
-            tableNumber: table + 1 + i,
+        careerFairData.tableMappings.put({
+            id: table + 1 + i,
             tableSize: 1
         });
     }
@@ -340,13 +340,13 @@ function splitTable(table) {
     drawTables();
     updateCompanyList();
 }
-// function restoreTableLocation(tableId) {
-//     var location = tableLocations[careerFairData.termVars.layout.tableLocationMapping[tableId].location];
-//     $canvasMap.setLayer("table" + tableId + "Box", {
+// function restoreTableLocation(id) {
+//     var location = tableLocations[careerFairData.layoutVars.tableLocationMapping[id].location];
+//     $canvasMap.setLayer("table" + id + "Box", {
 //         x: location.x,
 //         y: location.y
 //     });
-//     $canvasMap.setLayer("table" + tableId + "Text", {
+//     $canvasMap.setLayer("table" + id + "Text", {
 //         x: location.x + location.width / 2,
 //         y: location.y + location.height / 2
 //     });
@@ -355,15 +355,15 @@ function splitTable(table) {
 //draw tables and table numbers
 function drawRect(tableObj) {
     //
-    //draw tableId in box for easy reading.
-    if (tableObj.tableId !== 0 && tableObj.tableId <= careerFairData.termVars.layout.tableMappings.getKeys("tableNumber").length) {
+    //draw id in box for easy reading.
+    if (tableObj.id !== 0 && tableObj.id <= careerFairData.tableMappings.getKeys("id").length) {
         $canvasMap.drawRect({
             layer: true,
-            name: 'table' + tableObj.tableId + 'Box',
+            name: 'table' + tableObj.id + 'Box',
             strokeStyle: '#000',
             strokeWidth: scaling,
             data: {
-                tableId: tableObj.tableId
+                id: tableObj.id
             },
             x: tableObj.x,
             y: tableObj.y,
@@ -372,24 +372,24 @@ function drawRect(tableObj) {
             fromCenter: false,
             click: function(layer) {
                 if (mergeToolActive || selectionToolActive) {
-                    var tableId = layer.data.tableId;
+                    var id = layer.data.id;
                     if (selectedTable1 === null) {
-                        if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId) === 'undefined' || careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId === null) {
+                        if ((typeof careerFairData.tableMappings.get("id", id).companyId) === 'undefined' || careerFairData.tableMappings.get("id", id).companyId === null) {
                             return;
                         }
-                        selectedTable1 = tableId;
+                        selectedTable1 = id;
                         setTableColor(selectedTable1);
                         redrawTable(selectedTable1);
                     } else {
                         if (mergeToolActive) {
-                            var table1 = tableId > selectedTable1 ? selectedTable1 : tableId;
-                            var table2 = tableId > selectedTable1 ? tableId : selectedTable1;
+                            var table1 = id > selectedTable1 ? selectedTable1 : id;
+                            var table2 = id > selectedTable1 ? id : selectedTable1;
                             mergeTables(table1, table2);
                         }
                         if (selectionToolActive) {
                             var table1 = selectedTable1;
-                            var table2 = layer.data.tableId;
-                            if (moveCompany(careerFairData.termVars.layout.tableMappings.get("tableNumber", table1).companyId, tableId)) {
+                            var table2 = layer.data.id;
+                            if (moveCompany(careerFairData.tableMappings.get("id", table1).companyId, id)) {
                                 selectedTable1 = null;
                                 setTableColor(table1);
                                 setTableColor(table2);
@@ -399,35 +399,35 @@ function drawRect(tableObj) {
                         }
                     }
                 } else if (splitToolActive) {
-                    splitTable(layer.data.tableId);
+                    splitTable(layer.data.id);
                 }
             },
             mouseover: function(layer) {
-                var tableId = layer.data.tableId;
-                mousedOverTable = tableId;
-                setTableColor(tableId);
-                redrawTable(tableId);
-                drawTag(tableId);
+                var id = layer.data.id;
+                mousedOverTable = id;
+                setTableColor(id);
+                redrawTable(id);
+                drawTag(id);
             },
             mouseout: function(layer) {
-                var tableId = layer.data.tableId;
+                var id = layer.data.id;
                 mousedOverTable = null;
-                setTableColor(tableId);
-                redrawTable(tableId);
+                setTableColor(id);
+                redrawTable(id);
                 removeTag();
             }
         });
         $canvasMap.drawText({
             layer: true,
-            name: 'table' + tableObj.tableId + 'Text',
+            name: 'table' + tableObj.id + 'Text',
             fillStyle: '#000000',
             data: {
-                tableId: tableObj.tableId
+                id: tableObj.id
             },
             x: tableObj.x + tableObj.width / 2,
             y: tableObj.y + tableObj.height / 2,
             fontSize: tableObj.height / tableObj.yScaling / 2,
-            text: tableObj.tableId,
+            text: tableObj.id,
             intangible: true
         });
     } else {
@@ -438,7 +438,7 @@ function drawRect(tableObj) {
             strokeStyle: '#000',
             strokeWidth: scaling,
             data: {
-                tableId: tableObj.tableId
+                id: tableObj.id
             },
             x: tableObj.x,
             y: tableObj.y,
@@ -454,25 +454,25 @@ function removeTag() {
     $canvasMap.removeLayer("tagText");
 }
 
-function drawTag(tableId) {
-    if ((typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId) === 'undefined' || careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId === null) {
+function drawTag(id) {
+    if ((typeof careerFairData.tableMappings.get("id", id).companyId) === 'undefined' || careerFairData.tableMappings.get("id", id).companyId === null) {
         return;
     }
-    var s1 = Number(careerFairData.termVars.layout.section1);
-    var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.section3);
+    var s1 = Number(careerFairData.layoutVars.Layout_Section1);
+    var s2 = Number(careerFairData.layoutVars.Layout_Section2);
+    var s2Rows = Number(careerFairData.layoutVars.Layout_Section2_Rows);
+    var s2PathWidth = Number(careerFairData.layoutVars.Layout_Section2_PathWidth);
+    var s3 = Number(careerFairData.layoutVars.Layout_Section3);
     var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
     var vrtCount = Math.max(s1, s3);
     var tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
     var tableHeight = unitY * 70 / vrtCount;
     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
     var points = {};
-    switch (tableLocations[tableId].section) {
+    switch (tableLocations[id].section) {
         case 1:
-            var startX = tableLocations[tableId].x + (tableLocations[tableId].xScaling * tableWidth);
-            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight)/2;
+            var startX = tableLocations[id].x + (tableLocations[id].xScaling * tableWidth);
+            var startY = tableLocations[id].y + (tableLocations[id].yScaling * tableHeight)/2;
             points = {
                 x1: startX,
                 y1: startY,
@@ -489,8 +489,8 @@ function drawTag(tableId) {
             };
             break;
         case 2:
-            var startX = tableLocations[tableId].x + (tableLocations[tableId].xScaling * tableWidth) / 2;
-            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight);
+            var startX = tableLocations[id].x + (tableLocations[id].xScaling * tableWidth) / 2;
+            var startY = tableLocations[id].y + (tableLocations[id].yScaling * tableHeight);
             points = {
                 x1: startX,
                 y1: startY,
@@ -507,8 +507,8 @@ function drawTag(tableId) {
             };
             break;
         case 3:
-            var startX = tableLocations[tableId].x;
-            var startY = tableLocations[tableId].y + (tableLocations[tableId].yScaling * tableHeight)/2;
+            var startX = tableLocations[id].x;
+            var startY = tableLocations[id].y + (tableLocations[id].yScaling * tableHeight)/2;
             points = {
                 x1: startX,
                 y1: startY,
@@ -558,14 +558,14 @@ function drawTag(tableId) {
         maxWidth: unitY * 25 - tableWidth / 2,
         fontSize: tableHeight / 2,
         text: getWrappedText({
-            text: careerFairData.companies[careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId].name,
+            text: careerFairData.companies[careerFairData.tableMappings.get("id", id).companyId].name,
             maxWidth: pathWidth - tableWidth / 2,
             maxLines: lines,
             fontSize: tableHeight / 2,
             breakWord: true
         }),
         // Rotate the text by 30 degrees
-        rotate: tableLocations[tableId].section == 2 ? 90 : 0
+        rotate: tableLocations[id].section == 2 ? 90 : 0
     });
     $canvasMap.drawLayers();
 }
@@ -578,11 +578,11 @@ function generateTableLocations() {
     companyLocations = [];
     //
     //convenience assignments
-    var s1 = Number(careerFairData.termVars.layout.section1);
-    var s2 = Number(careerFairData.termVars.layout.section2);
-    var s2Rows = Number(careerFairData.termVars.layout.section2_Rows);
-    var s2PathWidth = Number(careerFairData.termVars.layout.section2_PathWidth);
-    var s3 = Number(careerFairData.termVars.layout.section3);
+    var s1 = Number(careerFairData.layoutVars.Layout_Section1);
+    var s2 = Number(careerFairData.layoutVars.Layout_Section2);
+    var s2Rows = Number(careerFairData.layoutVars.Layout_Section2_Rows);
+    var s2PathWidth = Number(careerFairData.layoutVars.Layout_Section2_PathWidth);
+    var s3 = Number(careerFairData.layoutVars.Layout_Section3);
     //
     //count number of vertical and horizontal tables there are
     var hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
@@ -597,16 +597,16 @@ function generateTableLocations() {
     var tableHeight = unitY * 70 / vrtCount;
     //
     //
-    var tableId = 1;
+    var id = 1;
     var tableSize = 1;
     var offsetX = 5 * unitX;
     //
     // section 1
     if (s1 > 0) {
         for (var i = 0; i < s1;) {
-            tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
-            tableLocations[tableId] = {
-                tableId: tableId,
+            tableSize = careerFairData.tableMappings.get("id", id).tableSize;
+            tableLocations[id] = {
+                id: id,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
@@ -618,7 +618,7 @@ function generateTableLocations() {
                 group: 0
             };
             i += tableSize;
-            tableId++;
+            id++;
         }
         offsetX += tableWidth + 5 * unitX;
     }
@@ -634,9 +634,9 @@ function generateTableLocations() {
             //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
-                    tableLocations[tableId] = {
-                        tableId: tableId,
+                    tableSize = careerFairData.tableMappings.get("id", id).tableSize;
+                    tableLocations[id] = {
+                        id: id,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * tableSize,
@@ -648,7 +648,7 @@ function generateTableLocations() {
                         group: 0
                     };
                     j += tableSize;
-                    tableId++;
+                    id++;
                 }
             }
             //
@@ -657,9 +657,9 @@ function generateTableLocations() {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
                 for (var j = 0; j < leftTables;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
-                    tableLocations[tableId] = {
-                        tableId: tableId,
+                    tableSize = careerFairData.tableMappings.get("id", id).tableSize;
+                    tableLocations[id] = {
+                        id: id,
                         x: offsetX + (j * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * tableSize,
@@ -671,12 +671,12 @@ function generateTableLocations() {
                         group: 1
                     };
                     j += tableSize;
-                    tableId++;
+                    id++;
                 }
                 for (var j = 0; j < rightTables;) {
-                    tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
-                    tableLocations[tableId] = {
-                        tableId: tableId,
+                    tableSize = careerFairData.tableMappings.get("id", id).tableSize;
+                    tableLocations[id] = {
+                        id: id,
                         x: offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
                         y: 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                         width: tableWidth * tableSize,
@@ -688,7 +688,7 @@ function generateTableLocations() {
                         group: 2
                     };
                     j += tableSize;
-                    tableId++;
+                    id++;
                 }
             }
         }
@@ -698,9 +698,9 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-            tableSize = careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).tableSize;
-            tableLocations[tableId] = {
-                tableId: tableId,
+            tableSize = careerFairData.tableMappings.get("id", id).tableSize;
+            tableLocations[id] = {
+                id: id,
                 x: offsetX,
                 y: 5 * unitY + i * tableHeight,
                 width: tableWidth,
@@ -712,7 +712,7 @@ function generateTableLocations() {
                 group: 0
             };
             i += tableSize;
-            tableId++;
+            id++;
         }
     }
     offsetX += tableWidth + 5 * unitX;
@@ -729,7 +729,7 @@ function drawTables() {
     //
     // rest & registration areas
     drawRect({
-        tableId: 0,
+        id: 0,
         x: 40 * unitX,
         y: 80 * unitY,
         width: 45 * unitX,
@@ -747,7 +747,7 @@ function drawTables() {
         text: 'Rest Area'
     });
     drawRect({
-        tableId: 0,
+        id: 0,
         x: 5 * unitX,
         y: 80 * unitY,
         width: 30 * unitX,
@@ -767,34 +767,34 @@ function drawTables() {
     highlightUsedTables();
 }
 
-function setTableColor(tableId) {
-    if (tableId === selectedTable1) {
-        if (tableId === mousedOverTable) {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+function setTableColor(id) {
+    if (id === selectedTable1) {
+        if (id === mousedOverTable) {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: hoverClickedColor
             });
         } else {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: clickedColor
             });
         }
-    } else if (typeof careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId !== 'undefined' && careerFairData.termVars.layout.tableMappings.get("tableNumber", tableId).companyId !== null) {
-        if (tableId === mousedOverTable) {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+    } else if (typeof careerFairData.tableMappings.get("id", id).companyId !== 'undefined' && careerFairData.tableMappings.get("id", id).companyId !== null) {
+        if (id === mousedOverTable) {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: hoverUsedColor
             });
         } else {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: usedColor
             });
         }
     } else {
-        if (tableId === mousedOverTable) {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+        if (id === mousedOverTable) {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: hoverUnusedColor
             });
         } else {
-            $canvasMap.setLayer('table' + tableId + 'Box', {
+            $canvasMap.setLayer('table' + id + 'Box', {
                 fillStyle: unusedColor
             });
         }
@@ -802,10 +802,10 @@ function setTableColor(tableId) {
 }
 
 function highlightUsedTables() {
-    var mappingObjs = careerFairData.termVars.layout.tableMappings.getValues("tableNumber");
+    var mappingObjs = careerFairData.tableMappings.getValues("id");
     var mappingObjsLength = mappingObjs.length;
     for (var i = 0; i < mappingObjsLength; i++) {
-        setTableColor(mappingObjs[i].tableNumber);
+        setTableColor(mappingObjs[i].id);
     }
     $canvasMap.drawLayers();
 }

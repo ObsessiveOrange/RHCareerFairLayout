@@ -10,7 +10,7 @@ public class Layout {
     private int section2Rows = 0;
     private int section2PathWidth = 0;
     private int section3 = 0;
-    private ArrayList<TableMapping> tableMappings = new ArrayList<TableMapping>();
+    private ArrayList<Table> tableMappings = new ArrayList<Table>();
 
     public Layout(HashMap<String, Object> layoutMap) {
 
@@ -74,7 +74,7 @@ public class Layout {
     /**
      * @return the locationTableMapping
      */
-    public ArrayList<TableMapping> getTableMappings() {
+    public ArrayList<Table> getTableMappings() {
 
 	return tableMappings;
     }

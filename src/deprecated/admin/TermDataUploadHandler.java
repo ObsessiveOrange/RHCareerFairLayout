@@ -5,7 +5,7 @@ import java.util.List;
 import adt.Category;
 import adt.Company;
 import adt.Layout;
-import adt.TableMapping;
+import adt.deprecated.TableMapping;
 
 public class TermDataUploadHandler {
     

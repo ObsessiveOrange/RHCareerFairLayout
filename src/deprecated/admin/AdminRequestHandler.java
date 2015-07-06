@@ -19,9 +19,10 @@ import org.apache.commons.fileupload.util.Streams;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import adt.TableMapping;
+import adt.Table;
 import adt.Term;
 import adt.Workbook;
+import adt.wrappers.TableArray;
 import common.Response;
 import common.Response.FailResponse;
 import common.Response.SuccessResponse;
@@ -270,7 +271,7 @@ public class AdminRequestHandler {
 	}
     }
 
-    public static Response updateTableMappingsHandler(ArrayList<TableMapping> mappings) {
+    public static Response updateTableMappingsHandler(TableArray mappings) {
 
 	try {
 
@@ -281,17 +282,17 @@ public class AdminRequestHandler {
 	    stmt = SQLManager.getConn(DataManager.getSelectedTerm()).prepareStatement(
 		    "INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE companyId = values(companyId), tableSize = values(tableSize)");
 
-	    for (TableMapping m : mappings) {
+	    for (Table m : mappings) {
 
-		stmt.setInt(1, m.tableNumber);
-		if (m.companyId == null) {
+		stmt.setLong(1, m.getId());
+		if (m.getCompanyId() == null) {
 		    stmt.setNull(2, java.sql.Types.INTEGER);
 
 		} else {
-		    stmt.setInt(2, m.companyId);
+		    stmt.setLong(2, m.getCompanyId());
 
 		}
-		stmt.setInt(3, m.tableSize);
+		stmt.setInt(3, m.getTableSize());
 		stmt.executeUpdate();
 	    }
 

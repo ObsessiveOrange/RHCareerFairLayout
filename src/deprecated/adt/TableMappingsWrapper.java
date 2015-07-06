@@ -1,4 +1,4 @@
-package adt;
+package adt.deprecated;
 
 import java.util.ArrayList;
 

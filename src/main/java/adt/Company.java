@@ -4,62 +4,82 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Company extends Entry implements Comparable<Company> {
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 418100621969341337L;
-    private String            name;
-    private List<Integer>     categories;
-    private String            description;
-    private Integer           tableNumber;
-    
+
+    protected String name;
+    protected List<Long> categories;
+    protected String description;
+    protected Long tableId;
+
     /**
      * Constructor for reconstructing from SQL queries
      * 
-     * @param id The ID of the company
-     * @param name The name of the company
-     * @param description A description of the company (Can be null)
-     * @param tableNumber The table the company will be at.
+     * @param id
+     *            The ID of the company
+     * @param name
+     *            The name of the company
+     * @param description
+     *            A description of the company (Can be null)
+     * @param tableNumber
+     *            The table the company will be at.
      */
-    public Company(Integer id, String name, String description, Integer tableNumber) {
-    
-        this(id, name, new ArrayList<Integer>(), description, tableNumber);
+    public Company(Long id, String name, String description, Long tableId) {
+
+	this(id, name, new ArrayList<Long>(), description, tableId);
     }
-    
-    public Company(Integer id, String name, List<Integer> categories, String description, Integer tableNumber) {
-    
-        super(id);
-        this.name = name;
-        this.categories = categories;
-        this.description = description;
-        this.tableNumber = tableNumber;
+
+    public Company(Long id, String name, List<Long> categories, String description, Long tableId) {
+
+	super(id);
+	this.name = name;
+	this.categories = categories;
+	this.description = description;
+	this.tableId = tableId;
     }
-    
+
     public String getName() {
-    
-        return name;
+
+	return name;
     }
-    
-    public List<Integer> getCategories() {
-    
-        return categories;
+
+    public void setName(String name) {
+
+	this.name = name;
     }
-    
-    public Integer getTableNumber() {
-    
-        return tableNumber;
+
+    public List<Long> getCategories() {
+
+	return categories;
     }
-    
+
+    public void setCategories(List<Long> categories) {
+
+	this.categories = categories;
+    }
+
     public String getDescription() {
-    
-        return description;
+
+	return description;
     }
-    
+
+    public void setDescription(String description) {
+
+	this.description = description;
+    }
+
+    public Long getTableId() {
+
+	return tableId;
+    }
+
+    public void setTableId(Long tableId) {
+
+	this.tableId = tableId;
+    }
+
     @Override
     public int compareTo(Company other) {
-    
-        return name.compareTo(other.getName());
+
+	return name.compareTo(other.getName());
     }
-    
+
 }

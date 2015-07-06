@@ -135,16 +135,16 @@ public class DataManager {
 
 	PreparedStatement insertTableMapping = SQLManager.getConn(dbName).prepareStatement(
 		"INSERT INTO TableMappings (tableNumber, companyId, tableSize) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE companyId=values(companyId), tableSize=values(tableSize);");
-	HashMap<Integer, Integer> tableCompanyMap = new HashMap<Integer, Integer>();
+	HashMap<Long, Long> tableCompanyMap = new HashMap<Long, Long>();
 	for (Company c : companies) {
-	    tableCompanyMap.put(c.getTableNumber(), c.getId());
+	    tableCompanyMap.put(c.getTableId(), c.getId());
 	}
 
 	for (int i = 0; i < tableMappings.getRows(); i++) {
-	    Integer companyID = tableCompanyMap.get(tableMappings.getItem(i, "Table Number", Integer.class));
+	    Long companyID = tableCompanyMap.get(tableMappings.getItem(i, "Table Number", Long.class));
 	    insertTableMapping.setInt(1, tableMappings.getItem(i, "Table Number", Integer.class));
 	    if (companyID != null) {
-		insertTableMapping.setInt(2, companyID);
+		insertTableMapping.setLong(2, companyID);
 	    } else {
 		insertTableMapping.setNull(2, java.sql.Types.INTEGER);
 	    }
@@ -162,7 +162,7 @@ public class DataManager {
 		"INSERT INTO Categories (id, name, type) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), type=values(type);");
 
 	for (Category c : categories) {
-	    insertCategories.setInt(1, c.getId());
+	    insertCategories.setLong(1, c.getId());
 	    insertCategories.setString(2, c.getName());
 	    insertCategories.setString(3, c.getType());
 	    insertCategories.executeUpdate();
@@ -178,7 +178,7 @@ public class DataManager {
 		"INSERT INTO Companies (id, name, description) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=values(name), description=values(description);");
 
 	for (Company c : companies) {
-	    insertCompanies.setInt(1, c.getId());
+	    insertCompanies.setLong(1, c.getId());
 	    insertCompanies.setString(2, c.getName());
 
 	    if (c.getDescription() != null) {
@@ -199,9 +199,9 @@ public class DataManager {
 		.prepareStatement("INSERT IGNORE INTO Categories_Companies (categoryId, companyId) VALUES (?, ?)");
 
 	for (Company company : companies) {
-	    for (Integer categoryId : company.getCategories()) {
-		insertCompanies.setInt(1, categoryId);
-		insertCompanies.setInt(2, company.getId());
+	    for (Long categoryId : company.getCategories()) {
+		insertCompanies.setLong(1, categoryId);
+		insertCompanies.setLong(2, company.getId());
 		insertCompanies.executeUpdate();
 	    }
 	}
@@ -212,17 +212,17 @@ public class DataManager {
     public static Response updateCategoriesAndCompanies(String dbName, Sheet categories, Sheet companies)
 	    throws SQLException, ClassNotFoundException {
 
-	HashMap<String, HashMap<String, Integer>> categoryLookupTable = new HashMap<String, HashMap<String, Integer>>();
+	HashMap<String, HashMap<String, Long>> categoryLookupTable = new HashMap<String, HashMap<String, Long>>();
 	List<Company> companyList = new ArrayList<Company>();
 	List<Category> categoryList = new ArrayList<Category>();
 
 	for (int i = 0; i < categories.getRows(); i++) {
 	    String name = categories.getItem(i, "Name", String.class);
 	    String type = categories.getItem(i, "Type", String.class);
-	    Category newCategory = new Category(i + 1, name, type);
+	    Category newCategory = new Category((long) (i + 1), name, type);
 
 	    if (categoryLookupTable.get(type) == null) {
-		categoryLookupTable.put(type, new HashMap<String, Integer>());
+		categoryLookupTable.put(type, new HashMap<String, Long>());
 	    }
 
 	    categoryLookupTable.get(type).put(name, newCategory.getId());
@@ -239,26 +239,26 @@ public class DataManager {
 	    String[] posTypes = companies.getItem(i, 3, String.class) == null ? new String[] {}
 		    : companies.getItem(i, 3, String.class).split(",");
 
-	    ArrayList<Integer> majorsList = new ArrayList<Integer>();
-	    ArrayList<Integer> workAuthList = new ArrayList<Integer>();
-	    ArrayList<Integer> posTypeList = new ArrayList<Integer>();
+	    ArrayList<Long> majorsList = new ArrayList<Long>();
+	    ArrayList<Long> workAuthList = new ArrayList<Long>();
+	    ArrayList<Long> posTypeList = new ArrayList<Long>();
 
 	    for (String major : majors) {
-		Integer id = categoryLookupTable.get("Major").get(major.trim());
+		Long id = categoryLookupTable.get("Major").get(major.trim());
 		if (id != null) {
 		    majorsList.add(id);
 		}
 	    }
 
 	    for (String workAuth : workAuths) {
-		Integer id = categoryLookupTable.get("Work Authorization").get(workAuth.trim());
+		Long id = categoryLookupTable.get("Work Authorization").get(workAuth.trim());
 		if (id != null) {
 		    workAuthList.add(id);
 		}
 	    }
 
 	    for (String posType : posTypes) {
-		Integer id = categoryLookupTable.get("Position Type").get(posType.trim());
+		Long id = categoryLookupTable.get("Position Type").get(posType.trim());
 		if (id != null) {
 		    posTypeList.add(id);
 		}
@@ -274,13 +274,13 @@ public class DataManager {
 		posTypeList.addAll(categoryLookupTable.get("Position Type").values());
 	    }
 
-	    List<Integer> companyCategories = new ArrayList<Integer>();
+	    List<Long> companyCategories = new ArrayList<Long>();
 	    companyCategories.addAll(majorsList);
 	    companyCategories.addAll(workAuthList);
 	    companyCategories.addAll(posTypeList);
-	    Integer tableNumber = companies.getItem(i, "Table Number", Integer.class);
+	    Long tableId = companies.getItem(i, "Table Number", Long.class);
 
-	    Company newCompany = new Company(i + 100, name, companyCategories, null, tableNumber);
+	    Company newCompany = new Company((long) (i + 100), name, companyCategories, null, tableId);
 	    companyList.add(newCompany);
 	}
 
