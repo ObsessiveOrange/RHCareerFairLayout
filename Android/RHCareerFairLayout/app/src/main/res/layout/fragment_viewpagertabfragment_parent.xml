@@ -37,7 +37,7 @@
             android:background="@android:color/white" />
     </FrameLayout>
 
-    <cf.obsessiveorange.rhcareerfairlayout.SlidingTabLayout
+    <cf.obsessiveorange.rhcareerfairlayout.ui.SlidingTabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
