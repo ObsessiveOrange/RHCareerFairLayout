@@ -36,9 +36,9 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.SlidingTabLayout;
 
 /**

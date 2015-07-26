@@ -2,6 +2,7 @@ package cf.obsessiveorange.rhcareerfairlayout.data.models;
 
 import android.content.ContentValues;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +19,8 @@ public class Term implements Comparable<Term> {
     private Integer layout_Section2_PathWidth;
     private Integer layout_Section2_Rows;
     private Integer layout_Section3;
+    @JsonIgnore
+    private final Long lastUpdateTime;
 
     public Term(Integer year, String quarter) {
         this(year, quarter, null, null, null, null, null);
@@ -38,6 +41,7 @@ public class Term implements Comparable<Term> {
         this.setLayout_Section2_PathWidth(layout_Section2_PathWidth);
         this.setLayout_Section2_Rows(layout_Section2_Rows);
         this.setLayout_Section3(layout_Section3);
+        this.lastUpdateTime = System.currentTimeMillis();
     }
 
     @Override
@@ -165,6 +169,10 @@ public class Term implements Comparable<Term> {
         this.layout_Section3 = layout_Section3;
     }
 
+    public Long getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
     public ContentValues toContentValues() {
         ContentValues row = new ContentValues();
 
@@ -175,6 +183,7 @@ public class Term implements Comparable<Term> {
         row.put(DBAdapter.KEY_LAYOUT_SECTION2_PATHWIDTH, this.getLayout_Section2_PathWidth());
         row.put(DBAdapter.KEY_LAYOUT_SECTION2_ROWS, this.getLayout_Section2_Rows());
         row.put(DBAdapter.KEY_LAYOUT_SECTION3, this.getLayout_Section3());
+        row.put(DBAdapter.KEY_LAST_UPDATE_TIME, this.getLastUpdateTime());
 
         return row;
     }

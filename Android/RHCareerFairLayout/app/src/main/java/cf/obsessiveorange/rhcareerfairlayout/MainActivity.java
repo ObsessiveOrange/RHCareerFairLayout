@@ -20,16 +20,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.managers.ConnectionManager;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.ViewPagerTabFragmentParentFragment;
 
@@ -55,40 +46,5 @@ public class MainActivity extends BaseActivity {
             fm.executePendingTransactions();
         }
         //new RetrieveFeedTask().execute();
-
-        DBAdapter.setupDBAdapter(this);
-        DBAdapter.open();
-
-        ConnectionManager.Request req = new ConnectionManager.Request();
-        req.setUrl("http://192.168.2.30:8080/api/data/all");
-        req.setMethod(ConnectionManager.Request.HTTPMethod.GET);
-        req.setQueryParams(new HashMap<String, String>() {{
-            put("year", "2015");
-            put("quarter", "Fall");
-        }});
-        req.setHeaderParams(null);
-        req.setBodyParams(null);
-        req.setResponseHandler(new ConnectionManager.ResponseHandler() {
-            @Override
-            public void handleSuccess(String response) {
-                ObjectMapper mapper = new ObjectMapper();
-                DataWrapper dataWrapper = null;
-                try {
-                    dataWrapper = mapper.readValue(response, DataWrapper.class);
-                } catch (IOException e) {
-                    Log.e(RHCareerFairLayout.RH_CFL, "Error occurred during deserialization", e);
-                    e.printStackTrace();
-                    return;
-                }
-                Log.d(RHCareerFairLayout.RH_CFL, "Object deserialized successfully");
-
-                DBAdapter.loadNewData(dataWrapper);
-
-                Log.d(RHCareerFairLayout.RH_CFL, "Object input into DB successfully");
-            }
-        });
-
-        ConnectionManager.enqueueRequest(req);
-
     }
 }

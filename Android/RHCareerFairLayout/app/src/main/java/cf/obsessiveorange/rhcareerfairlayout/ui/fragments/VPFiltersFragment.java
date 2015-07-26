@@ -22,7 +22,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -30,16 +29,13 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.CompaniesCellAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activity.FiltersCellAdapter;
 
 /**
  * Fragment for ViewPagerTabFragmentActivity.
  * ScrollView callbacks are handled by its parent fragment, not its parent activity.
  */
 public class VPFiltersFragment extends BaseFragment {
-
-    private SimpleCursorAdapter mCursorAdapter;
-    private ObservableRecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,14 +45,7 @@ public class VPFiltersFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        DBAdapter.setupDBAdapter(getActivity());
-        DBAdapter.open();
-
-//        Cursor cursor = mDBAdapter.getScoresCursor();
-//        String[] fromColumns = new String[]{ScoreDataAdapter.KEY_NAME, ScoreDataAdapter.KEY_SCORE};
-//        int[] toTextViews = new int[]{R.id.textViewName, R.id.textViewScore};
-
-        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), getDummyData()));
+        recyclerView.setAdapter(new FiltersCellAdapter(getActivity(), DBAdapter.getCategoriesCursor()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleHeaderRecyclerAdapter;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.CompaniesCellAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleRecyclerAdapter;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int NUM_OF_ITEMS = 100;
@@ -105,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setDummyData(RecyclerView recyclerView, int num) {
-        recyclerView.setAdapter(new CompaniesCellAdapter(this, getDummyData(num)));
+        recyclerView.setAdapter(new SimpleRecyclerAdapter(this, getDummyData(num)));
     }
 
     protected void setDummyDataWithHeader(RecyclerView recyclerView, int headerHeight) {

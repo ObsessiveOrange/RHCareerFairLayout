@@ -19,13 +19,15 @@ package cf.obsessiveorange.rhcareerfairlayout.ui;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.CompaniesCellAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleHeaderRecyclerAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleRecyclerAdapter;
 
 public abstract class BaseFragment extends Fragment {
     private static final int NUM_OF_ITEMS = 100;
@@ -59,6 +61,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void setDummyData(RecyclerView recyclerView) {
-        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), getDummyData()));
+        recyclerView.setAdapter(new SimpleRecyclerAdapter(getActivity(), getDummyData()));
+    }
+
+    protected void setDummyDataWithHeader(RecyclerView recyclerView, View headerView) {
+        recyclerView.setAdapter(new SimpleHeaderRecyclerAdapter(getActivity(), getDummyData(), headerView));
     }
 }

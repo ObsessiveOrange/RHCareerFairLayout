@@ -17,69 +17,102 @@
 package cf.obsessiveorange.rhcareerfairlayout.ui.activity;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
 
 public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.ViewHolder> {
-    private Context mContext;
-    private LayoutInflater mInflater;
-    private ArrayList<String> mItems;
 
-    public FiltersCellAdapter(Context context, ArrayList<String> items) {
+    // Hold on to a CursorAdapter for handling of cursor reference - will automatically
+    // clear cursor when done.
+    CursorAdapter mCursorAdapter;
+
+    Context mContext;
+
+    LayoutInflater mInflater;
+
+    public FiltersCellAdapter(Context context, Cursor c) {
+
         mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mItems = items;
+        mInflater = LayoutInflater.from(mContext);
+
+        mCursorAdapter = new ResourceCursorAdapter(mContext, R.layout.cell_filter, c, 0) {
+
+
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                // Binding operations
+
+                final CheckBox filterActiveCheckbox = (CheckBox) view.findViewById(R.id.filter_active);
+                final TextView filterNameTextView = (TextView) view.findViewById(R.id.filter_name);
+
+                final Category category = new Category(cursor);
+                final Boolean selected = cursor.getInt(cursor.getColumnIndexOrThrow(DBAdapter.KEY_SELECTED)) > 0;
+
+
+                view.setBackgroundColor(Color.WHITE);
+                filterActiveCheckbox.setChecked(selected);
+                filterNameTextView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBAdapter.KEY_NAME)));
+//                v.setImageURI(Uri.parse(value));
+
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean current = filterActiveCheckbox.isChecked();
+                        Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
+                        DBAdapter.setCategorySelected(category.getId(), !current);
+                        filterActiveCheckbox.setChecked(!current);
+                        changeCursor(DBAdapter.getCategoriesCursor());
+                    }
+                });
+
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        v.setBackgroundColor(Color.GREEN);
+                        return true;
+                    }
+                });
+            }
+        };
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mCursorAdapter.getCount();
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // Passing the binding operation to cursor loader
+        mCursorAdapter.getCursor().moveToPosition(position);
+        mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case 0:
-                break;
-            case 1:
-                break;
-            default:
-                break;
-        }
-        return new ViewHolder(mInflater.inflate(R.layout.cell_filter, parent, false));
+        // Passing the inflater job to the cursor-adapter
+        View v = mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent);
+        return new ViewHolder(v);
     }
 
-    @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        viewHolder.cellRoot.setBackgroundColor(Color.WHITE);
-        viewHolder.filterActiveCheckbox.setChecked(false);
-        viewHolder.filterNameTextView.setText(mItems.get(position));
-        viewHolder.cellRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                viewHolder.filterActiveCheckbox.setChecked(!viewHolder.filterActiveCheckbox.isChecked());
-                v.setBackgroundColor(Color.GREEN);
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-            }
-        });
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout cellRoot;
         CheckBox filterActiveCheckbox;
         TextView filterNameTextView;
@@ -91,4 +124,5 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
             filterNameTextView = (TextView) view.findViewById(R.id.filter_name);
         }
     }
+
 }

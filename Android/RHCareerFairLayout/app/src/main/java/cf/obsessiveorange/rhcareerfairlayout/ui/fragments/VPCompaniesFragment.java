@@ -22,7 +22,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -38,9 +37,6 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.activity.CompaniesCellAdapter;
  */
 public class VPCompaniesFragment extends BaseFragment {
 
-    private SimpleCursorAdapter mCursorAdapter;
-    private ObservableRecyclerView recyclerView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
@@ -49,14 +45,7 @@ public class VPCompaniesFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        DBAdapter.setupDBAdapter(getActivity());
-        DBAdapter.open();
-
-//        Cursor cursor = mDBAdapter.getScoresCursor();
-//        String[] fromColumns = new String[]{ScoreDataAdapter.KEY_NAME, ScoreDataAdapter.KEY_SCORE};
-//        int[] toTextViews = new int[]{R.id.textViewName, R.id.textViewScore};
-
-        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), getDummyData()));
+        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), DBAdapter.getCompaniesCursor()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();

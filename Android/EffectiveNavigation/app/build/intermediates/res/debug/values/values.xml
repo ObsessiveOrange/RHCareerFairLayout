@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/D:/1.%20Work/Workspaces/Java%20Workspace/RHCareerFairLayout/android/EffectiveNavigation/app/src/main/res/values/strings.xml -->
-    <eat-comment/>
-    <string name="app_name">Effective Navigation</string>
-    <string name="demo_collection">Demo Collection</string>
-    <string name="demo_external_activity">Demo External Activity</string>
-    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
-</resources>
