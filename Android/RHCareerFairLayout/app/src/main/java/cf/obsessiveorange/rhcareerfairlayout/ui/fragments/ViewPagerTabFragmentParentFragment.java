@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,57 +53,37 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
     private int mSlop;
-    private boolean mScrolled;
     private ScrollState mLastScrollState;
     private TouchInterceptionFrameLayout.TouchInterceptionListener mInterceptionListener = new TouchInterceptionFrameLayout.TouchInterceptionListener() {
         @Override
         public boolean shouldInterceptTouchEvent(MotionEvent ev, boolean moving, float diffX, float diffY) {
-            if (!mScrolled && mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
+            if (mSlop < Math.abs(diffX) && Math.abs(diffY) < Math.abs(diffX)) {
+                Log.d(RHCareerFairLayout.RH_CFL, "Scrolled Horizontally");
                 // Horizontal scroll is maybe handled by ViewPager
-                return false;
-            }
-
-
-
-            Scrollable scrollable = getCurrentScrollable();
-            if (scrollable == null) {
-                mScrolled = false;
                 return false;
             }
 
             // If interceptionLayout can move, it should intercept.
             // And once it begins to move, horizontal scroll shouldn't work any longer.
-            View toolbarView = getActivity().findViewById(R.id.toolbar);
-            int toolbarHeight = toolbarView.getHeight();
-            int translationY = (int) mInterceptionLayout.getTranslationY();
+
+//            View toolbarView = getActivity().findViewById(R.id.toolbar);
+
+//            int toolbarHeight = toolbarView.getHeight();
+//            int translationY = (int) mInterceptionLayout.getTranslationY();
             boolean scrollingUp = 0 < diffY;
             boolean scrollingDown = diffY < 0;
             if (scrollingDown) {
-                if(toolbarIsHidden()){
-                    mScrolled = false;
+                if (toolbarIsHidden()) {
                     return false;
                 }
-//                if (translationY < 0) {
-//                    mScrolled = true;
-//                    mLastScrollState = ScrollState.UP;
-//                    return true;
-//                }
                 showToolbar();
             } else if (scrollingUp) {
 
-                if(toolbarIsShown()){
-                    mScrolled = false;
+                if (toolbarIsShown()) {
                     return false;
                 }
-
-//                if (-toolbarHeight < translationY) {
-//                    mScrolled = true;
-//                    mLastScrollState = ScrollState.DOWN;
-//                    return true;
-//                }
                 hideToolbar();
             }
-            mScrolled = false;
             return false;
         }
 
@@ -125,7 +106,6 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
 
         @Override
         public void onUpOrCancelMotionEvent(MotionEvent ev) {
-            //mScrolled = false;
             adjustToolbar(mLastScrollState);
         }
     };
@@ -163,10 +143,9 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-//        if (!mScrolled) {
-            // This event can be used only when TouchInterceptionFrameLayout
-            // doesn't handle the consecutive events.
-            adjustToolbar(scrollState);
+        // This event can be used only when TouchInterceptionFrameLayout
+        // doesn't handle the consecutive events.
+        adjustToolbar(scrollState);
 //        }
     }
 
@@ -190,8 +169,7 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
         int scrollY = scrollable.getCurrentScrollY();
         if (scrollState == ScrollState.DOWN) {
             showToolbar();
-        }
-        else if(scrollState == ScrollState.UP){
+        } else if (scrollState == ScrollState.UP) {
             hideToolbar();
         }
 //        } else if (scrollState == ScrollState.UP) {

@@ -77,6 +77,9 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                         boolean current = showOnMapCheckBox.isChecked();
                         Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + !current);
                         DBAdapter.setCompanySelected(company.getId(), !current);
+                        synchronized (RHCareerFairLayout.companySelectionChanged){
+                            RHCareerFairLayout.companySelectionChanged.notifyChanged();
+                        }
                         showOnMapCheckBox.setChecked(!current);
                         changeCursor(DBAdapter.getCompaniesCursor());
                     }

@@ -9,14 +9,12 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.CompanyCategory;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.TableMapping;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.TableMappingArray;
+import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 
 public class DBAdapter {
     //
@@ -62,7 +60,7 @@ public class DBAdapter {
     private static DBHelper mOpenHelper = null;
     private static SQLiteDatabase mDatabase = null;
 
-    public static void setupDBAdapter(Context context) {
+    public static void setupDBAdapterIfNeeded(Context context) {
         // Create a SQLiteOpenHelper
         if (mOpenHelper == null) {
             mOpenHelper = new DBHelper(context);
@@ -73,13 +71,14 @@ public class DBAdapter {
         }
     }
 
-    public static Long getLastUpdateTime(String year, String quarter){
+    public static Long getLastUpdateTime(String year, String quarter) {
+
         String[] projection = new String[]{KEY_LAST_UPDATE_TIME};
         String whereClause = KEY_YEAR + " = '" + year + "' AND " + KEY_QUARTER + " = '" + quarter + "'";
 
         Cursor c = mDatabase.query(TABLE_TERM_NAME, projection, whereClause, null, null, null, null);
 
-        if(c.getCount() == 0){
+        if (c.getCount() == 0) {
             return null;
         }
 
@@ -87,34 +86,40 @@ public class DBAdapter {
         return c.getLong(c.getColumnIndexOrThrow(KEY_LAST_UPDATE_TIME));
     }
 
-    public static void loadNewData(DataWrapper data) {
+    public static void loadNewData(DataWrapper data) throws SQLException {
         mOpenHelper.resetDB(mDatabase);
 
         Log.d(RHCareerFairLayout.RH_CFL, "Loading new data");
 
-        for (Category category : data.getCategoryMap().values()) {
-            ContentValues row = category.toContentValues();
-
-            mDatabase.insert(TABLE_CATEGORY_NAME, null, row);
-            setCategorySelected(category.getId(), false);
-        }
-        for (Company company : data.getCompanyMap().values()) {
-            ContentValues row = company.toContentValues();
-
-            mDatabase.insert(TABLE_COMPANY_NAME, null, row);
-            setCompanySelected(company.getId(), false);
-        }
-        for (CompanyCategory companyCategory : data.getCompanyCategoryMap().values()) {
-            List<ContentValues> rows = companyCategory.toContentValues();
-            for (ContentValues row : rows) {
-                mDatabase.insert(TABLE_COMPANYCATEGORY_NAME, null, row);
-            }
-        }
-        for (TableMapping tableMapping : data.getTableMappingList()) {
-            ContentValues row = tableMapping.toContentValues();
-
-            mDatabase.insert(TABLE_TABLEMAPPING_NAME, null, row);
-        }
+//        for (Category category : data.getCategoryMap().values()) {
+//            ContentValues row = category.toContentValues();
+//
+//            mDatabase.insert(TABLE_CATEGORY_NAME, null, row);
+//            setCategorySelected(category.getId(), false);
+//        }
+//        for (Company company : data.getCompanyMap().values()) {
+//            ContentValues row = company.toContentValues();
+//
+//            mDatabase.insert(TABLE_COMPANY_NAME, null, row);
+//            setCompanySelected(company.getId(), false);
+//        }
+//        for (CompanyCategory companyCategory : data.getCompanyCategoryMap().values()) {
+//            List<ContentValues> rows = companyCategory.toContentValues();
+//            for (ContentValues row : rows) {
+//                mDatabase.insert(TABLE_COMPANYCATEGORY_NAME, null, row);
+//            }
+//        }
+//        for (TableMapping tableMapping : data.getTableMappingList()) {
+//            ContentValues row = tableMapping.toContentValues();
+//
+//            mDatabase.insert(TABLE_TABLEMAPPING_NAME, null, row);
+//        }
+        bulkInsert(TABLE_CATEGORY_NAME, data.getCategoryMap().getContentValues());
+        bulkInsert(TABLE_SELECTED_CATEGORIES_NAME, data.getCategoryMap().getInitialSelectionContentValues());
+        bulkInsert(TABLE_COMPANY_NAME, data.getCompanyMap().getContentValues());
+        bulkInsert(TABLE_SELECTED_COMPANIES_NAME, data.getCompanyMap().getInitialSelectionContentValues());
+        bulkInsert(TABLE_COMPANYCATEGORY_NAME, data.getCompanyCategoryMap().getContentValues());
+        bulkInsert(TABLE_TABLEMAPPING_NAME, data.getTableMappingList().getContentValues());
 
         ContentValues termRow = data.getTerm().toContentValues();
 
@@ -194,6 +199,56 @@ public class DBAdapter {
         return sqlQB.query(mDatabase, projection, null, null, null, null, orderBy);
     }
 
+    public static Term getTerm() {
+        String[] projection = new String[]{KEY_YEAR, KEY_QUARTER, KEY_LAYOUT_SECTION1,
+                KEY_LAYOUT_SECTION2, KEY_LAYOUT_SECTION2_PATHWIDTH, KEY_LAYOUT_SECTION2_ROWS,
+                KEY_LAYOUT_SECTION3, KEY_LAST_UPDATE_TIME};
+        Cursor cursor = mDatabase.query(TABLE_TERM_NAME, projection, null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            return new Term(cursor);
+        }
+        return null;
+    }
+
+    public static TableMappingArray getTableMappings() {
+        String[] projection = new String[]{KEY_ID, KEY_COMPANY_ID, KEY_SIZE};
+        Cursor cursor = mDatabase.query(TABLE_TABLEMAPPING_NAME, projection, null, null, null, null, KEY_ID + " ASC");
+
+        if (cursor != null && cursor.moveToFirst()) {
+            return new TableMappingArray(cursor);
+        }
+        return null;
+    }
+
+    public static TableMap getTables() {
+
+        // Create new querybuilder
+        SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
+
+        // Join tables on ID
+        sqlQB.setTables(TABLE_TABLEMAPPING_NAME +
+                " LEFT OUTER JOIN " + TABLE_COMPANY_NAME + " ON " +
+                TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID + " = " + TABLE_COMPANY_NAME + "." + KEY_ID +
+                " LEFT OUTER JOIN " + TABLE_SELECTED_COMPANIES_NAME + " ON " +
+                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID);
+
+        // Get these columns.
+        String[] projection = new String[]{
+                TABLE_TABLEMAPPING_NAME + "." + KEY_ID + " AS " + KEY_ID,
+                KEY_SIZE,
+                KEY_SELECTED
+        };
+
+        // Sort first by type, then name.
+        String orderBy = KEY_ID + " ASC";
+
+        //Get cursor
+        Cursor cursor = sqlQB.query(mDatabase, projection, null, null, null, null, orderBy);
+
+        return new TableMap(cursor);
+    }
+
 //    /**
 //     * Add a score to the DB
 //     *
@@ -270,6 +325,7 @@ public class DBAdapter {
     }
 
     public static void close() {
+        mOpenHelper = null;
         mDatabase.close();
         mDatabase = null;
     }

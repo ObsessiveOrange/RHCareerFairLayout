@@ -29,33 +29,21 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        app:contentInsetEnd="20dp"
+        app:contentInsetLeft="12dp"
+        app:contentInsetRight="20dp"
+        app:contentInsetStart="12dp"
         app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-        app:contentInsetLeft="16dp"
-        app:contentInsetStart="16dp"
-        app:contentInsetRight="16dp"
-        app:contentInsetEnd="16dp"
         app:theme="@style/Toolbar">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/career_fair_title"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:background="@android:color/holo_green_dark"
-                android:gravity="start|center_vertical"
-                android:text="@string/loading"
-                android:layout_weight="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:background="@android:color/holo_blue_dark"
-                android:gravity="end|center_vertical"
-                android:text="@string/app_name" />
-
-        </LinearLayout>
+            android:drawableLeft="@drawable/ic_rose_logo"
+            android:drawableStart="@drawable/ic_rose_logo"
+            android:gravity="start|bottom"
+            android:text="@string/rhcareerfair" />
 
 
     </android.support.v7.widget.Toolbar>

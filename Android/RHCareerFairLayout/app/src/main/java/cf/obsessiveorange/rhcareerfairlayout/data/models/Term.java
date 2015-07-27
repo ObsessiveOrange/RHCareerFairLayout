@@ -1,6 +1,7 @@
 package cf.obsessiveorange.rhcareerfairlayout.data.models;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,6 +22,19 @@ public class Term implements Comparable<Term> {
     private Integer layout_Section3;
     @JsonIgnore
     private final Long lastUpdateTime;
+
+
+    public Term(Cursor c) {
+
+        this.year = c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_YEAR));
+        this.quarter = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_QUARTER));
+        this.setLayout_Section1(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION1)));
+        this.setLayout_Section2(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2)));
+        this.setLayout_Section2_PathWidth(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2_PATHWIDTH)));
+        this.setLayout_Section2_Rows(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2_ROWS)));
+        this.setLayout_Section3(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION3)));
+        this.lastUpdateTime = c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_LAST_UPDATE_TIME));
+    }
 
     public Term(Integer year, String quarter) {
         this(year, quarter, null, null, null, null, null);
@@ -171,6 +185,10 @@ public class Term implements Comparable<Term> {
 
     public Long getLastUpdateTime() {
         return lastUpdateTime;
+    }
+
+    public Integer getNumTables(){
+        return layout_Section1 + (layout_Section2 - 2) * layout_Section2_Rows + 4 + layout_Section3;
     }
 
     public ContentValues toContentValues() {

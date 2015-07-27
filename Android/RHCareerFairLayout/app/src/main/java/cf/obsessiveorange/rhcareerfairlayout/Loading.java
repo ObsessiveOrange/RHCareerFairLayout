@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,7 +32,7 @@ public class Loading extends Activity {
         final String requestYear = "2015";
         final String requestQuarter = "Fall";
 
-        DBAdapter.setupDBAdapter(this);
+        DBAdapter.setupDBAdapterIfNeeded(this);
 
         statusTextView.setText(getString(R.string.loadingStatus_checkingForNewData));
 
@@ -58,7 +59,7 @@ public class Loading extends Activity {
             Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
 
             ConnectionManager.Request req = new ConnectionManager.Request();
-            req.setUrl("http://192.168.2.30:8080/api/data/all");
+            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all");
             req.setMethod(ConnectionManager.Request.HTTPMethod.GET);
             req.setQueryParams(new HashMap<String, String>() {{
                 put("year", requestYear);
@@ -80,7 +81,12 @@ public class Loading extends Activity {
                     }
                     Log.d(RHCareerFairLayout.RH_CFL, "Object deserialized successfully");
 
-                    DBAdapter.loadNewData(dataWrapper);
+                    try {
+                        DBAdapter.loadNewData(dataWrapper);
+                    } catch (SQLException e) {
+                        Log.d(RHCareerFairLayout.RH_CFL, "SQL exception while loading data into DB", e);
+                        finish();
+                    }
 
                     Log.d(RHCareerFairLayout.RH_CFL, "Object input into DB successfully");
 
@@ -100,6 +106,7 @@ public class Loading extends Activity {
                 }
             });
 
+            Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
             ConnectionManager.enqueueRequest(req);
         }
     }

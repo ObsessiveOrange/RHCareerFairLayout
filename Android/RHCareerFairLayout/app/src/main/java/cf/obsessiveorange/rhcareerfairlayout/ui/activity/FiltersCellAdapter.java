@@ -76,6 +76,9 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                         boolean current = filterActiveCheckbox.isChecked();
                         Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
                         DBAdapter.setCategorySelected(category.getId(), !current);
+                        synchronized (RHCareerFairLayout.categorySelectionChanged){
+                            RHCareerFairLayout.categorySelectionChanged.notifyChanged();
+                        }
                         filterActiveCheckbox.setChecked(!current);
                         changeCursor(DBAdapter.getCategoriesCursor());
                     }
