@@ -37,7 +37,7 @@ public class CompanyMap extends HashMap<Long, Company> {
             ContentValues row = new ContentValues();
 
             row.put(DBAdapter.KEY_COMPANY_ID, company.getId());
-            row.put(DBAdapter.KEY_SELECTED, false);
+            row.put(DBAdapter.KEY_SELECTED, true);
 
             rows[i] = row;
             i++;

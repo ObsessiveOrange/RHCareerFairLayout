@@ -5,19 +5,28 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewParent;
 import android.widget.Toast;
+
+import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import cf.obsessiveorange.rhcareerfairlayout.MainActivity;
+import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.ViewPagerTabFragmentParentFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Rectangle;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Table;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
@@ -49,12 +58,31 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
     double containerWidth;
     double containerHeight;
 
+    Rectangle mapAreaRect;
+    Rectangle restAreaRect;
+    Rectangle registrationAreaRect;
+    Paint boxPaint;
     double mapWidth;
     double mapHeight;
 
     Thread companySelectionChangedWatcher;
 
     private TableMap tableMap;
+    private ViewParent parentView = null;
+
+    private Runnable updateGUI = new Runnable() {
+        @Override
+        public void run() {
+            containerWidth = getHolder().getSurfaceFrame().width();
+            containerHeight = getHolder().getSurfaceFrame().height();
+
+            generateTableLocations();
+
+            CalculateMatrix(true);
+
+            Log.d(RHCareerFairLayout.RH_CFL, "Height: " + containerHeight);
+        }
+    };
 
     public MapView(Context context) {
         super(context);
@@ -148,8 +176,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                         // get distance vector from where the finger touched down to
                         // current location
 
-                        mTouchX = getNewX(mTouchBackupX, diffX);
-                        mTouchY = getNewY(mTouchBackupY, diffY);
+                        mTouchX = mTouchBackupX + diffX;
+                        mTouchY = mTouchBackupY + diffY;
 
 //                        mTouchY = Math.max(boxHeight / 2 / mScaleFactor, Math.min(containerHeight - boxHeight / 2 / mScaleFactor, mTouchBackupY + diffY));
 
@@ -173,7 +201,27 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
+    private TouchInterceptionFrameLayout getTouchInterceptionFrameLayout() {
+        if (parentView == null) {
+
+            parentView = this.getParent();
+            while (!(parentView instanceof TouchInterceptionFrameLayout)) {
+                parentView = parentView.getParent();
+            }
+        }
+        return (TouchInterceptionFrameLayout) parentView;
+    }
+
+    private ViewPagerTabFragmentParentFragment getParentFragment() {
+        return (ViewPagerTabFragmentParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(ViewPagerTabFragmentParentFragment.FRAGMENT_TAG);
+    }
+
+    private boolean isToolbarShown() {
+        return getTouchInterceptionFrameLayout().getTranslationY() == 0;
+    }
+
     private double getNewX(double referencePoint, double delta) {
+
         if (mapWidth * mScaleFactor >= containerWidth) {
             return Math.min(mapWidth * (mScaleFactor / 2), Math.max(containerWidth - mapWidth * (mScaleFactor / 2), referencePoint + delta));
         } else {
@@ -182,10 +230,29 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private double getNewY(double referencePoint, double delta) {
+        View toolbarView = ((Activity) getContext()).findViewById(R.id.toolbar);
+        float translationY = -toolbarView.getHeight();
+//
+        int topOffset = 0;
+        int bottomOffset = 0;
+
+        if (!isToolbarShown()) {
+            MainActivity activity = ((MainActivity) getContext());
+            ActionBar actionBar = activity.getSupportActionBar();
+
+            int actionBarHeight = 0;
+            if (actionBar != null) {
+                actionBarHeight = actionBar.getHeight();
+            }
+
+//            topOffset = (int) (actionBarHeight * mScaleFactor * 1 / 2);
+//            bottomOffset = (int) (actionBarHeight * mScaleFactor * 1 / 2);
+        }
+
         if (mapHeight * mScaleFactor >= containerHeight) {
-            return Math.min(mapHeight * (mScaleFactor / 2), Math.max(containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
+            return Math.min(topOffset + mapHeight * (mScaleFactor / 2), Math.max(bottomOffset + containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
         } else {
-            return Math.max(mapHeight * (mScaleFactor / 2), Math.min(containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
+            return Math.max(topOffset + mapHeight * (mScaleFactor / 2), Math.min(bottomOffset + containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
         }
     }
 
@@ -197,6 +264,11 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.concat(mMatrix);
 
         canvas.drawColor(Color.GRAY);
+
+        mapAreaRect.draw(canvas);
+        restAreaRect.draw(canvas);
+        registrationAreaRect.draw(canvas);
+
         for (Table table : tableMap.values()) {
 
             table.getRectangle().draw(canvas);
@@ -272,11 +344,16 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         // scale the view
         mMatrix.postScale(mScaleFactor, mScaleFactor);
 
+        // make sure x, y are within bounds
+        mTouchX = getNewX(mTouchX, 0);
+        mTouchY = getNewY(mTouchY, 0);
+
         // re-move the view to it's desired location
         mMatrix.postTranslate((float) mTouchX, (float) mTouchY);
 
-        if (invalidate)
+        if (invalidate) {
             invalidate(); // re-draw
+        }
     }
 
     private class ScaleListener extends
@@ -307,6 +384,13 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         public void onScaleEnd(ScaleGestureDetector detector) {
 
             mode = InteractionMode.None;
+
+            if (mScaleFactor == 1) {
+                getParentFragment().showToolbar(updateGUI);
+            } else {
+                getParentFragment().hideToolbar(updateGUI);
+            }
+
 
             super.onScaleEnd(detector);
         }
@@ -339,8 +423,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
             // set new touch position
 
-            mTouchX = getNewX(mZoomBackupX, diffX);
-            mTouchY = getNewY(mZoomBackupY, diffY);
+            mTouchX = mZoomBackupX + diffX;
+            mTouchY = mZoomBackupY + diffY;
 
             CalculateMatrix(true);
 
@@ -373,33 +457,88 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         mapWidth = containerWidth >= containerHeight * 2 ? containerHeight * 2 : containerWidth;
         mapHeight = containerWidth >= containerHeight * 2 ? containerHeight : containerWidth / 2;
 
+
+        Paint strokePaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
+        strokePaintTables.setColor(Color.BLACK);
+        strokePaintTables.setStyle(Paint.Style.STROKE);
+        strokePaintTables.setStrokeWidth(2);
+
+        Paint strokePaintThin = new Paint(Paint.ANTI_ALIAS_FLAG);
+        strokePaintThin.setColor(Color.BLACK);
+        strokePaintThin.setStyle(Paint.Style.STROKE);
+        strokePaintThin.setStrokeWidth(1);
+
+        Paint fillPaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
+        fillPaintTables.setColor(Color.GREEN);
+        fillPaintTables.setStyle(Paint.Style.FILL);
+
+        Paint fillPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        fillPaintText.setColor(Color.BLACK);
+        fillPaintText.setStyle(Paint.Style.FILL);
+
+
         tableMap = DBAdapter.getTables();
         Term term = DBAdapter.getTerm();
 
-        //
         //convenience assignments
         int s1 = term.getLayout_Section1();
         int s2 = term.getLayout_Section2();
         int s2Rows = term.getLayout_Section2_Rows();
         int s2PathWidth = term.getLayout_Section2_PathWidth();
         int s3 = term.getLayout_Section3();
-        //
+
         //count number of vertical and horizontal tableMap there are
         int hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
         int vrtCount = Math.max(s1, s3);
-        //
+
         //calculate width and height of tableMap based on width of the canvas
         double unitX = mapWidth / 100;
+
         //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
         double tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
         double unitY = mapHeight / 100;
+
         //30% of space allocated to registration and rest area.
         double tableHeight = unitY * 70 / vrtCount;
-        //
+
         //
         long id = 1;
         double offsetX = (containerWidth - mapWidth) / 2;
         double offsetY = (containerHeight - mapHeight) / 2;
+
+        // static tables.
+        mapAreaRect = Rectangle.RectangleBuilderFromCenter(
+                containerWidth/2,
+                containerHeight/2,
+                mapWidth,
+                mapHeight,
+                strokePaintThin,
+                null,
+                false,
+                null
+        );
+        restAreaRect = Rectangle.RectangleBuilderFromTopLeft(
+                offsetX + 40 * unitX,
+                offsetY + 80 * unitY,
+                45 * unitX,
+                15 * unitY,
+                strokePaintThin,
+                null,
+                false,
+                "Rest Area"
+        );
+        registrationAreaRect = Rectangle.RectangleBuilderFromTopLeft(
+                offsetX + 5 * unitX,
+                offsetY + 80 * unitY,
+                30 * unitX,
+                15 * unitY,
+                strokePaintThin,
+                null,
+                false,
+                "Registration"
+        );
+
+
         //
         // section 1
         offsetX += 5 * unitX;
@@ -411,9 +550,10 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                         offsetY + 5 * unitY + i * tableHeight,
                         tableWidth,
                         tableHeight * table.getSize(),
-                        Color.BLACK,
-                        table.isSelected() ? Color.GREEN : null,
-                        table.isSelected()
+                        strokePaintTables,
+                        table.isSelected() ? fillPaintTables : null,
+                        table.isSelected(),
+                        table.getId().toString()
                 );
                 id++;
                 i += table.getSize();
@@ -438,9 +578,10 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                                 offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                 tableWidth * table.getSize(),
                                 tableHeight,
-                                Color.BLACK,
-                                table.isSelected() ? Color.GREEN : null,
-                                table.isSelected()
+                                strokePaintTables,
+                                table.isSelected() ? fillPaintTables : null,
+                                table.isSelected(),
+                                table.getId().toString()
                         );
                         table.setRectangle(rectangle);
 
@@ -460,9 +601,10 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                                 offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                 tableWidth * table.getSize(),
                                 tableHeight,
-                                Color.BLACK,
-                                table.isSelected() ? Color.GREEN : null,
-                                table.isSelected()
+                                strokePaintTables,
+                                table.isSelected() ? fillPaintTables : null,
+                                table.isSelected(),
+                                table.getId().toString()
                         );
                         table.setRectangle(rectangle);
 
@@ -476,9 +618,10 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                                 offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                 tableWidth * table.getSize(),
                                 tableHeight,
-                                Color.BLACK,
-                                table.isSelected() ? Color.GREEN : null,
-                                table.isSelected()
+                                strokePaintTables,
+                                table.isSelected() ? fillPaintTables : null,
+                                table.isSelected(),
+                                table.getId().toString()
                         );
                         table.setRectangle(rectangle);
 
@@ -499,9 +642,11 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                         offsetY + 5 * unitY + i * tableHeight,
                         tableWidth,
                         tableHeight * table.getSize(),
-                        Color.BLACK,
-                        table.isSelected() ? Color.GREEN : null,
-                        table.isSelected()
+                        strokePaintTables,
+                        table.isSelected() ? fillPaintTables : null,
+                        table.isSelected(),
+
+                        table.getId().toString()
                 );
                 table.setRectangle(rectangle);
 

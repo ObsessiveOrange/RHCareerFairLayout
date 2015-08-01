@@ -16,6 +16,7 @@ public class RHCareerFairLayout {
     public static final String RH_CFL = "RH-CFL";
     public static final int APP_VERSION = 1;
 
+//    public static final String URL_BASE = "http://192.168.2.30:8080/api";
     public static final String URL_BASE = "http://rhcareerfair.cf/api";
 
     public static final ArrayList<NavigationItem> tabs = new ArrayList<NavigationItem>();

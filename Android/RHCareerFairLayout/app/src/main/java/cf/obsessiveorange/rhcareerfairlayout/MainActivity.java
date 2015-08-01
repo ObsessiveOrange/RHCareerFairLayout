@@ -16,6 +16,11 @@
 
 package cf.obsessiveorange.rhcareerfairlayout;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -72,6 +77,44 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch(id){
+            case R.id.refresh_data:
+                DialogFragment df = new DialogFragment(){
+                    @Override
+                    public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Reload Data?");
+                        builder.setMessage("This will clear all your current results. Continue?");
+                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dismiss();
+
+                                Intent reloadDataIntent = new Intent(getActivity(), Loading.class);
+                                reloadDataIntent.putExtra(Loading.KEY_FORCE_REFRESH, true);
+                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(reloadDataIntent);
+                            }
+                        });
+                        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dismiss();
+                            }
+                        });
+                        return builder.create();
+                    }
+                };
+                df.show(getFragmentManager(), null);
+                break;
+            default:
+                break;
+        }
         if (id == R.id.action_settings) {
             return true;
         }
@@ -94,8 +137,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onStop() {
-
-        DBAdapter.close();
 
         super.onStop();
     }

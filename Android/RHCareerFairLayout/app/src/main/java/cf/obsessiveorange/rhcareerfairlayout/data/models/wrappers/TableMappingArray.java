@@ -16,7 +16,7 @@ public class TableMappingArray extends ArrayList<TableMapping> {
     private static final long serialVersionUID = -4617007484637352031L;
 
     public TableMappingArray(){
-
+        super();
     }
 
     public TableMappingArray(Cursor cursor) {

@@ -19,7 +19,9 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,9 +29,8 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.FiltersCellAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.SectionRecyclerAdapter;
 
 /**
  * Fragment for ViewPagerTabFragmentActivity.
@@ -45,7 +46,25 @@ public class VPFiltersFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        recyclerView.setAdapter(new FiltersCellAdapter(getActivity(), DBAdapter.getCategoriesCursor()));
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
+
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+
+        recyclerView.setAdapter(new SectionRecyclerAdapter(getActivity()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();

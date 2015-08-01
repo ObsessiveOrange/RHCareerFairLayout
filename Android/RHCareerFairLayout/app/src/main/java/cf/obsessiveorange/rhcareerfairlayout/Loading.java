@@ -21,10 +21,24 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 
 public class Loading extends Activity {
 
+    public static final String KEY_FORCE_REFRESH = "forceRefresh";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        boolean forceRefresh = getIntent().getBooleanExtra(KEY_FORCE_REFRESH, false);
+        reloadData(forceRefresh);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void reloadData(boolean forceRefresh){
 
         final TextView statusTextView = (TextView)findViewById(R.id.loading_status_textview);
         final Timer timer = new Timer();
@@ -40,7 +54,7 @@ public class Loading extends Activity {
         Long lastUpdateTime = DBAdapter.getLastUpdateTime(requestYear, requestQuarter);
 
         // TODO: Change this logic to factor in last update times.
-        if(lastUpdateTime != null){
+        if(!forceRefresh && lastUpdateTime != null){
             statusTextView.setText(getString(R.string.loadingStatus_dataUpToDate));
             Log.d(RHCareerFairLayout.RH_CFL, "Data already downloaded, skipping retrieval.");
 
@@ -75,6 +89,7 @@ public class Loading extends Activity {
                     try {
                         dataWrapper = mapper.readValue(response, DataWrapper.class);
                     } catch (IOException e) {
+                        statusTextView.setText("Error occurred during deserialization");
                         Log.e(RHCareerFairLayout.RH_CFL, "Error occurred during deserialization", e);
                         e.printStackTrace();
                         return;

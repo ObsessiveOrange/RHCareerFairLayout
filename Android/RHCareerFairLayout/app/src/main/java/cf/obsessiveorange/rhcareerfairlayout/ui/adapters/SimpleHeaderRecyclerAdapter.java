@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cf.obsessiveorange.rhcareerfairlayout.ui.activity;
+package cf.obsessiveorange.rhcareerfairlayout.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

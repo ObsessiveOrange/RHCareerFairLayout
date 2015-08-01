@@ -29,7 +29,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.CompaniesCellAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
 
 /**
  * Fragment for ViewPagerTabFragmentActivity.

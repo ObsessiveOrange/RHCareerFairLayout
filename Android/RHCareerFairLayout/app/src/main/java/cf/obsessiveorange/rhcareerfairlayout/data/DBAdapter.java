@@ -19,7 +19,7 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 public class DBAdapter {
     //
     // DB Schema version constant
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     //
     // Filename constant
     private static final String DATABASE_NAME = "RHCareerFairLayout.db";
@@ -325,8 +325,8 @@ public class DBAdapter {
     }
 
     public static void close() {
+        mOpenHelper.close();
         mOpenHelper = null;
-        mDatabase.close();
         mDatabase = null;
     }
 

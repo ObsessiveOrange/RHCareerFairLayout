@@ -18,6 +18,7 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.fragments;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -189,11 +190,11 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
         return mPagerAdapter.getItemAt(mPager.getCurrentItem());
     }
 
-    private boolean toolbarIsShown() {
+    public boolean toolbarIsShown() {
         return mInterceptionLayout.getTranslationY() == 0;
     }
 
-    private boolean toolbarIsHidden() {
+    public boolean toolbarIsHidden() {
         View view = getView();
         if (view == null) {
             return false;
@@ -202,19 +203,19 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
         return mInterceptionLayout.getTranslationY() == -toolbarView.getHeight();
     }
 
-    private void showToolbar() {
-        animateToolbar(0);
+    public void showToolbar(Runnable... completionHandlers) {
+        animateToolbar(0, completionHandlers);
     }
 
-    private void hideToolbar() {
+    public void hideToolbar(Runnable... completionHandlers) {
         View toolbarView = getActivity().findViewById(R.id.toolbar);
-        animateToolbar(-toolbarView.getHeight());
+        animateToolbar(-toolbarView.getHeight(), completionHandlers);
     }
 
-    private void animateToolbar(final float toY) {
+    private void animateToolbar(final float toY, final Runnable... completionHandlers) {
         float layoutTranslationY = mInterceptionLayout.getTranslationY();
         if (layoutTranslationY != toY) {
-            ValueAnimator animator = ValueAnimator.ofFloat(mInterceptionLayout.getTranslationY(), toY).setDuration(200);
+            final ValueAnimator animator = ValueAnimator.ofFloat(mInterceptionLayout.getTranslationY(), toY).setDuration(200);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -230,6 +231,16 @@ public class ViewPagerTabFragmentParentFragment extends BaseFragment implements 
                 }
             });
             animator.start();
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    animator.end();
+
+                    for(Runnable completionHandler : completionHandlers){
+                        completionHandler.run();
+                    }
+                }
+            }, animator.getDuration());
+
         }
     }
 

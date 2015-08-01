@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cf.obsessiveorange.rhcareerfairlayout.ui.activity;
+package cf.obsessiveorange.rhcareerfairlayout.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -34,9 +34,9 @@ import android.widget.TextView;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
 
-public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.ViewHolder> {
+public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdapter.ViewHolder> {
 
     // Hold on to a CursorAdapter for handling of cursor reference - will automatically
     // clear cursor when done.
@@ -46,41 +46,42 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
 
     LayoutInflater mInflater;
 
-    public FiltersCellAdapter(Context context, Cursor c) {
+    public CompaniesCellAdapter(Context context, Cursor c) {
 
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
 
-        mCursorAdapter = new ResourceCursorAdapter(mContext, R.layout.cell_filter, c, 0) {
-
+        mCursorAdapter = new ResourceCursorAdapter(mContext, R.layout.cell_company, c, 0) {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
                 // Binding operations
 
-                final CheckBox filterActiveCheckbox = (CheckBox) view.findViewById(R.id.filter_active);
-                final TextView filterNameTextView = (TextView) view.findViewById(R.id.filter_name);
+                final CheckBox showOnMapCheckBox = (CheckBox) view.findViewById(R.id.show_on_map);
+                final TextView companyNameTextView = (TextView) view.findViewById(R.id.company_name);
+                final TextView tableNumberTextView = (TextView) view.findViewById(R.id.table_number);
 
-                final Category category = new Category(cursor);
+                final Company company = new Company(cursor);
+                final Long table = cursor.getLong(cursor.getColumnIndexOrThrow(DBAdapter.KEY_TABLE));
                 final Boolean selected = cursor.getInt(cursor.getColumnIndexOrThrow(DBAdapter.KEY_SELECTED)) > 0;
 
-
                 view.setBackgroundColor(Color.WHITE);
-                filterActiveCheckbox.setChecked(selected);
-                filterNameTextView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBAdapter.KEY_NAME)));
+                showOnMapCheckBox.setChecked(selected);
+                companyNameTextView.setText(company.getName());
+                tableNumberTextView.setText(table.toString());
 //                v.setImageURI(Uri.parse(value));
 
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        boolean current = filterActiveCheckbox.isChecked();
-                        Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
-                        DBAdapter.setCategorySelected(category.getId(), !current);
-                        synchronized (RHCareerFairLayout.categorySelectionChanged){
-                            RHCareerFairLayout.categorySelectionChanged.notifyChanged();
+                        boolean current = showOnMapCheckBox.isChecked();
+                        Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + !current);
+                        DBAdapter.setCompanySelected(company.getId(), !current);
+                        synchronized (RHCareerFairLayout.companySelectionChanged){
+                            RHCareerFairLayout.companySelectionChanged.notifyChanged();
                         }
-                        filterActiveCheckbox.setChecked(!current);
-                        changeCursor(DBAdapter.getCategoriesCursor());
+                        showOnMapCheckBox.setChecked(!current);
+                        changeCursor(DBAdapter.getCompaniesCursor());
                     }
                 });
 
@@ -115,17 +116,17 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         LinearLayout cellRoot;
-        CheckBox filterActiveCheckbox;
-        TextView filterNameTextView;
+        CheckBox showOnMapCheckBox;
+        TextView companyNameTextView;
+        TextView tableNumberTextView;
 
         public ViewHolder(View view) {
             super(view);
             cellRoot = (LinearLayout) view.findViewById(R.id.cell_root);
-            filterActiveCheckbox = (CheckBox) view.findViewById(R.id.filter_active);
-            filterNameTextView = (TextView) view.findViewById(R.id.filter_name);
+            showOnMapCheckBox = (CheckBox) view.findViewById(R.id.show_on_map);
+            companyNameTextView = (TextView) view.findViewById(R.id.company_name);
+            tableNumberTextView = (TextView) view.findViewById(R.id.table_number);
         }
     }
-
 }

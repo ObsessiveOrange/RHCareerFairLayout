@@ -26,8 +26,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleHeaderRecyclerAdapter;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activity.SimpleRecyclerAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.SimpleHeaderRecyclerAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.SimpleRecyclerAdapter;
 
 public abstract class BaseFragment extends Fragment {
     private static final int NUM_OF_ITEMS = 100;
