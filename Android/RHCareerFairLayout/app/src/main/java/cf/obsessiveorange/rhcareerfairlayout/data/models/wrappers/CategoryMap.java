@@ -28,7 +28,7 @@ public class CategoryMap extends HashMap<Long, Category> {
         return rows;
     }
 
-    public ContentValues[] getInitialSelectionContentValues(){
+    public ContentValues[] getSelectionContentValues(boolean selected){
         ContentValues[] rows = new ContentValues[size()];
 
         int i = 0;
@@ -37,7 +37,7 @@ public class CategoryMap extends HashMap<Long, Category> {
             ContentValues row = new ContentValues();
 
             row.put(DBAdapter.KEY_CATEGORY_ID, category.getId());
-            row.put(DBAdapter.KEY_SELECTED, false);
+            row.put(DBAdapter.KEY_SELECTED, selected);
 
             rows[i] = row;
             i++;

@@ -31,6 +31,8 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.SQLException;
+
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
@@ -75,7 +77,11 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                     public void onClick(View v) {
                         boolean current = filterActiveCheckbox.isChecked();
                         Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
-                        DBAdapter.setCategorySelected(category.getId(), !current);
+                        try {
+                            DBAdapter.setCategorySelected(category.getId(), !current);
+                        } catch (SQLException e) {
+                            Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
+                        }
                         synchronized (RHCareerFairLayout.categorySelectionChanged){
                             RHCareerFairLayout.categorySelectionChanged.notifyChanged();
                         }

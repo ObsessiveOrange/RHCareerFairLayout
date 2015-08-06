@@ -30,6 +30,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -44,13 +45,12 @@ public class SectionRecyclerAdapter extends RecyclerView.Adapter<SectionRecycler
     // clear cursor when done.
     Cursor mCursor;
     LayoutInflater mInflater;
-    TreeMap<Integer, Integer> mOffsets;
+    TreeMap<Integer, Integer> mOffsets = new TreeMap<Integer, Integer>();
+    boolean headerLocationsGenerated = false;
 
     public SectionRecyclerAdapter(Context context) {
-
-        mCursor = DBAdapter.getCategoriesCursor();
         mInflater = LayoutInflater.from(context);
-        mOffsets = new TreeMap<Integer, Integer>();
+        changeCursor(DBAdapter.getCategoriesCursor());
     }
 
     public void changeCursor(Cursor cursor) {
@@ -58,6 +58,37 @@ public class SectionRecyclerAdapter extends RecyclerView.Adapter<SectionRecycler
             mCursor.close();
         }
         mCursor = cursor;
+        generateHeaderLocations();
+    }
+
+    private void generateHeaderLocations() {
+        int headers = 0;
+        for (int position = 0; position < mCursor.getCount() + headers; position++) {
+            if (position == 0) {
+                // New header
+                Map.Entry<Integer, Integer> prevNumHeaders = mOffsets.lowerEntry(position);
+                mOffsets.put(position, (prevNumHeaders == null ? 0 : prevNumHeaders.getValue()) + 1);
+            }
+            // If is not first item in section, check for headers.
+            else if (mOffsets.get(position - 1) == null) {
+                // Get offset based on how many section headers are above.
+                int offsetPosition = position - mOffsets.lowerEntry(position).getValue();
+
+                String prevType = mCursor.moveToPosition(offsetPosition - 1) ?
+                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
+                        null;
+                String currType = mCursor.moveToPosition(offsetPosition) ?
+                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
+                        null;
+
+                // If both types do not match, then it is an header.
+                if (prevType == null || currType == null || !prevType.equalsIgnoreCase(currType)) {
+                    // New header
+                    Map.Entry<Integer, Integer> prevNumHeaders = mOffsets.lowerEntry(position);
+                    mOffsets.put(position, (prevNumHeaders == null ? 0 : prevNumHeaders.getValue()) + 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -68,46 +99,22 @@ public class SectionRecyclerAdapter extends RecyclerView.Adapter<SectionRecycler
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        if (position == 0) {
-            // Build header
-            buildHeader(holder, position, 0);
-        } else {
-            // Get offset based on how many section headers are above.
-            int offsetPosition = position - mOffsets.lowerEntry(position).getValue();
+        // Get offset based on how many section headers are above.
+        Map.Entry<Integer, Integer> entry = mOffsets.lowerEntry(position);
+        int offset = entry == null ? 0 : entry.getValue();
+        int offsetPosition = position - offset;
 
-            // If first item in section, do not check, automatically an item
-            if (mOffsets.get(position - 1) != null) {
-                // Build item.
-                buildItem(holder, offsetPosition);
-            }
-            // Can be header or item
-            else {
-                String prevType = mCursor.moveToPosition(offsetPosition - 1) ?
-                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
-                        null;
-                String currType = mCursor.moveToPosition(offsetPosition) ?
-                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
-                        null;
-
-                // If both types match, then it is an item.
-                if (prevType != null && currType != null && prevType.equalsIgnoreCase(currType)) {
-                    // Build item.
-                    buildItem(holder, offsetPosition);
-                }
-                // Otherwise, it's a header.
-                else {
-                    // Build header.
-                    buildHeader(holder, position, offsetPosition);
-                }
-            }
+        // If it is the offsets map, it's a header
+        if (mOffsets.get(position) != null) {
+            buildHeader(holder, offsetPosition);
         }
-
-        // Passing the binding operation to cursor loader
-//        mCursorAdapter.getCursor().moveToPosition(position);
-//        mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
+        // Otherwise, it's an item.
+        else {
+            buildItem(holder, offsetPosition);
+        }
     }
 
-    private void buildHeader(final ViewHolder holder, int position, int offsetPosition) {
+    private void buildHeader(final ViewHolder holder, int offsetPosition) {
         if (mCursor.moveToPosition(offsetPosition)) {
             final Category category = new Category(mCursor);
 
@@ -115,12 +122,9 @@ public class SectionRecyclerAdapter extends RecyclerView.Adapter<SectionRecycler
 
             holder.filterNameTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             holder.filterNameTextView.setTypeface(null, Typeface.BOLD);
-            holder.filterNameTextView.setText(category.getType());
+            holder.filterNameTextView.setText(category.getType() + "s");
 
             holder.cellRoot.setBackgroundColor(Color.LTGRAY);
-
-            Map.Entry<Integer, Integer> prevNumHeaders = mOffsets.lowerEntry(position);
-            mOffsets.put(position, (prevNumHeaders == null ? 0 : prevNumHeaders.getValue()) + 1);
         } else {
             Log.d(RHCareerFairLayout.RH_CFL, "Invalid cursor position detected while creating header cell: " + offsetPosition);
             return;
@@ -148,7 +152,11 @@ public class SectionRecyclerAdapter extends RecyclerView.Adapter<SectionRecycler
                 public void onClick(View v) {
                     boolean current = holder.filterActiveCheckbox.isChecked();
                     Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
-                    DBAdapter.setCategorySelected(category.getId(), !current);
+                    try {
+                        DBAdapter.setCategorySelected(category.getId(), !current);
+                    } catch (SQLException e) {
+                        Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
+                    }
                     synchronized (RHCareerFairLayout.categorySelectionChanged) {
                         RHCareerFairLayout.categorySelectionChanged.notifyChanged();
                     }

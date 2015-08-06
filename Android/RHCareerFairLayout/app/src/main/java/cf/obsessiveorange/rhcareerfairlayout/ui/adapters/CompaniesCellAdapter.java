@@ -81,7 +81,7 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                             RHCareerFairLayout.companySelectionChanged.notifyChanged();
                         }
                         showOnMapCheckBox.setChecked(!current);
-                        changeCursor(DBAdapter.getCompaniesCursor());
+                        changeCursor(DBAdapter.getFilteredCompaniesCursor());
                     }
                 });
 
@@ -113,6 +113,10 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         // Passing the inflater job to the cursor-adapter
         View v = mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent);
         return new ViewHolder(v);
+    }
+
+    public void changeCursor(Cursor cursor){
+        mCursorAdapter.changeCursor(cursor);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

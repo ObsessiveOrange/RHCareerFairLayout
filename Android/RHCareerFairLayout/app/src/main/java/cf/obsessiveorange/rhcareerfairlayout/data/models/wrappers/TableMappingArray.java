@@ -23,6 +23,8 @@ public class TableMappingArray extends ArrayList<TableMapping> {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             this.add(new TableMapping(cursor));
         }
+
+        cursor.close();
     }
 
     public ContentValues[] getContentValues(){

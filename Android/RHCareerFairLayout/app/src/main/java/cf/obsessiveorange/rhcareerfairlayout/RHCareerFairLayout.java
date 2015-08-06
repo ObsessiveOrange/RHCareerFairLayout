@@ -19,6 +19,13 @@ public class RHCareerFairLayout {
 //    public static final String URL_BASE = "http://192.168.2.30:8080/api";
     public static final String URL_BASE = "http://rhcareerfair.cf/api";
 
+    public static final String PREF_KEY_MAP_VIEW_FOCUS_X_PORT = "mapViewFocusX-Port";
+    public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_PORT = "mapViewFocusY-Port";
+    public static final String PREF_KEY_MAP_VIEW_SCALE_PORT = "mapViewScale-Port";
+    public static final String PREF_KEY_MAP_VIEW_FOCUS_X_LAND = "mapViewFocusX-Land";
+    public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_LAND = "mapViewFocusY-Land";
+    public static final String PREF_KEY_MAP_VIEW_SCALE_LAND = "mapViewScale-Land";
+
     public static final ArrayList<NavigationItem> tabs = new ArrayList<NavigationItem>();
 
     static {

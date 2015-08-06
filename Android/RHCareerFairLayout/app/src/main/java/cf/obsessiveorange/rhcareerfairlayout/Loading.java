@@ -38,9 +38,9 @@ public class Loading extends Activity {
         super.onResume();
     }
 
-    private void reloadData(boolean forceRefresh){
+    private void reloadData(boolean forceRefresh) {
 
-        final TextView statusTextView = (TextView)findViewById(R.id.loading_status_textview);
+        final TextView statusTextView = (TextView) findViewById(R.id.loading_status_textview);
         final Timer timer = new Timer();
 
         final String requestYear = "2015";
@@ -54,7 +54,7 @@ public class Loading extends Activity {
         Long lastUpdateTime = DBAdapter.getLastUpdateTime(requestYear, requestQuarter);
 
         // TODO: Change this logic to factor in last update times.
-        if(!forceRefresh && lastUpdateTime != null){
+        if (!forceRefresh && lastUpdateTime != null) {
             statusTextView.setText(getString(R.string.loadingStatus_dataUpToDate));
             Log.d(RHCareerFairLayout.RH_CFL, "Data already downloaded, skipping retrieval.");
 
@@ -67,8 +67,7 @@ public class Loading extends Activity {
 
             timer.schedule(doneLoadingData, 1000);
 
-        }
-        else {
+        } else {
             statusTextView.setText(getString(R.string.loadingStatus_downloadingData));
             Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
 
@@ -89,7 +88,12 @@ public class Loading extends Activity {
                     try {
                         dataWrapper = mapper.readValue(response, DataWrapper.class);
                     } catch (IOException e) {
-                        statusTextView.setText("Error occurred during deserialization");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusTextView.setText("Error occurred during deserialization");
+                            }
+                        });
                         Log.e(RHCareerFairLayout.RH_CFL, "Error occurred during deserialization", e);
                         e.printStackTrace();
                         return;
@@ -110,14 +114,26 @@ public class Loading extends Activity {
 
                 @Override
                 public void handleException(Exception e) {
-                    statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
-                    // TODO: Retry button
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
+                            // TODO: Retry button
+                        }
+                    });
+                    Log.d(RHCareerFairLayout.RH_CFL, "Exception thrown while downloading data.", e);
                 }
 
                 @Override
                 public void handleFailure(String response) {
-                    statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
-                    // TODO: Retry button
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
+                            // TODO: Retry button
+                        }
+                    });
+                    Log.d(RHCareerFairLayout.RH_CFL, "Failed to download data. Response: " + response);
                 }
             });
 
@@ -126,7 +142,7 @@ public class Loading extends Activity {
         }
     }
 
-    public void doneLoadingData(){
+    public void doneLoadingData() {
         Intent launchNextActivity;
         launchNextActivity = new Intent(this, MainActivity.class);
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -19,6 +19,7 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
@@ -37,15 +39,18 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
  */
 public class VPCompaniesFragment extends BaseFragment {
 
+    Thread companySelectionChangedWatcher;
+    ObservableRecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
-        final ObservableRecyclerView recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
+        recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), DBAdapter.getCompaniesCursor()));
+        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), DBAdapter.getFilteredCompaniesCursor()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();
@@ -55,6 +60,51 @@ public class VPCompaniesFragment extends BaseFragment {
                 recyclerView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentFragment);
             }
         }
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+
+
+        companySelectionChangedWatcher = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        synchronized (RHCareerFairLayout.categorySelectionChanged) {
+                            RHCareerFairLayout.categorySelectionChanged.wait();
+                            if (!RHCareerFairLayout.categorySelectionChanged.hasChanged()) {
+                                continue;
+                            }
+                        }
+                        ((CompaniesCellAdapter)recyclerView.getAdapter()).changeCursor(DBAdapter.getFilteredCompaniesCursor());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                recyclerView.getAdapter().notifyDataSetChanged();
+                            }
+                        });
+                    }
+                    Log.d(RHCareerFairLayout.RH_CFL, "companySelectionChangedWatcher thread stopped.");
+                    companySelectionChangedWatcher = null;
+                } catch (InterruptedException e) {
+                    Log.d(RHCareerFairLayout.RH_CFL, "companySelectionChangedWatcher thread stopped.");
+                    companySelectionChangedWatcher = null;
+                }
+            }
+        });
+        companySelectionChangedWatcher.start();
+
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (companySelectionChangedWatcher != null) {
+            companySelectionChangedWatcher.interrupt();
+        }
+        super.onPause();
     }
 }

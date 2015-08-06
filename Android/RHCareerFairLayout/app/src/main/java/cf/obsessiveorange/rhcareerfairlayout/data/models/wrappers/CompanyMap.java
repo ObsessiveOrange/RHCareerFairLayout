@@ -1,6 +1,7 @@
 package cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.HashMap;
 
@@ -15,6 +16,18 @@ public class CompanyMap extends HashMap<Long, Company> {
      */
     private static final long serialVersionUID = -4617007484637352031L;
 
+    public CompanyMap(){
+        super();
+    }
+
+    public CompanyMap(Cursor cursor) {
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            Company company = new Company(cursor);
+            this.put(company.getId(), company);
+        }
+
+        cursor.close();
+    }
 
     public ContentValues[] getContentValues(){
         ContentValues[] rows = new ContentValues[size()];
@@ -28,7 +41,7 @@ public class CompanyMap extends HashMap<Long, Company> {
         return rows;
     }
 
-    public ContentValues[] getInitialSelectionContentValues(){
+    public ContentValues[] getSelectionContentValues(boolean selected){
         ContentValues[] rows = new ContentValues[size()];
 
         int i = 0;
@@ -37,7 +50,7 @@ public class CompanyMap extends HashMap<Long, Company> {
             ContentValues row = new ContentValues();
 
             row.put(DBAdapter.KEY_COMPANY_ID, company.getId());
-            row.put(DBAdapter.KEY_SELECTED, true);
+            row.put(DBAdapter.KEY_SELECTED, selected);
 
             rows[i] = row;
             i++;

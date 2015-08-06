@@ -2,6 +2,8 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -295,10 +297,19 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
         // initial center/touch point of the view (otherwise the view would jump
         // around on first pan/move touch
-        mTouchX = containerWidth / 2;
-        mTouchY = containerHeight / 2;
 
-        final Activity activity = (Activity) getContext();
+        SharedPreferences prefs = getContext().getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) (containerWidth / 2));
+            mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) (containerHeight / 2));
+            mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, 1);
+        } else {
+            mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) (containerWidth / 2));
+            mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) (containerHeight / 2));
+            mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, 1);
+        }
+
+        CalculateMatrix(true);
 
         companySelectionChangedWatcher = new Thread(new Runnable() {
             @Override
@@ -354,6 +365,21 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         if (invalidate) {
             invalidate(); // re-draw
         }
+
+
+        SharedPreferences prefs = getContext().getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) mTouchX);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) mTouchY);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, mScaleFactor);
+        } else {
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) mTouchX);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) mTouchY);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, mScaleFactor);
+        }
+        editor.apply();
     }
 
     private class ScaleListener extends
@@ -508,8 +534,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
         // static tables.
         mapAreaRect = Rectangle.RectangleBuilderFromCenter(
-                containerWidth/2,
-                containerHeight/2,
+                containerWidth / 2,
+                containerHeight / 2,
                 mapWidth,
                 mapHeight,
                 strokePaintThin,
