@@ -21,16 +21,26 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+
+import java.sql.SQLException;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.SectionRecyclerAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.FiltersCellAdapter;
 
 /**
  * Fragment for ViewPagerTabFragmentActivity.
@@ -38,15 +48,19 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.SectionRecyclerAdapter;
  */
 public class VPFiltersFragment extends BaseFragment {
 
+    ObservableRecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
-        final ObservableRecyclerView recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
+        setHasOptionsMenu(true);
+
+        recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -64,7 +78,7 @@ public class VPFiltersFragment extends BaseFragment {
             }
         });
 
-        recyclerView.setAdapter(new SectionRecyclerAdapter(getActivity()));
+        recyclerView.setAdapter(new FiltersCellAdapter(getActivity()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();
@@ -74,6 +88,47 @@ public class VPFiltersFragment extends BaseFragment {
                 recyclerView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentFragment);
             }
         }
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        MenuItem clearFiltersItem = menu.add("Clear Filters");
+        clearFiltersItem.setIcon(
+                new IconDrawable(
+                        this.getActivity(),
+                        Iconify.IconValue.fa_times)
+                        .colorRes(R.color.accentNoTransparency)
+                        .actionBarSize());
+        clearFiltersItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        clearFiltersItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
+
+                try {
+                    DBAdapter.setAllCategoriesSelected(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                ((FiltersCellAdapter) recyclerView.getAdapter()).refreshData();
+
+                synchronized (RHCareerFairLayout.categorySelectionChanged) {
+                    RHCareerFairLayout.categorySelectionChanged.notifyChanged();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
+
+                return true;
+            }
+        });
     }
 }

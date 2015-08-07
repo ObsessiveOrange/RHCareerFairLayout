@@ -18,6 +18,7 @@
     <color name="primary">#800000</color>
     <color name="primaryDark">#600000</color>
     <color name="accent">#bbbbbb</color>
+    <color name="accentNoTransparency">#e3a4a7</color>
     <color name="accentLight">#dddddd</color>
 
 </resources>

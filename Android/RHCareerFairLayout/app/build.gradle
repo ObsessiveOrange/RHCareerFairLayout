@@ -37,5 +37,6 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.4']
     )
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
 }

@@ -21,11 +21,19 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+
+import java.sql.SQLException;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
@@ -46,11 +54,13 @@ public class VPCompaniesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
+        setHasOptionsMenu(true);
+
         recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
-        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity(), DBAdapter.getFilteredCompaniesCursor()));
+        recyclerView.setAdapter(new CompaniesCellAdapter(getActivity()));
 
         Fragment parentFragment = getParentFragment();
         ViewGroup viewGroup = (ViewGroup) parentFragment.getView();
@@ -79,7 +89,7 @@ public class VPCompaniesFragment extends BaseFragment {
                                 continue;
                             }
                         }
-                        ((CompaniesCellAdapter)recyclerView.getAdapter()).changeCursor(DBAdapter.getFilteredCompaniesCursor());
+                        ((CompaniesCellAdapter)recyclerView.getAdapter()).refreshData();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -106,5 +116,83 @@ public class VPCompaniesFragment extends BaseFragment {
             companySelectionChangedWatcher.interrupt();
         }
         super.onPause();
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem deselectAllItem = menu.add("Deselect All");
+        deselectAllItem.setIcon(
+                new IconDrawable(
+                        this.getActivity(),
+                        Iconify.IconValue.fa_square_o)
+                        .colorRes(R.color.accentNoTransparency)
+                        .actionBarSize());
+        deselectAllItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        deselectAllItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Deselected all items", Toast.LENGTH_SHORT).show();
+
+                try {
+                    DBAdapter.setAllCompaniesSelected(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
+
+                synchronized (RHCareerFairLayout.companySelectionChanged) {
+                    RHCareerFairLayout.companySelectionChanged.notifyChanged();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
+
+                return true;
+            }
+        });
+
+        MenuItem selectAllItem = menu.add("Select All");
+        selectAllItem.setIcon(
+                new IconDrawable(
+                        this.getActivity(),
+                        Iconify.IconValue.fa_check_square_o)
+                        .colorRes(R.color.accentNoTransparency)
+                        .actionBarSize());
+        selectAllItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        selectAllItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
+
+                try {
+                    DBAdapter.setAllCategoriesSelected(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
+
+                synchronized (RHCareerFairLayout.companySelectionChanged) {
+                    RHCareerFairLayout.companySelectionChanged.notifyChanged();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
+
+                return true;
+            }
+        });
     }
 }

@@ -14,6 +14,10 @@
     <string name="loadingStatus_errorDownloadingData">Error downloading data</string>
     <string name="loadingStatus_done">Done…</string>
 
+    <string name="btn_select_all">Select All</string>
+    <string name="btn_deselect_all">Deselect All</string>
+    <string name="btn_clear_filters">Clear Filters</string>
+
 
     <string name="title_activity_actionbarcontrolgridview">GridView &amp; Action Bar</string>
     <string name="title_activity_actionbarcontrollistview">ListView &amp; Action Bar</string>

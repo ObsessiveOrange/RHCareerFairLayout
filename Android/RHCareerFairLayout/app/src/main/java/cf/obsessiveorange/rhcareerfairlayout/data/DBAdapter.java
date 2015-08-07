@@ -156,6 +156,22 @@ public class DBAdapter {
 
     }
 
+    public static void setAllCategoriesSelected(boolean selected) throws SQLException {
+        mDatabase.execSQL("UPDATE " + TABLE_SELECTED_CATEGORIES_NAME +
+                        " SET " + KEY_SELECTED + " = " + (selected ? 1 : 0)
+        );
+
+        // Update selected company list
+
+
+        mDatabase.execSQL("UPDATE " + TABLE_SELECTED_COMPANIES_NAME +
+                        " SET " + KEY_SELECTED + " = 0"
+        );
+
+        CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
+        bulkInsertOrUpdate(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true));
+    }
+
     public static void setCompanySelected(long companyId, boolean selected) {
 
         ContentValues row = new ContentValues();
@@ -164,6 +180,12 @@ public class DBAdapter {
         row.put(DBAdapter.KEY_SELECTED, selected);
 
         mDatabase.insertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public static void setAllCompaniesSelected(boolean selected) throws SQLException {
+        CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
+
+        bulkInsertOrUpdate(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(selected));
     }
 
     public static Cursor getCategoriesCursor() {
