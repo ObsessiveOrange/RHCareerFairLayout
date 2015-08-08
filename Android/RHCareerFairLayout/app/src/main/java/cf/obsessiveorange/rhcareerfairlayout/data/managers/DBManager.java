@@ -1,4 +1,4 @@
-package cf.obsessiveorange.rhcareerfairlayout.data;
+package cf.obsessiveorange.rhcareerfairlayout.data.managers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +17,7 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.TableMappingArray;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 
-public class DBAdapter {
+public class DBManager {
     //
     // DB Schema version constant
     private static final int DATABASE_VERSION = 2;
@@ -98,29 +98,6 @@ public class DBAdapter {
 
         Log.d(RHCareerFairLayout.RH_CFL, "Loading new data");
 
-//        for (Category category : data.getCategoryMap().values()) {
-//            ContentValues row = category.toContentValues();
-//
-//            mDatabase.insert(TABLE_CATEGORY_NAME, null, row);
-//            setCategorySelected(category.getId(), false);
-//        }
-//        for (Company company : data.getCompanyMap().values()) {
-//            ContentValues row = company.toContentValues();
-//
-//            mDatabase.insert(TABLE_COMPANY_NAME, null, row);
-//            setCompanySelected(company.getId(), false);
-//        }
-//        for (CompanyCategory companyCategory : data.getCompanyCategoryMap().values()) {
-//            List<ContentValues> rows = companyCategory.toContentValues();
-//            for (ContentValues row : rows) {
-//                mDatabase.insert(TABLE_COMPANYCATEGORY_NAME, null, row);
-//            }
-//        }
-//        for (TableMapping tableMapping : data.getTableMappingList()) {
-//            ContentValues row = tableMapping.toContentValues();
-//
-//            mDatabase.insert(TABLE_TABLEMAPPING_NAME, null, row);
-//        }
         bulkInsert(TABLE_CATEGORY_NAME, data.getCategoryMap().getContentValues());
         bulkInsert(TABLE_SELECTED_CATEGORIES_NAME, data.getCategoryMap().getSelectionContentValues(false));
         bulkInsert(TABLE_COMPANY_NAME, data.getCompanyMap().getContentValues());
@@ -139,8 +116,8 @@ public class DBAdapter {
 
         ContentValues row = new ContentValues();
 
-        row.put(DBAdapter.KEY_CATEGORY_ID, categoryId);
-        row.put(DBAdapter.KEY_SELECTED, selected);
+        row.put(DBManager.KEY_CATEGORY_ID, categoryId);
+        row.put(DBManager.KEY_SELECTED, selected);
 
         mDatabase.insertWithOnConflict(TABLE_SELECTED_CATEGORIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
 
@@ -176,8 +153,8 @@ public class DBAdapter {
 
         ContentValues row = new ContentValues();
 
-        row.put(DBAdapter.KEY_COMPANY_ID, companyId);
-        row.put(DBAdapter.KEY_SELECTED, selected);
+        row.put(DBManager.KEY_COMPANY_ID, companyId);
+        row.put(DBManager.KEY_SELECTED, selected);
 
         mDatabase.insertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
     }

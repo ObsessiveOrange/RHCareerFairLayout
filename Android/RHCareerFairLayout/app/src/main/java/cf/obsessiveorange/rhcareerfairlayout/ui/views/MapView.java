@@ -23,12 +23,12 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 import java.util.HashSet;
 import java.util.Set;
 
-import cf.obsessiveorange.rhcareerfairlayout.MainActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
-import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.ViewPagerTabFragmentParentFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Rectangle;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Table;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
@@ -214,8 +214,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         return (TouchInterceptionFrameLayout) parentView;
     }
 
-    private ViewPagerTabFragmentParentFragment getParentFragment() {
-        return (ViewPagerTabFragmentParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(ViewPagerTabFragmentParentFragment.FRAGMENT_TAG);
+    private VPParentFragment getParentFragment() {
+        return (VPParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(VPParentFragment.FRAGMENT_TAG);
     }
 
     private boolean isToolbarShown() {
@@ -265,7 +265,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.save();
         canvas.concat(mMatrix);
 
-        canvas.drawColor(Color.GRAY);
+        canvas.drawColor(Color.WHITE);
 
         mapAreaRect.draw(canvas);
         restAreaRect.draw(canvas);
@@ -503,8 +503,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         fillPaintText.setStyle(Paint.Style.FILL);
 
 
-        tableMap = DBAdapter.getTables();
-        Term term = DBAdapter.getTerm();
+        tableMap = DBManager.getTables();
+        Term term = DBManager.getTerm();
 
         //convenience assignments
         int s1 = term.getLayout_Section1();

@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 
 public class TableMapping extends Entry implements Comparable<TableMapping> {
 
@@ -15,10 +15,10 @@ public class TableMapping extends Entry implements Comparable<TableMapping> {
 
     public TableMapping(Cursor c) {
 
-        super(c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_ID)));
+        super(c.getLong(c.getColumnIndexOrThrow(DBManager.KEY_ID)));
 
-        this.companyId = c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_COMPANY_ID));
-        this.size = c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_SIZE));
+        this.companyId = c.getLong(c.getColumnIndexOrThrow(DBManager.KEY_COMPANY_ID));
+        this.size = c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_SIZE));
     }
 
     public TableMapping(@JsonProperty("id") Long id,
@@ -67,9 +67,9 @@ public class TableMapping extends Entry implements Comparable<TableMapping> {
     public ContentValues toContentValues() {
         ContentValues row = new ContentValues();
 
-        row.put(DBAdapter.KEY_ID, this.getId());
-        row.put(DBAdapter.KEY_COMPANY_ID, this.getCompanyId());
-        row.put(DBAdapter.KEY_SIZE, this.getSize());
+        row.put(DBManager.KEY_ID, this.getId());
+        row.put(DBManager.KEY_COMPANY_ID, this.getCompanyId());
+        row.put(DBManager.KEY_SIZE, this.getSize());
 
         return row;
     }

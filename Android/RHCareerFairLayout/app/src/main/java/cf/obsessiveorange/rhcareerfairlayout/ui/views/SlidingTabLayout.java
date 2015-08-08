@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cf.obsessiveorange.rhcareerfairlayout.ui;
+package cf.obsessiveorange.rhcareerfairlayout.ui.views;
 
 import android.content.Context;
 import android.graphics.Typeface;

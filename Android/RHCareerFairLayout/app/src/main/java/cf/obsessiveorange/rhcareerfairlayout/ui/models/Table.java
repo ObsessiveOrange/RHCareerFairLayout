@@ -2,7 +2,7 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.models;
 
 import android.database.Cursor;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Entry;
 
 /**
@@ -16,10 +16,10 @@ public class Table extends Entry {
 
     public Table(Cursor c) {
 
-        super(c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_ID)));
+        super(c.getLong(c.getColumnIndexOrThrow(DBManager.KEY_ID)));
 
-        this.size = c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_SIZE));
-        this.selected = c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_SELECTED)) > 0;
+        this.size = c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_SIZE));
+        this.selected = c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
     }
 
     public Rectangle getRectangle() {

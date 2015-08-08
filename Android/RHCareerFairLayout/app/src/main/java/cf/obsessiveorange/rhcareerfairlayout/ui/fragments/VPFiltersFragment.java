@@ -38,7 +38,7 @@ import java.sql.SQLException;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.FiltersCellAdapter;
 
@@ -95,7 +95,7 @@ public class VPFiltersFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        MenuItem clearFiltersItem = menu.add("Clear Filters");
+        MenuItem clearFiltersItem = menu.add(getResources().getString(R.string.btn_clear_filters));
         clearFiltersItem.setIcon(
                 new IconDrawable(
                         this.getActivity(),
@@ -109,7 +109,7 @@ public class VPFiltersFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBAdapter.setAllCategoriesSelected(false);
+                    DBManager.setAllCategoriesSelected(false);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

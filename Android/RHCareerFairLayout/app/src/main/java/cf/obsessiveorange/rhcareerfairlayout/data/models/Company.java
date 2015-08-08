@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 
 public class Company extends Entry implements Comparable<Company> {
 
@@ -25,12 +25,12 @@ public class Company extends Entry implements Comparable<Company> {
 
     public Company(Cursor c) {
 
-        super(c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_ID)));
+        super(c.getLong(c.getColumnIndexOrThrow(DBManager.KEY_ID)));
 
-        this.name = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_NAME));
-        this.description = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_DESCRIPTION));
-        this.websiteLink = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_WEBSITE_LINK));
-        this.address = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_ADDRESS));
+        this.name = c.getString(c.getColumnIndexOrThrow(DBManager.KEY_NAME));
+        this.description = c.getString(c.getColumnIndexOrThrow(DBManager.KEY_DESCRIPTION));
+        this.websiteLink = c.getString(c.getColumnIndexOrThrow(DBManager.KEY_WEBSITE_LINK));
+        this.address = c.getString(c.getColumnIndexOrThrow(DBManager.KEY_ADDRESS));
     }
 
     public Company(@JsonProperty("id") Long id,
@@ -95,11 +95,11 @@ public class Company extends Entry implements Comparable<Company> {
     public ContentValues toContentValues() {
         ContentValues row = new ContentValues();
 
-        row.put(DBAdapter.KEY_ID, this.getId());
-        row.put(DBAdapter.KEY_NAME, this.getName());
-        row.put(DBAdapter.KEY_DESCRIPTION, this.getDescription());
-        row.put(DBAdapter.KEY_WEBSITE_LINK, this.getWebsiteLink());
-        row.put(DBAdapter.KEY_ADDRESS, this.getAddress());
+        row.put(DBManager.KEY_ID, this.getId());
+        row.put(DBManager.KEY_NAME, this.getName());
+        row.put(DBManager.KEY_DESCRIPTION, this.getDescription());
+        row.put(DBManager.KEY_WEBSITE_LINK, this.getWebsiteLink());
+        row.put(DBManager.KEY_ADDRESS, this.getAddress());
 
         return row;
     }

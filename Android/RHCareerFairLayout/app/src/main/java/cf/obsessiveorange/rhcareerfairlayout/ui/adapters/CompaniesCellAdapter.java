@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
 
 public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdapter.ViewHolder> {
@@ -46,7 +46,7 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     }
 
     public void refreshData() {
-        changeCursor(DBAdapter.getFilteredCompaniesCursor());
+        changeCursor(DBManager.getFilteredCompaniesCursor());
     }
 
     public void changeCursor(Cursor cursor) {
@@ -70,8 +70,8 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     private void buildItem(final ViewHolder holder, int position) {
         if (mCursor.moveToPosition(position)) {
             final Company company = new Company(mCursor);
-            final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_SELECTED)) > 0;
-            final Long table = mCursor.getLong(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TABLE));
+            final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
+            final Long table = mCursor.getLong(mCursor.getColumnIndexOrThrow(DBManager.KEY_TABLE));
 
             holder.showOnMapCheckBox.setChecked(selected);
 
@@ -86,7 +86,7 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 public void onClick(View v) {
                     boolean current = holder.showOnMapCheckBox.isChecked();
                     Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + !current);
-                    DBAdapter.setCompanySelected(company.getId(), !current);
+                    DBManager.setCompanySelected(company.getId(), !current);
                     synchronized (RHCareerFairLayout.companySelectionChanged) {
                         RHCareerFairLayout.companySelectionChanged.notifyChanged();
                     }

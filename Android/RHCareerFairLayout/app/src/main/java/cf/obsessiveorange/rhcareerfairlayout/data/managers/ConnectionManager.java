@@ -1,4 +1,4 @@
-package cf.obsessiveorange.rhcareerfairlayout.data.models.managers;
+package cf.obsessiveorange.rhcareerfairlayout.data.managers;
 
 import android.util.Log;
 

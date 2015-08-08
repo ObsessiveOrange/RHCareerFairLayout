@@ -4,7 +4,7 @@ import android.content.ContentValues;
 
 import java.util.HashMap;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
 
 
@@ -36,8 +36,8 @@ public class CategoryMap extends HashMap<Long, Category> {
 
             ContentValues row = new ContentValues();
 
-            row.put(DBAdapter.KEY_CATEGORY_ID, category.getId());
-            row.put(DBAdapter.KEY_SELECTED, selected);
+            row.put(DBManager.KEY_CATEGORY_ID, category.getId());
+            row.put(DBManager.KEY_SELECTED, selected);
 
             rows[i] = row;
             i++;

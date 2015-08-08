@@ -37,7 +37,7 @@ import java.sql.SQLException;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
 
@@ -123,7 +123,7 @@ public class VPCompaniesFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuItem deselectAllItem = menu.add("Deselect All");
+        MenuItem deselectAllItem = menu.add(getResources().getString(R.string.btn_deselect_all));
         deselectAllItem.setIcon(
                 new IconDrawable(
                         this.getActivity(),
@@ -137,7 +137,7 @@ public class VPCompaniesFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Deselected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBAdapter.setAllCompaniesSelected(false);
+                    DBManager.setAllCompaniesSelected(false);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -159,7 +159,7 @@ public class VPCompaniesFragment extends BaseFragment {
             }
         });
 
-        MenuItem selectAllItem = menu.add("Select All");
+        MenuItem selectAllItem = menu.add(getResources().getString(R.string.btn_select_all));
         selectAllItem.setIcon(
                 new IconDrawable(
                         this.getActivity(),
@@ -173,7 +173,7 @@ public class VPCompaniesFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBAdapter.setAllCategoriesSelected(true);
+                    DBManager.setAllCategoriesSelected(true);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

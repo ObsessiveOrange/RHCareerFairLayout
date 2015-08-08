@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cf.obsessiveorange.rhcareerfairlayout;
+package cf.obsessiveorange.rhcareerfairlayout.ui.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -29,14 +29,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseActivity;
-import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.ViewPagerTabFragmentParentFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 
 /**
  * This activity just provides a toolbar.
- * Toolbar is manipulated by ViewPagerTabFragmentParentFragment.
+ * Toolbar is manipulated by VPParentFragment.
  */
 public class MainActivity extends BaseActivity {
 
@@ -45,18 +46,18 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBAdapter.setupDBAdapterIfNeeded(this);
+        DBManager.setupDBAdapterIfNeeded(this);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        Term term = DBAdapter.getTerm();
+        Term term = DBManager.getTerm();
         ((TextView) findViewById(R.id.career_fair_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
 
         FragmentManager fm = getSupportFragmentManager();
-        if (fm.findFragmentByTag(ViewPagerTabFragmentParentFragment.FRAGMENT_TAG) == null) {
+        if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
             FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.fragment, new ViewPagerTabFragmentParentFragment(),
-                    ViewPagerTabFragmentParentFragment.FRAGMENT_TAG);
+            ft.add(R.id.fragment, new VPParentFragment(),
+                    VPParentFragment.FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
@@ -92,8 +93,8 @@ public class MainActivity extends BaseActivity {
 
                                 dismiss();
 
-                                Intent reloadDataIntent = new Intent(getActivity(), Loading.class);
-                                reloadDataIntent.putExtra(Loading.KEY_FORCE_REFRESH, true);
+                                Intent reloadDataIntent = new Intent(getActivity(), LoadingActivity.class);
+                                reloadDataIntent.putExtra(LoadingActivity.KEY_FORCE_REFRESH, true);
                                 reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -125,14 +126,14 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        DBAdapter.setupDBAdapterIfNeeded(this);
+        DBManager.setupDBAdapterIfNeeded(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        DBAdapter.setupDBAdapterIfNeeded(this);
+        DBManager.setupDBAdapterIfNeeded(this);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 
 @JsonInclude(Include.NON_NULL)
 public class Term implements Comparable<Term> {
@@ -26,14 +26,14 @@ public class Term implements Comparable<Term> {
 
     public Term(Cursor c) {
 
-        this.year = c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_YEAR));
-        this.quarter = c.getString(c.getColumnIndexOrThrow(DBAdapter.KEY_QUARTER));
-        this.setLayout_Section1(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION1)));
-        this.setLayout_Section2(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2)));
-        this.setLayout_Section2_PathWidth(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2_PATHWIDTH)));
-        this.setLayout_Section2_Rows(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION2_ROWS)));
-        this.setLayout_Section3(c.getInt(c.getColumnIndexOrThrow(DBAdapter.KEY_LAYOUT_SECTION3)));
-        this.lastUpdateTime = c.getLong(c.getColumnIndexOrThrow(DBAdapter.KEY_LAST_UPDATE_TIME));
+        this.year = c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_YEAR));
+        this.quarter = c.getString(c.getColumnIndexOrThrow(DBManager.KEY_QUARTER));
+        this.setLayout_Section1(c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_LAYOUT_SECTION1)));
+        this.setLayout_Section2(c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_LAYOUT_SECTION2)));
+        this.setLayout_Section2_PathWidth(c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_LAYOUT_SECTION2_PATHWIDTH)));
+        this.setLayout_Section2_Rows(c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_LAYOUT_SECTION2_ROWS)));
+        this.setLayout_Section3(c.getInt(c.getColumnIndexOrThrow(DBManager.KEY_LAYOUT_SECTION3)));
+        this.lastUpdateTime = c.getLong(c.getColumnIndexOrThrow(DBManager.KEY_LAST_UPDATE_TIME));
     }
 
     public Term(Integer year, String quarter) {
@@ -194,14 +194,14 @@ public class Term implements Comparable<Term> {
     public ContentValues toContentValues() {
         ContentValues row = new ContentValues();
 
-        row.put(DBAdapter.KEY_YEAR, this.getYear());
-        row.put(DBAdapter.KEY_QUARTER, this.getQuarter());
-        row.put(DBAdapter.KEY_LAYOUT_SECTION1, this.getLayout_Section1());
-        row.put(DBAdapter.KEY_LAYOUT_SECTION2, this.getLayout_Section2());
-        row.put(DBAdapter.KEY_LAYOUT_SECTION2_PATHWIDTH, this.getLayout_Section2_PathWidth());
-        row.put(DBAdapter.KEY_LAYOUT_SECTION2_ROWS, this.getLayout_Section2_Rows());
-        row.put(DBAdapter.KEY_LAYOUT_SECTION3, this.getLayout_Section3());
-        row.put(DBAdapter.KEY_LAST_UPDATE_TIME, this.getLastUpdateTime());
+        row.put(DBManager.KEY_YEAR, this.getYear());
+        row.put(DBManager.KEY_QUARTER, this.getQuarter());
+        row.put(DBManager.KEY_LAYOUT_SECTION1, this.getLayout_Section1());
+        row.put(DBManager.KEY_LAYOUT_SECTION2, this.getLayout_Section2());
+        row.put(DBManager.KEY_LAYOUT_SECTION2_PATHWIDTH, this.getLayout_Section2_PathWidth());
+        row.put(DBManager.KEY_LAYOUT_SECTION2_ROWS, this.getLayout_Section2_Rows());
+        row.put(DBManager.KEY_LAYOUT_SECTION3, this.getLayout_Section3());
+        row.put(DBManager.KEY_LAST_UPDATE_TIME, this.getLastUpdateTime());
 
         return row;
     }

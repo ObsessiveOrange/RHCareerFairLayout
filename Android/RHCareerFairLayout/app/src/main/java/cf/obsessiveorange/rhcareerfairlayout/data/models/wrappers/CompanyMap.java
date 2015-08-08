@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 import java.util.HashMap;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
 
 
@@ -49,8 +49,8 @@ public class CompanyMap extends HashMap<Long, Company> {
 
             ContentValues row = new ContentValues();
 
-            row.put(DBAdapter.KEY_COMPANY_ID, company.getId());
-            row.put(DBAdapter.KEY_SELECTED, selected);
+            row.put(DBManager.KEY_COMPANY_ID, company.getId());
+            row.put(DBManager.KEY_SELECTED, selected);
 
             rows[i] = row;
             i++;

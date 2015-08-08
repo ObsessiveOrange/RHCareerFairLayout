@@ -36,7 +36,7 @@ import java.util.TreeMap;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
 
 public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.ViewHolder> {
@@ -54,7 +54,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
     }
 
     public void refreshData(){
-        changeCursor(DBAdapter.getCategoriesCursor());
+        changeCursor(DBManager.getCategoriesCursor());
     }
 
     public void changeCursor(Cursor cursor) {
@@ -79,10 +79,10 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                 int offsetPosition = position - mOffsets.lowerEntry(position).getValue();
 
                 String prevType = mCursor.moveToPosition(offsetPosition - 1) ?
-                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
+                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBManager.KEY_TYPE)) :
                         null;
                 String currType = mCursor.moveToPosition(offsetPosition) ?
-                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_TYPE)) :
+                        mCursor.getString(mCursor.getColumnIndexOrThrow(DBManager.KEY_TYPE)) :
                         null;
 
                 // If both types do not match, then it is an header.
@@ -137,7 +137,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
     private void buildItem(final ViewHolder holder, int offsetPosition) {
         if (mCursor.moveToPosition(offsetPosition)) {
             final Category category = new Category(mCursor);
-            final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBAdapter.KEY_SELECTED)) > 0;
+            final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
 
             holder.filterActiveCheckbox.setVisibility(View.VISIBLE);
             holder.filterActiveCheckbox.setChecked(selected);
@@ -156,7 +156,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                     boolean current = holder.filterActiveCheckbox.isChecked();
                     Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting category " + category.getId() + " to " + !current);
                     try {
-                        DBAdapter.setCategorySelected(category.getId(), !current);
+                        DBManager.setCategorySelected(category.getId(), !current);
                     } catch (SQLException e) {
                         Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
                     }

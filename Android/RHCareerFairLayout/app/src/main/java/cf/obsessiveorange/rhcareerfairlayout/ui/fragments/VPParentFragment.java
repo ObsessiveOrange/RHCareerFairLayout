@@ -41,13 +41,13 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.SlidingTabLayout;
+import cf.obsessiveorange.rhcareerfairlayout.ui.views.SlidingTabLayout;
 
 /**
  * This fragment manages ViewPager and its child Fragments.
  * Scrolling techniques are basically the same as ViewPagerTab2Activity.
  */
-public class ViewPagerTabFragmentParentFragment extends BaseFragment implements ObservableScrollViewCallbacks {
+public class VPParentFragment extends BaseFragment implements ObservableScrollViewCallbacks {
     public static final String FRAGMENT_TAG = "fragment";
 
     private TouchInterceptionFrameLayout mInterceptionLayout;

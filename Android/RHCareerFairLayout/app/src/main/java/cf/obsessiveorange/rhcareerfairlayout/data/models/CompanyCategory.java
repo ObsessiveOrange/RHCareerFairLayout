@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 
 public class CompanyCategory {
 
@@ -67,8 +67,8 @@ public class CompanyCategory {
         for(Long category : categories){
             ContentValues row = new ContentValues();
 
-            row.put(DBAdapter.KEY_COMPANY_ID, this.getCompanyId());
-            row.put(DBAdapter.KEY_CATEGORY_ID, category);
+            row.put(DBManager.KEY_COMPANY_ID, this.getCompanyId());
+            row.put(DBManager.KEY_CATEGORY_ID, category);
 
             contentValuesList.add(row);
         }

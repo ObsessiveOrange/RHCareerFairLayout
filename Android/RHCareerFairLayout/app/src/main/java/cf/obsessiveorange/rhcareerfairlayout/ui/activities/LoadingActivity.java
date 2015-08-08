@@ -1,4 +1,4 @@
-package cf.obsessiveorange.rhcareerfairlayout;
+package cf.obsessiveorange.rhcareerfairlayout.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cf.obsessiveorange.rhcareerfairlayout.data.DBAdapter;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.managers.ConnectionManager;
+import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.ConnectionManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 
 
-public class Loading extends Activity {
+public class LoadingActivity extends Activity {
 
     public static final String KEY_FORCE_REFRESH = "forceRefresh";
 
@@ -46,12 +48,12 @@ public class Loading extends Activity {
         final String requestYear = "2015";
         final String requestQuarter = "Fall";
 
-        DBAdapter.setupDBAdapterIfNeeded(this);
+        DBManager.setupDBAdapterIfNeeded(this);
 
         statusTextView.setText(getString(R.string.loadingStatus_checkingForNewData));
 
         // TODO: Get last update time from server
-        Long lastUpdateTime = DBAdapter.getLastUpdateTime(requestYear, requestQuarter);
+        Long lastUpdateTime = DBManager.getLastUpdateTime(requestYear, requestQuarter);
 
         // TODO: Change this logic to factor in last update times.
         if (!forceRefresh && lastUpdateTime != null) {
@@ -101,7 +103,7 @@ public class Loading extends Activity {
                     Log.d(RHCareerFairLayout.RH_CFL, "Object deserialized successfully");
 
                     try {
-                        DBAdapter.loadNewData(dataWrapper);
+                        DBManager.loadNewData(dataWrapper);
                     } catch (SQLException e) {
                         Log.d(RHCareerFairLayout.RH_CFL, "SQL exception while loading data into DB", e);
                         finish();
