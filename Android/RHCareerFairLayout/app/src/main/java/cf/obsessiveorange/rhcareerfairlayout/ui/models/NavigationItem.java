@@ -1,6 +1,6 @@
 package cf.obsessiveorange.rhcareerfairlayout.ui.models;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.BaseFragment;
 
 /**
  * Created by Benedict on 7/16/2015.

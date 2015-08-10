@@ -2,12 +2,14 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,18 +18,20 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewParent;
-import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.TableMapping;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.DetailActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Rectangle;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.Table;
@@ -44,7 +48,6 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         AtBounds
     }
 
-    final static String TAG = "Test";
     ScaleGestureDetector mScaleDetector;
     InteractionMode mode = InteractionMode.None;
     Matrix mMatrix = new Matrix();
@@ -69,8 +72,14 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
     Thread companySelectionChangedWatcher;
 
-    private TableMap tableMap;
+    private TableMap mTableMap;
+    private final Object mTableMapSynchronizationObject = new Object();
     private ViewParent parentView = null;
+
+    private volatile Long mSelectedTable = null;
+    private Paint fillPaintHighlightTables = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private Handler mHighlightTablesHandler = new Handler();
 
     private Runnable updateGUI = new Runnable() {
         @Override
@@ -78,11 +87,13 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
             containerWidth = getHolder().getSurfaceFrame().width();
             containerHeight = getHolder().getSurfaceFrame().height();
 
-            generateTableLocations();
+            generateTableLocations(new Runnable() {
+                @Override
+                public void run() {
 
-            CalculateMatrix(true);
-
-            Log.d(RHCareerFairLayout.RH_CFL, "Height: " + containerHeight);
+                    CalculateMatrix(true);
+                }
+            });
         }
     };
 
@@ -104,7 +115,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         if (!this.mScaleDetector.isInProgress()) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_UP:
-                    Log.d(TAG, "Touch up event: " + mode.name());
+                    Log.d(RHCareerFairLayout.RH_CFL, "Touch up event: " + mode.name());
                     if (mode == InteractionMode.TouchStarted) {
                         mode = InteractionMode.Tap;
 
@@ -118,11 +129,29 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                         //relative point of touch, based on original drawing location.
                         double relativeTapPointX = containerWidth / 2 + fromCenterX;
                         double relativeTapPointY = containerHeight / 2 + fromCenterY;
-                        for (Table table : tableMap.values()) {
-                            if (table.getRectangle().isTappable() && table.getRectangle().getRect().contains((int) relativeTapPointX, (int) relativeTapPointY)) {
-                                Log.d(TAG, "Tapped Rectangle");
-                                Toast.makeText(getContext(), "Tapped this rectangle!", Toast.LENGTH_SHORT).show();
-                                break;
+
+                        synchronized (mTableMapSynchronizationObject) {
+                            for (Table table : mTableMap.values()) {
+                                if (table.getRectangle().isTappable() && table.getRectangle().getRect().contains((int) relativeTapPointX, (int) relativeTapPointY)) {
+
+                                    Company company = DBManager.getCompanyForTableMapping(table.getId());
+
+                                    if (company == null) {
+                                        throw new IllegalArgumentException("Invalid tableId provided - no company found at that index");
+                                    }
+
+                                    Log.d(RHCareerFairLayout.RH_CFL, "Tapped table:" + table.getId() + ", companyId:" + company.getId());
+
+                                    Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                                    detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
+                                    ((Activity) getContext()).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
+
+                                    mHighlightTablesHandler.removeCallbacksAndMessages(null);
+                                    mSelectedTable = null;
+                                    updateGUI.run();
+
+                                    break;
+                                }
                             }
                         }
                     }
@@ -136,7 +165,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                     mode = InteractionMode.None;
                     break;
                 case MotionEvent.ACTION_DOWN:
-                    Log.d(TAG, "Touch down event: " + mode.name());
+                    Log.d(RHCareerFairLayout.RH_CFL, "Touch down event: " + mode.name());
 
                     mTouchDownX = event.getX();
                     mTouchDownY = event.getY();
@@ -147,8 +176,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                     mode = InteractionMode.TouchStarted;
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.d(TAG, "Touch move event: " + mode.name());
-                    Log.d(TAG, "X: " + event.getX() + ", Y: " + event.getY());
+                    Log.d(RHCareerFairLayout.RH_CFL, "Map panned: " + mode.name());
 
                     final double diffX = event.getX() - mTouchDownX;
                     final double diffY = event.getY() - mTouchDownY;
@@ -267,13 +295,21 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
         canvas.drawColor(Color.WHITE);
 
-        mapAreaRect.draw(canvas);
-        restAreaRect.draw(canvas);
-        registrationAreaRect.draw(canvas);
+        synchronized (mTableMapSynchronizationObject) {
 
-        for (Table table : tableMap.values()) {
+            mapAreaRect.draw(canvas);
+            restAreaRect.draw(canvas);
+            registrationAreaRect.draw(canvas);
 
-            table.getRectangle().draw(canvas);
+            for (Table table : mTableMap.values()) {
+
+                if (table.getId() == mSelectedTable) {
+                    table.getRectangle().setFillPaint(fillPaintHighlightTables);
+                    table.getRectangle().draw(canvas);
+                } else {
+                    table.getRectangle().draw(canvas);
+                }
+            }
         }
 
         canvas.restoreToCount(saveCount);
@@ -291,25 +327,38 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         containerWidth = holder.getSurfaceFrame().width();
         containerHeight = holder.getSurfaceFrame().height();
 
-        generateTableLocations();
+        fillPaintHighlightTables.setColor(Color.YELLOW);
+        fillPaintHighlightTables.setStyle(Paint.Style.FILL);
 
-        setFocusable(true);
+        generateTableLocations(new Runnable() {
+            @Override
+            public void run() {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setFocusable(true);
+                    }
+                });
+
+                SharedPreferences prefs = getContext().getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE);
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) (containerWidth / 2));
+                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) (containerHeight / 2));
+                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, 1);
+                } else {
+                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) (containerWidth / 2));
+                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) (containerHeight / 2));
+                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, 1);
+                }
+
+                CalculateMatrix(true);
+            }
+        });
+
 
         // initial center/touch point of the view (otherwise the view would jump
         // around on first pan/move touch
 
-        SharedPreferences prefs = getContext().getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) (containerWidth / 2));
-            mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) (containerHeight / 2));
-            mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, 1);
-        } else {
-            mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) (containerWidth / 2));
-            mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) (containerHeight / 2));
-            mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, 1);
-        }
-
-        CalculateMatrix(true);
 
         companySelectionChangedWatcher = new Thread(new Runnable() {
             @Override
@@ -322,8 +371,12 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                                 continue;
                             }
                         }
-                        generateTableLocations();
-                        postInvalidate();
+                        generateTableLocations(new Runnable() {
+                            @Override
+                            public void run() {
+                                postInvalidate();
+                            }
+                        });
                     }
                     Log.d(RHCareerFairLayout.RH_CFL, "companySelectionChangedWatcher thread stopped.");
                     companySelectionChangedWatcher = null;
@@ -363,7 +416,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         mMatrix.postTranslate((float) mTouchX, (float) mTouchY);
 
         if (invalidate) {
-            invalidate(); // re-draw
+            postInvalidate(); // re-draw
         }
 
 
@@ -427,8 +480,6 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
             if (mode != InteractionMode.Zoom)
                 return true;
 
-            Log.d(TAG, "Touch scale event");
-
             // get current scale and fix its value
             float scale = detector.getScaleFactor();
             mScaleFactor *= scale;
@@ -454,6 +505,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
 
             CalculateMatrix(true);
 
+            Log.d(RHCareerFairLayout.RH_CFL, "Map scaled to: " + mScaleFactor);
+
             return true;
         }
 
@@ -476,219 +529,289 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         return (getNewY(mTouchY, 1) - mTouchY) >= 1;
     }
 
-    public void generateTableLocations() {
+    public void generateTableLocations(final Runnable... callbacks) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        //
-        // Calculate usable width
-        mapWidth = containerWidth >= containerHeight * 2 ? containerHeight * 2 : containerWidth;
-        mapHeight = containerWidth >= containerHeight * 2 ? containerHeight : containerWidth / 2;
-
-
-        Paint strokePaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
-        strokePaintTables.setColor(Color.BLACK);
-        strokePaintTables.setStyle(Paint.Style.STROKE);
-        strokePaintTables.setStrokeWidth(2);
-
-        Paint strokePaintThin = new Paint(Paint.ANTI_ALIAS_FLAG);
-        strokePaintThin.setColor(Color.BLACK);
-        strokePaintThin.setStyle(Paint.Style.STROKE);
-        strokePaintThin.setStrokeWidth(1);
-
-        Paint fillPaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fillPaintTables.setColor(Color.GREEN);
-        fillPaintTables.setStyle(Paint.Style.FILL);
-
-        Paint fillPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fillPaintText.setColor(Color.BLACK);
-        fillPaintText.setStyle(Paint.Style.FILL);
-
-
-        tableMap = DBManager.getTables();
-        Term term = DBManager.getTerm();
-
-        //convenience assignments
-        int s1 = term.getLayout_Section1();
-        int s2 = term.getLayout_Section2();
-        int s2Rows = term.getLayout_Section2_Rows();
-        int s2PathWidth = term.getLayout_Section2_PathWidth();
-        int s3 = term.getLayout_Section3();
-
-        //count number of vertical and horizontal tableMap there are
-        int hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
-        int vrtCount = Math.max(s1, s3);
-
-        //calculate width and height of tableMap based on width of the canvas
-        double unitX = mapWidth / 100;
-
-        //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
-        double tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
-        double unitY = mapHeight / 100;
-
-        //30% of space allocated to registration and rest area.
-        double tableHeight = unitY * 70 / vrtCount;
-
-        //
-        long id = 1;
-        double offsetX = (containerWidth - mapWidth) / 2;
-        double offsetY = (containerHeight - mapHeight) / 2;
-
-        // static tables.
-        mapAreaRect = Rectangle.RectangleBuilderFromCenter(
-                containerWidth / 2,
-                containerHeight / 2,
-                mapWidth,
-                mapHeight,
-                strokePaintThin,
-                null,
-                false,
-                null
-        );
-        restAreaRect = Rectangle.RectangleBuilderFromTopLeft(
-                offsetX + 40 * unitX,
-                offsetY + 80 * unitY,
-                45 * unitX,
-                15 * unitY,
-                strokePaintThin,
-                null,
-                false,
-                "Rest Area"
-        );
-        registrationAreaRect = Rectangle.RectangleBuilderFromTopLeft(
-                offsetX + 5 * unitX,
-                offsetY + 80 * unitY,
-                30 * unitX,
-                15 * unitY,
-                strokePaintThin,
-                null,
-                false,
-                "Registration"
-        );
-
-
-        //
-        // section 1
-        offsetX += 5 * unitX;
-        if (s1 > 0) {
-            for (int i = 0; i < s1; ) {
-                Table table = tableMap.get(id);
-                Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
-                        offsetX,
-                        offsetY + 5 * unitY + i * tableHeight,
-                        tableWidth,
-                        tableHeight * table.getSize(),
-                        strokePaintTables,
-                        table.isSelected() ? fillPaintTables : null,
-                        table.isSelected(),
-                        table.getId().toString()
-                );
-                id++;
-                i += table.getSize();
-            }
-            offsetX += tableWidth + 5 * unitX;
-        }
-        //
-        // section 2
-        double pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
-        //
-        //rows
-        if (s2Rows > 0 && s2 > 0) {
-            for (int i = 0; i < s2Rows; i++) {
                 //
-                //Outer rows have no walkway.
-                //Also use this if there is no path inbetween the left and right.
-                if (s2PathWidth == 0 || i == 0 || i == s2Rows - 1) {
-                    for (int j = 0; j < s2; ) {
-                        Table table = tableMap.get(id);
-                        Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
-                                offsetX + (j * tableWidth),
-                                offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                                tableWidth * table.getSize(),
-                                tableHeight,
-                                strokePaintTables,
-                                table.isSelected() ? fillPaintTables : null,
-                                table.isSelected(),
-                                table.getId().toString()
-                        );
-                        table.setRectangle(rectangle);
+                // Calculate usable width
+                mapWidth = containerWidth >= containerHeight * 2 ? containerHeight * 2 : containerWidth;
+                mapHeight = containerWidth >= containerHeight * 2 ? containerHeight : containerWidth / 2;
 
-                        id++;
-                        j += table.getSize();
+
+                Paint strokePaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
+                strokePaintTables.setColor(Color.BLACK);
+                strokePaintTables.setStyle(Paint.Style.STROKE);
+                strokePaintTables.setStrokeWidth(2);
+
+                Paint strokePaintThin = new Paint(Paint.ANTI_ALIAS_FLAG);
+                strokePaintThin.setColor(Color.BLACK);
+                strokePaintThin.setStyle(Paint.Style.STROKE);
+                strokePaintThin.setStrokeWidth(1);
+
+                Paint fillPaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
+                fillPaintTables.setColor(Color.GREEN);
+                fillPaintTables.setStyle(Paint.Style.FILL);
+
+                Paint fillPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+                fillPaintText.setColor(Color.BLACK);
+                fillPaintText.setStyle(Paint.Style.FILL);
+
+                synchronized (mTableMapSynchronizationObject) {
+                    mTableMap = DBManager.getTables();
+                    Term term = DBManager.getTerm();
+
+                    //convenience assignments
+                    int s1 = term.getLayout_Section1();
+                    int s2 = term.getLayout_Section2();
+                    int s2Rows = term.getLayout_Section2_Rows();
+                    int s2PathWidth = term.getLayout_Section2_PathWidth();
+                    int s3 = term.getLayout_Section3();
+
+                    //count number of vertical and horizontal mTableMap there are
+                    int hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
+                    int vrtCount = Math.max(s1, s3);
+
+                    //calculate width and height of mTableMap based on width of the canvas
+                    double unitX = mapWidth / 100;
+
+                    //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
+                    double tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
+                    double unitY = mapHeight / 100;
+
+                    //30% of space allocated to registration and rest area.
+                    double tableHeight = unitY * 70 / vrtCount;
+
+                    //
+                    long id = 1;
+                    double offsetX = (containerWidth - mapWidth) / 2;
+                    double offsetY = (containerHeight - mapHeight) / 2;
+
+
+                    // static tables.
+                    mapAreaRect = Rectangle.RectangleBuilderFromCenter(
+                            containerWidth / 2,
+                            containerHeight / 2,
+                            mapWidth,
+                            mapHeight,
+                            strokePaintThin,
+                            null,
+                            false,
+                            null
+                    );
+                    restAreaRect = Rectangle.RectangleBuilderFromTopLeft(
+                            offsetX + 40 * unitX,
+                            offsetY + 80 * unitY,
+                            45 * unitX,
+                            15 * unitY,
+                            strokePaintThin,
+                            null,
+                            false,
+                            "Rest Area"
+                    );
+                    registrationAreaRect = Rectangle.RectangleBuilderFromTopLeft(
+                            offsetX + 5 * unitX,
+                            offsetY + 80 * unitY,
+                            30 * unitX,
+                            15 * unitY,
+                            strokePaintThin,
+                            null,
+                            false,
+                            "Registration"
+                    );
+
+
+                    //
+                    // section 1
+                    offsetX += 5 * unitX;
+                    if (s1 > 0) {
+                        for (int i = 0; i < s1; ) {
+                            Table table = mTableMap.get(id);
+                            Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
+                                    offsetX,
+                                    offsetY + 5 * unitY + i * tableHeight,
+                                    tableWidth,
+                                    tableHeight * table.getSize(),
+                                    strokePaintTables,
+                                    table.isSelected() ? fillPaintTables : null,
+                                    table.isSelected(),
+                                    table.getId().toString()
+                            );
+                            id++;
+                            i += table.getSize();
+                        }
+                        offsetX += tableWidth + 5 * unitX;
+                    }
+                    //
+                    // section 2
+                    double pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+                    //
+                    //rows
+                    if (s2Rows > 0 && s2 > 0) {
+                        for (int i = 0; i < s2Rows; i++) {
+                            //
+                            //Outer rows have no walkway.
+                            //Also use this if there is no path inbetween the left and right.
+                            if (s2PathWidth == 0 || i == 0 || i == s2Rows - 1) {
+                                for (int j = 0; j < s2; ) {
+                                    Table table = mTableMap.get(id);
+                                    Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
+                                            offsetX + (j * tableWidth),
+                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            tableWidth * table.getSize(),
+                                            tableHeight,
+                                            strokePaintTables,
+                                            table.isSelected() ? fillPaintTables : null,
+                                            table.isSelected(),
+                                            table.getId().toString()
+                                    );
+                                    table.setRectangle(rectangle);
+
+                                    id++;
+                                    j += table.getSize();
+                                }
+                            }
+                            //
+                            //inner rows need to have walkway halfway through
+                            else {
+                                int leftTables = ((s2 - s2PathWidth) / 2);
+                                int rightTables = s2 - s2PathWidth - leftTables;
+                                for (int j = 0; j < leftTables; ) {
+                                    Table table = mTableMap.get(id);
+                                    Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
+                                            offsetX + (j * tableWidth),
+                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            tableWidth * table.getSize(),
+                                            tableHeight,
+                                            strokePaintTables,
+                                            table.isSelected() ? fillPaintTables : null,
+                                            table.isSelected(),
+                                            table.getId().toString()
+                                    );
+                                    table.setRectangle(rectangle);
+
+                                    id++;
+                                    j += table.getSize();
+                                }
+                                for (int j = 0; j < rightTables; ) {
+                                    Table table = mTableMap.get(id);
+                                    Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
+                                            offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
+                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            tableWidth * table.getSize(),
+                                            tableHeight,
+                                            strokePaintTables,
+                                            table.isSelected() ? fillPaintTables : null,
+                                            table.isSelected(),
+                                            table.getId().toString()
+                                    );
+                                    table.setRectangle(rectangle);
+
+                                    id++;
+                                    j += table.getSize();
+                                }
+                            }
+                        }
+                        offsetX += s2 * tableWidth + 5 * unitX;
+                    }
+                    //
+                    // section 3
+                    if (s3 > 0) {
+                        for (int i = 0; i < s3; ) {
+                            Table table = mTableMap.get(id);
+                            Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
+                                    offsetX,
+                                    offsetY + 5 * unitY + i * tableHeight,
+                                    tableWidth,
+                                    tableHeight * table.getSize(),
+                                    strokePaintTables,
+                                    table.isSelected() ? fillPaintTables : null,
+                                    table.isSelected(),
+
+                                    table.getId().toString()
+                            );
+                            table.setRectangle(rectangle);
+
+                            id++;
+                            i += table.getSize();
+                        }
+                    }
+                    offsetX += tableWidth + 5 * unitX;
+
+                    //
+                    // Trim mTableMap array, make sure there are no more beyond what layout specifies
+                    Set<Long> tableIds = new HashSet<Long>(mTableMap.keySet());
+                    for (long tableId : tableIds) {
+                        if (tableId >= id) {
+                            mTableMap.remove(tableId);
+                        }
                     }
                 }
-                //
-                //inner rows need to have walkway halfway through
-                else {
-                    int leftTables = ((s2 - s2PathWidth) / 2);
-                    int rightTables = s2 - s2PathWidth - leftTables;
-                    for (int j = 0; j < leftTables; ) {
-                        Table table = tableMap.get(id);
-                        Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
-                                offsetX + (j * tableWidth),
-                                offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                                tableWidth * table.getSize(),
-                                tableHeight,
-                                strokePaintTables,
-                                table.isSelected() ? fillPaintTables : null,
-                                table.isSelected(),
-                                table.getId().toString()
-                        );
-                        table.setRectangle(rectangle);
-
-                        id++;
-                        j += table.getSize();
-                    }
-                    for (int j = 0; j < rightTables; ) {
-                        Table table = tableMap.get(id);
-                        Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
-                                offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
-                                offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
-                                tableWidth * table.getSize(),
-                                tableHeight,
-                                strokePaintTables,
-                                table.isSelected() ? fillPaintTables : null,
-                                table.isSelected(),
-                                table.getId().toString()
-                        );
-                        table.setRectangle(rectangle);
-
-                        id++;
-                        j += table.getSize();
-                    }
+                for (Runnable callback : callbacks) {
+                    callback.run();
                 }
             }
-            offsetX += s2 * tableWidth + 5 * unitX;
+        });
+
+        t.start();
+    }
+
+    public void flashCompany(long companyId) {
+
+        final TableMapping tableMapping = DBManager.getTableMappingForCompany(companyId);
+
+        if (tableMapping == null) {
+            throw new IllegalArgumentException("No table mapping found for companyId: " + companyId);
         }
-        //
-        // section 3
-        if (s3 > 0) {
-            for (int i = 0; i < s3; ) {
-                Table table = tableMap.get(id);
-                Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
-                        offsetX,
-                        offsetY + 5 * unitY + i * tableHeight,
-                        tableWidth,
-                        tableHeight * table.getSize(),
-                        strokePaintTables,
-                        table.isSelected() ? fillPaintTables : null,
-                        table.isSelected(),
 
-                        table.getId().toString()
-                );
-                table.setRectangle(rectangle);
 
-                id++;
-                i += table.getSize();
+        Runnable focusAndFlash = new Runnable() {
+            @Override
+            public void run() {
+                Table table;
+                synchronized (mTableMapSynchronizationObject) {
+                    table = mTableMap.get(tableMapping.getId());
+                }
+
+                mTouchX = getHolder().getSurfaceFrame().width() / 2 +
+                        (getHolder().getSurfaceFrame().width() / 2
+                                - table.getRectangle().getRect().exactCenterX()
+                        ) * mScaleFactor;
+                mTouchY = getHolder().getSurfaceFrame().height() / 2 +
+                        (getHolder().getSurfaceFrame().height() / 2
+                                - table.getRectangle().getRect().exactCenterY()
+                        ) * mScaleFactor;
+
+                CalculateMatrix(true);
+
+                for (int i = 0; i < 3; i++) {
+                    mHighlightTablesHandler.postDelayed(new Runnable() {
+                        public void run() {
+                            Log.d(RHCareerFairLayout.RH_CFL, "Highlight off - table " + tableMapping.getId());
+                            mSelectedTable = tableMapping.getId();
+
+                            updateGUI.run();
+                        }
+                    }, i * 2000);
+                }
+                for (int i = 0; i < 3; i++) {
+                    mHighlightTablesHandler.postDelayed(new Runnable() {
+                        public void run() {
+                            Log.d(RHCareerFairLayout.RH_CFL, "Highlight on - table " + tableMapping.getId());
+                            mSelectedTable = null;
+
+                            updateGUI.run();
+                        }
+                    }, 1000 + i * 2000);
+                }
             }
-        }
-        offsetX += tableWidth + 5 * unitX;
+        };
 
-        //
-        // Trim tableMap array, make sure there are no more beyond what layout specifies
-        Set<Long> tableIds = new HashSet<Long>(tableMap.keySet());
-        for (long tableId : tableIds) {
-            if (tableId >= id) {
-                tableMap.remove(tableId);
-            }
+        if (mTableMap == null) {
+            generateTableLocations(focusAndFlash);
+        } else {
+            focusAndFlash.run();
         }
     }
 }

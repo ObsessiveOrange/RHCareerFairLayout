@@ -22,6 +22,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -30,9 +31,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPMapContainerFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 
 /**
@@ -43,6 +45,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Pull using: adb pull /sdcard/RHCareerFairLayoutTrace.trace "D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\android\RHCareerFairLayout"
+//        Debug.startMethodTracing("RHCareerFairLayoutTrace");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -78,9 +84,11 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id){
+        DialogFragment df;
+
+        switch (id) {
             case R.id.refresh_data:
-                DialogFragment df = new DialogFragment(){
+                df = new DialogFragment() {
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -113,11 +121,29 @@ public class MainActivity extends BaseActivity {
                 };
                 df.show(getFragmentManager(), null);
                 break;
+            case R.id.about:
+                df = new DialogFragment() {
+                    @Override
+                    public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                        builder.setTitle(getString(R.string.about));
+                        builder.setMessage(getString(R.string.about_description));
+                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dismiss();
+                            }
+                        });
+
+
+                        return builder.create();
+                    }
+                };
+                df.show(getFragmentManager(), "");
             default:
                 break;
-        }
-        if (id == R.id.action_settings) {
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -140,5 +166,36 @@ public class MainActivity extends BaseActivity {
     protected void onStop() {
 
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+//        Debug.stopMethodTracing();
+
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+        switch (requestCode) {
+            case RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP:
+                if (resultCode == RESULT_OK) {
+                    fragmentParent.getPager().setCurrentItem(0);
+                    Fragment fragment = fragmentParent.getCurrentFragment();
+                    if (fragment instanceof VPMapContainerFragment) {
+                        VPMapContainerFragment mapFragment = (VPMapContainerFragment) fragment;
+                        long companyId = data.getLongExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, -1);
+                        if (companyId == -1) {
+                            throw new IllegalStateException("Invalid companyId provided back to map.");
+                        }
+                        mapFragment.flashCompany(companyId);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

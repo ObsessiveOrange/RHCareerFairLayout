@@ -38,7 +38,6 @@ import java.sql.SQLException;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
 
 /**
@@ -47,8 +46,8 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
  */
 public class VPCompaniesFragment extends BaseFragment {
 
-    Thread companySelectionChangedWatcher;
-    ObservableRecyclerView recyclerView;
+    private Thread companySelectionChangedWatcher;
+    private ObservableRecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +88,7 @@ public class VPCompaniesFragment extends BaseFragment {
                                 continue;
                             }
                         }
-                        ((CompaniesCellAdapter)recyclerView.getAdapter()).refreshData();
+                        ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -173,7 +172,7 @@ public class VPCompaniesFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBManager.setAllCategoriesSelected(true);
+                    DBManager.setAllCompaniesSelected(true);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

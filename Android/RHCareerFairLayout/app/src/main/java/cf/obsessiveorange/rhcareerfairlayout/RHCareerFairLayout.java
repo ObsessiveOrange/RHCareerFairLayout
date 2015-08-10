@@ -26,6 +26,13 @@ public class RHCareerFairLayout {
     public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_LAND = "mapViewFocusY-Land";
     public static final String PREF_KEY_MAP_VIEW_SCALE_LAND = "mapViewScale-Land";
 
+    public static final int REQUEST_CODE_FIND_ON_MAP = 1;
+    public static final String INTENT_KEY_SELECTED_COMPANY = "KEY_SELECTED_COMPANY";
+
+    public static final String KEY_CATEGORY_MAJOR = "Major";
+    public static final String KEY_CATEGORY_POSITION_TYPE = "Position Type";
+    public static final String KEY_CATEGORY_WORK_AUTHORIZATION = "Work Authorization";
+
     public static final ArrayList<NavigationItem> tabs = new ArrayList<NavigationItem>();
 
     static {

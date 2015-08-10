@@ -49,4 +49,23 @@
         <item name="android:textColor">#212121</item>
     </style>
 
+    <!-- the theme applied to the application or activity -->
+    <style name="AppTheme.ActionBar"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/ActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="ActionBar"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@color/primary</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/primary</item>
+    </style>
+
+
 </resources>

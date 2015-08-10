@@ -9,8 +9,13 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
+import cf.obsessiveorange.rhcareerfairlayout.data.models.TableMapping;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.CompanyMap;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
@@ -249,6 +254,112 @@ public class DBManager {
         return sqlQB.query(mDatabase, projection, null, null, null, null, orderBy);
     }
 
+    public static Company getCompany(long companyId) {
+        Cursor cursor = null;
+        try {
+            // Get these columns.
+            String[] projection = new String[]{
+                    KEY_ID,
+                    KEY_NAME,
+                    KEY_DESCRIPTION,
+                    KEY_WEBSITE_LINK,
+                    KEY_ADDRESS
+            };
+
+            // Fitting these conditions
+            String where = TABLE_COMPANY_NAME + "." + KEY_ID + " = " + companyId;
+
+            //Get cursor
+            cursor = mDatabase.query(TABLE_COMPANY_NAME, projection, where, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                return new Company(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static HashMap<String, ArrayList<Category>> getCategoriesForCompany(long companyId) {
+
+        Cursor cursor = null;
+
+        try {
+            // Create new querybuilder
+            SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
+
+            // Join tables on ID
+            sqlQB.setTables(TABLE_COMPANYCATEGORY_NAME +
+                    " JOIN " + TABLE_CATEGORY_NAME + " ON " +
+                    TABLE_COMPANYCATEGORY_NAME + "." + KEY_CATEGORY_ID + " = " + TABLE_CATEGORY_NAME + "." + KEY_ID);
+
+            // Get these columns.
+            String[] projection = new String[]{
+                    KEY_ID,
+                    KEY_NAME,
+                    KEY_TYPE
+            };
+
+            // Fitting these conditions
+            String where = TABLE_COMPANYCATEGORY_NAME + "." + KEY_COMPANY_ID + " = " + companyId;
+
+            // Sort first by type, then name.
+            String orderBy = KEY_NAME + " COLLATE NOCASE ASC";
+
+            cursor = sqlQB.query(mDatabase, projection, where, null, null, null, orderBy);
+
+            if(cursor.getCount() > 0) {
+                HashMap<String, ArrayList<Category>> categories = new HashMap<String, ArrayList<Category>>();
+                while (cursor.moveToNext()) {
+                    Category category = new Category(cursor);
+                    if (categories.get(category.getType()) == null) {
+                        categories.put(category.getType(), new ArrayList<Category>());
+                    }
+                    categories.get(category.getType()).add(category);
+                }
+
+                //Get cursor
+                return categories;
+            }
+
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static TableMapping getTableMappingForCompany(long companyId){
+        Cursor cursor = null;
+        try {
+            // Get these columns.
+            String[] projection = new String[]{
+                    KEY_ID,
+                    KEY_COMPANY_ID,
+                    KEY_SIZE
+            };
+
+            // Fitting these conditions
+            String where = KEY_COMPANY_ID + " = " + companyId;
+
+            //Get cursor
+            cursor = mDatabase.query(TABLE_TABLEMAPPING_NAME, projection, where, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                return new TableMapping(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     public static Term getTerm() {
         String[] projection = new String[]{KEY_YEAR, KEY_QUARTER, KEY_LAYOUT_SECTION1,
                 KEY_LAYOUT_SECTION2, KEY_LAYOUT_SECTION2_PATHWIDTH, KEY_LAYOUT_SECTION2_ROWS,
@@ -274,6 +385,44 @@ public class DBManager {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 return new TableMappingArray(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static Company getCompanyForTableMapping (long tableId){
+
+        Cursor cursor = null;
+
+        try {
+            // Create new querybuilder
+            SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
+
+            // Join tables on ID
+            sqlQB.setTables(TABLE_COMPANY_NAME +
+                    " JOIN " + TABLE_TABLEMAPPING_NAME + " ON " +
+                    TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID);
+
+            // Get these columns.
+            String[] projection = new String[]{
+                    TABLE_COMPANY_NAME + "." + KEY_ID + " AS " + KEY_ID,
+                    KEY_NAME,
+                    KEY_DESCRIPTION,
+                    KEY_WEBSITE_LINK,
+                    KEY_ADDRESS
+            };
+
+            // Fitting these conditions
+            String where = TABLE_TABLEMAPPING_NAME + "." + KEY_ID + " = " + tableId;
+
+            cursor = sqlQB.query(mDatabase, projection, where, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                return new Company(cursor);
             }
             return null;
         } finally {

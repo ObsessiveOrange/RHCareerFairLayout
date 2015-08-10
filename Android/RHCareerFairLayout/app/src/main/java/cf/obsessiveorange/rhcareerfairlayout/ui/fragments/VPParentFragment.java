@@ -40,7 +40,6 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.views.SlidingTabLayout;
 
 /**
@@ -113,11 +112,12 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_viewpagertabfragment_parent, container, false);
+        View view = inflater.inflate(R.layout.fragment_parent, container, false);
 
         AppCompatActivity parentActivity = (AppCompatActivity) getActivity();
         mPagerAdapter = new NavigationAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager.setOffscreenPageLimit(2);
         mPager.setAdapter(mPagerAdapter);
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
@@ -186,7 +186,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 //        }
     }
 
-    private Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         return mPagerAdapter.getItemAt(mPager.getCurrentItem());
     }
 
@@ -269,5 +269,9 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         public CharSequence getPageTitle(int position) {
             return RHCareerFairLayout.tabs.get(position).getTitle();
         }
+    }
+
+    public ViewPager getPager() {
+        return mPager;
     }
 }

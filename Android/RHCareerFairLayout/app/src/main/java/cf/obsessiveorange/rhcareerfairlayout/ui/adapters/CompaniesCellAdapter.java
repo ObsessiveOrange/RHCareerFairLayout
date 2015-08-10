@@ -16,9 +16,10 @@
 
 package cf.obsessiveorange.rhcareerfairlayout.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,16 +33,19 @@ import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.DetailActivity;
 
 public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdapter.ViewHolder> {
 
     // Hold on to a CursorAdapter for handling of cursor reference - will automatically
     // clear cursor when done.
     Cursor mCursor;
+    Context mContext;
     LayoutInflater mInflater;
 
     public CompaniesCellAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
+        mContext = context;
+        mInflater = LayoutInflater.from(mContext);
         refreshData();
     }
 
@@ -98,7 +102,11 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
             holder.cellRoot.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    v.setBackgroundColor(Color.GREEN);
+
+                    Intent detailIntent = new Intent(mContext, DetailActivity.class);
+                    detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
+                    ((Activity)mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
+
                     return true;
                 }
             });

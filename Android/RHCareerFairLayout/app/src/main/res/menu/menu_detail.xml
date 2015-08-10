@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="cf.obsessiveorange.rhcareerfairlayout.ui.activities.DetailActivity">
+    <item android:id="@+id/viewOnMap_btn" android:title="@string/viewOnMap_btn"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:orderInCategory="100" app:showAsAction="always" />
+    <item android:id="@+id/close_btn" android:title="@string/close_btn"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:orderInCategory="101" app:showAsAction="always" />
+</menu>

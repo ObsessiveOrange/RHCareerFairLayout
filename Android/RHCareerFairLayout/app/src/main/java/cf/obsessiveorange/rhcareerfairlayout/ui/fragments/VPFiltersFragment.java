@@ -39,7 +39,6 @@ import java.sql.SQLException;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.FiltersCellAdapter;
 
 /**
@@ -48,7 +47,7 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.FiltersCellAdapter;
  */
 public class VPFiltersFragment extends BaseFragment {
 
-    ObservableRecyclerView recyclerView;
+    private ObservableRecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,7 +105,7 @@ public class VPFiltersFragment extends BaseFragment {
         clearFiltersItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Filters cleared", Toast.LENGTH_SHORT).show();
 
                 try {
                     DBManager.setAllCategoriesSelected(false);

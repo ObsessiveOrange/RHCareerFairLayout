@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cf.obsessiveorange.rhcareerfairlayout.ui.BaseFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.views.MapView;
 
 /**
@@ -53,13 +52,8 @@ public class VPMapContainerFragment extends BaseFragment {
         return mapView;
     }
 
-
-
-    public boolean canMoveLeft(){
-        return mapView.canMoveLeft();
-    }
-    public boolean canMoveRight(){
-        return mapView.canMoveRight();
+    public void flashCompany(long companyId){
+        mapView.flashCompany(companyId);
     }
 
 }
