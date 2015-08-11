@@ -117,7 +117,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         AppCompatActivity parentActivity = (AppCompatActivity) getActivity();
         mPagerAdapter = new NavigationAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.pager);
-        mPager.setOffscreenPageLimit(2);
+        mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(mPagerAdapter);
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
