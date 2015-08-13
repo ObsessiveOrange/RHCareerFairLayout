@@ -13,6 +13,9 @@ Array.prototype.insertAtIndex = function(item, index) {
 //add to array - might be able to be optimized?
 Array.prototype.addToOrderedSet = function(item) {
     var insertIndex;
+    if (!isNaN(parseFloat(item)) && isFinite(item)) {
+        item = Number(item);
+    }
     for (insertIndex = 0; insertIndex < this.length; insertIndex++) {
         if (item == this[insertIndex]) {
             return;

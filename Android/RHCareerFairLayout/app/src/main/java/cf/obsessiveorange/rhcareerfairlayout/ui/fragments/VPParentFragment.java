@@ -16,7 +16,7 @@
 
 package cf.obsessiveorange.rhcareerfairlayout.ui.fragments;
 
-import android.animation.ValueAnimator;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,9 +38,11 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
+import com.quinny898.library.persistentsearch.SearchBox;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.views.SlidingTabLayout;
 
 /**
@@ -117,7 +120,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         AppCompatActivity parentActivity = (AppCompatActivity) getActivity();
         mPagerAdapter = new NavigationAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.pager);
-        mPager.setOffscreenPageLimit(1);
+        mPager.setOffscreenPageLimit(2);
         mPager.setAdapter(mPagerAdapter);
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
@@ -173,17 +176,6 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         } else if (scrollState == ScrollState.UP) {
             hideToolbar();
         }
-//        } else if (scrollState == ScrollState.UP) {
-//            if (toolbarHeight <= scrollY) {
-//                hideToolbar();
-//            } else {
-//                showToolbar();
-//            }
-//        } else if (!toolbarIsShown() && !toolbarIsHidden()) {
-//            // Toolbar is moving but doesn't know which to move:
-//            // you can change this to hideToolbar()
-//            showToolbar();
-//        }
     }
 
     public Fragment getCurrentFragment() {
@@ -215,33 +207,48 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
     private void animateToolbar(final float toY, final Runnable... completionHandlers) {
         float layoutTranslationY = mInterceptionLayout.getTranslationY();
         if (layoutTranslationY != toY) {
-            final ValueAnimator animator = ValueAnimator.ofFloat(mInterceptionLayout.getTranslationY(), toY).setDuration(200);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    float translationY = (float) animation.getAnimatedValue();
-                    View toolbarView = getActivity().findViewById(R.id.toolbar);
-                    mInterceptionLayout.setTranslationY(translationY);
-                    toolbarView.setTranslationY(translationY);
-                    if (translationY < 0) {
-                        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
-                        lp.height = (int) (-translationY + getScreenHeight());
+            final float translationY = -layoutTranslationY + toY;
+            final View toolbarView = getActivity().findViewById(R.id.toolbar);
+            final SearchBox searchView = ((MainActivity)getActivity()).getSearch();
+
+            // Need to offset for the -6dp margin on search bar
+            Resources r = getResources();
+            float offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, r.getDisplayMetrics());
+
+            mInterceptionLayout.animate().y(toY).setDuration(200);
+            toolbarView.animate().y(toY).setDuration(200);
+            searchView.animate().y(toY-offset).setDuration(200);
+
+            final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
+
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        lp.height = (int) (Math.max(0, -translationY) + getScreenHeight());
                         mInterceptionLayout.requestLayout();
                     }
-                }
-            });
-            animator.start();
+                }, translationY < 0 ? 0 : 200);
+
+
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    animator.end();
+//                    if(translationY < 0) {
+//                        lp.height = (int) (Math.max(0, -translationY) + getScreenHeight());
+//                        mInterceptionLayout.forceLayout();
+//                    }
 
                     for(Runnable completionHandler : completionHandlers){
                         completionHandler.run();
                     }
                 }
-            }, animator.getDuration());
+            }, 250);
 
         }
+    }
+
+    private void adjustInterceptionLayoutHeight(int height){
+        final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
+        lp.height = height;
+        mInterceptionLayout.forceLayout();
     }
 
     /**
@@ -274,4 +281,5 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
     public ViewPager getPager() {
         return mPager;
     }
+
 }

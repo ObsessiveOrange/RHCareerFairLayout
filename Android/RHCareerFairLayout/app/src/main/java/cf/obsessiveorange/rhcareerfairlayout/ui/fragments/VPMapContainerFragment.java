@@ -18,9 +18,14 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cf.obsessiveorange.rhcareerfairlayout.R;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.views.MapView;
 
 /**
@@ -34,20 +39,13 @@ public class VPMapContainerFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+
         mapView = new MapView(getActivity());
         mapView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-
-//        Fragment parentFragment = getParentFragment();
-//        ViewGroup viewGroup = (ViewGroup) parentFragment.getView();
-//
-//        if (viewGroup != null) {
-//            scrollView.setTouchInterceptionViewGroup((ViewGroup) viewGroup.findViewById(R.id.container));
-//            if (parentFragment instanceof ObservableScrollViewCallbacks) {
-//                scrollView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentFragment);
-//            }
-//        }
 
         return mapView;
     }
@@ -56,4 +54,12 @@ public class VPMapContainerFragment extends BaseFragment {
         mapView.flashCompany(companyId);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchBtn = menu.findItem(R.id.action_search);
+        searchBtn.setVisible(false);
+
+        ((MainActivity)getActivity()).closeSearch();
+    }
 }

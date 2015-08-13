@@ -19,9 +19,12 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +32,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+import com.quinny898.library.persistentsearch.SearchBox;
+import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
+import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
+
+import java.util.ArrayList;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
@@ -43,6 +54,9 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
  */
 public class MainActivity extends BaseActivity {
 
+    private SearchBox search;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,7 +68,14 @@ public class MainActivity extends BaseActivity {
 
         DBManager.setupDBAdapterIfNeeded(this);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        search = (SearchBox) findViewById(R.id.searchbox);
+        search.enableVoiceRecognition(this);
+        search.setSearchWithoutSuggestions(true);
+        search.setSearchString(getSearchString());
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Term term = DBManager.getTerm();
         ((TextView) findViewById(R.id.career_fair_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
@@ -67,7 +88,6 @@ public class MainActivity extends BaseActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
-        //new RetrieveFeedTask().execute();
 
     }
 
@@ -75,6 +95,14 @@ public class MainActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        menu.findItem(R.id.action_search).setIcon(
+                new IconDrawable(
+                        this,
+                        Iconify.IconValue.fa_search)
+                        .colorRes(R.color.accentNoTransparency)
+                        .actionBarSize());
+
         return true;
     }
 
@@ -136,16 +164,18 @@ public class MainActivity extends BaseActivity {
                                 dismiss();
                             }
                         });
-
-
                         return builder.create();
                     }
                 };
                 df.show(getFragmentManager(), "");
-            default:
                 break;
+            case R.id.action_search:
+                openSearch();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -160,12 +190,6 @@ public class MainActivity extends BaseActivity {
         super.onStart();
 
         DBManager.setupDBAdapterIfNeeded(this);
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
     }
 
     @Override
@@ -194,8 +218,135 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 break;
+            case 1234:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<String> matches = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    search.populateEditText(matches);
+                }
+                super.onActivityResult(requestCode, resultCode, data);
             default:
                 break;
         }
+    }
+
+    public void openSearch() {
+        toolbar.setTitle("");
+        search.revealFromMenuItem(R.id.action_search, this);
+//		for (int x = 0; x < 10; x++) {
+//			SearchResult option = new SearchResult("Result "
+//					+ Integer.toString(x), getResources().getDrawable(
+//					R.drawable.ic_history));
+//			search.addSearchable(option);
+//		}
+        search.setMenuListener(new MenuListener() {
+
+            @Override
+            public void onMenuClick() {
+                closeSearch();
+            }
+
+        });
+        search.setSearchListener(new SearchListener() {
+
+            @Override
+            public void onSearchOpened() {
+
+            }
+
+            @Override
+            public void onSearchClosed() {
+                if (search.getSearchOpen()) {
+                    closeSearch();
+                }
+            }
+
+            @Override
+            public void onSearchTermChanged(String term) {
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+
+                saveSearchString();
+            }
+
+            @Override
+            public void onSearch(String searchTerm) {
+
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+
+                saveSearchString();
+            }
+
+            @Override
+            public void onSearchCleared() {
+
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+
+                saveSearchString();
+            }
+
+        });
+
+    }
+
+    public void closeSearch() {
+        search.hideCircularlyToMenuItem(R.id.action_search, this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (search.isShown()) {
+            closeSearch();
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
+    public String getSearchText() {
+        return search.getSearchText();
+    }
+
+    public SearchBox getSearch() {
+        return search;
+    }
+
+    public void setSearch(SearchBox search) {
+        this.search = search;
+    }
+
+    public void enableSearch() {
+        MenuItem searchBtn = toolbar.getMenu().getItem(R.id.action_search);
+        searchBtn.setVisible(true);
+    }
+
+    public void disableSearch() {
+        MenuItem searchBtn = toolbar.getMenu().getItem(R.id.action_search);
+        searchBtn.setVisible(false);
+    }
+
+    private void saveSearchString() {
+        SharedPreferences prefs = ((Context) MainActivity.this).getSharedPreferences(
+                RHCareerFairLayout.RH_CFL,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (getSearchText() != null) {
+            editor.putString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, getSearchText());
+        }
+        editor.apply();
+    }
+
+    private String getSearchString() {
+        SharedPreferences prefs = ((Context) MainActivity.this).getSharedPreferences(
+                RHCareerFairLayout.RH_CFL,
+                Context.MODE_PRIVATE);
+
+        return prefs.getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "");
     }
 }

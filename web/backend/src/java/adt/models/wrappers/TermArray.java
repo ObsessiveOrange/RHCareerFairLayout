@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import adt.models.Term;
 import common.Result;
@@ -47,6 +48,8 @@ public class TermArray extends ArrayList<Term> {
 		    termList.add(t);
 		}
 	    }
+
+	    Collections.sort(termList);
 
 	    respObj = new SuccessResult();
 	    respObj.put("termList", termList);

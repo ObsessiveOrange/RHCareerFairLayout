@@ -20,6 +20,7 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.CompanyMap;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.TableMappingArray;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 
 public class DBManager {
@@ -69,10 +70,13 @@ public class DBManager {
     public static final String KEY_SELECTED = "selected";
     //
     // DB Helpers
+    private static Context mContext = null;
     private static DBHelper mOpenHelper = null;
     private static SQLiteDatabase mDatabase = null;
 
     public static void setupDBAdapterIfNeeded(Context context) {
+        mContext = context;
+
         // Create a SQLiteOpenHelper
         if (mOpenHelper == null) {
             mOpenHelper = new DBHelper(context);
@@ -192,6 +196,9 @@ public class DBManager {
 
     public static Cursor getFilteredCompaniesCursor() {
 
+        String searchText = ((MainActivity)mContext).getSearchText();
+        searchText = "%" + (searchText == null ? "" : searchText) + "%";
+
         // Create new querybuilder
         SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
 
@@ -216,11 +223,15 @@ public class DBManager {
                 KEY_SELECTED
         };
 
+//        String where = TABLE_COMPANY_NAME + "." + KEY_NAME + " LIKE '%" + searchText + "%'";
+        String where = TABLE_COMPANY_NAME + "." + KEY_NAME + " LIKE ?";
+        String[] whereArgs = new String[]{searchText};
+
         // Sort first by type, then name.
         String orderBy = KEY_NAME + " COLLATE NOCASE ASC";
 
         //Get cursor
-        return sqlQB.query(mDatabase, projection, null, null, null, null, orderBy);
+        return sqlQB.query(mDatabase, projection, where, whereArgs, null, null, orderBy);
     }
 
     public static Cursor getCompaniesCursor() {
@@ -459,62 +470,6 @@ public class DBManager {
 
         return new TableMap(cursor);
     }
-
-//    /**
-//     * Add a score to the DB
-//     *
-//     * @param score
-//     * @return the id of the item that was added.
-//     */
-//    public long addScore(Score score) {
-//        ContentValues row = getContentValuesFromScore(score);
-//        long newId = mDatabase.insert(TABLE_NAME, null, row);
-//
-//        score.setId(newId);
-//        return newId;
-//    }
-//
-//
-//
-//    public Cursor getScoresCursor() {
-//        String[] projection = new String[]{KEY_ID, KEY_NAME, KEY_SCORE};
-//        return mDatabase.query(TABLE_NAME, projection, null, null, null, null, KEY_SCORE + " DESC");
-//    }
-//
-//    public Score getScore(long id) {
-//        String[] projection = new String[]{KEY_ID, KEY_NAME, KEY_SCORE};
-//        String selection = KEY_ID + " = " + id;
-//        Cursor c = mDatabase.query(TABLE_NAME, projection, selection, null, null, null, KEY_SCORE + " DESC");
-//
-//        if (c != null && c.moveToFirst()) {
-//            return getScoreFromCursor(c);
-//        }
-//        return null;
-//    }
-//
-//    public void updateScore(Score score) {
-//        ContentValues row = getContentValuesFromScore(score);
-//        String whereClause = KEY_ID + " = " + score.getId();
-//        mDatabase.update(TABLE_NAME, row, whereClause, null);
-//    }
-//    private ContentValues getContentValuesFromScore(Score score) {
-//        ContentValues row = new ContentValues();
-//        row.put(KEY_NAME, score.getTitle());
-//        row.put(KEY_SCORE, score.getScore());
-//        return row;
-//    }
-//    private Score getScoreFromCursor(Cursor c) {
-//        Score score = new Score();
-//        score.setId(c.getInt(c.getColumnIndexOrThrow(KEY_ID)));
-//        score.setTitle(c.getString(c.getColumnIndexOrThrow(KEY_NAME)));
-//        score.setScore(c.getInt(c.getColumnIndexOrThrow(KEY_SCORE)));
-//        return score;
-//    }
-//
-//    public boolean removeScore(long id) {
-//        String whereClause = KEY_ID + " = " + id;
-//        return mDatabase.delete(TABLE_NAME, whereClause, null) > 0;
-//    }
 
     private static int bulkInsert(String table, ContentValues[] values) throws SQLException {
         int numInserted = 0;

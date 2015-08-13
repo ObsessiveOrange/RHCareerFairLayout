@@ -25,7 +25,12 @@ android {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -39,4 +44,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    compile project(':persistentSearch')
 }

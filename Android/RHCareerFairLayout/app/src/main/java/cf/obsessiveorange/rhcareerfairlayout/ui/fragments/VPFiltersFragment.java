@@ -39,6 +39,7 @@ import java.sql.SQLException;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.FiltersCellAdapter;
 
 /**
@@ -93,6 +94,11 @@ public class VPFiltersFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchBtn = menu.findItem(R.id.action_search);
+        searchBtn.setVisible(false);
+
+        ((MainActivity)getActivity()).closeSearch();
 
         MenuItem clearFiltersItem = menu.add(getResources().getString(R.string.btn_clear_filters));
         clearFiltersItem.setIcon(
@@ -115,8 +121,8 @@ public class VPFiltersFragment extends BaseFragment {
 
                 ((FiltersCellAdapter) recyclerView.getAdapter()).refreshData();
 
-                synchronized (RHCareerFairLayout.categorySelectionChanged) {
-                    RHCareerFairLayout.categorySelectionChanged.notifyChanged();
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                 }
 
                 getActivity().runOnUiThread(new Runnable() {

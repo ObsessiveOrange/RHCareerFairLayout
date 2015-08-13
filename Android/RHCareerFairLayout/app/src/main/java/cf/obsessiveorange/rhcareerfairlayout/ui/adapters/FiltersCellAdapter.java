@@ -38,17 +38,20 @@ import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 
 public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.ViewHolder> {
 
     // Hold on to a CursorAdapter for handling of cursor reference - will automatically
     // clear cursor when done.
+    Context mContext;
     Cursor mCursor;
     LayoutInflater mInflater;
     TreeMap<Integer, Integer> mOffsets = new TreeMap<Integer, Integer>();
     boolean headerLocationsGenerated = false;
 
     public FiltersCellAdapter(Context context) {
+        mContext = context;
         mInflater = LayoutInflater.from(context);
         refreshData();
     }
@@ -160,8 +163,11 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                     } catch (SQLException e) {
                         Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
                     }
-                    synchronized (RHCareerFairLayout.categorySelectionChanged) {
-                        RHCareerFairLayout.categorySelectionChanged.notifyChanged();
+
+                    ((MainActivity)mContext).getSearch().setSearchString("");
+
+                    synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                        RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                     }
                     holder.filterActiveCheckbox.setChecked(!current);
                     refreshData();

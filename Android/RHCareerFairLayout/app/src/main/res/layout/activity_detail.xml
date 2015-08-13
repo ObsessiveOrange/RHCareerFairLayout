@@ -20,15 +20,15 @@
             android:id="@+id/detail_companyName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Company Name"
+            android:text="@string/placeholder_DetailCompanyName"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_companyWebsite"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Website"
+            android:text="@string/placeholder_DetailWebsite"
             android:autoLink="web"/>
 
         <android.widget.Space
@@ -40,7 +40,7 @@
             android:id="@+id/detail_description_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description:"
+            android:text="@string/header_DetailDescription"
             android:textStyle="bold" />
 
         <TextView
@@ -58,14 +58,14 @@
             android:id="@+id/detail_majors_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Majors:"
+            android:text="@string/header_DetailMajors"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_majors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Majors" />
+            android:text="@string/placeholder_DetailMajors" />
 
         <android.widget.Space
             android:layout_width="match_parent"
@@ -76,14 +76,14 @@
             android:id="@+id/detail_positionTypes_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Position Types:"
+            android:text="@string/header_DetailPositionTypes"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_positionTypes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Position Types" />
+            android:text="@string/placeholder_DetailPositionTypes" />
 
         <android.widget.Space
             android:layout_width="match_parent"
@@ -94,14 +94,14 @@
             android:id="@+id/detail_workAuthorizations_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Work Authorizations:"
+            android:text="@string/header_DetailWorkAuthorizations"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_workAuthorizations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Work Authorizations" />
+            android:text="@string/placeholder_DetailWorkAuthorizations" />
 
         <android.widget.Space
             android:id="@+id/detail_address_spacer"
@@ -113,13 +113,13 @@
             android:id="@+id/detail_address_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address:"
+            android:text="@string/header_DetailAddress"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/detail_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address" />
+            android:text="@string/placeholder_DetailAddress" />
     </LinearLayout>
 </ScrollView>

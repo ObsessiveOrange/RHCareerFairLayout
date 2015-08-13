@@ -365,10 +365,12 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
             public void run() {
                 try {
                     while (!Thread.currentThread().isInterrupted()) {
-                        synchronized (RHCareerFairLayout.companySelectionChanged) {
-                            RHCareerFairLayout.companySelectionChanged.wait();
-                            if (!RHCareerFairLayout.companySelectionChanged.hasChanged()) {
-                                continue;
+                        synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                            if (!RHCareerFairLayout.refreshMapNotifier.hasChanged()) {
+                                RHCareerFairLayout.refreshMapNotifier.wait();
+                                if (!RHCareerFairLayout.refreshMapNotifier.hasChanged()) {
+                                    continue;
+                                }
                             }
                         }
                         generateTableLocations(new Runnable() {

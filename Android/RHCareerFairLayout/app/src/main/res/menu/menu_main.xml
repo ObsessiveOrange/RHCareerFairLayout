@@ -1,8 +1,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/refresh_data" android:title="@string/refresh" android:icon="@drawable/ic_refresh"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/about" android:title="@string/about"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/refresh_data"
+        android:icon="@drawable/ic_refresh"
+        android:orderInCategory="100"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="100"
+        android:title="@string/about"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="100"
+        android:title="@string/btn_search"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 </menu>

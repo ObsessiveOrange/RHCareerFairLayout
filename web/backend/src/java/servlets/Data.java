@@ -40,6 +40,33 @@ public class Data {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("all/latest")
+    public Response get_AllData_Latest() {
+	try {
+	    Result resp = TermArray.getTermList();
+	    if (!resp.isSuccess()) {
+		return resp.toJAXRS();
+	    }
+	    TermArray termList = resp.get("termList", TermArray.class);
+
+	    if (termList.isEmpty()) {
+		return new FailResult(400, "No terms found").toJAXRS();
+	    }
+	    Term latestTerm = termList.get(0);
+
+	    Integer year = latestTerm.getYear();
+	    String quarter = latestTerm.getQuarter();
+	    return get_AllData(year, quarter);
+
+	} catch (Exception e) {
+	    ServletLog.logEvent(e);
+
+	    return new FailResult(e).toJAXRS();
+	}
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
     public Response get_AllData(@QueryParam("year") Integer year, @QueryParam("quarter") String quarter) {
 
@@ -337,7 +364,7 @@ public class Data {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("term/all")
-    public Response get_Terms() {
+    public Response get_TermList() {
 
 	try {
 
@@ -349,6 +376,31 @@ public class Data {
 
 	    SuccessResult response = new SuccessResult();
 	    response.put("termList", termList);
+
+	    return response.toJAXRS();
+	} catch (Exception e) {
+	    ServletLog.logEvent(e);
+
+	    return new FailResult(e).toJAXRS();
+
+	}
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("term/latest")
+    public Response get_Term_Latest() {
+
+	try {
+
+	    Result resp = TermArray.getTermList();
+	    if (!resp.isSuccess()) {
+		return resp.toJAXRS();
+	    }
+	    TermArray termList = resp.get("termList", TermArray.class);
+
+	    SuccessResult response = new SuccessResult();
+	    response.put("term", termList.get(0));
 
 	    return response.toJAXRS();
 	} catch (Exception e) {

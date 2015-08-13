@@ -50,7 +50,16 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     }
 
     public void refreshData() {
+        Cursor c = DBManager.getFilteredCompaniesCursor();
+
         changeCursor(DBManager.getFilteredCompaniesCursor());
+
+        ((Activity)mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public void changeCursor(Cursor cursor) {
@@ -91,8 +100,8 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                     boolean current = holder.showOnMapCheckBox.isChecked();
                     Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + !current);
                     DBManager.setCompanySelected(company.getId(), !current);
-                    synchronized (RHCareerFairLayout.companySelectionChanged) {
-                        RHCareerFairLayout.companySelectionChanged.notifyChanged();
+                    synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                        RHCareerFairLayout.refreshMapNotifier.notifyChanged();
                     }
                     holder.showOnMapCheckBox.setChecked(!current);
                     refreshData();

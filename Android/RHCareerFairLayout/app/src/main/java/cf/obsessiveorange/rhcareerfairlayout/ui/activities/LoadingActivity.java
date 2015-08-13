@@ -10,14 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
-import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.ConnectionManager;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 
 
@@ -74,12 +73,15 @@ public class LoadingActivity extends Activity {
             Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
 
             ConnectionManager.Request req = new ConnectionManager.Request();
-            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all");
+//             For eventual support of historical data.
+//            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all");
+            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all/latest");
             req.setMethod(ConnectionManager.Request.HTTPMethod.GET);
-            req.setQueryParams(new HashMap<String, String>() {{
-                put("year", requestYear);
-                put("quarter", requestQuarter);
-            }});
+//             For eventual support of historical data.
+//            req.setQueryParams(new HashMap<String, String>() {{
+//                put("year", requestYear);
+//                put("quarter", requestQuarter);
+//            }});
             req.setHeaderParams(null);
             req.setBodyParams(null);
             req.setResponseHandler(new ConnectionManager.ResponseHandler() {

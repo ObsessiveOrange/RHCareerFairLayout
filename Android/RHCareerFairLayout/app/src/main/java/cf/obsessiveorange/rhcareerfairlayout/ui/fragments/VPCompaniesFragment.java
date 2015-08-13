@@ -24,8 +24,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
@@ -38,6 +40,7 @@ import java.sql.SQLException;
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
 
 /**
@@ -46,16 +49,17 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.adapters.CompaniesCellAdapter;
  */
 public class VPCompaniesFragment extends BaseFragment {
 
+    private View mView;
     private Thread companySelectionChangedWatcher;
     private ObservableRecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        mView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
         setHasOptionsMenu(true);
 
-        recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
+        recyclerView = (ObservableRecyclerView) mView.findViewById(R.id.scroll);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
 
@@ -70,7 +74,18 @@ public class VPCompaniesFragment extends BaseFragment {
             }
         }
 
-        return view;
+        final String searchText = ((MainActivity)getActivity()).getSearchText();
+        final TextView notificationTextView = (TextView) mView.findViewById(R.id.notificationBox);
+
+        if(searchText != null && !searchText.isEmpty()){
+            notificationTextView.setText(getResources().getString(R.string.notification_Search, searchText));
+            notificationTextView.setVisibility(View.VISIBLE);
+        }
+        else{
+            notificationTextView.setVisibility(View.GONE);
+        }
+
+        return mView;
     }
 
     @Override
@@ -82,19 +97,35 @@ public class VPCompaniesFragment extends BaseFragment {
             public void run() {
                 try {
                     while (!Thread.currentThread().isInterrupted()) {
-                        synchronized (RHCareerFairLayout.categorySelectionChanged) {
-                            RHCareerFairLayout.categorySelectionChanged.wait();
-                            if (!RHCareerFairLayout.categorySelectionChanged.hasChanged()) {
-                                continue;
+                        synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                            if (!RHCareerFairLayout.refreshCompaniesNotifier.hasChanged()) {
+                                RHCareerFairLayout.refreshCompaniesNotifier.wait();
+                                if (!RHCareerFairLayout.refreshCompaniesNotifier.hasChanged()) {
+                                    continue;
+                                }
                             }
                         }
                         ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
+
+                        final String searchText = ((MainActivity)getActivity()).getSearchText();
+                        final TextView notificationTextView = (TextView) mView.findViewById(R.id.notificationBox);
+
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                recyclerView.getAdapter().notifyDataSetChanged();
+                                if(searchText != null && !searchText.isEmpty()){
+                                    notificationTextView.setText(getResources().getString(R.string.notification_Search, searchText));
+                                    notificationTextView.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    notificationTextView.setVisibility(View.GONE);
+                                }
                             }
                         });
+
+                        synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                            RHCareerFairLayout.refreshMapNotifier.notifyChanged();
+                        }
                     }
                     Log.d(RHCareerFairLayout.RH_CFL, "companySelectionChangedWatcher thread stopped.");
                     companySelectionChangedWatcher = null;
@@ -121,44 +152,21 @@ public class VPCompaniesFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchBtn = menu.findItem(R.id.action_search);
+        searchBtn.setVisible(true);
 
-        MenuItem deselectAllItem = menu.add(getResources().getString(R.string.btn_deselect_all));
-        deselectAllItem.setIcon(
+        SubMenu selectionMenu = menu.addSubMenu(getResources().getString(R.string.selection_options_btn));
+        selectionMenu.getItem().setIcon(
                 new IconDrawable(
                         this.getActivity(),
-                        Iconify.IconValue.fa_square_o)
+                        Iconify.IconValue.fa_edit)
                         .colorRes(R.color.accentNoTransparency)
                         .actionBarSize());
-        deselectAllItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        deselectAllItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getActivity(), "Deselected all items", Toast.LENGTH_SHORT).show();
+        selectionMenu.getItem().setTitle(getResources().getString(R.string.selection_options_btn));
+        selectionMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-                try {
-                    DBManager.setAllCompaniesSelected(false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
-                ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
-
-                synchronized (RHCareerFairLayout.companySelectionChanged) {
-                    RHCareerFairLayout.companySelectionChanged.notifyChanged();
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    }
-                });
-
-                return true;
-            }
-        });
-
-        MenuItem selectAllItem = menu.add(getResources().getString(R.string.btn_select_all));
+        MenuItem selectAllItem = selectionMenu.add(getResources().getString(R.string.btn_select_all));
         selectAllItem.setIcon(
                 new IconDrawable(
                         this.getActivity(),
@@ -179,16 +187,39 @@ public class VPCompaniesFragment extends BaseFragment {
 
                 ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
 
-                synchronized (RHCareerFairLayout.companySelectionChanged) {
-                    RHCareerFairLayout.companySelectionChanged.notifyChanged();
+                synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                    RHCareerFairLayout.refreshMapNotifier.notifyChanged();
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    }
-                });
+                return true;
+            }
+        });
+
+
+        MenuItem deselectAllItem = selectionMenu.add(getResources().getString(R.string.btn_deselect_all));
+        deselectAllItem.setIcon(
+                new IconDrawable(
+                        this.getActivity(),
+                        Iconify.IconValue.fa_square_o)
+                        .colorRes(R.color.accentNoTransparency)
+                        .actionBarSize());
+        deselectAllItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        deselectAllItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getActivity(), "Deselected all items", Toast.LENGTH_SHORT).show();
+
+                try {
+                    DBManager.setAllCompaniesSelected(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
+
+                synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                    RHCareerFairLayout.refreshMapNotifier.notifyChanged();
+                }
 
                 return true;
             }

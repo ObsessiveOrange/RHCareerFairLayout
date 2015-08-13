@@ -25,6 +25,7 @@ public class RHCareerFairLayout {
     public static final String PREF_KEY_MAP_VIEW_FOCUS_X_LAND = "mapViewFocusX-Land";
     public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_LAND = "mapViewFocusY-Land";
     public static final String PREF_KEY_MAP_VIEW_SCALE_LAND = "mapViewScale-Land";
+    public static final String PREF_KEY_SEARCH_STRING = "searchString";
 
     public static final int REQUEST_CODE_FIND_ON_MAP = 1;
     public static final String INTENT_KEY_SELECTED_COMPANY = "KEY_SELECTED_COMPANY";
@@ -41,14 +42,16 @@ public class RHCareerFairLayout {
         tabs.add(new NavigationItem("Filters", new VPFiltersFragment()));
     }
 
-    public static final ChangeNotifier companySelectionChanged = new ChangeNotifier();
-    public static final ChangeNotifier categorySelectionChanged = new ChangeNotifier();
+    public static final ChangeNotifier refreshMapNotifier = new ChangeNotifier();
+    public static final ChangeNotifier refreshCompaniesNotifier = new ChangeNotifier();
 
     public static class ChangeNotifier {
         private boolean changed = false;
 
         public boolean hasChanged() {
-            return changed;
+            boolean prevChangedValue = changed;
+            changed = false;
+            return prevChangedValue;
         }
 
         public void notifyChanged() {

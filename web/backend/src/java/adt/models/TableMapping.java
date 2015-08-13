@@ -10,7 +10,11 @@ public class TableMapping extends Entry implements Comparable<TableMapping> {
 
     public TableMapping(ResultSet rs) throws SQLException {
 
-	this(rs.getLong("id"), rs.getLong("companyId"), rs.getInt("size"));
+	this(rs.getLong("id"), null, rs.getInt("size"));
+	Long companyId = rs.getLong("companyId");
+	if (!rs.wasNull()) {
+	    setCompanyId(companyId);
+	}
     }
 
     public TableMapping(Long id, Long companyId, Integer size) {
