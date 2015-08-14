@@ -151,7 +151,7 @@ function getNewData() {
 function setupPage() {
     //
     //update the title
-    $("span#careerFairDescription").html(careerFairData.title);
+    $("span#careerFairDescription").html("Career Fair " + careerFairData.term.quarter + " " + careerFairData.term.year);
     //
     //setup company list    
     updateCompanyList();

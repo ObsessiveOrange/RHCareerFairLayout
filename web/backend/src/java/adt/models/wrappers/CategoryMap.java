@@ -34,7 +34,7 @@ public class CategoryMap extends HashMap<Long, Category> {
 
 	    rs = stmt.executeQuery();
 
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
 		return respObj;
 	    }
 

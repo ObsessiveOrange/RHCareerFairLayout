@@ -37,7 +37,7 @@ public class CompanyCategoryMap extends HashMap<Long, CompanyCategory> {
 
 	    rs = stmt.executeQuery();
 
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
 		return respObj;
 	    }
 

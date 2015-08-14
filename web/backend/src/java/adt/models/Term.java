@@ -40,7 +40,7 @@ public class Term implements Comparable<Term> {
 	    stmt.setString(2, quarter);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
 		return respObj;
 	    }
 

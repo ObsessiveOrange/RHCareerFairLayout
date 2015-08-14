@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.CookieParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,7 +51,7 @@ public class Users {
 	    stmt.setString(1, authUser);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 401)).isSuccess()) {
 		return respObj.toJAXRS();
 	    }
 
@@ -60,15 +61,12 @@ public class Users {
 		if (Utils.hasColumn(rs, "hashedPw")) {
 		    // loop over all hashed passwords, checking there are any
 		    // positive matches - should only have 1 item here.
-		    boolean hasNext = rs.next();
-		    while (hasNext) {
+		    while (rs.next()) {
 			if (BCrypt.checkpw(authPass, rs.getString("hashedPw"))) {
 			    break checkPwLoop;
-			} else if (!hasNext) {
-			    return new FailResult(401, "Invalid Username/Password Combination").toJAXRS();
 			}
-			hasNext = rs.next();
 		    }
+		    return new FailResult(401, "Invalid Username/Password Combination").toJAXRS();
 		}
 	    }
 
@@ -110,16 +108,16 @@ public class Users {
 	}
     }
 
-    @POST
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("check_authentication")
     public Response checkAuthentication(@CookieParam("authUser") String authUser,
 	    @CookieParam("authToken") String authToken, @HeaderParam("User-Agent") String userAgent) {
-	return checkAuthenticationHelper(authUser, authToken, userAgent, response).toJAXRS();
+	return checkAuthenticationHelper(authUser, authToken, userAgent, 0, response).toJAXRS();
     }
 
-    private Result checkAuthenticationHelper(String authUser, String authToken, String userAgent,
-	    HttpServletResponse response) {
+    public static Result checkAuthenticationHelper(String authUser, String authToken, String userAgent,
+	    int permissionsLevel, HttpServletResponse response) {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -130,13 +128,14 @@ public class Users {
 	    conn = SQLManager.getConn();
 
 	    // Check session is valid
-	    stmt = conn.prepareCall("CALL User_CheckAuth(?, ?, ?);");
+	    stmt = conn.prepareCall("CALL User_CheckAuth(?, ?, ?, ?);");
 	    stmt.setString(1, authUser);
 	    stmt.setString(2, authToken);
 	    stmt.setString(3, userAgent == null ? "NO USER-AGENT PROVIDED" : userAgent);
+	    stmt.setInt(4, permissionsLevel);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 401)).isSuccess()) {
 		return respObj;
 	    }
 
@@ -176,7 +175,8 @@ public class Users {
 	}
     }
 
-    private Result startNewSession(String authUser, String authToken, String userAgent, HttpServletResponse response) {
+    private static Result startNewSession(String authUser, String authToken, String userAgent,
+	    HttpServletResponse response) {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -194,17 +194,19 @@ public class Users {
 	    stmt.setInt(4, SESSION_VALID_DAYS);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 401)).isSuccess()) {
 		return respObj;
 	    }
 
 	    if (response != null) {
 		Cookie authUserCookie = new Cookie("authUser", authUser);
 		authUserCookie.setSecure(true);
+		authUserCookie.setPath("/api/users");
 		authUserCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(SESSION_VALID_DAYS));
 
 		Cookie authTokenCookie = new Cookie("authToken", authToken);
 		authTokenCookie.setSecure(true);
+		authTokenCookie.setPath("/api/users");
 		authTokenCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(SESSION_VALID_DAYS));
 
 		response.addCookie(authUserCookie);
@@ -256,7 +258,7 @@ public class Users {
 	    conn = SQLManager.getConn();
 
 	    Result authResponse;
-	    if (!(authResponse = checkAuthenticationHelper(authUser, authToken, userAgent, null)).isSuccess()) {
+	    if (!(authResponse = checkAuthenticationHelper(authUser, authToken, userAgent, 0, null)).isSuccess()) {
 		return authResponse.toJAXRS();
 	    }
 
@@ -266,7 +268,7 @@ public class Users {
 	    stmt.setString(3, userAgent == null ? "NO USER-AGENT PROVIDED" : userAgent);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
 		return respObj.toJAXRS();
 	    }
 
@@ -277,6 +279,9 @@ public class Users {
 	    Cookie authTokenCookie = new Cookie("authToken", "");
 	    authTokenCookie.setSecure(true);
 	    authTokenCookie.setMaxAge(0);
+
+	    response.addCookie(authUserCookie);
+	    response.addCookie(authTokenCookie);
 
 	    return new SuccessResult().toJAXRS();
 	} catch (Exception e) {
@@ -329,7 +334,7 @@ public class Users {
 	    stmt.setString(2, hashedPw);
 
 	    rs = stmt.executeQuery();
-	    if (!(respObj = Utils.checkResultSuccess(rs)).isSuccess()) {
+	    if (!(respObj = Utils.checkResultSuccess(rs, 400)).isSuccess()) {
 		return respObj.toJAXRS();
 	    }
 

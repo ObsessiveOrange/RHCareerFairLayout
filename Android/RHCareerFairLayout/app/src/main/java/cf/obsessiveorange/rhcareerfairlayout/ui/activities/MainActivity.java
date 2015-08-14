@@ -45,7 +45,7 @@ import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
-import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPMapContainerFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPLayoutContainerFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 
 /**
@@ -54,12 +54,15 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
  */
 public class MainActivity extends BaseActivity {
 
+    public static MainActivity instance;
+
     private SearchBox search;
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        instance = this;
 //        Pull using: adb pull /sdcard/RHCareerFairLayoutTrace.trace "D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\android\RHCareerFairLayout"
 //        Debug.startMethodTracing("RHCareerFairLayoutTrace");
 
@@ -208,8 +211,8 @@ public class MainActivity extends BaseActivity {
                 if (resultCode == RESULT_OK) {
                     fragmentParent.getPager().setCurrentItem(0);
                     Fragment fragment = fragmentParent.getCurrentFragment();
-                    if (fragment instanceof VPMapContainerFragment) {
-                        VPMapContainerFragment mapFragment = (VPMapContainerFragment) fragment;
+                    if (fragment instanceof VPLayoutContainerFragment) {
+                        VPLayoutContainerFragment mapFragment = (VPLayoutContainerFragment) fragment;
                         long companyId = data.getLongExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, -1);
                         if (companyId == -1) {
                             throw new IllegalStateException("Invalid companyId provided back to map.");
@@ -305,7 +308,32 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        super.onBackPressed();
+        DialogFragment df;
+        df = new DialogFragment() {
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Quit?");
+                builder.setMessage("Really quit?");
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();
+                        dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                });
+                return builder.create();
+            }
+        };
+        df.show(getFragmentManager(), null);
     }
 
     public String getSearchText() {

@@ -141,10 +141,10 @@ public class Utils {
 	return year + "_" + toProperCase(quarter);
     }
 
-    public static Result checkResultSuccess(ResultSet rs) throws SQLException {
+    public static Result checkResultSuccess(ResultSet rs, int failCode) throws SQLException {
 	if (hasColumn(rs, "status") && rs.next() && rs.getInt("status") < 0) {
 	    if (hasColumn(rs, "message")) {
-		return new FailResult(500, rs.getString("message"));
+		return new FailResult(failCode, rs.getString("message"));
 	    }
 	    return new FailResult(500, "Failed, but no SQL Error given");
 	}

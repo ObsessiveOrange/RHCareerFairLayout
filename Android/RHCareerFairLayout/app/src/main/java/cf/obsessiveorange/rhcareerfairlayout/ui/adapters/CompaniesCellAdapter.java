@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,14 +51,23 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     }
 
     public void refreshData() {
-        Cursor c = DBManager.getFilteredCompaniesCursor();
-
         changeCursor(DBManager.getFilteredCompaniesCursor());
 
-        ((Activity)mContext).runOnUiThread(new Runnable() {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void refreshData(final int position) {
+        changeCursor(DBManager.getFilteredCompaniesCursor());
+
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(position);
             }
         });
     }
@@ -80,12 +90,13 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         buildItem(holder, position);
     }
 
-    private void buildItem(final ViewHolder holder, int position) {
+    private void buildItem(final ViewHolder holder, final int position) {
         if (mCursor.moveToPosition(position)) {
             final Company company = new Company(mCursor);
             final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
             final Long table = mCursor.getLong(mCursor.getColumnIndexOrThrow(DBManager.KEY_TABLE));
 
+            holder.showOnMapCheckBox.setOnCheckedChangeListener(null);
             holder.showOnMapCheckBox.setChecked(selected);
 
             holder.companyNameTextView.setText(company.getName());
@@ -94,29 +105,27 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
 
 //                v.setImageURI(Uri.parse(value));
 
-            holder.cellRoot.setOnClickListener(new View.OnClickListener() {
+            holder.showOnMapCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    boolean current = holder.showOnMapCheckBox.isChecked();
-                    Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + !current);
-                    DBManager.setCompanySelected(company.getId(), !current);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + isChecked);
+                    DBManager.setCompanySelected(company.getId(), isChecked);
                     synchronized (RHCareerFairLayout.refreshMapNotifier) {
                         RHCareerFairLayout.refreshMapNotifier.notifyChanged();
                     }
-                    holder.showOnMapCheckBox.setChecked(!current);
-                    refreshData();
+                    refreshData(position);
                 }
             });
 
-            holder.cellRoot.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.cellRoot.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public void onClick(View v) {
 
                     Intent detailIntent = new Intent(mContext, DetailActivity.class);
                     detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
-                    ((Activity)mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
+                    ((Activity) mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
 
-                    return true;
                 }
             });
         } else {

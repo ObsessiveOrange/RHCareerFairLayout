@@ -1,20 +1,18 @@
 (window.setup = function() {
     $("#pageContents").on("click", "#login", function() {
         sendPostRequest({
-            url: "/api/users?method=login",
+            url: "/api/users/login",
             headers: {
                 authUser: $("#usernameField").val(),
                 authPass: $("#passwordField").val()
             },
             successHandler: function(returnData) {
-                //
-                //set last fetch time, so we know to refresh beyond a certain validity time
-                if (returnData.success === 1) {
-                    loadContentWithJS("overview");
-                    setupLinks();
-                } else {
-                    alert(returnData.message);
-                }
+                loadContentWithJS("overview");
+                setupLinks();
+            },
+            errorHandler: function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.message);
+                console.log(textStatus + " : " + errorThrown);
             }
         });
     });

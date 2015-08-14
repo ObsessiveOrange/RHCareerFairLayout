@@ -5,19 +5,18 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingBottom="4dp"
     android:paddingEnd="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="4dp">
+    android:paddingStart="16dp">
+
+    <!--android:focusable="false" -->
+
 
     <CheckBox
         android:id="@+id/show_on_map"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/company_name"
@@ -26,7 +25,9 @@
         android:layout_weight="1"
         android:gravity="center"
         android:lines="2"
-        android:text="@string/company_name_placeholders" />
+        android:text="@string/company_name_placeholders"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
 
     <TextView
         android:id="@+id/table_number"

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPCompaniesFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPFiltersFragment;
-import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPMapContainerFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPLayoutContainerFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.NavigationItem;
 
 /**
@@ -37,7 +37,7 @@ public class RHCareerFairLayout {
     public static final ArrayList<NavigationItem> tabs = new ArrayList<NavigationItem>();
 
     static {
-        tabs.add(new NavigationItem("Map", new VPMapContainerFragment()));
+        tabs.add(new NavigationItem("Layout", new VPLayoutContainerFragment()));
         tabs.add(new NavigationItem("Companies", new VPCompaniesFragment()));
         tabs.add(new NavigationItem("Filters", new VPFiltersFragment()));
     }

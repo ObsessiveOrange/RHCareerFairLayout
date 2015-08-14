@@ -40,8 +40,11 @@ public class SQLManager {
 	dataSource.setTestOnReturn(true);
 	dataSource.setTestWhileIdle(true);
 	dataSource.setMaxWaitMillis(10000);
-	dataSource.setRemoveAbandonedTimeout(60);
+	dataSource.setRemoveAbandonedOnBorrow(true);
+	dataSource.setRemoveAbandonedOnMaintenance(true);
+	dataSource.setRemoveAbandonedTimeout(30);
 	dataSource.setMinEvictableIdleTimeMillis(30000);
+	dataSource.setTimeBetweenEvictionRunsMillis(30000);
     }
 
     public static Connection getConn() throws ClassNotFoundException, SQLException {

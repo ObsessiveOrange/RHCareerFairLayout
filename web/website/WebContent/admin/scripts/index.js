@@ -3,8 +3,7 @@ $(document).ready(function() {
     //create variables that will be overwritten by individual .js files
     window.setup = function() {};
     window.cleanup = function() {};
-
-//setup minimization stuff
+    //setup minimization stuff
     $(document.body).on("click", ".groupHeader", function(event) {
         var sourceId = event.currentTarget.id;
         var target = sourceId.replace("GroupHeader", "");
@@ -17,28 +16,34 @@ $(document).ready(function() {
         }
     });
 
-    sendPostRequest({
-        url: "/api/users?method=checkAuthentication",
+    sendGetRequest({
+        url: "/api/data/term/all",
         successHandler: function(data) {
-            //
-            //parse the data from JSON (may switch to JSONP eventually... how does that affect this?)
-            // var returnData = $.parseJSON(data);
-            var returnData = data;
-            //
-            //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success === 1) {
-                setupLinks();
-                loadContentWithJS("overview");
-            } else {
-                loadContentWithJS("login");
+            var terms = data.termList;
+            for(var i = 0; i < terms.length; i++){
+                var selected = (i === 0 ? "selected" : "");
+                $("#termSelectionBox").append("<option value='" + terms[i].quarter + "-" + terms[i].year + "' " + selected + ">" + terms[i].quarter + " " + terms[i].year + "</option>");
             }
+            setupPage();
         },
         errorHandler: function(jqXHR, textStatus, errorThrown) {
-            alert(textStatus + " : " + errorThrown);
-            loadContentWithJS("login");
+            alert("Fatal error: Could not retrieve terms");
         }
     });
 });
+
+function setupPage(){
+    sendGetRequest({
+        url: "/api/users/admin/check_authentication",
+        successHandler: function(data) {
+            setupLinks();
+            loadContentWithJS("overview");
+        },
+        errorHandler: function(jqXHR, textStatus, errorThrown) {
+            loadContentWithJS("login");
+        }
+    });
+}
 
 function setupLinks() {
     $(".menuLink").click(function(event) {
@@ -63,24 +68,14 @@ function logout() {
         $.removeCookie(cookie);
     }
     sendPostRequest({
-        url: "/api/users?method=logout",
+        url: "/api/users/logout",
         successHandler: function(data) {
-            //
-            //parse the data from JSON (may switch to JSONP eventually... how does that affect this?)
-            // var returnData = $.parseJSON(data);
-            var returnData = data;
-            //
-            //check success of 
-            if (returnData.success === 1) {
-                loadContentWithJS("login");
-                removeLinks();
-            } else {
-                alert("Logout failed");
-            }
+            loadContentWithJS("login");
+            removeLinks();
         },
         errorHandler: function(jqXHR, textStatus, errorThrown) {
-            alert(textStatus + " : " + errorThrown);
             loadContentWithJS("login");
+            removeLinks();
         }
     });
 }
@@ -140,4 +135,12 @@ function loadScript(url, callback) {
     };
     head.appendChild(script);
     return undefined; // We handle everything using the script element injection
+}
+
+function getSelectedQuarter(){
+    return $("#termSelectionBox").val().split("-")[0];
+}
+
+function getSelectedYear(){
+    return $("#termSelectionBox").val().split("-")[1];
 }

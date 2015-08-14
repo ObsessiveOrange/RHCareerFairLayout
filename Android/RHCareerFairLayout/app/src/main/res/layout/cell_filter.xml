@@ -5,12 +5,10 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingBottom="4dp"
     android:paddingEnd="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="4dp">
+    android:paddingStart="16dp">
 
     <CheckBox
         android:id="@+id/filter_active"
@@ -26,5 +24,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:lines="2"
-        android:text="@string/company_name_placeholders" />
+        android:text="@string/company_name_placeholders"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
 </LinearLayout>

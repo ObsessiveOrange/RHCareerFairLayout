@@ -16,6 +16,7 @@
 
 package cf.obsessiveorange.rhcareerfairlayout.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -58,6 +59,24 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
 
     public void refreshData(){
         changeCursor(DBManager.getCategoriesCursor());
+
+        ((Activity)mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void refreshData(final int position) {
+        changeCursor(DBManager.getCategoriesCursor());
+
+        ((Activity)mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(position);
+            }
+        });
     }
 
     public void changeCursor(Cursor cursor) {
@@ -113,15 +132,15 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
 
         // If it is the offsets map, it's a header
         if (mOffsets.get(position) != null) {
-            buildHeader(holder, offsetPosition);
+            buildHeader(holder, position, offsetPosition);
         }
         // Otherwise, it's an item.
         else {
-            buildItem(holder, offsetPosition);
+            buildItem(holder, position, offsetPosition);
         }
     }
 
-    private void buildHeader(final ViewHolder holder, int offsetPosition) {
+    private void buildHeader(final ViewHolder holder, final int position, final int offsetPosition) {
         if (mCursor.moveToPosition(offsetPosition)) {
             final Category category = new Category(mCursor);
 
@@ -131,13 +150,13 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
             holder.filterNameTextView.setTypeface(null, Typeface.BOLD);
             holder.filterNameTextView.setText(category.getType() + "s");
 
-            holder.cellRoot.setBackgroundColor(Color.LTGRAY);
+            holder.cellRoot.setBackgroundColor(mContext.getResources().getColor(R.color.accentLight));
         } else {
             Log.d(RHCareerFairLayout.RH_CFL, "Invalid cursor position detected while creating header cell: " + offsetPosition);
         }
     }
 
-    private void buildItem(final ViewHolder holder, int offsetPosition) {
+    private void buildItem(final ViewHolder holder, final int position, final int offsetPosition) {
         if (mCursor.moveToPosition(offsetPosition)) {
             final Category category = new Category(mCursor);
             final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
@@ -164,20 +183,13 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                         Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
                     }
 
-                    ((MainActivity)mContext).getSearch().setSearchString("");
+                    ((MainActivity) mContext).getSearch().setSearchString("");
 
                     synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
                         RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                     }
                     holder.filterActiveCheckbox.setChecked(!current);
-                    refreshData();
-                }
-            });
-
-            holder.cellRoot.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return true;
+                    refreshData(position);
                 }
             });
         } else {

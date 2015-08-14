@@ -1,37 +1,33 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data/selected_term",
+        url: "/api/data/term",
+        data: {
+            year: getSelectedYear(),
+            quarter : getSelectedQuarter()
+        },
         successHandler: function(returnData) {
-            //
-            //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success === 1) {
-                $("#selectedQuarter").html(returnData.selectedQuarter);
-                $("#selectedYear").html(returnData.selectedYear);
-            } else {
-                alert("Error: Could not retreive data");
-            }
+            $("#selectedQuarter").html(returnData.term.quarter);
+            $("#selectedYear").html(returnData.term.year);
         },
         errorHandler: function(jqXHR, textStatus, errorThrown) {
+            alert("Error: Could not retreive term");
             console.log(textStatus + " : " + errorThrown);
-            $("#contentFrame").load("login.html");
         }
     });
     sendGetRequest({
         url: "/api/data/statistics",
+        data: {
+            year: getSelectedYear(),
+            quarter : getSelectedQuarter()
+        },
         successHandler: function(returnData) {
-            //
-            //set last fetch time, so we know to refresh beyond a certain validity time
-            if (returnData.success === 1) {
                 $("#companyCount").html(returnData.companyCount);
                 $("#totalTableCount").html(returnData.totalTableCount);
                 $("#usedTableCount").html(returnData.usedTableCount);
-            } else {
-                alert("Error: Could not retreive data");
-            }
         },
         errorHandler: function(jqXHR, textStatus, errorThrown) {
+            alert("Error: Could not retreive statistics");
             console.log(textStatus + " : " + errorThrown);
-            $("#contentFrame").load("login.html");
         }
     });
 })();

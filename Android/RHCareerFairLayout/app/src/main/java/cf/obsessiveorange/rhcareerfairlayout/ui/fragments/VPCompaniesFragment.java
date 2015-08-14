@@ -55,7 +55,7 @@ public class VPCompaniesFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        mView = inflater.inflate(R.layout.fragment_companies, container, false);
 
         setHasOptionsMenu(true);
 

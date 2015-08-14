@@ -4,7 +4,7 @@
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-
+W
       http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
@@ -13,14 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycler_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <color name="primary">#800000</color>
-    <color name="primaryLight">#CCAAAA</color>
-    <color name="primaryDark">#600000</color>
-    <color name="accent">#bbbbbb</color>
-    <color name="accentNoTransparency">#e6cccc</color>
-    <color name="accentLight">#cccccc</color>
-    <color name="highlight">#ffff00</color>
+    <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+</LinearLayout>
 
-</resources>

@@ -70,13 +70,10 @@ public class DBManager {
     public static final String KEY_SELECTED = "selected";
     //
     // DB Helpers
-    private static Context mContext = null;
     private static DBHelper mOpenHelper = null;
     private static SQLiteDatabase mDatabase = null;
 
     public static void setupDBAdapterIfNeeded(Context context) {
-        mContext = context;
-
         // Create a SQLiteOpenHelper
         if (mOpenHelper == null) {
             mOpenHelper = new DBHelper(context);
@@ -196,8 +193,8 @@ public class DBManager {
 
     public static Cursor getFilteredCompaniesCursor() {
 
-        String searchText = ((MainActivity)mContext).getSearchText();
-        searchText = "%" + (searchText == null ? "" : searchText) + "%";
+        String searchText = MainActivity.instance.getSearchText();
+        searchText = "%" + (searchText == null ? "" : searchText.trim()) + "%";
 
         // Create new querybuilder
         SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
