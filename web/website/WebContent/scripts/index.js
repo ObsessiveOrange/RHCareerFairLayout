@@ -50,7 +50,6 @@ $(document).ready(function() {
     //else, if careerFairData has been loaded, just setup the page using cached data
     else {
         careerFairData.tableMappingList = new NWayMap(careerFairData.tableMappingList);
-        careerFairData.categoryMap = new NWayMap(careerFairData.categoryMap);
         setupPage();
     }
     $("#companySearchBar").click(function() {
@@ -227,7 +226,7 @@ function updateCompanyList() {
     //
     //if no filters applied or only has "changed" flag, skip all the checks for performance reasons.
     //will have either 0, 1, or n+1 elements, where n is the number of types of filters.
-    if ((typeof filters.changed) == "undefined" || filters.changed === false) {
+    if ((typeof filters.changed) == "undefined" || filters.changed === false || Object.keys(filters).length <= 1) {
         filteredCompanyIds = Object.keys(careerFairData.companyMap);
         //
         // Set all company ids to integers;
@@ -247,18 +246,21 @@ function updateCompanyList() {
             filteredCompanyIds = [];
             //
             //check if companies are in at least one of the filters in each type
-            filteredCompanyIdsInType = [];
-            Object.keys(filters).forEach(function(filterType) {
+            var filterTypes = Object.keys(filters);
+            filterTypes.forEach(function(filterType) {
                 //
                 //ignore the changed flag - only do the ones that are arrays.
                 if (Array.isArray(filters[filterType])) {
+                    var filteredCompanyIdsInType = [];
                     //
                     //if the filter length is 0, no filters are applied in that type group - automatically true.
                     if (filters[filterType].length === 0) {
-                        filteredCompanyIdsInType = Object.keys(careerFairData.companyMap);
+                        filteredCompanyIdsInType = _.map(Object.keys(careerFairData.companyMap), function(num) {
+                            return Number(num);
+                        });
                     } else {
                         filters[filterType].forEach(function(categoryId) {
-                            filteredCompanyIdsInType = _.union(filteredCompanyIdsInType, careerFairdata.categoryCompanyMap[categoryId].companies);
+                            filteredCompanyIdsInType = _.union(filteredCompanyIdsInType, careerFairData.categoryCompanyMap[categoryId].companies);
                         });
                     }
                     if (filteredCompanyIds.length === 0) {

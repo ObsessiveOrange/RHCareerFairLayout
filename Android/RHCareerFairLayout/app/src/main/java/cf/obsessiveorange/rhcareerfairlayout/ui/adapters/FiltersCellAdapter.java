@@ -177,7 +177,6 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
             holder.cellRoot.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    v.setBackgroundColor(Color.GREEN);
                     return true;
                 }
             });

@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Pull using: adb pull /sdcard/RHCareerFairLayoutTrace.trace "D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\android\RHCareerFairLayout"
+//        Pull using: adb pull /sdcard/RHCareerFairLayoutTrace.trace "D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\android\RHCareerFairLayout"
 //        Debug.startMethodTracing("RHCareerFairLayoutTrace");
 
         super.onCreate(savedInstanceState);

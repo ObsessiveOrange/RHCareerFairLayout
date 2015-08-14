@@ -9,6 +9,7 @@
 //
 // Initialize variables
 var careerFairData;
+var categories;
 var filters;
 var clearCacheFlag;
 $(document).ready(function() {
@@ -20,6 +21,9 @@ $(document).ready(function() {
     if (!careerFairData || !filters) {
         window.location = "/";
         return;
+    }
+    if(categories === null || (typeof categories) === "undefined"){
+        buildCategories();
     }
     //
     //update name in navigation bar
@@ -52,11 +56,27 @@ $(document).ready(function() {
 //load data saved in persistent storage
 function loadAfterPageSwitch() {
     careerFairData = PersistentStorage.retrieveObject("careerFairData");
+    categories = PersistentStorage.retrieveObject("categories");
     filters = PersistentStorage.retrieveObject("filters");
 }
+
+function buildCategories(){
+    var keys = Object.keys(careerFairData.categoryMap);
+    categories = {};
+
+    for(var i = 0; i < keys.length; i++){
+        var category = careerFairData.categoryMap[keys[i]];
+        if(categories[category.type] === null || typeof categories[category.type] === 'undefined'){
+            categories[category.type] = {};
+        }
+        categories[category.type][category.id] = category;
+    }
+}
+
 //load data saved in persistent storage
 function prepareForPageSwitch() {
     PersistentStorage.storeObject("careerFairData", careerFairData);
+    PersistentStorage.storeObject("categories", categories);
     PersistentStorage.storeObject("filters", filters);
 }
 //creates filters list
@@ -72,7 +92,7 @@ function createFilterList() {
     var $filtersListBody = $("#filtersListBody");
     //
     //go through each category, and create filter groups, then populate with the filters
-    Object.keys(careerFairData.categoryMap).sort().forEach(function(filterGroup) {
+    Object.keys(categories).sort().forEach(function(filterGroup) {
         //
         //add this new group to the array
         filterGroupArray.push(filterGroup);
@@ -89,14 +109,14 @@ function createFilterList() {
         $filtersListBody.append("<tr class='filtersListGroupRow' id='filtersListGroup" + filterGroupId + "Row' onclick='toggleFilterGroupId(" + filterGroupId + ")'><td class='center filtersListExpandColumn' id='filtersListExpand_" + filterGroupId + "'>►</td><td class='filtersListFilterColumn'><b>" + filterGroup + "</b></td>");
         //
         //populate filter group
-        Object.keys(careerFairData.categoryMap[filterGroup]).forEach(function(filterId) {
+        Object.keys(categories[filterGroup]).forEach(function(filterId) {
             //
             //force filterId to a number - persistent storage will restore the object with these Ids as numbers, while the keys in categories may be as text. 
             //(or maybe it's the other way round? Either way, this is important)
             filterId = Number(filterId);
             //
             //Create filter rows
-            $filtersListBody.append("<tr class='filterGroup" + filterGroupId + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterId + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterId + "'>☐</td><td class='filtersListFilterColumn'>" + careerFairData.categoryMap[filterGroup][filterId].name + "</td></tr>");
+            $filtersListBody.append("<tr class='filterGroup" + filterGroupId + "Element' onclick='toggleCheckbox(" + '"' + filterGroup + '", ' + filterId + ")'><td class='center filtersListSelectColumn' id='selectFilterCheckbox_" + filterId + "'>☐</td><td class='filtersListFilterColumn'>" + categories[filterGroup][filterId].name + "</td></tr>");
             //
             //if it was previously selected, check it off.
             if (filters[filterGroup].indexOf(filterId) != -1) {
@@ -112,7 +132,7 @@ function createFilterList() {
 function showFilterGroup(groupId) {
     //
     //set the up arrow to show that it can be minimized.
-    $("#filtersListExpand_" + groupId).html("►");
+    $("#filtersListExpand_" + groupId).html("▼");
     //
     //hide all items with animation
     $(".filterGroup" + groupId + "Element").show(250);
@@ -126,7 +146,7 @@ function showFilterGroup(groupId) {
 function hideFilterGroup(groupId) {
     //
     //set the down arrow to show that it can be expanded.
-    $("#filtersListExpand_" + groupId).html("▼");
+    $("#filtersListExpand_" + groupId).html("►");
     //
     //show all items with animation
     $(".filterGroup" + groupId + "Element").hide(250);
@@ -140,7 +160,7 @@ function hideFilterGroup(groupId) {
 function toggleFilterGroupId(groupId) {
     //
     //Show/hide based on what the current icon is.
-    if ($("#filtersListExpand_" + groupId).html() == "▼") {
+    if ($("#filtersListExpand_" + groupId).html() == "►") {
         showFilterGroup(groupId);
     } else {
         hideFilterGroup(groupId);
