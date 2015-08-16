@@ -149,6 +149,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
             holder.filterNameTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             holder.filterNameTextView.setTypeface(null, Typeface.BOLD);
             holder.filterNameTextView.setText(category.getType() + "s");
+            holder.filterNameTextView.setLines(1);
 
             holder.cellRoot.setBackgroundColor(mContext.getResources().getColor(R.color.accentLight));
         } else {
@@ -169,6 +170,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
             holder.filterNameTextView.setGravity(Gravity.CENTER);
             holder.filterNameTextView.setTypeface(null, Typeface.NORMAL);
             holder.filterNameTextView.setText(category.getName());
+            holder.filterNameTextView.setLines(2);
 
             holder.cellRoot.setBackgroundColor(Color.WHITE);
 

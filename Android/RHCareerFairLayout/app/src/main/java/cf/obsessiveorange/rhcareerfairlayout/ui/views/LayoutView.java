@@ -148,7 +148,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
                                     mHighlightTablesHandler.removeCallbacksAndMessages(null);
                                     mSelectedTable = null;
-                                    updateGUI.run();
+                                    //updateGUI.run();
 
                                     break;
                                 }
@@ -759,14 +759,13 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         t.start();
     }
 
-    public void flashCompany(long companyId) {
+    public void flashTable(long tableId){
 
-        final TableMapping tableMapping = DBManager.getTableMappingForCompany(companyId);
+        final TableMapping tableMapping = DBManager.getTableMapping(tableId);
 
         if (tableMapping == null) {
-            throw new IllegalArgumentException("No table mapping found for companyId: " + companyId);
+            throw new IllegalArgumentException("No table mapping found for tableId: " + tableId);
         }
-
 
         Runnable focusAndFlash = new Runnable() {
             @Override
@@ -815,5 +814,17 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         } else {
             focusAndFlash.run();
         }
+    }
+
+    public void flashCompany(long companyId) {
+
+        final TableMapping tableMapping = DBManager.getTableMappingForCompany(companyId);
+
+        if (tableMapping == null) {
+            throw new IllegalArgumentException("No table mapping found for companyId: " + companyId);
+        }
+
+        flashTable(tableMapping.getId());
+
     }
 }

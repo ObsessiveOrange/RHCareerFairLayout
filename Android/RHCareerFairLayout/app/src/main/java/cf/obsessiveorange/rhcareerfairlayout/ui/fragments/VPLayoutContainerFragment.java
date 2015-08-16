@@ -53,6 +53,9 @@ public class VPLayoutContainerFragment extends BaseFragment {
     public void flashCompany(long companyId){
         layoutView.flashCompany(companyId);
     }
+    public void flashTable(long tableId){
+        layoutView.flashTable(tableId);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

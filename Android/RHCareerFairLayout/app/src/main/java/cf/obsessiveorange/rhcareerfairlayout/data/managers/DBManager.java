@@ -89,6 +89,7 @@ public class DBManager {
         String[] projection = new String[]{KEY_LAST_UPDATE_TIME};
         String whereClause = KEY_YEAR + " = '" + year + "' AND " + KEY_QUARTER + " = '" + quarter + "'";
 
+
         Cursor c = mDatabase.query(TABLE_TERM_NAME, projection, whereClause, null, null, null, null);
 
         if (c.getCount() == 0) {
@@ -104,12 +105,12 @@ public class DBManager {
 
         Log.d(RHCareerFairLayout.RH_CFL, "Loading new data");
 
-        bulkInsert(TABLE_CATEGORY_NAME, data.getCategoryMap().getContentValues());
-        bulkInsert(TABLE_SELECTED_CATEGORIES_NAME, data.getCategoryMap().getSelectionContentValues(false));
-        bulkInsert(TABLE_COMPANY_NAME, data.getCompanyMap().getContentValues());
-        bulkInsert(TABLE_SELECTED_COMPANIES_NAME, data.getCompanyMap().getSelectionContentValues(true));
-        bulkInsert(TABLE_COMPANYCATEGORY_NAME, data.getCompanyCategoryMap().getContentValues());
-        bulkInsert(TABLE_TABLEMAPPING_NAME, data.getTableMappingList().getContentValues());
+        bulkInsertWithOnConflict(TABLE_CATEGORY_NAME, data.getCategoryMap().getContentValues(), SQLiteDatabase.CONFLICT_IGNORE);
+        bulkInsertWithOnConflict(TABLE_SELECTED_CATEGORIES_NAME, data.getCategoryMap().getSelectionContentValues(false), SQLiteDatabase.CONFLICT_IGNORE);
+        bulkInsertWithOnConflict(TABLE_COMPANY_NAME, data.getCompanyMap().getContentValues(), SQLiteDatabase.CONFLICT_FAIL);
+        bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, data.getCompanyMap().getSelectionContentValues(true), SQLiteDatabase.CONFLICT_FAIL);
+        bulkInsertWithOnConflict(TABLE_COMPANYCATEGORY_NAME, data.getCompanyCategoryMap().getContentValues(), SQLiteDatabase.CONFLICT_FAIL);
+        bulkInsertWithOnConflict(TABLE_TABLEMAPPING_NAME, data.getTableMappingList().getContentValues(), SQLiteDatabase.CONFLICT_FAIL);
 
         ContentValues termRow = data.getTerm().toContentValues();
 
@@ -133,7 +134,7 @@ public class DBManager {
         );
 
         CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
-        bulkInsertOrUpdate(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true));
+        bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true), SQLiteDatabase.CONFLICT_REPLACE);
 
         // Update with only new companies.
 
@@ -152,7 +153,7 @@ public class DBManager {
         );
 
         CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
-        bulkInsertOrUpdate(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true));
+        bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true), SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public static void setCompanySelected(long companyId, boolean selected) {
@@ -168,7 +169,7 @@ public class DBManager {
     public static void setAllCompaniesSelected(boolean selected) throws SQLException {
         CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
 
-        bulkInsertOrUpdate(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(selected));
+        bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(selected), SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public static Cursor getCategoriesCursor() {
@@ -319,7 +320,7 @@ public class DBManager {
 
             cursor = sqlQB.query(mDatabase, projection, where, null, null, null, orderBy);
 
-            if(cursor.getCount() > 0) {
+            if (cursor.getCount() > 0) {
                 HashMap<String, ArrayList<Category>> categories = new HashMap<String, ArrayList<Category>>();
                 while (cursor.moveToNext()) {
                     Category category = new Category(cursor);
@@ -341,7 +342,7 @@ public class DBManager {
         }
     }
 
-    public static TableMapping getTableMappingForCompany(long companyId){
+    public static TableMapping getTableMappingForCompany(long companyId) {
         Cursor cursor = null;
         try {
             // Get these columns.
@@ -353,6 +354,33 @@ public class DBManager {
 
             // Fitting these conditions
             String where = KEY_COMPANY_ID + " = " + companyId;
+
+            //Get cursor
+            cursor = mDatabase.query(TABLE_TABLEMAPPING_NAME, projection, where, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                return new TableMapping(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public static TableMapping getTableMapping(long tableId) {
+        Cursor cursor = null;
+        try {
+            // Get these columns.
+            String[] projection = new String[]{
+                    KEY_ID,
+                    KEY_COMPANY_ID,
+                    KEY_SIZE
+            };
+
+            // Fitting these conditions
+            String where = KEY_ID + " = " + tableId;
 
             //Get cursor
             cursor = mDatabase.query(TABLE_TABLEMAPPING_NAME, projection, where, null, null, null, null);
@@ -402,7 +430,7 @@ public class DBManager {
         }
     }
 
-    public static Company getCompanyForTableMapping (long tableId){
+    public static Company getCompanyForTableMapping(long tableId) {
 
         Cursor cursor = null;
 
@@ -468,26 +496,7 @@ public class DBManager {
         return new TableMap(cursor);
     }
 
-    private static int bulkInsert(String table, ContentValues[] values) throws SQLException {
-        int numInserted = 0;
-
-        mDatabase.beginTransaction();
-        try {
-            for (ContentValues cv : values) {
-                long newID = mDatabase.insertOrThrow(table, null, cv);
-                if (newID <= 0) {
-                    throw new SQLException("Failed to insert row into " + table);
-                }
-            }
-            numInserted = values.length;
-            mDatabase.setTransactionSuccessful();
-        } finally {
-            mDatabase.endTransaction();
-        }
-        return numInserted;
-    }
-
-    private static int bulkInsertOrUpdate(String table, ContentValues[] values) throws SQLException {
+    private static int bulkInsertWithOnConflict(String table, ContentValues[] values, int conflictAlgorithm) throws SQLException {
         int numInserted = 0;
 
         mDatabase.beginTransaction();
@@ -498,9 +507,10 @@ public class DBManager {
                         table,
                         null,
                         cv,
-                        SQLiteDatabase.CONFLICT_REPLACE);
+                        conflictAlgorithm);
                 if (newID <= 0) {
-                    throw new SQLException("Failed to insert row into " + table);
+                    Log.d(RHCareerFairLayout.RH_CFL, "Conflict on content value " + cv.toString() +
+                            "; Using conflict algorithim " + conflictAlgorithm);
                 }
             }
             numInserted = values.length;
@@ -519,8 +529,8 @@ public class DBManager {
 
     private static class DBHelper extends SQLiteOpenHelper {
 
-        public static final String CREATE_CATEGORY_STATEMENT =
-                "CREATE TABLE " + TABLE_CATEGORY_NAME + " (" +
+        public static final String CREATE_TABLE_CATEGORY =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_ID + " INTEGER NOT NULL, " +
                         KEY_NAME + " VARCHAR(100) NOT NULL, " +
@@ -529,8 +539,8 @@ public class DBManager {
                         "UNIQUE(" + KEY_NAME + ", " + KEY_TYPE + ") " +
                         ");";
 
-        public static final String CREATE_COMPANY_STATEMENT =
-                "CREATE TABLE " + TABLE_COMPANY_NAME + " (" +
+        public static final String CREATE_TABLE_COMPANY =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_ID + " INTEGER NOT NULL, " +
                         KEY_NAME + " VARCHAR(100) NOT NULL, " +
@@ -540,8 +550,8 @@ public class DBManager {
                         "UNIQUE (" + KEY_ID + ") " +
                         ");";
 
-        public static final String CREATE_COMPANYCATEGORY_STATEMENT =
-                "CREATE TABLE " + TABLE_COMPANYCATEGORY_NAME + " (" +
+        public static final String CREATE_TABLE_COMPANYCATEGORY =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANYCATEGORY_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_COMPANY_ID + " INTEGER NOT NULL, " +
                         KEY_CATEGORY_ID + " INTEGER NOT NULL, " +
@@ -550,8 +560,8 @@ public class DBManager {
                         "FOREIGN KEY (" + KEY_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY_NAME + "(" + KEY_ID + ") ON UPDATE CASCADE ON DELETE CASCADE " +
                         ");";
 
-        public static final String CREATE_TABLEMAPPING_STATEMENT =
-                "CREATE TABLE " + TABLE_TABLEMAPPING_NAME + " (" +
+        public static final String CREATE_TABLE_TABLEMAPPING =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_TABLEMAPPING_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_ID + " INTEGER NOT NULL, " +
                         KEY_COMPANY_ID + " INTEGER, " +
@@ -561,8 +571,8 @@ public class DBManager {
                         ");";
 
 
-        public static final String CREATE_TERM_STATEMENT =
-                "CREATE TABLE " + TABLE_TERM_NAME + " (" +
+        public static final String CREATE_TABLE_TERM =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_TERM_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_YEAR + " INTEGER NOT NULL, " +
                         KEY_QUARTER + " VARCHAR(10) NOT NULL, " +
@@ -575,8 +585,8 @@ public class DBManager {
                         "UNIQUE (" + KEY_YEAR + ", " + KEY_QUARTER + ") " +
                         ");";
 
-        public static final String CREATE_SELECTED_CATEGORIES_STATEMENT =
-                "CREATE TABLE " + TABLE_SELECTED_CATEGORIES_NAME + " (" +
+        public static final String CREATE_TABLE_SELECTED_CATEGORIES =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_SELECTED_CATEGORIES_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_CATEGORY_ID + " INTEGER NOT NULL, " +
                         KEY_SELECTED + " BOOLEAN NOT NULL DEFAULT 0, " +
@@ -584,8 +594,8 @@ public class DBManager {
                         "FOREIGN KEY (" + KEY_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY_NAME + "(" + KEY_ID + ") ON UPDATE CASCADE ON DELETE CASCADE " +
                         ");";
 
-        public static final String CREATE_SELECTED_COMPANIES_STATEMENT =
-                "CREATE TABLE " + TABLE_SELECTED_COMPANIES_NAME + " (" +
+        public static final String CREATE_TABLE_SELECTED_COMPANIES =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_SELECTED_COMPANIES_NAME + " (" +
                         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         KEY_COMPANY_ID + " INTEGER NOT NULL, " +
                         KEY_SELECTED + " BOOLEAN NOT NULL DEFAULT 0, " +
@@ -688,17 +698,21 @@ public class DBManager {
             CREATE_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE = sb.toString();
         }
 
-        public static final String DROP_CATEGORY_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_CATEGORY_NAME;
-        public static final String DROP_COMPANY_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_COMPANY_NAME;
-        public static final String DROP_CATEGORYCOMPANY_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_COMPANYCATEGORY_NAME;
-        public static final String DROP_TABLEMAPPING_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_TABLEMAPPING_NAME;
-        public static final String DROP_TERM_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_TERM_NAME;
-        public static final String DROP_SELECTED_CATEGORIES_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_SELECTED_CATEGORIES_NAME;
-        public static final String DROP_SELECTED_COMPANIES_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_SELECTED_COMPANIES_NAME;
+        public static final String DROP_TABLE_CATEGORY = "DROP TABLE IF EXISTS " + TABLE_CATEGORY_NAME;
+        public static final String DROP_TABLE_COMPANY = "DROP TABLE IF EXISTS " + TABLE_COMPANY_NAME;
+        public static final String DROP_TABLE_COMPANYCATEGORY = "DROP TABLE IF EXISTS " + TABLE_COMPANYCATEGORY_NAME;
+        public static final String DROP_TABLE_TABLEMAPPING = "DROP TABLE IF EXISTS " + TABLE_TABLEMAPPING_NAME;
+        public static final String DROP_TABLE_TERM = "DROP TABLE IF EXISTS " + TABLE_TERM_NAME;
+        public static final String DROP_TABLE_SELECTED_CATEGORIES = "DROP TABLE IF EXISTS " + TABLE_SELECTED_CATEGORIES_NAME;
+        public static final String DROP_TABLE_SELECTED_COMPANIES = "DROP TABLE IF EXISTS " + TABLE_SELECTED_COMPANIES_NAME;
+        public static final String DROP_VIEW_FILTERED_COMPANIES = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_NAME;
+        public static final String DROP_VIEW_FILTERED_COMPANIES_BY_MAJOR = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_MAJOR_NAME;
+        public static final String DROP_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE_NAME;
+        public static final String DROP_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION_NAME;
 
-        public DBHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
+            public DBHelper(Context context) {
+                super(context, DATABASE_NAME, null, DATABASE_VERSION);
+            }
 
         public void resetDB(SQLiteDatabase db) {
 
@@ -713,17 +727,19 @@ public class DBManager {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            dropViews(db);
+            dropCategories(db);
             resetDB(db);
         }
 
         public void createTables(SQLiteDatabase db) {
-            db.execSQL(CREATE_CATEGORY_STATEMENT);
-            db.execSQL(CREATE_COMPANY_STATEMENT);
-            db.execSQL(CREATE_COMPANYCATEGORY_STATEMENT);
-            db.execSQL(CREATE_TABLEMAPPING_STATEMENT);
-            db.execSQL(CREATE_TERM_STATEMENT);
-            db.execSQL(CREATE_SELECTED_CATEGORIES_STATEMENT);
-            db.execSQL(CREATE_SELECTED_COMPANIES_STATEMENT);
+            db.execSQL(CREATE_TABLE_CATEGORY);
+            db.execSQL(CREATE_TABLE_SELECTED_CATEGORIES);
+            db.execSQL(CREATE_TABLE_COMPANY);
+            db.execSQL(CREATE_TABLE_SELECTED_COMPANIES);
+            db.execSQL(CREATE_TABLE_COMPANYCATEGORY);
+            db.execSQL(CREATE_TABLE_TABLEMAPPING);
+            db.execSQL(CREATE_TABLE_TERM);
             db.execSQL(CREATE_VIEW_FILTERED_COMPANIES_BY_MAJOR);
             db.execSQL(CREATE_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE);
             db.execSQL(CREATE_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION);
@@ -731,13 +747,23 @@ public class DBManager {
         }
 
         public void dropTables(SQLiteDatabase db) {
-            db.execSQL(DROP_CATEGORY_STATEMENT);
-            db.execSQL(DROP_COMPANY_STATEMENT);
-            db.execSQL(DROP_CATEGORYCOMPANY_STATEMENT);
-            db.execSQL(DROP_TABLEMAPPING_STATEMENT);
-            db.execSQL(DROP_TERM_STATEMENT);
-            db.execSQL(DROP_SELECTED_CATEGORIES_STATEMENT);
-            db.execSQL(DROP_SELECTED_COMPANIES_STATEMENT);
+            db.execSQL(DROP_TABLE_COMPANY);
+            db.execSQL(DROP_TABLE_SELECTED_COMPANIES);
+            db.execSQL(DROP_TABLE_COMPANYCATEGORY);
+            db.execSQL(DROP_TABLE_TABLEMAPPING);
+            db.execSQL(DROP_TABLE_TERM);
+        }
+
+        public void dropCategories(SQLiteDatabase db) {
+            db.execSQL(DROP_TABLE_CATEGORY);
+            db.execSQL(DROP_TABLE_SELECTED_CATEGORIES);
+        }
+
+        public void dropViews(SQLiteDatabase db) {
+            db.execSQL(DROP_VIEW_FILTERED_COMPANIES);
+            db.execSQL(DROP_VIEW_FILTERED_COMPANIES_BY_MAJOR);
+            db.execSQL(DROP_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE);
+            db.execSQL(DROP_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION);
         }
     }
 }

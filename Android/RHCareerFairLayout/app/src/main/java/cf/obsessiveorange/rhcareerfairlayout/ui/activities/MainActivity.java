@@ -40,6 +40,7 @@ import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
 import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
@@ -58,6 +59,9 @@ public class MainActivity extends BaseActivity {
 
     private SearchBox search;
     private Toolbar toolbar;
+
+    private Stack<Integer> backStack = new Stack<Integer>();
+    private boolean pressedBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,12 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         Term term = DBManager.getTerm();
-        ((TextView) findViewById(R.id.career_fair_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
+        if (term == null) {
+            reloadData();
+            return;
+        } else {
+            ((TextView) findViewById(R.id.career_fair_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
+        }
 
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
@@ -91,7 +100,6 @@ public class MainActivity extends BaseActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
-
     }
 
     @Override
@@ -132,12 +140,8 @@ public class MainActivity extends BaseActivity {
 
                                 dismiss();
 
-                                Intent reloadDataIntent = new Intent(getActivity(), LoadingActivity.class);
-                                reloadDataIntent.putExtra(LoadingActivity.KEY_FORCE_REFRESH, true);
-                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(reloadDataIntent);
+                                reloadData();
+
                             }
                         });
                         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -181,18 +185,36 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    private void reloadData() {
+        Intent reloadDataIntent = new Intent(this, LoadingActivity.class);
+        reloadDataIntent.putExtra(LoadingActivity.KEY_FORCE_REFRESH, true);
+        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(reloadDataIntent);
+    }
+
     @Override
     protected void onResume() {
-        super.onResume();
-
         DBManager.setupDBAdapterIfNeeded(this);
+        super.onResume();
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
-
         DBManager.setupDBAdapterIfNeeded(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        DBManager.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -308,32 +330,44 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        DialogFragment df;
-        df = new DialogFragment() {
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Quit?");
-                builder.setMessage("Really quit?");
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        if (!backStack.isEmpty()) {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.super.onBackPressed();
-                        dismiss();
-                    }
-                });
-                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            // Ignore next push to backStack - we caused it here.
+            pressedBack = true;
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dismiss();
-                    }
-                });
-                return builder.create();
-            }
-        };
-        df.show(getFragmentManager(), null);
+            // Get last position, and send viewPager to that.
+            int newPosition = backStack.pop();
+            VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+            fragmentParent.getPager().setCurrentItem(newPosition);
+
+        }
+
+//        DialogFragment df;
+//        df = new DialogFragment() {
+//            @Override
+//            public Dialog onCreateDialog(Bundle savedInstanceState) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle("Quit?");
+//                builder.setMessage("Really quit?");
+//                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        MainActivity.super.onBackPressed();
+//                        dismiss();
+//                    }
+//                });
+//                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dismiss();
+//                    }
+//                });
+//                return builder.create();
+//            }
+//        };
+//        df.show(getFragmentManager(), null);
     }
 
     public String getSearchText() {
@@ -348,18 +382,8 @@ public class MainActivity extends BaseActivity {
         this.search = search;
     }
 
-    public void enableSearch() {
-        MenuItem searchBtn = toolbar.getMenu().getItem(R.id.action_search);
-        searchBtn.setVisible(true);
-    }
-
-    public void disableSearch() {
-        MenuItem searchBtn = toolbar.getMenu().getItem(R.id.action_search);
-        searchBtn.setVisible(false);
-    }
-
     private void saveSearchString() {
-        SharedPreferences prefs = ((Context) MainActivity.this).getSharedPreferences(
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
                 RHCareerFairLayout.RH_CFL,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -371,10 +395,21 @@ public class MainActivity extends BaseActivity {
     }
 
     private String getSearchString() {
-        SharedPreferences prefs = ((Context) MainActivity.this).getSharedPreferences(
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
                 RHCareerFairLayout.RH_CFL,
                 Context.MODE_PRIVATE);
 
         return prefs.getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "");
+    }
+
+    public void pushToBackStack(int position) {
+        while (backStack.size() > 10) {
+            backStack.remove(0);
+        }
+
+        if (!pressedBack) {
+            backStack.push(position);
+        }
+        pressedBack = false;
     }
 }

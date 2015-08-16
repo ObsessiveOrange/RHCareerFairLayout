@@ -58,7 +58,5 @@ public class RHCareerFairLayout {
             this.changed = true;
             notifyAll();
         }
-
-
     }
 }

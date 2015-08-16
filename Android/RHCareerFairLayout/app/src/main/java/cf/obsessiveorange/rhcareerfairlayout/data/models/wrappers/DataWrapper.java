@@ -12,26 +12,30 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 public class DataWrapper {
 
     private final CategoryMap categoryMap;
+    private final CompanyCategoryMap companyCategoryMap;
     private final CompanyMap companyMap;
     private final TableMappingArray tableMappingList;
-    private final CompanyCategoryMap companyCategoryMap;
     private final Term term;
 
     public DataWrapper(@JsonProperty("categoryMap") CategoryMap categoryMap,
+                       @JsonProperty("companyCategoryMap") CompanyCategoryMap companyCategoryMap,
                        @JsonProperty("companyMap") CompanyMap companyMap,
                        @JsonProperty("tableMappingList") TableMappingArray tableMappingList,
-                       @JsonProperty("companyCategoryMap") CompanyCategoryMap companyCategoryMap,
                        @JsonProperty("term") Term term) {
 
         this.categoryMap = categoryMap;
+        this.companyCategoryMap = companyCategoryMap;
         this.companyMap = companyMap;
         this.tableMappingList = tableMappingList;
-        this.companyCategoryMap = companyCategoryMap;
         this.term = term;
     }
 
     public CategoryMap getCategoryMap() {
         return categoryMap;
+    }
+
+    public CompanyCategoryMap getCompanyCategoryMap() {
+        return companyCategoryMap;
     }
 
     public CompanyMap getCompanyMap() {
@@ -40,10 +44,6 @@ public class DataWrapper {
 
     public TableMappingArray getTableMappingList() {
         return tableMappingList;
-    }
-
-    public CompanyCategoryMap getCompanyCategoryMap() {
-        return companyCategoryMap;
     }
 
     public Term getTerm() {

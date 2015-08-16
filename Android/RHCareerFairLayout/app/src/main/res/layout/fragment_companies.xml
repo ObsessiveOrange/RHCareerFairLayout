@@ -31,26 +31,31 @@ W
         android:layout_height="wrap_content"
         android:background="@color/accentLight"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="15dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start|center_vertical"
-            android:text="@string/visibleHeader" />
+            android:text="@string/visibleHeader"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/companyHeader" />
+            android:text="@string/companyHeader"
+            android:textStyle="bold"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end|center_vertical"
-            android:text="@string/tableHeader" />
+            android:text="@string/tableHeader"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

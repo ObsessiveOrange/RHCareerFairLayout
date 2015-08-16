@@ -8,8 +8,8 @@ android {
         applicationId "cf.obsessiveorange.rhcareerfairlayout"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0b4h1"
     }
     buildTypes {
         release {

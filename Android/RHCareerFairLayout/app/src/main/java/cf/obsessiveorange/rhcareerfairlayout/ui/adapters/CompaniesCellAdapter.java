@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,9 @@ import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
 import cf.obsessiveorange.rhcareerfairlayout.ui.activities.DetailActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPLayoutContainerFragment;
+import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 
 public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdapter.ViewHolder> {
 
@@ -118,13 +122,33 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 }
             });
 
-            holder.cellRoot.setOnClickListener(new View.OnClickListener() {
+            holder.companyNameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     Intent detailIntent = new Intent(mContext, DetailActivity.class);
                     detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
                     ((Activity) mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
+
+                }
+            });
+
+            holder.tableNumberTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    VPParentFragment fragmentParent = (VPParentFragment) MainActivity.instance.getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+                    fragmentParent.getPager().setCurrentItem(0);
+                    Fragment fragment = fragmentParent.getCurrentFragment();
+                    if (fragment instanceof VPLayoutContainerFragment) {
+                        VPLayoutContainerFragment mapFragment = (VPLayoutContainerFragment) fragment;
+                        long tableId = Long.valueOf(holder.tableNumberTextView.getText().toString());
+                        if (tableId == -1) {
+                            throw new IllegalStateException("Invalid tableId provided back to map.");
+                        }
+                        mapFragment.flashTable(tableId);
+                    }
 
                 }
             });

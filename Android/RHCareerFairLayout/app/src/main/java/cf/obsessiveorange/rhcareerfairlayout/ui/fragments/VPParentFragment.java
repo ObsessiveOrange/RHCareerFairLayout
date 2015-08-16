@@ -54,6 +54,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 
     private TouchInterceptionFrameLayout mInterceptionLayout;
     private ViewPager mPager;
+    private int mLastPage = 0;
     private NavigationAdapter mPagerAdapter;
     private int mSlop;
     private ScrollState mLastScrollState;
@@ -120,6 +121,18 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         AppCompatActivity parentActivity = (AppCompatActivity) getActivity();
         mPagerAdapter = new NavigationAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(RHCareerFairLayout.RH_CFL, "PageSelected:" + position);
+                //TODO: Implement.
+
+                MainActivity activity = (MainActivity) getActivity();
+                activity.pushToBackStack(mLastPage);
+
+                mLastPage = position;
+            }
+        });
         mPager.setOffscreenPageLimit(2);
         mPager.setAdapter(mPagerAdapter);
 
@@ -209,7 +222,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         if (layoutTranslationY != toY) {
             final float translationY = -layoutTranslationY + toY;
             final View toolbarView = getActivity().findViewById(R.id.toolbar);
-            final SearchBox searchView = ((MainActivity)getActivity()).getSearch();
+            final SearchBox searchView = ((MainActivity) getActivity()).getSearch();
 
             // Need to offset for the -6dp margin on search bar
             Resources r = getResources();
@@ -217,26 +230,21 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 
             mInterceptionLayout.animate().y(toY).setDuration(200);
             toolbarView.animate().y(toY).setDuration(200);
-            searchView.animate().y(toY-offset).setDuration(200);
+            searchView.animate().y(toY - offset).setDuration(200);
 
             final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
 
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        lp.height = (int) (Math.max(0, -translationY) + getScreenHeight());
-                        mInterceptionLayout.requestLayout();
-                    }
-                }, translationY < 0 ? 0 : 200);
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    lp.height = (int) (Math.max(0, -translationY) + getScreenHeight());
+                    mInterceptionLayout.requestLayout();
+                }
+            }, translationY < 0 ? 0 : 200);
 
 
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-//                    if(translationY < 0) {
-//                        lp.height = (int) (Math.max(0, -translationY) + getScreenHeight());
-//                        mInterceptionLayout.forceLayout();
-//                    }
-
-                    for(Runnable completionHandler : completionHandlers){
+                    for (Runnable completionHandler : completionHandlers) {
                         completionHandler.run();
                     }
                 }
@@ -245,7 +253,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         }
     }
 
-    private void adjustInterceptionLayoutHeight(int height){
+    private void adjustInterceptionLayoutHeight(int height) {
         final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
         lp.height = height;
         mInterceptionLayout.forceLayout();
