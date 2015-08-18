@@ -10,7 +10,7 @@
 
 @implementation CFCompanyCategory
 
-- (id) initWithCompanyId: (NSNumber*) companyId withCategories: (NSArray*) categories{
+- (id) initWithCompanyId: (NSInteger) companyId withCategories: (NSArray*) categories{
     
     self = [super init];
     if(self){

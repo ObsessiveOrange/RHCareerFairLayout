@@ -10,7 +10,7 @@
 
 @implementation CFCategoryData
 
--(id) initWithId: (NSNumber*) id withName: (NSString*) name withType: (NSString*) type selected: (bool) selected{
+-(id) initWithId: (NSInteger) id withName: (NSString*) name withType: (NSString*) type selected: (bool) selected{
     self = [super initWithId:id withName:name withType:type];
     
     if(self){

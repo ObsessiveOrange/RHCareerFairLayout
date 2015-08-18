@@ -16,6 +16,6 @@
 @property (nonatomic, strong) NSString* company_websiteLink;
 @property (nonatomic, strong) NSString* company_address;
 
-- (id) initWithId: (NSNumber*)id withName: (NSString*)name withDescription: (NSString*)description withWebsiteLink: (NSString*)websiteLink withAddress: (NSString*)address;
+- (id) initWithId: (NSInteger)id withName: (NSString*)name withDescription: (NSString*)description withWebsiteLink: (NSString*)websiteLink withAddress: (NSString*)address;
 
 @end

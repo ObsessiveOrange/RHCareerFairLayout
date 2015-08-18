@@ -69,7 +69,6 @@ public class VPFiltersFragment extends BaseFragment {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
             }
 
             @Override
@@ -98,7 +97,7 @@ public class VPFiltersFragment extends BaseFragment {
         MenuItem searchBtn = menu.findItem(R.id.action_search);
         searchBtn.setVisible(false);
 
-        ((MainActivity)getActivity()).closeSearch();
+        ((MainActivity) getActivity()).closeSearch();
 
         MenuItem clearFiltersItem = menu.add(getResources().getString(R.string.btn_clear_filters));
         clearFiltersItem.setIcon(

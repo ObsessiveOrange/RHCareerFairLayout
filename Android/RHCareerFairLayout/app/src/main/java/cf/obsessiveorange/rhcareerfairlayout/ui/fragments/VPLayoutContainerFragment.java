@@ -65,4 +65,8 @@ public class VPLayoutContainerFragment extends BaseFragment {
 
         ((MainActivity)getActivity()).closeSearch();
     }
+
+    public LayoutView getLayoutView() {
+        return layoutView;
+    }
 }

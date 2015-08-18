@@ -18,6 +18,7 @@
 - (void)removeObjectForKey:(id)aKey;
 - (void)setObject:(id)anObject forKey:(id <NSCopying>)aKey;
 - (id)objectForKey:(id)aKey;
+- (id)objectForIntKey:(NSInteger)aKey;
 - (NSEnumerator *)keyEnumerator;
 
 @end

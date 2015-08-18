@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CompaniesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchBarDelegate>
+@interface CompaniesViewController : UITableViewController <UIActionSheetDelegate, UISearchBarDelegate>
+
+@property (nonatomic) bool displayOnMap;
 
 @end

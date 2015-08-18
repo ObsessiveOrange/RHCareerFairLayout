@@ -137,7 +137,7 @@ public class Rectangle {
         this.text = text;
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, float fontSize) {
 
         if (getFillPaint() != null) {
             canvas.drawRect(rect, fillPaint);
@@ -152,13 +152,13 @@ public class Rectangle {
             textPaint.setStyle(Paint.Style.FILL);
             textPaint.setTextAlign(Paint.Align.CENTER);
 
-            float testTextSize = rect.height() * 2 / 3;
+            float testTextSize = fontSize;
             textPaint.setTextSize(testTextSize);
 
             Rect textBounds = new Rect();
             textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
-            textPaint.setTextSize(Math.min(testTextSize, testTextSize * rect.width() * 0.9f / textBounds.width()));
+            textPaint.setTextSize(Math.min(fontSize, fontSize * rect.width() * 0.9f / textBounds.width()));
             textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
             canvas.drawText(text, rect.exactCenterX(), rect.exactCenterY() - textBounds.exactCenterY(), textPaint);

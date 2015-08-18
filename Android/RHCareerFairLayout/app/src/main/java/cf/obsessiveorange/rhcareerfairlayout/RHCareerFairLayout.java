@@ -18,6 +18,7 @@ public class RHCareerFairLayout {
 
 //    public static final String URL_BASE = "http://192.168.2.30:8080/api";
     public static final String URL_BASE = "http://rhcareerfair.cf/api";
+    public static final int DATA_CACHE_TIME_IN_DAYS = 1;
 
     public static final String PREF_KEY_MAP_VIEW_FOCUS_X_PORT = "mapViewFocusX-Port";
     public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_PORT = "mapViewFocusY-Port";

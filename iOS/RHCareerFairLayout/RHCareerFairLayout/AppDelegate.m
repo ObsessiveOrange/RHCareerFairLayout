@@ -20,11 +20,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:false];
+    
     self.searchText = [[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"];
     if(!self.searchText){
         self.searchText = @"";
         [[NSUserDefaults standardUserDefaults] setValue:self.searchText forKey:@"searchText"];
     }
+    
+    self.hightlightTableId = nil;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *docsPath = [paths objectAtIndex:0];

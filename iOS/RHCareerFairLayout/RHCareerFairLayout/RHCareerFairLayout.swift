@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     
-    convenience init(hex: Int) {
+    convenience init(hex: UInt) {
         
         let components = (
             A: CGFloat((hex >> 24) & 0xff) / 255,
@@ -37,9 +37,14 @@ class RHCareerFairLayout: NSObject {
     static var color_primaryDark : UIColor = UIColor(hex: 0xff600000);
     static var color_accent : UIColor = UIColor(hex: 0xffbbbbbb);
     static var color_accentLight : UIColor = UIColor(hex: 0xffdddddd);
+    static var color_black : UIColor = UIColor(hex: 0xff000000);
+    static var color_green : UIColor = UIColor(hex: 0xff00ff00);
+    static var color_yellow : UIColor = UIColor(hex: 0xffffff00);
+    
+    static var companyDetailSegueIdentifier : String = "CompanyDetail";
     
     static var data : NSDictionary?;
     
-    static var aboutString: String = "The RH Career Fair App is designed to help students, faculty and recruiters navigate around career fairs, without needing to resort to unwieldy paper maps. This app, the website, and the server were designed by student Benedict Wong.";
+    static var aboutString: String = "The RH Career Fair App is designed to help students, faculty and recruiters navigate around career fairs, without needing to resort to unwieldy paper maps. This app, the Android app, website, and server were designed by student Benedict Wong.";
     
 }

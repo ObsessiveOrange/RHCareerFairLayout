@@ -114,6 +114,7 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                     Log.d(RHCareerFairLayout.RH_CFL, "Updating DB: Setting company " + company.getId() + " to " + isChecked);
+                    MainActivity.instance.clearSearchFocus();
                     DBManager.setCompanySelected(company.getId(), isChecked);
                     synchronized (RHCareerFairLayout.refreshMapNotifier) {
                         RHCareerFairLayout.refreshMapNotifier.notifyChanged();
@@ -126,6 +127,7 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 @Override
                 public void onClick(View v) {
 
+                    MainActivity.instance.clearSearchFocus();
                     Intent detailIntent = new Intent(mContext, DetailActivity.class);
                     detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
                     ((Activity) mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
@@ -137,7 +139,9 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 @Override
                 public void onClick(View v) {
 
-                    VPParentFragment fragmentParent = (VPParentFragment) MainActivity.instance.getSupportFragmentManager().findFragmentById(R.id.fragment);
+                    MainActivity.instance.clearSearchFocus();
+
+                    VPParentFragment fragmentParent = (VPParentFragment) MainActivity.instance.getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
 
                     fragmentParent.getPager().setCurrentItem(0);
                     Fragment fragment = fragmentParent.getCurrentFragment();
@@ -148,6 +152,9 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                             throw new IllegalStateException("Invalid tableId provided back to map.");
                         }
                         mapFragment.flashTable(tableId);
+                    }
+                    else{
+                        Log.e(RHCareerFairLayout.RH_CFL, "ERROR: First fragment not layout fragment.");
                     }
 
                 }
@@ -174,9 +181,9 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         public ViewHolder(View view) {
             super(view);
             cellRoot = (LinearLayout) view.findViewById(R.id.cell_root);
-            showOnMapCheckBox = (CheckBox) view.findViewById(R.id.show_on_map);
-            companyNameTextView = (TextView) view.findViewById(R.id.company_name);
-            tableNumberTextView = (TextView) view.findViewById(R.id.table_number);
+            showOnMapCheckBox = (CheckBox) view.findViewById(R.id.company_chk_showOnMap);
+            companyNameTextView = (TextView) view.findViewById(R.id.company_txt_name);
+            tableNumberTextView = (TextView) view.findViewById(R.id.company_txt_tableNumber);
         }
     }
 }

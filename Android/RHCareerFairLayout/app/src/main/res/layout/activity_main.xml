@@ -24,7 +24,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/fragment"
+            android:id="@+id/main_frg_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -42,7 +42,7 @@
             app:theme="@style/Toolbar">
 
             <TextView
-                android:id="@+id/career_fair_title"
+                android:id="@+id/main_txt_title"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:drawableLeft="@drawable/ic_rose_logo"

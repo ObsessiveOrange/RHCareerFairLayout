@@ -10,11 +10,25 @@
 
 @implementation CFTableMappingArray
 
+- (id) init{
+    
+    
+    self = [super init];
+    
+    if(self){
+        
+        self.tableMappingArray = [[NSMutableArray alloc] init];
+        
+        return self;
+    }
+    return nil;
+}
+
 - (id) initWithArray:(NSArray *) data{
     
-    CFTableMappingArray* array = [super init];
+    self = [super init];
     
-    if(array){
+    if(self){
         
         self.tableMappingArray = [[NSMutableArray alloc] init];
         
@@ -22,11 +36,11 @@
             
             NSDictionary* tableMappingData = (NSDictionary*) obj;
             
-            NSNumber* id = [[NSNumber alloc] initWithInteger:[((NSString*)[tableMappingData objectForKey:@"id"]) integerValue]];
+            NSInteger id = [((NSString*)[tableMappingData objectForKey:@"id"]) integerValue];
             
             NSString* companyIdString = (NSString*)[tableMappingData objectForKey:@"companyId"];
             NSNumber* companyId = [companyIdString isEqual:[NSNull null]] ? nil : [[NSNumber alloc] initWithInteger:[companyIdString integerValue]];
-            NSNumber* size = [[NSNumber alloc] initWithInteger:[((NSString*)[tableMappingData objectForKey:@"size"]) integerValue]];
+            NSInteger size = [((NSString*)[tableMappingData objectForKey:@"size"]) integerValue];
             
             
             
@@ -38,7 +52,7 @@
         }
         
         
-        return array;
+        return self;
     }
     return nil;
 }

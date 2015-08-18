@@ -14,6 +14,6 @@
 @property (strong, nonatomic) NSString* category_name;
 @property (strong, nonatomic) NSString* category_type;
 
-- (id) initWithId: (NSNumber*) id withName: (NSString*) name withType: (NSString*) type;
+- (id) initWithId: (NSInteger) id withName: (NSString*) name withType: (NSString*) type;
 
 @end

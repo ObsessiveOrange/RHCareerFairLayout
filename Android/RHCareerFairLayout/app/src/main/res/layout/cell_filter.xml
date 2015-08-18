@@ -11,14 +11,15 @@
     android:paddingStart="16dp">
 
     <CheckBox
-        android:id="@+id/filter_active"
+        android:id="@+id/filter_chk_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:checked="false" />
 
     <TextView
-        android:id="@+id/filter_name"
+        android:id="@+id/filter_txt_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

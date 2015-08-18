@@ -11,9 +11,9 @@
 
 @interface CFCompanyCategory : NSObject
 
-@property (nonatomic, strong) NSNumber* companyCategory_companyId;
+@property (nonatomic) NSInteger companyCategory_companyId;
 @property (nonatomic, strong) NSArray* companyCategory_categories;
 
-- (id) initWithCompanyId: (NSNumber*) companyId withCategories: (NSArray*) categories;
+- (id) initWithCompanyId: (NSInteger) companyId withCategories: (NSArray*) categories;
 
 @end

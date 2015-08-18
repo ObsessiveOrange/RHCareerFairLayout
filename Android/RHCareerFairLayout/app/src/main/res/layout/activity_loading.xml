@@ -3,13 +3,44 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loading_img_backgroundImage"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/img_bkg_loading_screen"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loading_img_roseLogo"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/img_rose_hulman_logo_full" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:id="@+id/loading_btn_retry"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loadingStatus_loading"
-        android:id="@+id/loading_status_textview"
+        android:textColor="@android:color/white"
+        android:id="@+id/loading_txt_status"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:paddingBottom="20dp"
+        android:layout_above="@+id/loading_btn_retry"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

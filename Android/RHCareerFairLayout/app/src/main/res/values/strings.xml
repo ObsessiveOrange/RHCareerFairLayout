@@ -1,18 +1,19 @@
 <resources>
-    <string name="app_name">RHCareerFairLayout</string>
+    <string name="app_name">RH Career Fair Layout</string>
 
     <string name="rhcareerfair">RH Career Fair</string>
     <string name="career_fair_format">%1$s %2$d</string>
     <string name="table_number_placeholder">#</string>
     <string name="company_name_placeholders">Company Name</string>
     <string name="about">About</string>
-    <string name="about_description">The RH Career Fair App is designed to help students, faculty, and recruiters easily navigate around the career fair, without needing to resort to unwieldy paper maps. This app, the website and the server were designed by student Benedict Wong.</string>
+    <string name="about_description">The RH Career Fair App is designed to help students, faculty, and recruiters easily navigate around the career fair, without needing to resort to unwieldy paper maps. This app, as well as the iOS app, website and server were designed by student Benedict Wong.</string>
 
     <string name="loadingStatus_loading">Loading</string>
     <string name="loadingStatus_checkingForNewData">Checking to see if new data available</string>
     <string name="loadingStatus_dataUpToDate">Data already up to date</string>
     <string name="loadingStatus_downloadingData">Downloading new data</string>
     <string name="loadingStatus_errorDownloadingData">Error downloading data</string>
+    <string name="loadingStatus_errorParsingData">Error parsing data</string>
     <string name="loadingStatus_done">Done…</string>
 
     <string name="btn_select_all">Select All</string>
@@ -28,7 +29,7 @@
     <string name="header_DetailAddress">Address:</string>
     <string name="placeholder_DetailWebsite">Website</string>
     <string name="placeholder_DetailCompanyName">Company Name</string>
-    <string name="placeholder_DetailAddress">Address</string>
+    <string name="placeholder_DetailAddress">Address</string>7
     <string name="placeholder_DetailWorkAuthorizations">Work Authorizations</string>
     <string name="placeholder_DetailPositionTypes">Position Types</string>
     <string name="placeholder_DetailMajors">Majors</string>

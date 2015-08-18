@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface CFEntry : NSObject
-@property (nonatomic, strong) NSNumber* id;
+@property (nonatomic) NSInteger id;
 
-- (id) initWithId: (NSNumber*) id;
+- (id) initWithId: (NSInteger) id;
 
 @end

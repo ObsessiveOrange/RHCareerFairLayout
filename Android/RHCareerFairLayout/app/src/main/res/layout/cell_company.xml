@@ -14,12 +14,13 @@
 
 
     <CheckBox
-        android:id="@+id/show_on_map"
+        android:id="@+id/company_chk_showOnMap"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:checked="false" />
 
     <TextView
-        android:id="@+id/company_name"
+        android:id="@+id/company_txt_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -30,7 +31,7 @@
         android:text="@string/company_name_placeholders" />
 
     <TextView
-        android:id="@+id/table_number"
+        android:id="@+id/company_txt_tableNumber"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"

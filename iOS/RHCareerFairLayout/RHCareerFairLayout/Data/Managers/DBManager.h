@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "CFDataWrapper.h"
+#import "CFTableDataMap.h"
+#import "CFCompanyData.h"
 
 @interface DBManager : NSObject
 
@@ -20,10 +22,13 @@
 
 + (void) loadNewData: (CFDataWrapper*) data;
 + (NSArray*) getFilteredCompanies;
-+ (void) updateAllSelectedCompaniesWithSelected: (bool)selected;
++ (CFCompanyData*) getCompanyWithId: (NSInteger) companyId;
++ (void) updateFilteredCompaniesWithSelected: (bool)selected;
 + (NSArray*) getCategories;
-+ (void) setCompany: (NSNumber*) companyId selected:(bool)selected;
-+ (void) setCategory: (NSNumber*) categoryId selected:(bool)selected;
++ (NSDictionary*) getCategoriesForCompany: (NSInteger) companyId;
++ (void) setCompany: (NSInteger) companyId selected:(bool)selected;
++ (void) setCategory: (NSInteger) categoryId selected:(bool)selected;
 + (void) clearSelectedCategories;
-
++ (CFTableDataMap*) getTables;
++ (CFTerm*) getTerm;
 @end

@@ -11,13 +11,13 @@
 #import "CompaniesCell.h"
 #import "CFCompanyData.h"
 #import "DBManager.h"
+#import "DetailViewController.h"
 #import "TabBarController.h"
 #import "AppDelegate.h"
 #import <FontAwesomeKit/FontAwesomeKit.h>
 
 @interface CompaniesViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *moreMenuBtn;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *exitSearchBtn;
 @property (nonatomic, strong) NSArray* companyList;
@@ -25,14 +25,20 @@
 @property (nonatomic, strong) UISearchBar* pageSearchView;
 @property (nonatomic) bool searchActive;
 
+@property (strong, nonatomic) CFCompanyData* selectedCompany;
+
 @end
 
 @implementation CompaniesViewController
 
 static NSString* companiesCellReuseIdentifier = @"CompanyCell";
+static FAKFontAwesome* checkedCheckbox;
+static FAKFontAwesome* uncheckedCheckbox;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.displayOnMap = false;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -50,41 +56,79 @@ static NSString* companiesCellReuseIdentifier = @"CompanyCell";
     
     self.pageTitleView = self.navigationItem.titleView;
     
-    FAKIonIcons *checkbox = [FAKIonIcons androidMoreIconWithSize:17];
+    FAKIonIcons *more = [FAKIonIcons androidMoreIconWithSize:17];
     self.moreMenuBtn.title = @"";
-    self.moreMenuBtn.image = [checkbox imageWithSize:CGSizeMake(30, 30)];
+    self.moreMenuBtn.image = [more imageWithSize:CGSizeMake(30, 30)];
+    [self.navigationItem setRightBarButtonItem:self.moreMenuBtn];
+    
     
     FAKIonIcons *back = [FAKIonIcons ios7ArrowBackIconWithSize:17];
     self.exitSearchBtn.title = @"";
     self.exitSearchBtn.image = [back imageWithSize:CGSizeMake(30, 30)];
-    self.exitSearchBtn.target = self;
-    self.exitSearchBtn.action = @selector(hideSearch);
+    [self.navigationItem setLeftBarButtonItem:self.exitSearchBtn];
+    
+    checkedCheckbox = [FAKFontAwesome checkSquareOIconWithSize:15];
+    [checkedCheckbox addAttribute:NSForegroundColorAttributeName value:[UIColor
+                                                                 grayColor]];
+    uncheckedCheckbox = [FAKFontAwesome squareOIconWithSize:15];
+    [uncheckedCheckbox addAttribute:NSForegroundColorAttributeName value:[UIColor
+                                                                 grayColor]];
+    
+    [self hideSearch];
 }
 
-- (void) hideSearch{
-    self.searchActive = false;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = self.moreMenuBtn;
-    self.navigationItem.titleView = self.pageTitleView;
-}
-
-- (void) showSearch{
-    self.searchActive = true;
-    self.navigationItem.leftBarButtonItem = self.exitSearchBtn;
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.titleView = self.pageSearchView;
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    if(self.displayOnMap){
+        self.displayOnMap = false;
+        
+        [self gotoMapView];
+    }
     
     self.companyList = [DBManager getFilteredCompanies];
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    if(self.displayOnMap){
+        self.displayOnMap = false;
+        
+        [self.tabBarController setSelectedIndex:0];
+    }
+}
+
+-(void) gotoMapView{
+    
+    [self.tabBarController setSelectedIndex:0];
+    [[self.tabBarController selectedViewController] viewDidAppear:true];
+}
+
+- (IBAction)hideSearch:(UIBarButtonItem *)sender {
+    [self hideSearch];
+}
+
+- (void) hideSearch{
+    
+    [self.pageSearchView endEditing:YES];
+    
+    self.searchActive = false;
+    [self.navigationItem.leftBarButtonItem setEnabled:false];
+        [self.navigationItem.leftBarButtonItem setTintColor: [UIColor clearColor]];
+//    self.navigationItem.leftBarButtonItem = nil;
+//    self.navigationItem.rightBarButtonItem = self.moreMenuBtn;
+    self.navigationItem.titleView = self.pageTitleView;
+}
+
+- (void) showSearch{
+    self.searchActive = true;
+    [self.navigationItem.leftBarButtonItem setEnabled:true];
+        [self.navigationItem.leftBarButtonItem setTintColor: nil];
+//    self.navigationItem.leftBarButtonItem = self.exitSearchBtn;
+//    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.titleView = self.pageSearchView;
 }
 
 #pragma mark - Table view data source
@@ -94,6 +138,14 @@ static NSString* companiesCellReuseIdentifier = @"CompanyCell";
     return 1;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    
+    NSString* searchText = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).searchText;
+    
+    return [searchText length] == 0 ? nil : [[NSString alloc] initWithFormat:@"Searched: %@", searchText];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [self.companyList count];
@@ -101,86 +153,84 @@ static NSString* companiesCellReuseIdentifier = @"CompanyCell";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     CompaniesCell *cell = [tableView dequeueReusableCellWithIdentifier:companiesCellReuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
     CFCompanyData* data = (CFCompanyData*) self.companyList[indexPath.row];
-    
+
     FAKFontAwesome *checkbox;
     if(data.company_selected){
-        checkbox = [FAKFontAwesome checkSquareOIconWithSize:15];
+        checkbox = checkedCheckbox;
     }
     else{
-        checkbox = [FAKFontAwesome squareOIconWithSize:15];
+        checkbox = uncheckedCheckbox;
     }
-    
-    [checkbox addAttribute:NSForegroundColorAttributeName value:[UIColor
-                                                                 grayColor]];
-    
+
     [cell.showOnMap setAttributedTitle:[checkbox attributedString] forState:UIControlStateNormal];
     cell.showOnMap.tag = indexPath.row;
-    [cell.showOnMap addTarget:self action:@selector(checkBoxSelected:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     [cell.companyName setTitle:data.company_name
                       forState:UIControlStateNormal];
     [cell.companyName.titleLabel setTextAlignment: NSTextAlignmentCenter];
-    cell.companyName.titleLabel.numberOfLines = 2;
+    [cell.companyName.titleLabel setNumberOfLines:2];
     cell.companyName.tag = indexPath.row;
-    [cell.companyName addTarget:self action:@selector(companyNameSelected:) forControlEvents:UIControlEventTouchUpInside];
     
-    [cell.tableNumber setTitle:[[NSString alloc] initWithFormat:@"%@", data.company_table]
+    [cell.tableNumber setTitle:[[NSString alloc] initWithFormat:@"%ld", (long)data.company_table]
                       forState:UIControlStateNormal];
     cell.tableNumber.tag = indexPath.row;
-    [cell.tableNumber addTarget:self action:@selector(companyTableSelected:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
 
-- (void)checkBoxSelected:(UIButton*)sender
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    [self.pageSearchView endEditing:YES];
+}
+
+- (IBAction)checkBoxSelected:(UIButton *)sender
 {
+    
+    [self.pageSearchView endEditing:YES];
+    
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
     [DBManager setCompany: company.id selected:!company.company_selected];
     self.companyList = [DBManager getFilteredCompanies];
     [self.tableView reloadData];
-    
-    [self.view endEditing:YES];
 }
-
-- (void)companyNameSelected:(UILabel*)sender
+- (IBAction)companyNameSelected:(UIButton *)sender
 {
+    [self.pageSearchView endEditing:YES];
     
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
-    NSLog(@"Show detail for companyId: %@", company.id);
-    
-    [self.view endEditing:YES];
+    self.selectedCompany = company;
+    [self performSegueWithIdentifier:RHCareerFairLayout.companyDetailSegueIdentifier sender:self];
     
 }
-
-- (void)companyTableSelected:(UILabel*)sender
+- (IBAction)companyTableSelected:(UIButton*)sender
 {
+    [self.pageSearchView endEditing:YES];
     
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
-    NSLog(@"Show map for companyId: %@", company.id);
+    NSLog(@"Show map for companyId: %ld", (long)company.id);
     
-    [self.view endEditing:YES];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).hightlightTableId = @(company.company_table);
+    [self gotoMapView];
     
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [self.view endEditing:YES];
+    [self.pageSearchView endEditing:YES];
     
 }
-
-- (IBAction)showMenuActionSheet:(id)sender {
+- (IBAction)showMenuActionSheet:(UIBarButtonItem *)sender {
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Companies Options Menu"
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Search", @"Select All", @"Deselect All", @"Refresh Data", @"About", nil];
-    
-    [self.view endEditing:YES];
+                                                    otherButtonTitles:@"Toggle Search", @"Select All", @"Deselect All", @"Refresh Data", @"About", nil];
     
     [actionSheet showInView:self.view];
     
@@ -192,15 +242,20 @@ static NSString* companiesCellReuseIdentifier = @"CompanyCell";
     
     switch(buttonIndex){
         case 0: //search
-            [self showSearch];
+            if(self.searchActive){
+                [self hideSearch];
+            }
+            else{
+                [self showSearch];
+            }
             break;
         case 1: //select all
-            [DBManager updateAllSelectedCompaniesWithSelected:true];
+            [DBManager updateFilteredCompaniesWithSelected:true];
             self.companyList = [DBManager getFilteredCompanies];
             [self.tableView reloadData];
             break;
         case 2: //deselect all
-            [DBManager updateAllSelectedCompaniesWithSelected:false];
+            [DBManager updateFilteredCompaniesWithSelected:false];
             self.companyList = [DBManager getFilteredCompanies];
             [self.tableView reloadData];
             break;
@@ -236,48 +291,19 @@ static NSString* companiesCellReuseIdentifier = @"CompanyCell";
     
 }
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
+#pragma mark - Navigation
 
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:RHCareerFairLayout.companyDetailSegueIdentifier]){
+        DetailViewController* detailView = (DetailViewController*)((UINavigationController*)segue.destinationViewController).topViewController;
+        detailView.companyData = self.selectedCompany;
+        self.selectedCompany = nil;
+    }
+    
+}
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

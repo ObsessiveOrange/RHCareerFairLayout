@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,11 +39,14 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
+import cf.obsessiveorange.rhcareerfairlayout.ui.application.RHCareerFairLayoutApplication;
 import cf.obsessiveorange.rhcareerfairlayout.ui.views.SlidingTabLayout;
 
 /**
@@ -76,18 +80,18 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 //            int translationY = (int) mInterceptionLayout.getTranslationY();
             boolean scrollingUp = 0 < diffY;
             boolean scrollingDown = diffY < 0;
-            if (scrollingDown) {
-                if (toolbarIsHidden()) {
-                    return false;
-                }
-                showToolbar();
-            } else if (scrollingUp) {
-
-                if (toolbarIsShown()) {
-                    return false;
-                }
-                hideToolbar();
-            }
+//            if (scrollingDown) {
+//                if (toolbarIsHidden()) {
+//                    return false;
+//                }
+////                showToolbar();
+//            } else if (scrollingUp) {
+//
+//                if (toolbarIsShown()) {
+//                    return false;
+//                }
+////                hideToolbar();
+//            }
             return false;
         }
 
@@ -121,20 +125,42 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
         AppCompatActivity parentActivity = (AppCompatActivity) getActivity();
         mPagerAdapter = new NavigationAdapter(getChildFragmentManager());
         mPager = (ViewPager) view.findViewById(R.id.pager);
-        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        ViewPager.SimpleOnPageChangeListener pageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 Log.d(RHCareerFairLayout.RH_CFL, "PageSelected:" + position);
-                //TODO: Implement.
 
                 MainActivity activity = (MainActivity) getActivity();
-                activity.pushToBackStack(mLastPage);
+
+                if (getCurrentFragment() != null) {
+                    // If position is layout fragment, and scale is at base,
+                    if (position == 0) {
+                        if (((VPLayoutContainerFragment) getCurrentFragment()).getLayoutView().getScaleFactor() == 1.0) {
+                            showToolbar();
+                        } else {
+                            hideToolbar();
+                        }
+                    }
+
+                    activity.pushToBackStack(mLastPage);
+                }
+
+                // Send tracking info
+                RHCareerFairLayoutApplication application = (RHCareerFairLayoutApplication) activity.getApplication();
+                Tracker tracker = application.getDefaultTracker();
+                Log.i(RHCareerFairLayout.RH_CFL, "Setting screen name: " + RHCareerFairLayout.tabs.get(position).getTitle());
+                tracker.setScreenName(RHCareerFairLayout.tabs.get(position).getTitle());
+                tracker.send(new HitBuilders.ScreenViewBuilder().build());
+//                GoogleAnalytics.getInstance(getActivity().getBaseContext()).dispatchLocalHits();
 
                 mLastPage = position;
             }
-        });
+        };
+        mPager.addOnPageChangeListener(pageChangeListener);
         mPager.setOffscreenPageLimit(2);
         mPager.setAdapter(mPagerAdapter);
+
+        pageChangeListener.onPageSelected(0);
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
@@ -180,14 +206,22 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 
     private void adjustToolbar(ScrollState scrollState) {
         final Scrollable scrollable = getCurrentScrollable();
+        // If not a scrollable (eg, layout), early-out.
         if (scrollable == null) {
             return;
         }
-        int scrollY = scrollable.getCurrentScrollY();
-        if (scrollState == ScrollState.DOWN) {
+        // If finger movement down (Scrolled Up), or is already at top of the list, show toolbar
+        if (scrollState == ScrollState.DOWN || (scrollable instanceof RecyclerView
+                && ((RecyclerView) scrollable).computeVerticalScrollOffset() == 0)) {
             showToolbar();
-        } else if (scrollState == ScrollState.UP) {
+
+            MainActivity.instance.clearSearchFocus();
+        }
+        // Else, hide toolbar.
+        else if (scrollState == ScrollState.UP) {
             hideToolbar();
+
+            MainActivity.instance.clearSearchFocus();
         }
     }
 
@@ -271,7 +305,7 @@ public class VPParentFragment extends BaseFragment implements ObservableScrollVi
 
         @Override
         protected Fragment createItem(int position) {
-            Fragment f;
+
             return RHCareerFairLayout.tabs.get(position).getFragment();
         }
 

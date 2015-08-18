@@ -20,7 +20,6 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.CompanyMap;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.TableMappingArray;
-import cf.obsessiveorange.rhcareerfairlayout.ui.activities.MainActivity;
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 
 public class DBManager {
@@ -70,10 +69,13 @@ public class DBManager {
     public static final String KEY_SELECTED = "selected";
     //
     // DB Helpers
+    private static Context mContext = null;
     private static DBHelper mOpenHelper = null;
     private static SQLiteDatabase mDatabase = null;
 
     public static void setupDBAdapterIfNeeded(Context context) {
+        mContext = context;
+
         // Create a SQLiteOpenHelper
         if (mOpenHelper == null) {
             mOpenHelper = new DBHelper(context);
@@ -84,13 +86,11 @@ public class DBManager {
         }
     }
 
-    public static Long getLastUpdateTime(String year, String quarter) {
+    public static Long getLastUpdateTime() {
 
         String[] projection = new String[]{KEY_LAST_UPDATE_TIME};
-        String whereClause = KEY_YEAR + " = '" + year + "' AND " + KEY_QUARTER + " = '" + quarter + "'";
 
-
-        Cursor c = mDatabase.query(TABLE_TERM_NAME, projection, whereClause, null, null, null, null);
+        Cursor c = mDatabase.query(TABLE_TERM_NAME, projection, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
@@ -116,6 +116,8 @@ public class DBManager {
 
         mDatabase.insert(TABLE_TERM_NAME, null, termRow);
 
+        setFilteredCompaniesSelected(true);
+
         Log.d(RHCareerFairLayout.RH_CFL, "Finished loading new data");
     }
 
@@ -128,13 +130,8 @@ public class DBManager {
 
         mDatabase.insertWithOnConflict(TABLE_SELECTED_CATEGORIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
 
-        // Set selected values of all companies to false
-        mDatabase.execSQL("UPDATE " + TABLE_SELECTED_COMPANIES_NAME +
-                        " SET " + KEY_SELECTED + " = 0"
-        );
 
-        CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
-        bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true), SQLiteDatabase.CONFLICT_REPLACE);
+        setFilteredCompaniesSelected(true);
 
         // Update with only new companies.
 
@@ -166,7 +163,13 @@ public class DBManager {
         mDatabase.insertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public static void setAllCompaniesSelected(boolean selected) throws SQLException {
+    public static void setFilteredCompaniesSelected(boolean selected) throws SQLException {
+
+        // Set selected values of all companies to false
+        mDatabase.execSQL("UPDATE " + TABLE_SELECTED_COMPANIES_NAME +
+                        " SET " + KEY_SELECTED + " = 0"
+        );
+
         CompanyMap companies = new CompanyMap(getFilteredCompaniesCursor());
 
         bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(selected), SQLiteDatabase.CONFLICT_REPLACE);
@@ -193,21 +196,22 @@ public class DBManager {
     }
 
     public static Cursor getFilteredCompaniesCursor() {
-
-        String searchText = MainActivity.instance.getSearchText();
-        searchText = "%" + (searchText == null ? "" : searchText.trim()) + "%";
+        String searchText = "%" +
+                mContext.getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE).
+                        getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "").trim() +
+                "%";
 
         // Create new querybuilder
         SQLiteQueryBuilder sqlQB = new SQLiteQueryBuilder();
 
         // Join tables on ID
         sqlQB.setTables(TABLE_COMPANY_NAME +
-                " JOIN " + VIEW_FILTERED_COMPANIES_NAME + " ON " +
-                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + VIEW_FILTERED_COMPANIES_NAME + "." + KEY_COMPANY_ID +
-                " JOIN " + TABLE_TABLEMAPPING_NAME + " ON " +
-                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID +
-                " JOIN " + TABLE_SELECTED_COMPANIES_NAME + " ON " +
-                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID
+                        " JOIN " + VIEW_FILTERED_COMPANIES_NAME + " ON " +
+                        TABLE_COMPANY_NAME + "." + KEY_ID + " = " + VIEW_FILTERED_COMPANIES_NAME + "." + KEY_COMPANY_ID +
+                        " JOIN " + TABLE_TABLEMAPPING_NAME + " ON " +
+                        TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID +
+                        " JOIN " + TABLE_SELECTED_COMPANIES_NAME + " ON " +
+                        TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID
         );
 
         // Get these columns.
@@ -476,14 +480,12 @@ public class DBManager {
 
         // Join tables on ID
         sqlQB.setTables(TABLE_TABLEMAPPING_NAME +
-                " LEFT OUTER JOIN " + TABLE_COMPANY_NAME + " ON " +
-                TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID + " = " + TABLE_COMPANY_NAME + "." + KEY_ID +
                 " LEFT OUTER JOIN " + TABLE_SELECTED_COMPANIES_NAME + " ON " +
-                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID);
+                TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID);
 
         // Get these columns.
         String[] projection = new String[]{
-                TABLE_TABLEMAPPING_NAME + "." + KEY_ID + " AS " + KEY_ID,
+                KEY_ID,
                 KEY_SIZE,
                 KEY_SELECTED
         };
@@ -711,9 +713,9 @@ public class DBManager {
         public static final String DROP_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE_NAME;
         public static final String DROP_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION_NAME;
 
-            public DBHelper(Context context) {
-                super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            }
+        public DBHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
 
         public void resetDB(SQLiteDatabase db) {
 

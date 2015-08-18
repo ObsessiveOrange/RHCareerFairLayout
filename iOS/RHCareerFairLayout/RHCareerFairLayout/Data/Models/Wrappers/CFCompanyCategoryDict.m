@@ -22,7 +22,7 @@
             
             NSDictionary* companyCategoryData = (NSDictionary*) [data objectForKey:key];
             
-            NSNumber* companyId = [[NSNumber alloc] initWithInteger:[((NSString*)[companyCategoryData objectForKey:@"companyId"]) integerValue]];
+            NSInteger companyId = [((NSString*)[companyCategoryData objectForKey:@"companyId"]) integerValue];
             NSArray* categories = (NSArray*)[companyCategoryData objectForKey:@"categories"];
             
             
@@ -30,7 +30,7 @@
             CFCompanyCategory* companyCategory = [[CFCompanyCategory alloc] initWithCompanyId: companyId
                                                          withCategories: categories];
             
-            [self setObject:companyCategory forKey:companyId];
+            [self setObject:companyCategory forKey:@(companyId)];
         }
         
         return self;
@@ -47,6 +47,9 @@
 }
 - (id)objectForKey:(id)aKey{
     return [self.companyCategoryDict objectForKey:aKey];
+}
+- (id)objectForIntKey:(NSInteger)aKey{
+    return [self.companyCategoryDict objectForKey:@(aKey)];
 }
 - (NSEnumerator *)keyEnumerator{
     return [self.companyCategoryDict keyEnumerator];

@@ -11,8 +11,8 @@
 
 @interface CFTableMapping : CFEntry
 @property (nonatomic, strong) NSNumber* tableMapping_companyId;
-@property (nonatomic, strong) NSNumber* tableMapping_size;
+@property (nonatomic) NSInteger tableMapping_size;
 
-- (id) initWithId: (NSNumber*) id withCompanyId: (NSNumber*) companyId withSize: (NSNumber*) size;
+- (id) initWithId: (NSInteger) id withCompanyId: (NSNumber*) companyId withSize: (NSInteger) size;
 
 @end

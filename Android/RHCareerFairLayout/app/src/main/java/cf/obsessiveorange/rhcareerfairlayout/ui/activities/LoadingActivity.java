@@ -4,20 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.ConnectionManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
-import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.DataWrapper;
+import cf.obsessiveorange.rhcareerfairlayout.data.requests.GetAllDataRequest;
 
 
 public class LoadingActivity extends Activity {
@@ -29,8 +28,15 @@ public class LoadingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        boolean forceRefresh = getIntent().getBooleanExtra(KEY_FORCE_REFRESH, false);
-        reloadData(forceRefresh);
+        final Button retryButton = (Button) findViewById(R.id.loading_btn_retry);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadData();
+            }
+        });
+
+        reloadData();
 
     }
 
@@ -39,23 +45,23 @@ public class LoadingActivity extends Activity {
         super.onResume();
     }
 
-    private void reloadData(boolean forceRefresh) {
+    private void reloadData() {
 
-        final TextView statusTextView = (TextView) findViewById(R.id.loading_status_textview);
+        final TextView statusTextView = (TextView) findViewById(R.id.loading_txt_status);
+        final Button retryButton = (Button) findViewById(R.id.loading_btn_retry);
+
         final Timer timer = new Timer();
-
-        final String requestYear = "2015";
-        final String requestQuarter = "Fall";
 
         DBManager.setupDBAdapterIfNeeded(this);
 
         statusTextView.setText(getString(R.string.loadingStatus_checkingForNewData));
+        retryButton.setVisibility(View.INVISIBLE);
 
         // TODO: Get last update time from server
-        Long lastUpdateTime = DBManager.getLastUpdateTime(requestYear, requestQuarter);
+        Long localUpdateTime = DBManager.getLastUpdateTime();
 
-        // TODO: Change this logic to factor in last update times.
-        if (!forceRefresh && lastUpdateTime != null) {
+        // TODO: Change this logic to factor in server update times.
+        if (localUpdateTime != null && (System.currentTimeMillis() - localUpdateTime) < TimeUnit.DAYS.toMillis(RHCareerFairLayout.DATA_CACHE_TIME_IN_DAYS)) {
             statusTextView.setText(getString(R.string.loadingStatus_dataUpToDate));
             Log.d(RHCareerFairLayout.RH_CFL, "Data already downloaded, skipping retrieval.");
 
@@ -66,89 +72,55 @@ public class LoadingActivity extends Activity {
                 }
             };
 
-            timer.schedule(doneLoadingData, 1000);
+            timer.schedule(doneLoadingData, 500);
 
         } else {
             statusTextView.setText(getString(R.string.loadingStatus_downloadingData));
             Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
 
-            ConnectionManager.Request req = new ConnectionManager.Request();
-//             For eventual support of historical data.
-//            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all");
-            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all/latest");
-            req.setMethod(ConnectionManager.Request.HTTPMethod.GET);
-//             For eventual support of historical data.
-//            req.setQueryParams(new HashMap<String, String>() {{
-//                put("year", requestYear);
-//                put("quarter", requestQuarter);
-//            }});
-            req.setHeaderParams(null);
-            req.setBodyParams(null);
-            req.setResponseHandler(new ConnectionManager.ResponseHandler() {
+            Runnable successHandler = new Runnable() {
                 @Override
-                public void handleSuccess(String response) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    DataWrapper dataWrapper = null;
-                    try {
-                        dataWrapper = mapper.readValue(response, DataWrapper.class);
-                    } catch (IOException e) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                statusTextView.setText("Error occurred during deserialization");
-                            }
-                        });
-                        Log.e(RHCareerFairLayout.RH_CFL, "Error occurred during deserialization", e);
-                        e.printStackTrace();
-                        return;
-                    }
-                    Log.d(RHCareerFairLayout.RH_CFL, "Object deserialized successfully");
-
-                    try {
-                        DBManager.loadNewData(dataWrapper);
-                    } catch (SQLException e) {
-                        Log.d(RHCareerFairLayout.RH_CFL, "SQL exception while loading data into DB", e);
-                        finish();
-                    }
-
-                    Log.d(RHCareerFairLayout.RH_CFL, "Object input into DB successfully");
-
+                public void run() {
                     doneLoadingData();
                 }
+            };
 
+            Runnable exceptionHandler = new Runnable() {
                 @Override
-                public void handleException(Exception e) {
+                public void run() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
-                            // TODO: Retry button
+                            retryButton.setVisibility(View.VISIBLE);
                         }
                     });
-                    Log.d(RHCareerFairLayout.RH_CFL, "Exception thrown while downloading data.", e);
                 }
+            };
 
+            Runnable failHandler = new Runnable() {
                 @Override
-                public void handleFailure(String response) {
+                public void run() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            statusTextView.setText(getString(R.string.loadingStatus_errorDownloadingData));
-                            // TODO: Retry button
+                            statusTextView.setText(getString(R.string.loadingStatus_errorParsingData));
+                            retryButton.setVisibility(View.VISIBLE);
                         }
                     });
-                    Log.d(RHCareerFairLayout.RH_CFL, "Failed to download data. Response: " + response);
                 }
-            });
+            };
+
+            GetAllDataRequest req = new GetAllDataRequest(successHandler, exceptionHandler, failHandler);
 
             Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
             ConnectionManager.enqueueRequest(req);
         }
     }
 
-    public void doneLoadingData() {
+    private void doneLoadingData(){
         Intent launchNextActivity;
-        launchNextActivity = new Intent(this, MainActivity.class);
+        launchNextActivity = new Intent(LoadingActivity.this, MainActivity.class);
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

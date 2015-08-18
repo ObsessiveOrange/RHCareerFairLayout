@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +21,7 @@ import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Category;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
+import cf.obsessiveorange.rhcareerfairlayout.ui.application.RHCareerFairLayoutApplication;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -72,13 +77,13 @@ public class DetailActivity extends AppCompatActivity {
         }
         workAuthorizations.delete(workAuthorizations.length()-2, workAuthorizations.length());
 
-        TextView detailName = (TextView) findViewById(R.id.detail_companyName);
-        TextView detailWebsite = (TextView) findViewById(R.id.detail_companyWebsite);
-        TextView detailDescription = (TextView) findViewById(R.id.detail_description);
-        TextView detailMajors = (TextView) findViewById(R.id.detail_majors);
-        TextView detailPositionTypes = (TextView) findViewById(R.id.detail_positionTypes);
-        TextView detailWorkAuthorizations = (TextView) findViewById(R.id.detail_workAuthorizations);
-        TextView detailAddress = (TextView) findViewById(R.id.detail_address);
+        TextView detailName = (TextView) findViewById(R.id.detail_txt_companyName);
+        TextView detailWebsite = (TextView) findViewById(R.id.detail_txt_websiteLink);
+        TextView detailDescription = (TextView) findViewById(R.id.detail_txt_description);
+        TextView detailMajors = (TextView) findViewById(R.id.detail_txt_majors);
+        TextView detailPositionTypes = (TextView) findViewById(R.id.detail_txt_positionTypes);
+        TextView detailWorkAuthorizations = (TextView) findViewById(R.id.detail_txt_workAuthorizations);
+        TextView detailAddress = (TextView) findViewById(R.id.detail_txt_address);
 
         detailName.setText(company.getName());
 
@@ -91,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(company.getAddress() == null || company.getAddress().isEmpty()){
             detailAddress.setVisibility(View.GONE);
-            findViewById(R.id.detail_address_header).setVisibility(View.GONE);
+            findViewById(R.id.detail_hdr_address).setVisibility(View.GONE);
             findViewById(R.id.detail_address_spacer).setVisibility(View.GONE);
         }
         else{
@@ -100,7 +105,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(company.getDescription() == null || company.getDescription().isEmpty()){
             detailDescription.setVisibility(View.GONE);
-            findViewById(R.id.detail_description_header).setVisibility(View.GONE);
+            findViewById(R.id.detail_hdr_description).setVisibility(View.GONE);
             findViewById(R.id.detail_description_spacer).setVisibility(View.GONE);
         }
         else{
@@ -109,6 +114,18 @@ public class DetailActivity extends AppCompatActivity {
         detailMajors.setText(majors);
         detailPositionTypes.setText(positionTypes);
         detailWorkAuthorizations.setText(workAuthorizations);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Send tracking info
+        RHCareerFairLayoutApplication application = (RHCareerFairLayoutApplication) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+        Log.i(RHCareerFairLayout.RH_CFL, "Setting screen name: Company Details");
+        tracker.setScreenName("Company Details");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

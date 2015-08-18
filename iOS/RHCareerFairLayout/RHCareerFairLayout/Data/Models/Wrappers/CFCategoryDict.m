@@ -22,7 +22,7 @@
             
             NSDictionary* categoryData = (NSDictionary*) [data objectForKey:key];
             
-            NSNumber* id = [[NSNumber alloc] initWithInteger:([(NSString*)[categoryData objectForKey:@"id"] integerValue])];
+            NSInteger id =[(NSString*)[categoryData objectForKey:@"id"] integerValue];
             NSString* name = (NSString*)[categoryData objectForKey:@"name"];
             NSString* type = (NSString*)[categoryData objectForKey:@"type"];
             
@@ -32,7 +32,7 @@
                                                          withName: name
                                                          withType: type];
             
-            [self setObject:category forKey:id];
+            [self setObject:category forKey:@(id)];
         }
         
         return self;
@@ -49,6 +49,9 @@
 }
 - (id)objectForKey:(id)aKey{
     return [self.categoryDict objectForKey:aKey];
+}
+- (id)objectForIntKey:(NSInteger)aKey{
+    return [self.categoryDict objectForKey:@(aKey)];
 }
 - (NSEnumerator *)keyEnumerator{
     return [self.categoryDict keyEnumerator];

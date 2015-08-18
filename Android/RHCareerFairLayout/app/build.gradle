@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 22
@@ -8,8 +9,8 @@ android {
         applicationId "cf.obsessiveorange.rhcareerfairlayout"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.0b4h1"
+        versionCode 4
+        versionName "1.0b5"
     }
     buildTypes {
         release {
@@ -34,15 +35,16 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
     compile(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.4'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.5.4'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.4']
     )
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    compile 'com.google.android.gms:play-services-analytics:7.5.0'
     compile project(':persistentSearch')
 }

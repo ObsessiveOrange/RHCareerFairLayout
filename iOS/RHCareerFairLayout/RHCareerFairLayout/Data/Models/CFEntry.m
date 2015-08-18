@@ -10,7 +10,7 @@
 
 @implementation CFEntry
 
-- (id) initWithId: (NSNumber*) id{
+- (id) initWithId: (NSInteger) id{
     
     self = [super init];
     if(self){

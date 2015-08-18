@@ -215,8 +215,8 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
         public ViewHolder(View view) {
             super(view);
             cellRoot = (LinearLayout) view.findViewById(R.id.cell_root);
-            filterActiveCheckbox = (CheckBox) view.findViewById(R.id.filter_active);
-            filterNameTextView = (TextView) view.findViewById(R.id.filter_name);
+            filterActiveCheckbox = (CheckBox) view.findViewById(R.id.filter_chk_active);
+            filterNameTextView = (TextView) view.findViewById(R.id.filter_txt_name);
         }
     }
 

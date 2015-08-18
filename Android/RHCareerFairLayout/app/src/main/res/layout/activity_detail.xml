@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/detail_companyName"
+            android:id="@+id/detail_txt_companyName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailCompanyName"
@@ -25,7 +25,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_companyWebsite"
+            android:id="@+id/detail_txt_websiteLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailWebsite"
@@ -37,14 +37,14 @@
             android:layout_height="20dp" />
 
         <TextView
-            android:id="@+id/detail_description_header"
+            android:id="@+id/detail_hdr_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_DetailDescription"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_description"
+            android:id="@+id/detail_txt_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lipsum" />
@@ -55,14 +55,14 @@
 
 
         <TextView
-            android:id="@+id/detail_majors_header"
+            android:id="@+id/detail_hdr_majors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_DetailMajors"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_majors"
+            android:id="@+id/detail_txt_majors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailMajors" />
@@ -73,14 +73,14 @@
 
 
         <TextView
-            android:id="@+id/detail_positionTypes_header"
+            android:id="@+id/detail_hdr_positionTypes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_DetailPositionTypes"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_positionTypes"
+            android:id="@+id/detail_txt_positionTypes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailPositionTypes" />
@@ -91,14 +91,14 @@
 
 
         <TextView
-            android:id="@+id/detail_workAuthorizations_header"
+            android:id="@+id/detail_hdr_workAuthorizations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_DetailWorkAuthorizations"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_workAuthorizations"
+            android:id="@+id/detail_txt_workAuthorizations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailWorkAuthorizations" />
@@ -110,14 +110,14 @@
 
 
         <TextView
-            android:id="@+id/detail_address_header"
+            android:id="@+id/detail_hdr_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_DetailAddress"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/detail_address"
+            android:id="@+id/detail_txt_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_DetailAddress" />

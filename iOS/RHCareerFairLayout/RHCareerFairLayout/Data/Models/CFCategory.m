@@ -10,7 +10,7 @@
 
 @implementation CFCategory
 
-- (id) initWithId: (NSNumber*) id withName: (NSString*) name withType: (NSString*) type {
+- (id) initWithId: (NSInteger) id withName: (NSString*) name withType: (NSString*) type {
     
     self = [super initWithId:id];
     if(self){

@@ -19,6 +19,7 @@ package cf.obsessiveorange.rhcareerfairlayout.ui.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,8 +30,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -44,8 +47,10 @@ import java.util.Stack;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
+import cf.obsessiveorange.rhcareerfairlayout.data.managers.ConnectionManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Term;
+import cf.obsessiveorange.rhcareerfairlayout.data.requests.GetAllDataRequest;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPLayoutContainerFragment;
 import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
 
@@ -66,11 +71,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+
         instance = this;
 //        Pull using: adb pull /sdcard/RHCareerFairLayoutTrace.trace "D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\android\RHCareerFairLayout"
 //        Debug.startMethodTracing("RHCareerFairLayoutTrace");
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         DBManager.setupDBAdapterIfNeeded(this);
@@ -89,13 +95,13 @@ public class MainActivity extends BaseActivity {
             reloadData();
             return;
         } else {
-            ((TextView) findViewById(R.id.career_fair_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
+            ((TextView) findViewById(R.id.main_txt_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
         }
 
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
             FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.fragment, new VPParentFragment(),
+            ft.add(R.id.main_frg_body, new VPParentFragment(),
                     VPParentFragment.FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
@@ -186,12 +192,115 @@ public class MainActivity extends BaseActivity {
     }
 
     private void reloadData() {
-        Intent reloadDataIntent = new Intent(this, LoadingActivity.class);
-        reloadDataIntent.putExtra(LoadingActivity.KEY_FORCE_REFRESH, true);
-        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        reloadDataIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(reloadDataIntent);
+
+        final ProgressDialog progressDialog = ProgressDialog.show(MainActivity.this, "", "Loading...");
+
+        // If successful, notify all that that refreshed.
+        Runnable successHandler = new Runnable() {
+            @Override
+            public void run() {
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+                synchronized (RHCareerFairLayout.refreshMapNotifier) {
+                    RHCareerFairLayout.refreshMapNotifier.notifyChanged();
+                }
+
+                progressDialog.dismiss();
+            }
+        };
+
+        // If exception or failure, show error message, and ask if they want to retry.
+        Runnable exceptionHandler = new Runnable() {
+            @Override
+            public void run() {
+
+                progressDialog.dismiss();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogFragment df = new DialogFragment() {
+                            @Override
+                            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle("Error");
+                                builder.setMessage(getResources().getString(R.string.loadingStatus_errorDownloadingData));
+                                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dismiss();
+
+                                        reloadData();
+
+                                    }
+                                });
+                                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dismiss();
+                                    }
+                                });
+                                return builder.create();
+                            }
+                        };
+                        df.show(getFragmentManager(), null);
+                    }
+                });
+            }
+        };
+
+        Runnable failHandler = new Runnable() {
+            @Override
+            public void run() {
+
+                progressDialog.dismiss();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DialogFragment df = new DialogFragment() {
+                            @Override
+                            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle("Error");
+                                builder.setMessage(getResources().getString(R.string.loadingStatus_errorParsingData));
+                                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dismiss();
+
+                                        reloadData();
+
+                                    }
+                                });
+                                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dismiss();
+                                    }
+                                });
+                                return builder.create();
+                            }
+                        };
+                        df.show(getFragmentManager(), null);
+                    }
+                });
+            }
+        };
+
+        GetAllDataRequest req = new GetAllDataRequest(successHandler, exceptionHandler, failHandler);
+
+        Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
+        ConnectionManager.enqueueRequest(req);
     }
 
     @Override
@@ -221,17 +330,29 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
 //        Debug.stopMethodTracing();
 
+
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.remove(fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG));
+            ft.commit();
+            fm.executePendingTransactions();
+        }
+
         super.onDestroy();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
 
         switch (requestCode) {
             case RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP:
                 if (resultCode == RESULT_OK) {
+                    // Go to Layout fragment.
                     fragmentParent.getPager().setCurrentItem(0);
+
+                    // Check if current fragment is Layout fragment
                     Fragment fragment = fragmentParent.getCurrentFragment();
                     if (fragment instanceof VPLayoutContainerFragment) {
                         VPLayoutContainerFragment mapFragment = (VPLayoutContainerFragment) fragment;
@@ -288,31 +409,31 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onSearchTermChanged(String term) {
+
+                saveSearchString();
                 synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
                     RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                 }
-
-                saveSearchString();
             }
 
             @Override
             public void onSearch(String searchTerm) {
 
+                saveSearchString();
+
                 synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
                     RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                 }
-
-                saveSearchString();
             }
 
             @Override
             public void onSearchCleared() {
 
+                saveSearchString();
+
                 synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
                     RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
                 }
-
-                saveSearchString();
             }
 
         });
@@ -320,6 +441,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void closeSearch() {
+
+        saveSearchString();
+
         search.hideCircularlyToMenuItem(R.id.action_search, this);
     }
 
@@ -337,49 +461,18 @@ public class MainActivity extends BaseActivity {
 
             // Get last position, and send viewPager to that.
             int newPosition = backStack.pop();
-            VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+            VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
             fragmentParent.getPager().setCurrentItem(newPosition);
 
         }
-
-//        DialogFragment df;
-//        df = new DialogFragment() {
-//            @Override
-//            public Dialog onCreateDialog(Bundle savedInstanceState) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("Quit?");
-//                builder.setMessage("Really quit?");
-//                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        MainActivity.super.onBackPressed();
-//                        dismiss();
-//                    }
-//                });
-//                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dismiss();
-//                    }
-//                });
-//                return builder.create();
-//            }
-//        };
-//        df.show(getFragmentManager(), null);
     }
 
-    public String getSearchText() {
+    private String getSearchText() {
         return search.getSearchText();
     }
 
     public SearchBox getSearch() {
         return search;
-    }
-
-    public void setSearch(SearchBox search) {
-        this.search = search;
     }
 
     private void saveSearchString() {
@@ -394,12 +487,21 @@ public class MainActivity extends BaseActivity {
         editor.apply();
     }
 
-    private String getSearchString() {
+    public String getSearchString() {
         SharedPreferences prefs = MainActivity.this.getSharedPreferences(
                 RHCareerFairLayout.RH_CFL,
                 Context.MODE_PRIVATE);
 
         return prefs.getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "");
+    }
+
+    public void clearSearchFocus(){
+        if(search.hasFocus()) {
+            search.clearFocus();
+        }
+
+        InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
 
     public void pushToBackStack(int position) {

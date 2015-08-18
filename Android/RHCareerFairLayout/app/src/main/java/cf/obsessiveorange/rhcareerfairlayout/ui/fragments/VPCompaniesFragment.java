@@ -74,14 +74,13 @@ public class VPCompaniesFragment extends BaseFragment {
             }
         }
 
-        final String searchText = ((MainActivity)getActivity()).getSearchText();
-        final TextView notificationTextView = (TextView) mView.findViewById(R.id.notificationBox);
+        final String searchText = ((MainActivity) getActivity()).getSearchString();
+        final TextView notificationTextView = (TextView) mView.findViewById(R.id.companies_txt_notificationBox);
 
-        if(searchText != null && !searchText.isEmpty()){
+        if (searchText != null && !searchText.isEmpty()) {
             notificationTextView.setText(getResources().getString(R.string.notification_Search, searchText));
             notificationTextView.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             notificationTextView.setVisibility(View.GONE);
         }
 
@@ -107,17 +106,16 @@ public class VPCompaniesFragment extends BaseFragment {
                         }
                         ((CompaniesCellAdapter) recyclerView.getAdapter()).refreshData();
 
-                        final String searchText = ((MainActivity)getActivity()).getSearchText();
-                        final TextView notificationTextView = (TextView) mView.findViewById(R.id.notificationBox);
+                        final String searchText = ((MainActivity) getActivity()).getSearchString();
+                        final TextView notificationTextView = (TextView) mView.findViewById(R.id.companies_txt_notificationBox);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(searchText != null && !searchText.isEmpty()){
+                                if (searchText != null && !searchText.isEmpty()) {
                                     notificationTextView.setText(getResources().getString(R.string.notification_Search, searchText));
                                     notificationTextView.setVisibility(View.VISIBLE);
-                                }
-                                else{
+                                } else {
                                     notificationTextView.setVisibility(View.GONE);
                                 }
                             }
@@ -180,7 +178,7 @@ public class VPCompaniesFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Selected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBManager.setAllCompaniesSelected(true);
+                    DBManager.setFilteredCompaniesSelected(true);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -210,7 +208,7 @@ public class VPCompaniesFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "Deselected all items", Toast.LENGTH_SHORT).show();
 
                 try {
-                    DBManager.setAllCompaniesSelected(false);
+                    DBManager.setFilteredCompaniesSelected(false);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

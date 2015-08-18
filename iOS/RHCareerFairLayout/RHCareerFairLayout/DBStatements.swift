@@ -216,5 +216,6 @@ class DBStatements: NSObject {
     static let DROP_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION : String = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION_NAME;
     
     static let JOIN_STATEMENT : String = "%@ JOIN %@ ON %@.%@ = %@.%@";
+    static let LEFT_OUTER_JOIN_STATEMENT : String = "%@ LEFT OUTER JOIN %@ ON %@.%@ = %@.%@";
     
 }

@@ -10,7 +10,7 @@
 
 @implementation CFTableMapping
 
-- (id) initWithId: (NSNumber*) id withCompanyId: (NSNumber*) companyId withSize: (NSNumber*) size{
+- (id) initWithId: (NSInteger) id withCompanyId: (NSNumber*) companyId withSize: (NSInteger) size{
     
     self = [super initWithId:id];
     if(self){

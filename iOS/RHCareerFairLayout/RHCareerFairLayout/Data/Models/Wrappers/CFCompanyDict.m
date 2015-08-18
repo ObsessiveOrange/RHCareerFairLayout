@@ -22,7 +22,7 @@
             
             NSDictionary* companyData = (NSDictionary*) [data objectForKey:key];
             
-            NSNumber* id = [[NSNumber alloc] initWithInteger:([(NSString*)[companyData objectForKey:@"id"] integerValue])];
+            NSInteger id = [(NSString*)[companyData objectForKey:@"id"] integerValue];
             NSString* name = (NSString*)[companyData objectForKey:@"name"];
             NSString* description = (NSString*)[companyData objectForKey:@"description"];
             NSString* websiteLink = (NSString*)[companyData objectForKey:@"websiteLink"];
@@ -36,7 +36,7 @@
                                                withWebsiteLink: websiteLink
                                                withAddress: address];
             
-            [self setObject:company forKey:id];
+            [self setObject:company forKey:@(id)];
         }
         
         return self;
@@ -53,6 +53,9 @@
 }
 - (id)objectForKey:(id)aKey{
     return [self.companyDict objectForKey:aKey];
+}
+- (id)objectForIntKey:(NSInteger)aKey{
+    return [self.companyDict objectForKey:@(aKey)];
 }
 - (NSEnumerator *)keyEnumerator{
     return [self.companyDict keyEnumerator];

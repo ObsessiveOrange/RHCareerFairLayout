@@ -66,9 +66,9 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     Rectangle mapAreaRect;
     Rectangle restAreaRect;
     Rectangle registrationAreaRect;
-    Paint boxPaint;
     double mapWidth;
     double mapHeight;
+    private float mFontSize;
 
     Thread companySelectionChangedWatcher;
 
@@ -290,6 +290,11 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 
         int saveCount = canvas.getSaveCount();
+
+        if(canvas == null){
+            return;
+        }
+
         canvas.save();
         canvas.concat(mMatrix);
 
@@ -297,17 +302,17 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
         synchronized (mTableMapSynchronizationObject) {
 
-            mapAreaRect.draw(canvas);
-            restAreaRect.draw(canvas);
-            registrationAreaRect.draw(canvas);
+            mapAreaRect.draw(canvas, mFontSize);
+            restAreaRect.draw(canvas, mFontSize);
+            registrationAreaRect.draw(canvas, mFontSize);
 
             for (Table table : mTableMap.values()) {
 
                 if (table.getId() == mSelectedTable) {
                     table.getRectangle().setFillPaint(fillPaintHighlightTables);
-                    table.getRectangle().draw(canvas);
+                    table.getRectangle().draw(canvas, mFontSize);
                 } else {
-                    table.getRectangle().draw(canvas);
+                    table.getRectangle().draw(canvas, mFontSize);
                 }
             }
         }
@@ -584,6 +589,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
                     //30% of space allocated to registration and rest area.
                     double tableHeight = unitY * 70 / vrtCount;
+                    mFontSize = (float) tableHeight * 2 / 3;
 
                     //
                     long id = 1;
@@ -640,6 +646,8 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                                     table.isSelected(),
                                     table.getId().toString()
                             );
+                            table.setRectangle(rectangle);
+
                             id++;
                             i += table.getSize();
                         }
@@ -759,7 +767,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         t.start();
     }
 
-    public void flashTable(long tableId){
+    public void flashTable(long tableId) {
 
         final TableMapping tableMapping = DBManager.getTableMapping(tableId);
 
@@ -826,5 +834,9 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
         flashTable(tableMapping.getId());
 
+    }
+
+    public float getScaleFactor() {
+        return mScaleFactor;
     }
 }

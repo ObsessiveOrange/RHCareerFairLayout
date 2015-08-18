@@ -8,6 +8,7 @@
 
 #import "TabBarController.h"
 #import "RHCareerFairLayout-Swift.h"
+#import <FontAwesomeKit/FontAwesomeKit.h>
 
 @interface TabBarController ()
 
@@ -22,6 +23,7 @@
     self.tabBar.barTintColor = RHCareerFairLayout.color_primary;
     self.tabBar.tintColor = RHCareerFairLayout.color_tabText;
     self.tabBar.selectedImageTintColor = RHCareerFairLayout.color_tabTextSelected;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -30,13 +32,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

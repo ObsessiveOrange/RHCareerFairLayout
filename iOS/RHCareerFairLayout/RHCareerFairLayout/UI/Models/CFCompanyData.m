@@ -10,7 +10,7 @@
 
 @implementation CFCompanyData
 
-- (id) initWithId:(NSNumber *)id withName:(NSString *)name withDescription:(NSString *)description withWebsiteLink:(NSString *)websiteLink withAddress:(NSString *)address withTable:(NSNumber *)table selected:(bool) selected{
+- (id) initWithId:(NSInteger)id withName:(NSString *)name withDescription:(NSString *)description withWebsiteLink:(NSString *)websiteLink withAddress:(NSString *)address withTable:(NSInteger)table selected:(bool) selected{
     
     self = [super initWithId:id withName:name withDescription:description withWebsiteLink:websiteLink withAddress:address];
     

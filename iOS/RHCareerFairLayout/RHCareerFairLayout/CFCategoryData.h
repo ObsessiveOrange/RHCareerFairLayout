@@ -13,6 +13,6 @@
 
 @property (nonatomic) bool category_selected;
 
--(id) initWithId: (NSNumber*) id withName: (NSString*) name withType: (NSString*) type selected: (bool) selected;
+-(id) initWithId: (NSInteger) id withName: (NSString*) name withType: (NSString*) type selected: (bool) selected;
 
 @end

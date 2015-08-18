@@ -16,7 +16,6 @@
 
 @interface FiltersViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *moreMenuIcon;
 @property (nonatomic, strong) NSMutableDictionary* filters;
 @property (nonatomic, strong) NSMutableArray* filterTypes;
