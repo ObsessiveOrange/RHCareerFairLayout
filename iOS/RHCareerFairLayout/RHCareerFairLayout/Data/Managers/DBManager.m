@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 ObsessiveOrange. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "DBManager.h"
 #import "RHCareerFairLayout-Swift.h"
 #import "CFCategoryDict.h"
@@ -18,6 +19,8 @@
 #import "CFEntry.h"
 #import "CFTableMapping.h"
 #import "CFTerm.h"
+#import "CFCompanyData.h"
+#import "CFCategoryData.h"
 #import <FMDB.h>
 
 @implementation DBManager
@@ -219,6 +222,250 @@
         [RHCareerFairLayout.database commit];
         [RHCareerFairLayout.database close];
     }
+}
+
++ (NSArray*) getFilteredCompanies{
+    if([RHCareerFairLayout.database open]){
+        
+        NSString* tables;
+        
+        tables = [[NSString alloc] initWithFormat:DBStatements.JOIN_STATEMENT,
+                  DBStatements.TABLE_COMPANY_NAME,
+                  DBStatements.VIEW_FILTERED_COMPANIES_NAME,
+                  DBStatements.TABLE_COMPANY_NAME,
+                  DBStatements.KEY_ID,
+                  DBStatements.VIEW_FILTERED_COMPANIES_NAME,
+                  DBStatements.KEY_COMPANY_ID];
+        tables = [[NSString alloc] initWithFormat:DBStatements.JOIN_STATEMENT,
+                  tables,
+                  DBStatements.TABLE_TABLEMAPPING_NAME,
+                  DBStatements.TABLE_COMPANY_NAME,
+                  DBStatements.KEY_ID,
+                  DBStatements.TABLE_TABLEMAPPING_NAME,
+                  DBStatements.KEY_COMPANY_ID];
+        tables = [[NSString alloc] initWithFormat:DBStatements.JOIN_STATEMENT,
+                  tables,
+                  DBStatements.TABLE_SELECTED_COMPANIES_NAME,
+                  DBStatements.TABLE_COMPANY_NAME,
+                  DBStatements.KEY_ID,
+                  DBStatements.TABLE_SELECTED_COMPANIES_NAME,
+                  DBStatements.KEY_COMPANY_ID];
+        
+        NSArray* projection = @[
+                                [self getColumnNameFromTable:DBStatements.TABLE_COMPANY_NAME withName:DBStatements.KEY_ID asAlias:DBStatements.KEY_ID],
+                                DBStatements.KEY_NAME,
+                                DBStatements.KEY_DESCRIPTION,
+                                DBStatements.KEY_WEBSITE_LINK,
+                                DBStatements.KEY_ADDRESS,
+                                [self getColumnNameFromTable:DBStatements.TABLE_TABLEMAPPING_NAME withName:DBStatements.KEY_ID asAlias:DBStatements.KEY_TABLE],
+                                DBStatements.KEY_SELECTED
+                                ];
+        
+        NSString* criteria = [[NSString alloc] initWithFormat:@"%@.%@ LIKE ?", DBStatements.TABLE_COMPANY_NAME, DBStatements.KEY_NAME];
+        
+        NSString* order = [[NSString alloc] initWithFormat:@"%@.%@ %@", DBStatements.TABLE_COMPANY_NAME, DBStatements.KEY_NAME, @"COLLATE NOCASE ASC"];
+        
+        NSString* sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE %@ ORDER BY %@",
+                         [self getProjectionStatementWithColumns:projection],
+                         tables,
+                         criteria,
+                         order
+                         ];
+        
+        FMResultSet* results = [RHCareerFairLayout.database executeQuery:sql,
+                                [[NSString alloc] initWithFormat:@"%%%@%%", ((AppDelegate*)[[UIApplication sharedApplication] delegate]).searchText]];
+        
+        NSMutableArray* resultsArray = [[NSMutableArray alloc] init];
+        
+        while([results next]){
+            CFCompanyData* companyData = [[CFCompanyData alloc]
+                                          initWithId:[[NSNumber alloc] initWithInt:[results intForColumn:DBStatements.KEY_ID]]
+                                          withName:[results stringForColumn:DBStatements.KEY_NAME]
+                                          withDescription:[results stringForColumn:DBStatements.KEY_DESCRIPTION]
+                                          withWebsiteLink:[results stringForColumn:DBStatements.KEY_WEBSITE_LINK]
+                                          withAddress:[results stringForColumn:DBStatements.KEY_ADDRESS]
+                                          withTable:[[NSNumber alloc] initWithInt:[results intForColumn:DBStatements.KEY_TABLE]]
+                                          selected:[results boolForColumn:DBStatements.KEY_SELECTED]];
+            
+            [resultsArray addObject:companyData];
+        }
+        
+        [RHCareerFairLayout.database close];
+        
+        return resultsArray;
+    }
+    
+    return [[NSArray alloc] init];
+}
+
++ (void) setCompany: (NSNumber*) companyId selected:(bool)selected{
+    if([RHCareerFairLayout.database open]){
+        
+        // Update selected (Replace on duplicate)
+        
+        NSString* sql = [[NSString alloc] initWithFormat:@"INSERT OR REPLACE INTO %@ (%@, %@) VALUES(?, ?);",
+                         DBStatements.TABLE_SELECTED_COMPANIES_NAME,
+                         DBStatements.KEY_COMPANY_ID,
+                         DBStatements.KEY_SELECTED];
+        
+        NSError* error;
+        
+        [RHCareerFairLayout.database executeUpdate:sql
+                              withErrorAndBindings:&error,
+         companyId,
+         @(selected)];
+        
+        [RHCareerFairLayout.database close];
+    }
+    
+}
+
++ (void) updateAllSelectedCompaniesWithSelected: (bool)selected{
+    
+    NSArray* filteredCompanies = [self getFilteredCompanies];
+    
+    [RHCareerFairLayout.database open];
+    [RHCareerFairLayout.database beginTransaction];
+    
+    [RHCareerFairLayout.database executeUpdate:[[NSString alloc]
+                                                initWithFormat:@"UPDATE %@ SET %@ = 0",
+                                                DBStatements.TABLE_SELECTED_COMPANIES_NAME,
+                                                DBStatements.KEY_SELECTED]];
+    
+    NSString* updateFilteredCompanies = [[NSString alloc] initWithFormat:@"INSERT OR REPLACE INTO %@ (%@, %@) VALUES(?, ?);",
+                                         DBStatements.TABLE_SELECTED_COMPANIES_NAME,
+                                         DBStatements.KEY_COMPANY_ID,
+                                         DBStatements.KEY_SELECTED];
+    
+    for(int i = 0; i < [filteredCompanies count]; i++){
+        
+        CFCompanyData* companyData = filteredCompanies[i];
+        
+        NSError* error;
+        
+        [RHCareerFairLayout.database executeUpdate:updateFilteredCompanies withErrorAndBindings:&error,
+         companyData.id,
+         @(selected)];
+        
+    }
+    
+    [RHCareerFairLayout.database commit];
+    [RHCareerFairLayout.database close];
+}
+
++ (NSArray*) getCategories{
+    if([RHCareerFairLayout.database open]){
+        
+        NSString* tables = [[NSString alloc] initWithFormat:DBStatements.JOIN_STATEMENT,
+                            DBStatements.TABLE_CATEGORY_NAME,
+                            DBStatements.TABLE_SELECTED_CATEGORIES_NAME,
+                            DBStatements.TABLE_CATEGORY_NAME,
+                            DBStatements.KEY_ID,
+                            DBStatements.TABLE_SELECTED_CATEGORIES_NAME,
+                            DBStatements.KEY_CATEGORY_ID];
+        
+        NSArray* projection = @[
+                                DBStatements.KEY_ID,
+                                DBStatements.KEY_NAME,
+                                DBStatements.KEY_TYPE,
+                                DBStatements.KEY_SELECTED
+                                ];
+        
+        NSString* order = [[NSString alloc] initWithFormat:@"%@ COLLATE NOCASE ASC, %@ COLLATE NOCASE ASC", DBStatements.KEY_TYPE, DBStatements.KEY_NAME];
+        
+        NSString* sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ ORDER BY %@",
+                         [self getProjectionStatementWithColumns:projection],
+                         tables,
+                         order
+                         ];
+        
+        FMResultSet* results = [RHCareerFairLayout.database executeQuery:sql];
+        
+        NSMutableArray* resultsArray = [[NSMutableArray alloc] init];
+        
+        while([results next]){
+            CFCategoryData* categoryData = [[CFCategoryData alloc]
+                                            initWithId:[[NSNumber alloc] initWithInt:[results intForColumn:DBStatements.KEY_ID]]
+                                            withName:[results stringForColumn:DBStatements.KEY_NAME]
+                                            withType:[results stringForColumn:DBStatements.KEY_TYPE]
+                                            selected:[results boolForColumn:DBStatements.KEY_SELECTED]];
+            
+            [resultsArray addObject:categoryData];
+        }
+        
+        [RHCareerFairLayout.database close];
+        return resultsArray;
+    }
+    
+    return [[NSArray alloc] init];
+}
+
++ (void) setCategory: (NSNumber*) categoryId selected:(bool)selected{
+    if([RHCareerFairLayout.database open]){
+        // Update selected (Replace on duplicate)
+        
+        NSString* sql = [[NSString alloc] initWithFormat:@"INSERT OR REPLACE INTO %@ (%@, %@) VALUES(?, ?);",
+                         DBStatements.TABLE_SELECTED_CATEGORIES_NAME,
+                         DBStatements.KEY_CATEGORY_ID,
+                         DBStatements.KEY_SELECTED];
+        
+        NSError* error;
+        
+        [RHCareerFairLayout.database executeUpdate:sql
+                              withErrorAndBindings:&error,
+         categoryId,
+         @(selected)];
+        
+        
+        [RHCareerFairLayout.database close];
+        
+        [self updateAllSelectedCompaniesWithSelected: true];
+    }
+}
+
++ (void) clearSelectedCategories{
+    if([RHCareerFairLayout.database open]){
+        // Update selected (Replace on duplicate)
+        
+        [RHCareerFairLayout.database executeUpdate:[[NSString alloc]
+                                                    initWithFormat:@"UPDATE %@ SET %@ = 0",
+                                                    DBStatements.TABLE_SELECTED_CATEGORIES_NAME,
+                                                    DBStatements.KEY_SELECTED]];
+        
+        
+        [RHCareerFairLayout.database close];
+        
+        [self updateAllSelectedCompaniesWithSelected: true];
+    }
+}
+
++ (NSString*) getColumnNameFromTable: (NSString*)table withName: (NSString*)name asAlias: (NSString*) alias{
+    
+    if(alias){
+        return [[NSString alloc] initWithFormat:@"%@.%@ AS %@", table, name, alias];
+    }
+    
+    return [[NSString alloc] initWithFormat:@"%@.%@", table, name];
+    
+}
+
++ (NSString*) getProjectionStatementWithColumns: (NSArray*) columns{
+    
+    NSString* projectionStmt = @"";
+    
+    for(int i = 0; i < [columns count]; i++){
+        
+        if([projectionStmt isEqualToString:@""]){
+            projectionStmt = columns[i];
+        }
+        else{
+            projectionStmt = [[NSString alloc] initWithFormat:@"%@, %@", projectionStmt, columns[i]];
+        }
+        
+    }
+    
+    return projectionStmt;
+    
 }
 
 @end

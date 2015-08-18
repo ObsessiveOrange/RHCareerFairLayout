@@ -19,4 +19,11 @@
 + (void) dropViews;
 
 + (void) loadNewData: (CFDataWrapper*) data;
++ (NSArray*) getFilteredCompanies;
++ (void) updateAllSelectedCompaniesWithSelected: (bool)selected;
++ (NSArray*) getCategories;
++ (void) setCompany: (NSNumber*) companyId selected:(bool)selected;
++ (void) setCategory: (NSNumber*) categoryId selected:(bool)selected;
++ (void) clearSelectedCategories;
+
 @end

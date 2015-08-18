@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CompaniesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CompaniesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchBarDelegate>
 
 @end

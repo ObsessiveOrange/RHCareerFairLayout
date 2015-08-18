@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FontAwesomeKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>75933160B29768195F641E71F170762B</key>
+		<key>469234EAB70C3A34B6252A11FDD408C9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7FC267B900F535F17A6B0E4C9D9883B7</key>
+		<key>CDFA1B2983B4A985454966D0BC5CE410</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E2245F2C46A96B3B17FC966B9C8A8B28</key>
 		<dict>
 			<key>primary</key>
 			<true/>

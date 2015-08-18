@@ -17,6 +17,9 @@
 		F06B85281B71803A00C4A169 /* CompaniesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F06B85271B71803A00C4A169 /* CompaniesCell.m */; };
 		F0EAAADB1B7413D600C6CF92 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EAAADA1B7413D600C6CF92 /* DBManager.m */; };
 		F0EAAADD1B7419D300C6CF92 /* DBStatements.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0EAAADC1B7419D300C6CF92 /* DBStatements.swift */; };
+		F0EB47941B76506B006E58F8 /* CFCompanyData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EB47931B76506B006E58F8 /* CFCompanyData.m */; };
+		F0EB479A1B7714D2006E58F8 /* CFCategoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EB47991B7714D2006E58F8 /* CFCategoryData.m */; };
+		F0EB479E1B77ABD5006E58F8 /* ReloadSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EB479D1B77ABD5006E58F8 /* ReloadSegue.m */; };
 		F0EC3D2D1B718B9D004795EF /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EC3D2C1B718B9D004795EF /* FiltersViewController.m */; };
 		F0EC3D301B718BBF004795EF /* CompaniesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EC3D2F1B718BBF004795EF /* CompaniesViewController.m */; };
 		F0EC3D331B718BD5004795EF /* FiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0EC3D321B718BD5004795EF /* FiltersCell.m */; };
@@ -65,6 +68,12 @@
 		F0EAAAD91B7413D600C6CF92 /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBManager.h; path = Data/Managers/DBManager.h; sourceTree = "<group>"; };
 		F0EAAADA1B7413D600C6CF92 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBManager.m; path = Data/Managers/DBManager.m; sourceTree = "<group>"; };
 		F0EAAADC1B7419D300C6CF92 /* DBStatements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBStatements.swift; sourceTree = "<group>"; };
+		F0EB47921B76506B006E58F8 /* CFCompanyData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFCompanyData.h; path = UI/Models/CFCompanyData.h; sourceTree = "<group>"; };
+		F0EB47931B76506B006E58F8 /* CFCompanyData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CFCompanyData.m; path = UI/Models/CFCompanyData.m; sourceTree = "<group>"; };
+		F0EB47981B7714D2006E58F8 /* CFCategoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFCategoryData.h; sourceTree = "<group>"; };
+		F0EB47991B7714D2006E58F8 /* CFCategoryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFCategoryData.m; sourceTree = "<group>"; };
+		F0EB479C1B77ABD5006E58F8 /* ReloadSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReloadSegue.h; path = UI/ReloadSegue.h; sourceTree = "<group>"; };
+		F0EB479D1B77ABD5006E58F8 /* ReloadSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReloadSegue.m; path = UI/ReloadSegue.m; sourceTree = "<group>"; };
 		F0EC3D2B1B718B9D004795EF /* FiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersViewController.h; path = UI/ViewControllers/FiltersViewController.h; sourceTree = "<group>"; };
 		F0EC3D2C1B718B9D004795EF /* FiltersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FiltersViewController.m; path = UI/ViewControllers/FiltersViewController.m; sourceTree = "<group>"; };
 		F0EC3D2E1B718BBF004795EF /* CompaniesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompaniesViewController.h; path = UI/ViewControllers/CompaniesViewController.h; sourceTree = "<group>"; };
@@ -219,6 +228,8 @@
 			children = (
 				F0EC3D361B718CE1004795EF /* Models */,
 				F0EC3D351B718CCF004795EF /* ViewControllers */,
+				F0EB479C1B77ABD5006E58F8 /* ReloadSegue.h */,
+				F0EB479D1B77ABD5006E58F8 /* ReloadSegue.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -245,8 +256,12 @@
 			children = (
 				F06B85261B71803A00C4A169 /* CompaniesCell.h */,
 				F06B85271B71803A00C4A169 /* CompaniesCell.m */,
+				F0EB47921B76506B006E58F8 /* CFCompanyData.h */,
+				F0EB47931B76506B006E58F8 /* CFCompanyData.m */,
 				F0EC3D311B718BD5004795EF /* FiltersCell.h */,
 				F0EC3D321B718BD5004795EF /* FiltersCell.m */,
+				F0EB47981B7714D2006E58F8 /* CFCategoryData.h */,
+				F0EB47991B7714D2006E58F8 /* CFCategoryData.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -440,7 +455,9 @@
 				F0F300391B72FB6600BDC1F1 /* CFEntry.m in Sources */,
 				F0F300251B72CB6600BDC1F1 /* RHCareerFairLayout.swift in Sources */,
 				F0EAAADB1B7413D600C6CF92 /* DBManager.m in Sources */,
+				F0EB479E1B77ABD5006E58F8 /* ReloadSegue.m in Sources */,
 				F0F300301B72FB4400BDC1F1 /* CFCategory.m in Sources */,
+				F0EB47941B76506B006E58F8 /* CFCompanyData.m in Sources */,
 				F0EAAADD1B7419D300C6CF92 /* DBStatements.swift in Sources */,
 				F0F3004B1B72FBD500BDC1F1 /* CFDataWrapper.m in Sources */,
 				F0F300361B72FB5B00BDC1F1 /* CFCompanyCategory.m in Sources */,
@@ -455,6 +472,7 @@
 				F0F3002A1B72CE0E00BDC1F1 /* TabBarController.m in Sources */,
 				F0EC3D331B718BD5004795EF /* FiltersCell.m in Sources */,
 				F0F300221B72C91700BDC1F1 /* LoadingViewController.m in Sources */,
+				F0EB479A1B7714D2006E58F8 /* CFCategoryData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

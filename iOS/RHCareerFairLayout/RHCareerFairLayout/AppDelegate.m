@@ -20,6 +20,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    self.searchText = [[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"];
+    if(!self.searchText){
+        self.searchText = @"";
+        [[NSUserDefaults standardUserDefaults] setValue:self.searchText forKey:@"searchText"];
+    }
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *docsPath = [paths objectAtIndex:0];
     NSString *path = [docsPath stringByAppendingPathComponent: RHCareerFairLayout.dbName];

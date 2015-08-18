@@ -10,7 +10,7 @@
 
 @interface CompaniesCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *showOnMap;
-@property (weak, nonatomic) IBOutlet UILabel *companyName;
-@property (weak, nonatomic) IBOutlet UILabel *tableNumber;
+@property (weak, nonatomic) IBOutlet UIButton *companyName;
+@property (weak, nonatomic) IBOutlet UIButton *tableNumber;
 
 @end

@@ -40,6 +40,6 @@ class RHCareerFairLayout: NSObject {
     
     static var data : NSDictionary?;
     
-    
+    static var aboutString: String = "The RH Career Fair App is designed to help students, faculty and recruiters navigate around career fairs, without needing to resort to unwieldy paper maps. This app, the website, and the server were designed by student Benedict Wong.";
     
 }

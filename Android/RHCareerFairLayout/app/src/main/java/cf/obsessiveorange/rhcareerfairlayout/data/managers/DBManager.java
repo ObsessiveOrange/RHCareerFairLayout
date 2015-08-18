@@ -207,7 +207,8 @@ public class DBManager {
                 " JOIN " + TABLE_TABLEMAPPING_NAME + " ON " +
                 TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_TABLEMAPPING_NAME + "." + KEY_COMPANY_ID +
                 " JOIN " + TABLE_SELECTED_COMPANIES_NAME + " ON " +
-                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID);
+                TABLE_COMPANY_NAME + "." + KEY_ID + " = " + TABLE_SELECTED_COMPANIES_NAME + "." + KEY_COMPANY_ID
+        );
 
         // Get these columns.
         String[] projection = new String[]{
