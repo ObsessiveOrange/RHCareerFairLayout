@@ -217,7 +217,7 @@
          @(term.term_layout_Section2_PathWidth),
          @(term.term_layout_Section2_Rows),
          @(term.term_layout_Section3),
-         @(term.term_lastUpdateTime)];
+         @([term.term_lastUpdateTime timeIntervalSince1970])];
         
         [RHCareerFairLayout.database commit];
         [RHCareerFairLayout.database close];
@@ -275,7 +275,7 @@
                          ];
         
         FMResultSet* results = [RHCareerFairLayout.database executeQuery:sql,
-                                [[NSString alloc] initWithFormat:@"%%%@%%", ((AppDelegate*)[[UIApplication sharedApplication] delegate]).searchText]];
+                                [[NSString alloc] initWithFormat:@"%%%@%%", [[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"]]];
         
         NSMutableArray* resultsArray = [[NSMutableArray alloc] init];
         
@@ -352,13 +352,13 @@
         
         if([results next]){
             companyData = [[CFCompanyData alloc]
-                                          initWithId:[results intForColumn:DBStatements.KEY_ID]
-                                          withName:[results stringForColumn:DBStatements.KEY_NAME]
-                                          withDescription:[results stringForColumn:DBStatements.KEY_DESCRIPTION]
-                                          withWebsiteLink:[results stringForColumn:DBStatements.KEY_WEBSITE_LINK]
-                                          withAddress:[results stringForColumn:DBStatements.KEY_ADDRESS]
-                                          withTable:[results intForColumn:DBStatements.KEY_TABLE]
-                                          selected:[results boolForColumn:DBStatements.KEY_SELECTED]];
+                           initWithId:[results intForColumn:DBStatements.KEY_ID]
+                           withName:[results stringForColumn:DBStatements.KEY_NAME]
+                           withDescription:[results stringForColumn:DBStatements.KEY_DESCRIPTION]
+                           withWebsiteLink:[results stringForColumn:DBStatements.KEY_WEBSITE_LINK]
+                           withAddress:[results stringForColumn:DBStatements.KEY_ADDRESS]
+                           withTable:[results intForColumn:DBStatements.KEY_TABLE]
+                           selected:[results boolForColumn:DBStatements.KEY_SELECTED]];
         }
         [RHCareerFairLayout.database close];
         
@@ -589,7 +589,7 @@
     if([RHCareerFairLayout.database open]){
         // Update selected (Replace on duplicate)
         
-        NSString* sql = [[NSString alloc] initWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@ FROM %@;",
+        NSString* sql = [[NSString alloc] initWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@, %@ FROM %@;",
                          DBStatements.KEY_YEAR,
                          DBStatements.KEY_QUARTER,
                          DBStatements.KEY_LAYOUT_SECTION1,
@@ -597,6 +597,7 @@
                          DBStatements.KEY_LAYOUT_SECTION2_PATHWIDTH,
                          DBStatements.KEY_LAYOUT_SECTION2_ROWS,
                          DBStatements.KEY_LAYOUT_SECTION3,
+                         DBStatements.KEY_LAST_UPDATE_TIME,
                          DBStatements.TABLE_TERM_NAME];
         
         FMResultSet* results = [RHCareerFairLayout.database executeQuery:sql];
@@ -609,7 +610,8 @@
                              withLayoutSection2:[results intForColumn:DBStatements.KEY_LAYOUT_SECTION2]
                     withLayoutSection2PathWidth:[results intForColumn:DBStatements.KEY_LAYOUT_SECTION2_PATHWIDTH]
                          withLayoutSection2Rows:[results intForColumn:DBStatements.KEY_LAYOUT_SECTION2_ROWS]
-                             withLayoutSection3:[results intForColumn:DBStatements.KEY_LAYOUT_SECTION3]];
+                             withLayoutSection3:[results intForColumn:DBStatements.KEY_LAYOUT_SECTION3]
+                             withLastUpdateTime:[results dateForColumn:DBStatements.KEY_LAST_UPDATE_TIME]];
         }
         
         [RHCareerFairLayout.database close];

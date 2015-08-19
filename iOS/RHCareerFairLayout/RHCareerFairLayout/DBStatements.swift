@@ -52,6 +52,8 @@ class DBStatements: NSObject {
     static let KEY_LAST_UPDATE_TIME : String = "lastUpdateTime";
     static let KEY_SELECTED : String = "selected";
     
+    //
+    // Database table & view creation statements.
     static let CREATE_TABLE_CATEGORY : String =
     "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY_NAME + " (" +
         KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -104,7 +106,7 @@ class DBStatements: NSObject {
         KEY_LAYOUT_SECTION2_PATHWIDTH + " INTEGER NOT NULL, " +
         KEY_LAYOUT_SECTION2_ROWS + " INTEGER NOT NULL, " +
         KEY_LAYOUT_SECTION3 + " INTEGER NOT NULL, " +
-        KEY_LAST_UPDATE_TIME + " INTEGER NOT NULL, " +
+        KEY_LAST_UPDATE_TIME + " FLOAT NOT NULL, " +
         "UNIQUE (" + KEY_YEAR + ", " + KEY_QUARTER + ") " +
     ");";
     
@@ -202,7 +204,8 @@ class DBStatements: NSObject {
         TABLE_CATEGORY_NAME + "." + KEY_ID +
         " WHERE type = 'Position Type' AND " + TABLE_SELECTED_CATEGORIES_NAME + "." + KEY_SELECTED + " = 1)));"
     
-    
+    //
+    // Database drop statements
     static let DROP_TABLE_CATEGORY : String = "DROP TABLE IF EXISTS " + TABLE_CATEGORY_NAME;
     static let DROP_TABLE_COMPANY : String = "DROP TABLE IF EXISTS " + TABLE_COMPANY_NAME;
     static let DROP_TABLE_COMPANYCATEGORY : String = "DROP TABLE IF EXISTS " + TABLE_COMPANYCATEGORY_NAME;
@@ -215,6 +218,8 @@ class DBStatements: NSObject {
     static let DROP_VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE : String = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE_NAME;
     static let DROP_VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION : String = "DROP VIEW IF EXISTS " + VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION_NAME;
     
+    // 
+    // Often-used utility statements.
     static let JOIN_STATEMENT : String = "%@ JOIN %@ ON %@.%@ = %@.%@";
     static let LEFT_OUTER_JOIN_STATEMENT : String = "%@ LEFT OUTER JOIN %@ ON %@.%@ = %@.%@";
     

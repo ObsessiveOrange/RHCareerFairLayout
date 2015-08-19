@@ -30,6 +30,7 @@ class RHCareerFairLayout: NSObject {
     static let dbName: String = "RHCareerFairLayout.sqlite";
     static let dbVersion: Int = 1;
     static var database : FMDatabase?;
+    static var dataCacheValidDays : Int = 1;
     
     static var color_tabText : UIColor = UIColor(hex: 0x99ffffff);
     static var color_tabTextSelected : UIColor = UIColor(hex: 0xffffffff);

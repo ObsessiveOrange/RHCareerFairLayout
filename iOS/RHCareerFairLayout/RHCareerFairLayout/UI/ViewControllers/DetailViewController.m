@@ -12,6 +12,7 @@
 #import "DBManager.h"
 #import "AppDelegate.h"
 #import <FontAwesomeKit/FontAwesomeKit.h>
+#import <Google/Analytics.h>
 
 @interface DetailViewController ()
 
@@ -130,6 +131,12 @@
     self.viewOnMapBtn.image = [viewOnMapIcon imageWithSize:CGSizeMake(30, 30)];
     [self.viewOnMapBtn setTarget:self];
     [self.viewOnMapBtn setAction:@selector(viewOnMap)];
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Company Detail"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void) exitDetail{

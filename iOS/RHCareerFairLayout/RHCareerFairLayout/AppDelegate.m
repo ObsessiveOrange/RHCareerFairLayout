@@ -10,6 +10,7 @@
 #import "DBManager.h"
 #import "RHCareerFairLayout-Swift.h"
 #import <FMDB.h>
+#import <Google/Analytics.h>
 
 @interface AppDelegate ()
 
@@ -22,23 +23,37 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:false];
     
-    self.searchText = [[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"];
-    if(!self.searchText){
-        self.searchText = @"";
-        [[NSUserDefaults standardUserDefaults] setValue:self.searchText forKey:@"searchText"];
-    }
+    // Setup forceReload flag - defaults to false unless set otherwise.
+    self.forceReload = false;
     
+    // Leave highlighted table as nil until needed.
     self.hightlightTableId = nil;
     
+    // Setup searchText - default it to an empty string on first run.
+    if(![[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"]){
+        [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"searchText"];
+    }
+    
+    // Setup DB. Create if needed.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *docsPath = [paths objectAtIndex:0];
     NSString *path = [docsPath stringByAppendingPathComponent: RHCareerFairLayout.dbName];
     
+    // Create and save DB reference
     RHCareerFairLayout.database = [FMDatabase databaseWithPath:path];
-    
     [DBManager setupDB];
     
-    // Override point for customization after application launch.
+    // Configure tracker from GoogleService-Info.plist.
+    NSError *configureError;
+    [[GGLContext sharedInstance] configureWithError:&configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    
+    // Configure GAI options.
+    GAI *gai = [GAI sharedInstance];
+    gai.dispatchInterval = 30;
+    gai.trackUncaughtExceptions = YES;  // report uncaught exceptions
+    // gai.logger.logLevel = kGAILogLevelVerbose;  // for dubugging purposes
+    
     return YES;
 }
 

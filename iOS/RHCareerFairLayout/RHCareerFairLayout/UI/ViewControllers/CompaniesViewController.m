@@ -15,6 +15,7 @@
 #import "TabBarController.h"
 #import "AppDelegate.h"
 #import <FontAwesomeKit/FontAwesomeKit.h>
+#import <Google/Analytics.h>
 
 @interface CompaniesViewController ()
 
@@ -38,41 +39,41 @@ static FAKFontAwesome* uncheckedCheckbox;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Setup flag for companyDetail return
     self.displayOnMap = false;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
+    // Setup navigationBar theme
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationController.navigationBar.barTintColor = RHCareerFairLayout.color_primary;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = @"Companies";
     
-    [self hideSearch];
+    self.pageTitleView = self.navigationItem.titleView;
     
+    // Search hidden by default
+    [self hideSearch];
     self.pageSearchView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
     self.pageSearchView.delegate = self;
     self.pageSearchView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.pageTitleView = self.navigationItem.titleView;
-    
-    FAKIonIcons *more = [FAKIonIcons androidMoreIconWithSize:17];
+    // Setup icons
+    FAKIonIcons *more = [FAKIonIcons androidMoreIconWithSize:20];
     self.moreMenuBtn.title = @"";
     self.moreMenuBtn.image = [more imageWithSize:CGSizeMake(30, 30)];
     [self.navigationItem setRightBarButtonItem:self.moreMenuBtn];
     
-    
-    FAKIonIcons *back = [FAKIonIcons ios7ArrowBackIconWithSize:17];
+    FAKIonIcons *back = [FAKIonIcons ios7ArrowBackIconWithSize:20];
     self.exitSearchBtn.title = @"";
     self.exitSearchBtn.image = [back imageWithSize:CGSizeMake(30, 30)];
     [self.navigationItem setLeftBarButtonItem:self.exitSearchBtn];
     
+    // Generate check/unchecked icons
     checkedCheckbox = [FAKFontAwesome checkSquareOIconWithSize:15];
     [checkedCheckbox addAttribute:NSForegroundColorAttributeName value:[UIColor
-                                                                 grayColor]];
+                                                                        grayColor]];
     uncheckedCheckbox = [FAKFontAwesome squareOIconWithSize:15];
     [uncheckedCheckbox addAttribute:NSForegroundColorAttributeName value:[UIColor
-                                                                 grayColor]];
+                                                                          grayColor]];
     
     [self hideSearch];
 }
@@ -80,10 +81,12 @@ static FAKFontAwesome* uncheckedCheckbox;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    // If coming back from the detailView with show on map selected, redirect here.
     if(self.displayOnMap){
         self.displayOnMap = false;
         
         [self gotoMapView];
+        return;
     }
     
     self.companyList = [DBManager getFilteredCompanies];
@@ -93,18 +96,20 @@ static FAKFontAwesome* uncheckedCheckbox;
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    if(self.displayOnMap){
-        self.displayOnMap = false;
-        
-        [self.tabBarController setSelectedIndex:0];
-    }
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Companies"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 -(void) gotoMapView{
     
+    // Redirect, and trigger viewDidAppear.
+    
     [self.tabBarController setSelectedIndex:0];
     [[self.tabBarController selectedViewController] viewDidAppear:true];
 }
+
+# pragma mark - Search functions
 
 - (IBAction)hideSearch:(UIBarButtonItem *)sender {
     [self hideSearch];
@@ -112,23 +117,34 @@ static FAKFontAwesome* uncheckedCheckbox;
 
 - (void) hideSearch{
     
+    // Hide keyboard
     [self.pageSearchView endEditing:YES];
     
+    // Set flag, hide relevant items.
     self.searchActive = false;
     [self.navigationItem.leftBarButtonItem setEnabled:false];
-        [self.navigationItem.leftBarButtonItem setTintColor: [UIColor clearColor]];
-//    self.navigationItem.leftBarButtonItem = nil;
-//    self.navigationItem.rightBarButtonItem = self.moreMenuBtn;
+    [self.navigationItem.leftBarButtonItem setTintColor: [UIColor clearColor]];
     self.navigationItem.titleView = self.pageTitleView;
 }
 
 - (void) showSearch{
+    
+    // Set flag, hide relevant items.
     self.searchActive = true;
     [self.navigationItem.leftBarButtonItem setEnabled:true];
-        [self.navigationItem.leftBarButtonItem setTintColor: nil];
-//    self.navigationItem.leftBarButtonItem = self.exitSearchBtn;
-//    self.navigationItem.rightBarButtonItem = nil;
+    [self.navigationItem.leftBarButtonItem setTintColor: nil];
     self.navigationItem.titleView = self.pageSearchView;
+}
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    
+    // Get new search string
+    [[NSUserDefaults standardUserDefaults] setValue:searchText forKey:@"searchText"];
+    
+    // Get new cursor, reload
+    self.companyList = [DBManager getFilteredCompanies];
+    [self.tableView reloadData];
+    
 }
 
 #pragma mark - Table view data source
@@ -140,9 +156,11 @@ static FAKFontAwesome* uncheckedCheckbox;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    // Use this header (only ever have one) to show what is currently being searched.
+    // A rather hack-ish way of doing it, but it has a good look to it.
+    NSString* searchText = [[NSUserDefaults standardUserDefaults] stringForKey:@"searchText"];
     
-    NSString* searchText = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).searchText;
-    
+    // Return nil for no header if no search term.
     return [searchText length] == 0 ? nil : [[NSString alloc] initWithFormat:@"Searched: %@", searchText];
 }
 
@@ -156,9 +174,10 @@ static FAKFontAwesome* uncheckedCheckbox;
     
     CompaniesCell *cell = [tableView dequeueReusableCellWithIdentifier:companiesCellReuseIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    // Configure the cell.
     CFCompanyData* data = (CFCompanyData*) self.companyList[indexPath.row];
-
+    
+    // Get appropriate checkbox, set as icon.
     FAKFontAwesome *checkbox;
     if(data.company_selected){
         checkbox = checkedCheckbox;
@@ -166,18 +185,21 @@ static FAKFontAwesome* uncheckedCheckbox;
     else{
         checkbox = uncheckedCheckbox;
     }
-
     [cell.showOnMap setAttributedTitle:[checkbox attributedString] forState:UIControlStateNormal];
     cell.showOnMap.tag = indexPath.row;
-
+    
+    // Set Title
     [cell.companyName setTitle:data.company_name
                       forState:UIControlStateNormal];
-    [cell.companyName.titleLabel setTextAlignment: NSTextAlignmentCenter];
     [cell.companyName.titleLabel setNumberOfLines:2];
+    [cell.companyName.titleLabel setTextAlignment: NSTextAlignmentCenter];
     cell.companyName.tag = indexPath.row;
     
+    // Set Table Number
     [cell.tableNumber setTitle:[[NSString alloc] initWithFormat:@"%ld", (long)data.company_table]
                       forState:UIControlStateNormal];
+    
+    // Set tag for ease of use.
     cell.tableNumber.tag = indexPath.row;
     
     return cell;
@@ -185,45 +207,59 @@ static FAKFontAwesome* uncheckedCheckbox;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
+    // Hide keyboard on scroll
     [self.pageSearchView endEditing:YES];
+}
+
+#pragma mark - Tap handlers for cells
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // Don't do anything except hide keyboard
+    [self.pageSearchView endEditing:YES];
+    
 }
 
 - (IBAction)checkBoxSelected:(UIButton *)sender
 {
-    
+    // Hide keyboard on tap
     [self.pageSearchView endEditing:YES];
     
+    // Update DB, retrieve new cursor, reload.
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
     [DBManager setCompany: company.id selected:!company.company_selected];
     self.companyList = [DBManager getFilteredCompanies];
     [self.tableView reloadData];
 }
+
 - (IBAction)companyNameSelected:(UIButton *)sender
 {
+    
+    // Hide keyboard on tap
     [self.pageSearchView endEditing:YES];
     
+    // Pass data to segue through class-variable.
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
     self.selectedCompany = company;
     [self performSegueWithIdentifier:RHCareerFairLayout.companyDetailSegueIdentifier sender:self];
     
 }
+
 - (IBAction)companyTableSelected:(UIButton*)sender
 {
+    
+    // Hide keyboard on tap
     [self.pageSearchView endEditing:YES];
     
+    // Highlight on map. Pass ID through AppDelegate.
     CFCompanyData* company = (CFCompanyData*)self.companyList[sender.tag];
-    NSLog(@"Show map for companyId: %ld", (long)company.id);
-    
     ((AppDelegate*)[[UIApplication sharedApplication] delegate]).hightlightTableId = @(company.company_table);
     [self gotoMapView];
     
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [self.pageSearchView endEditing:YES];
-    
-}
+#pragma mark - Menu
+
 - (IBAction)showMenuActionSheet:(UIBarButtonItem *)sender {
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Companies Options Menu"
@@ -238,10 +274,9 @@ static FAKFontAwesome* uncheckedCheckbox;
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    UIViewController* parent;
-    
     switch(buttonIndex){
         case 0: //search
+            
             if(self.searchActive){
                 [self hideSearch];
             }
@@ -249,54 +284,48 @@ static FAKFontAwesome* uncheckedCheckbox;
                 [self showSearch];
             }
             break;
+            
         case 1: //select all
+            
             [DBManager updateFilteredCompaniesWithSelected:true];
             self.companyList = [DBManager getFilteredCompanies];
             [self.tableView reloadData];
             break;
+            
         case 2: //deselect all
+            
             [DBManager updateFilteredCompaniesWithSelected:false];
             self.companyList = [DBManager getFilteredCompanies];
             [self.tableView reloadData];
             break;
+            
         case 3: //refresh data
             
-            parent = [self parentViewController];
+            // Set force reload flag - no cache.
+            ((AppDelegate*)[[UIApplication sharedApplication] delegate]).forceReload = true;
             
-            while(![parent isKindOfClass:[TabBarController class]]){
-                parent = [parent parentViewController];
-            }
-            
-            [parent performSegueWithIdentifier:@"ReloadSegue" sender:self];
+            [[TabBarController instance] performSegueWithIdentifier:@"ReloadSegue" sender:self];
             
             break;
+            
         case 4: //about
+            
             [[[UIAlertView alloc] initWithTitle:@"About"
                                         message:RHCareerFairLayout.aboutString
                                        delegate:self
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil] show];
             break;
+            
     }
-    
-}
-
-- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    
-    AppDelegate* delegate = ((AppDelegate*)[[UIApplication sharedApplication] delegate]);
-    delegate.searchText = searchText;
-    
-    self.companyList = [DBManager getFilteredCompanies];
-    [self.tableView reloadData];
     
 }
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    // Set detail view's company data
     if([segue.identifier isEqualToString:RHCareerFairLayout.companyDetailSegueIdentifier]){
         DetailViewController* detailView = (DetailViewController*)((UINavigationController*)segue.destinationViewController).topViewController;
         detailView.companyData = self.selectedCompany;

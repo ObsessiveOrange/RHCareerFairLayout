@@ -22,7 +22,7 @@
         self.term_layout_Section2_PathWidth = [((NSNumber*)[data objectForKey:@"layout_Section2_PathWidth"]) intValue];
         self.term_layout_Section2_Rows = [((NSNumber*)[data objectForKey:@"layout_Section2_Rows"]) intValue];
         self.term_layout_Section3 = [((NSNumber*)[data objectForKey:@"layout_Section3"]) intValue];
-        self.term_lastUpdateTime = floor([[NSDate date] timeIntervalSince1970] * 1000);
+        self.term_lastUpdateTime = [NSDate date];
         
         return self;
     }
@@ -30,7 +30,7 @@
     
 }
 
-- (id) initWithYear: (NSString*) year withQuarter: (NSString*) quarter withLayoutSection1: (NSInteger) layout_Section1 withLayoutSection2: (NSInteger) layout_Section2 withLayoutSection2PathWidth: (NSInteger) layout_Section2_PathWidth withLayoutSection2Rows: (NSInteger) layout_Section2_Rows withLayoutSection3: (NSInteger) layout_Section3{
+- (id) initWithYear: (NSString*) year withQuarter: (NSString*) quarter withLayoutSection1: (NSInteger) layout_Section1 withLayoutSection2: (NSInteger) layout_Section2 withLayoutSection2PathWidth: (NSInteger) layout_Section2_PathWidth withLayoutSection2Rows: (NSInteger) layout_Section2_Rows withLayoutSection3: (NSInteger) layout_Section3 withLastUpdateTime: (NSDate*) lastUpdateTime{
     
     self = [super init];
     if(self){
@@ -42,7 +42,7 @@
         self.term_layout_Section2_PathWidth = layout_Section2_PathWidth;
         self.term_layout_Section2_Rows = layout_Section2_Rows;
         self.term_layout_Section3 = layout_Section3;
-        self.term_lastUpdateTime = floor([[NSDate date] timeIntervalSince1970] * 1000);
+        self.term_lastUpdateTime = lastUpdateTime;
         
         return self;
     }

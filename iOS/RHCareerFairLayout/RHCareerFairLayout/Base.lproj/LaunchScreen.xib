@@ -35,7 +35,7 @@
         </view>
     </objects>
     <resources>
-        <image name="CareerFairLoadingScreenBkg.png" width="1080" height="2071"/>
+        <image name="CareerFairLoadingScreenBkg.png" width="1242" height="2208"/>
         <image name="RoseHulmanLogoFull.png" width="1080" height="184"/>
     </resources>
 </document>

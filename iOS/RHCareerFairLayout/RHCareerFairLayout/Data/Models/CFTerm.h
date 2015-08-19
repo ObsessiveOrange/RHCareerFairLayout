@@ -17,9 +17,9 @@
 @property (nonatomic) NSInteger term_layout_Section2_PathWidth;
 @property (nonatomic) NSInteger term_layout_Section2_Rows;
 @property (nonatomic) NSInteger term_layout_Section3;
-@property (nonatomic) NSInteger term_lastUpdateTime;
+@property (nonatomic) NSDate* term_lastUpdateTime;
 
 - (id) initWithDictionary: (NSDictionary*) data;
-- (id) initWithYear: (NSString*) year withQuarter: (NSString*) quarter withLayoutSection1: (NSInteger) layout_Section1 withLayoutSection2: (NSInteger) layout_Section2 withLayoutSection2PathWidth: (NSInteger) layout_Section2_PathWidth withLayoutSection2Rows: (NSInteger) layout_Section2_Rows withLayoutSection3: (NSInteger) layout_Section3;
+- (id) initWithYear: (NSString*) year withQuarter: (NSString*) quarter withLayoutSection1: (NSInteger) layout_Section1 withLayoutSection2: (NSInteger) layout_Section2 withLayoutSection2PathWidth: (NSInteger) layout_Section2_PathWidth withLayoutSection2Rows: (NSInteger) layout_Section2_Rows withLayoutSection3: (NSInteger) layout_Section3 withLastUpdateTime: (NSDate*) lastUpdateTime;
 
 @end

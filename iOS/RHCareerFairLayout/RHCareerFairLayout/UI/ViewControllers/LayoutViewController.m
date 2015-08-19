@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "DetailViewController.h"
 #import <FontAwesomeKit/FontAwesomeKit.h>
+#import <Google/Analytics.h>
 
 @interface LayoutViewController ()
 @property (weak, nonatomic) IBOutlet CanvasView *canvasView;
@@ -25,26 +26,33 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
+    // Set navigation bar theme
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationController.navigationBar.barTintColor = RHCareerFairLayout.color_primary;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = @"Layout";
     
-    FAKIonIcons *menu = [FAKIonIcons androidMoreIconWithSize:17];
+    // Setup icon for actionSheet menu
+    FAKIonIcons *menu = [FAKIonIcons androidMoreIconWithSize:20];
     self.moreMenuIcon.title = @"";
     self.moreMenuIcon.image = [menu imageWithSize:CGSizeMake(30, 30)];
     
+    // Give canvasView reference, for segue when table tapped
     self.canvasView.layoutViewController = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     
+    // If there is a company to be highlighted, setup the future calls to flash it.
     NSNumber* highlightCompany = ((AppDelegate*) [[UIApplication sharedApplication] delegate]).hightlightTableId;
     if(highlightCompany){
         ((AppDelegate*) [[UIApplication sharedApplication] delegate]).hightlightTableId = nil;
         
+        // Cancel any outstanding request first!
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        
+        // Start new animation cycle
         [self performSelector:@selector(flashCompany:) withObject:highlightCompany afterDelay:0.0];
         [self performSelector:@selector(flashCompany:) withObject:nil afterDelay:1.0];
         [self performSelector:@selector(flashCompany:) withObject:highlightCompany afterDelay:2.0];
@@ -53,12 +61,13 @@
         [self performSelector:@selector(flashCompany:) withObject:nil afterDelay:5.0];
     }
     
-    [self.canvasView setupView];
-    [self.canvasView setNeedsDisplay];
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Layout"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void) flashCompany:(NSNumber *)company{
-    
+    // Update view's data, and redraw
     self.canvasView.highlightCompany = company;
     [self.canvasView setNeedsDisplay];
 }
@@ -66,6 +75,7 @@
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     
+    //Earliest time that setup can be done - must have layout already defined.
     [self.canvasView setupView];
     [self.canvasView setNeedsDisplay];
 }
@@ -76,7 +86,10 @@
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Refresh Data", @"About", nil];
+                                                    otherButtonTitles:
+                                  @"Refresh Data",
+                                  @"About",
+                                  nil];
     
     [actionSheet showInView:self.view];
     
@@ -84,21 +97,16 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    UIViewController* parent;
-    
     switch(buttonIndex){
         case 0: //refresh data
             
-            parent = [self parentViewController];
+            // Set force reload flag - no cache.
+            ((AppDelegate*)[[UIApplication sharedApplication] delegate]).forceReload = true;
             
-            while(![parent isKindOfClass:[TabBarController class]]){
-                parent = [parent parentViewController];
-            }
-            
-            [parent performSegueWithIdentifier:@"ReloadSegue" sender:self];
+            [[TabBarController instance] performSegueWithIdentifier:@"ReloadSegue" sender:self];
             
             break;
-            break;
+            
         case 1: //about
             [[[UIAlertView alloc] initWithTitle:@"About"
                                         message:RHCareerFairLayout.aboutString
@@ -106,6 +114,7 @@
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil] show];
             break;
+            
     }
     
 }
@@ -113,10 +122,9 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    // Set detail view's company data
     if([segue.identifier isEqualToString:RHCareerFairLayout.companyDetailSegueIdentifier]){
         DetailViewController* detailView = (DetailViewController*)((UINavigationController*)segue.destinationViewController).topViewController;
         detailView.companyData = self.selectedCompany;

@@ -85,7 +85,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="companyName" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAG-37-85O">
                                                 <rect key="frame" x="8" y="8" width="576" height="24"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="websiteLink" translatesAutoresizingMaskIntoConstraints="NO" id="fAN-fX-Vay">
@@ -103,7 +103,7 @@
                                                 <string key="text">
 Description:</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dMF-Yr-rpS">
@@ -111,13 +111,13 @@ Description:</string>
                                                 <string key="text">
 Majors:</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zA7-Gu-mk4">
                                                 <rect key="frame" x="8" y="157" width="576" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s1j-40-Rsy">
@@ -125,13 +125,13 @@ Majors:</string>
                                                 <string key="text">
 Position Types:</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XER-YP-gF3">
                                                 <rect key="frame" x="8" y="213" width="576" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bOX-sN-he6">
@@ -139,13 +139,13 @@ Position Types:</string>
                                                 <string key="text">
 Work Authorizations:</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaV-UG-Dr0">
                                                 <rect key="frame" x="8" y="269" width="576" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KA0-eC-L2J">
@@ -153,25 +153,25 @@ Work Authorizations:</string>
                                                 <string key="text">
 Address:</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wci-Ot-czv">
                                                 <rect key="frame" x="8" y="325" width="576" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHh-Bp-5Tf">
                                                 <rect key="frame" x="8" y="342" width="0.0" height="250"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asF-Yv-DXW">
                                                 <rect key="frame" x="8" y="101" width="576" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -330,20 +330,32 @@ Address:</string>
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RoseHulmanLogoFull.png" translatesAutoresizingMaskIntoConstraints="NO" id="46a-ss-C4q">
-                                <rect key="frame" x="16" y="0.0" width="568" height="600"/>
+                                <rect key="frame" x="16" y="0.0" width="568" height="536"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading new data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="27h-gg-Qij">
-                                <rect key="frame" x="16" y="555" width="568" height="29"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading new data" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="27h-gg-Qij">
+                                <rect key="frame" x="16" y="515" width="568" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D36-zz-XOC">
+                                <rect key="frame" x="0.0" y="552" width="600" height="32"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Retry">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="retreiveData" destination="AjH-Yh-Jg8" eventType="touchUpInside" id="6Hz-cd-9bk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="a1i-mf-Zx8" firstAttribute="leading" secondItem="ZIU-C4-gPc" secondAttribute="leadingMargin" constant="-16" id="0B7-Dd-HXe"/>
                             <constraint firstItem="46a-ss-C4q" firstAttribute="top" secondItem="ZIU-C4-gPc" secondAttribute="topMargin" id="3cO-4x-tEa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="a1i-mf-Zx8" secondAttribute="trailing" constant="-16" id="3nf-ic-9qu"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="D36-zz-XOC" secondAttribute="bottom" constant="16" id="6Um-NE-DU6"/>
                             <constraint firstItem="Rse-th-XF0" firstAttribute="top" secondItem="27h-gg-Qij" secondAttribute="bottom" constant="8" id="F2h-Gb-jCb"/>
                             <constraint firstItem="a1i-mf-Zx8" firstAttribute="top" secondItem="ZIU-C4-gPc" secondAttribute="topMargin" id="JdI-bv-1DY"/>
                             <constraint firstItem="a1i-mf-Zx8" firstAttribute="top" secondItem="Fcx-XL-XYK" secondAttribute="bottom" id="KT1-Fy-EF8"/>
@@ -354,10 +366,13 @@ Address:</string>
                             <constraint firstAttribute="centerY" secondItem="27h-gg-Qij" secondAttribute="centerY" id="Odd-za-9yc"/>
                             <constraint firstItem="a1i-mf-Zx8" firstAttribute="leading" secondItem="ZIU-C4-gPc" secondAttribute="leadingMargin" constant="-16" id="Qi9-Jh-iOe"/>
                             <constraint firstItem="27h-gg-Qij" firstAttribute="leading" secondItem="ZIU-C4-gPc" secondAttribute="leadingMargin" id="V0C-RZ-N1x"/>
+                            <constraint firstItem="D36-zz-XOC" firstAttribute="leading" secondItem="ZIU-C4-gPc" secondAttribute="leadingMargin" constant="-16" id="V1I-fg-cJU"/>
                             <constraint firstAttribute="centerX" secondItem="27h-gg-Qij" secondAttribute="centerX" id="bRI-fs-7ID"/>
                             <constraint firstAttribute="trailingMargin" secondItem="a1i-mf-Zx8" secondAttribute="trailing" constant="-16" id="fSa-QH-ikF"/>
                             <constraint firstAttribute="bottomMargin" secondItem="27h-gg-Qij" secondAttribute="bottom" constant="16" id="kpF-sh-iKV"/>
-                            <constraint firstItem="46a-ss-C4q" firstAttribute="bottom" secondItem="ZIU-C4-gPc" secondAttribute="bottomMargin" id="uhw-Ci-XDb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="D36-zz-XOC" secondAttribute="trailing" constant="-16" id="laW-DJ-AQC"/>
+                            <constraint firstItem="D36-zz-XOC" firstAttribute="top" secondItem="27h-gg-Qij" secondAttribute="bottom" constant="8" id="tbM-nv-YWj"/>
+                            <constraint firstItem="46a-ss-C4q" firstAttribute="bottom" secondItem="ZIU-C4-gPc" secondAttribute="bottomMargin" constant="-64" id="uhw-Ci-XDb"/>
                             <constraint firstItem="46a-ss-C4q" firstAttribute="leading" secondItem="ZIU-C4-gPc" secondAttribute="leadingMargin" id="uiQ-76-zj8"/>
                         </constraints>
                         <variation key="default">
@@ -366,6 +381,7 @@ Address:</string>
                                 <exclude reference="Qi9-Jh-iOe"/>
                                 <exclude reference="fSa-QH-ikF"/>
                                 <exclude reference="Odd-za-9yc"/>
+                                <exclude reference="kpF-sh-iKV"/>
                                 <exclude reference="F2h-Gb-jCb"/>
                                 <exclude reference="OKj-Nw-2j6"/>
                             </mask>
@@ -373,6 +389,8 @@ Address:</string>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="iWa-XP-II5"/>
                     <connections>
+                        <outlet property="button" destination="D36-zz-XOC" id="Ay0-0O-FoH"/>
+                        <outlet property="statusLabel" destination="27h-gg-Qij" id="d4K-bg-Zbd"/>
                         <segue destination="49e-Tb-3d3" kind="show" identifier="finishedLoadingSegue" id="blC-ho-i0N"/>
                     </connections>
                 </viewController>
@@ -405,12 +423,12 @@ Address:</string>
         <scene sceneID="BJV-Do-If3">
             <objects>
                 <tableViewController id="1fd-Ee-bPN" customClass="CompaniesViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g5p-3o-HC5">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g5p-3o-HC5">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CompanyCell" id="eWJ-Bg-Yc0" customClass="CompaniesCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompanyCell" id="eWJ-Bg-Yc0" customClass="CompaniesCell">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eWJ-Bg-Yc0" id="yvX-8N-Lh7">
@@ -429,17 +447,6 @@ Address:</string>
                                                 <action selector="checkBoxSelected:" destination="1fd-Ee-bPN" eventType="touchUpInside" id="kB6-rC-WjG"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Xo-CJ-ggK">
-                                            <rect key="frame" x="59" y="7" width="482" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <state key="normal" title="Company Name">
-                                                <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="companyNameSelected:" destination="1fd-Ee-bPN" eventType="touchUpInside" id="uH0-5S-9Ro"/>
-                                            </connections>
-                                        </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fFm-yx-Hjh">
                                             <rect key="frame" x="549" y="7" width="35" height="30"/>
                                             <constraints>
@@ -452,6 +459,17 @@ Address:</string>
                                             </state>
                                             <connections>
                                                 <action selector="companyTableSelected:" destination="1fd-Ee-bPN" eventType="touchUpInside" id="yhv-9a-X2o"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Xo-CJ-ggK">
+                                            <rect key="frame" x="59" y="7" width="482" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <state key="normal" title="Company Name">
+                                                <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="companyNameSelected:" destination="1fd-Ee-bPN" eventType="touchUpInside" id="uH0-5S-9Ro"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -469,7 +487,6 @@ Address:</string>
                                     <outlet property="companyName" destination="6Xo-CJ-ggK" id="Hhc-ww-yj5"/>
                                     <outlet property="showOnMap" destination="el3-Xu-n88" id="eT7-ZV-cYf"/>
                                     <outlet property="tableNumber" destination="fFm-yx-Hjh" id="zxA-2B-bOX"/>
-                                    <segue destination="kYT-x1-hwi" kind="presentation" identifier="CompanyDetail" id="Xcj-3Z-lR5"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -493,6 +510,7 @@ Address:</string>
                     <connections>
                         <outlet property="exitSearchBtn" destination="dB3-VT-Hft" id="3z6-jf-blu"/>
                         <outlet property="moreMenuBtn" destination="kcI-8i-Eyx" id="NRG-2g-TU4"/>
+                        <segue destination="kYT-x1-hwi" kind="presentation" identifier="CompanyDetail" id="YV1-O5-yH1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cjT-Tg-nJq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -514,7 +532,13 @@ Address:</string>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E1Y-K1-DSx" id="p5q-Mx-soq">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FKh-qD-nQ5">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f0r-SP-QhJ">
+                                            <rect key="frame" x="59" y="13" width="525" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FKh-qD-nQ5">
                                             <rect key="frame" x="16" y="4" width="35" height="35"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="35" id="Z1j-As-CTp"/>
@@ -524,12 +548,6 @@ Address:</string>
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f0r-SP-QhJ">
-                                            <rect key="frame" x="59" y="13" width="525" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="f0r-SP-QhJ" firstAttribute="leading" secondItem="FKh-qD-nQ5" secondAttribute="trailing" constant="8" id="4Ma-jE-0WG"/>
@@ -619,6 +637,6 @@ Address:</string>
         <image name="map_selected.png" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Xcj-3Z-lR5"/>
+        <segue reference="YV1-O5-yH1"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -12,7 +12,9 @@
 #import "CFCategoryData.h"
 #import "DBManager.h"
 #import "TabBarController.h"
+#import "AppDelegate.h"
 #import <FontAwesomeKit/FontAwesomeKit.h>
+#import <Google/Analytics.h>
 
 @interface FiltersViewController ()
 
@@ -29,26 +31,29 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+    // Setup navigationBar theme
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.navigationController.navigationBar.barTintColor = RHCareerFairLayout.color_primary;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = @"Filters";
     
-    FAKIonIcons *checkbox = [FAKIonIcons androidMoreIconWithSize:17];
+    // Setup icon for actionSheet menu
+    FAKIonIcons *checkbox = [FAKIonIcons androidMoreIconWithSize:20];
     self.moreMenuIcon.title = @"";
     self.moreMenuIcon.image = [checkbox imageWithSize:CGSizeMake(30, 30)];
     
     [self getData];
 }
 
+- (void) viewWillAppear:(BOOL)animated{
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Filters"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
+
 - (void) getData{
     
+    // Get, split up categories based on type.
     NSArray* filtersList = [DBManager getCategories];
     self.filters = [[NSMutableDictionary alloc] init];
     self.filterTypes = [[NSMutableArray alloc] init];
@@ -68,21 +73,15 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    
     return [self.filterTypes count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    // Display header for each type
     return self.filterTypes[section];
 }
 
@@ -95,11 +94,10 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
     
     FiltersCell *cell = [tableView dequeueReusableCellWithIdentifier:filtersCellReuseIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
-    //    CFCategoryData* data = (CFCategoryData*) self.filtersList[indexPath.row];
+    // Get category data,
     CFCategoryData* data = (CFCategoryData*) ((NSArray*)[self.filters objectForKey:self.filterTypes[indexPath.section]])[indexPath.row];
     
-    
+    // Select appropriate checkbox, add to cell
     FAKFontAwesome *checkbox;
     if(data.category_selected){
         checkbox = [FAKFontAwesome checkSquareOIconWithSize:15];
@@ -107,10 +105,10 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
     else{
         checkbox = [FAKFontAwesome squareOIconWithSize:15];
     }
-    
     [checkbox addAttribute:NSForegroundColorAttributeName value:[UIColor
                                                                  grayColor]];
     
+    // Set title
     [cell.filterSelected setAttributedTitle:[checkbox attributedString] forState:UIControlStateNormal];
     cell.filterName.text= data.category_name;
     
@@ -119,10 +117,11 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //toggle company selected
+    // Toggle company selected
     CFCategoryData* filter = ((NSArray*)[self.filters objectForKey:self.filterTypes[indexPath.section]])[indexPath.row];
-    
     [DBManager setCategory:filter.id selected:!filter.category_selected];
+    
+    // Get new cursor, parse and reload.
     [self getData];
     [self.tableView reloadData];
 }
@@ -141,8 +140,6 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    UIViewController* parent;
-    
     switch(buttonIndex){
         case 0: //clear filters
             [DBManager clearSelectedCategories];
@@ -151,15 +148,12 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
             break;
         case 1: //refresh data
             
-            parent = [self parentViewController];
+            // Set force reload flag - no cache.
+            ((AppDelegate*)[[UIApplication sharedApplication] delegate]).forceReload = true;
             
-            while(![parent isKindOfClass:[TabBarController class]]){
-                parent = [parent parentViewController];
-            }
+            // Send reload request
+            [[TabBarController instance] performSegueWithIdentifier:@"ReloadSegue" sender:self];
             
-            [parent performSegueWithIdentifier:@"ReloadSegue" sender:self];
-            
-            break;
             break;
         case 2: //about
             [[[UIAlertView alloc] initWithTitle:@"About"
@@ -171,49 +165,5 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
     }
     
 }
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

@@ -9,11 +9,16 @@
 #import "LayoutViewController.h"
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, UIOrientation) {
+    UIOrientationPortrait,
+    UIOrientationLandscape
+};
+
 @interface CanvasView : UIView
 
 - (void) setupView;
 
-@property (weak, nonatomic) NSNumber *highlightCompany;
+@property (strong, nonatomic) volatile NSNumber *highlightCompany;
 @property (weak, nonatomic) LayoutViewController* layoutViewController;
 
 @end

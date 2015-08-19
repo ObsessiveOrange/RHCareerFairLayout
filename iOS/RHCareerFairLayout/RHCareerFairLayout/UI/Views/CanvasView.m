@@ -46,19 +46,17 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
 
 - (void) commonInit{
     
+    // Add gesture recognizers
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self addGestureRecognizer:self.tapGestureRecognizer];
-    
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [self addGestureRecognizer:self.panGestureRecognizer];
-    
     self.zoomGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handleZoom:)];
+    
+    [self addGestureRecognizer:self.tapGestureRecognizer];
+    [self addGestureRecognizer:self.panGestureRecognizer];
     [self addGestureRecognizer:self.zoomGestureRecognizer];
     
-    self.scaleFactor = 1;
+    // Wait till after setupView called before rendering view.
     self.isSetup = false;
-    
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{BORDER_WIDTH_PREF_KEY:@2.0f, CORNER_ROUNDING_PREF_KEY:@0.0f, SHAPE_COLOR_PREF_KEY:@"#000000"}];
 }
 
 - (id)initWithFrame:(CGRect)frame;
@@ -78,47 +76,51 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
 }
 
 - (void) setupView{
+    // Mark setup - prevents first draw on load, when view sizes are not correct.
     self.isSetup = true;
     
+    // Get saved focus & scale factors
     float focusX = 0, focusY = 0, scaleFactor = 1;
     
-    // portrait
+    // Portrait
     if(self.frame.size.height > self.frame.size.width){
         focusX = [[NSUserDefaults standardUserDefaults] floatForKey:@"focusX-port"];
         focusY = [[NSUserDefaults standardUserDefaults] floatForKey:@"focusY-port"];
         scaleFactor = [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor-port"];
     }
-    // landscape
+    // Landscape
     else{
         focusX = [[NSUserDefaults standardUserDefaults] floatForKey:@"focusX-land"];
         focusY = [[NSUserDefaults standardUserDefaults] floatForKey:@"focusY-land"];
         scaleFactor = [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor-land"];
     }
     
+    // If not set, default to center of screen
     self.focusX = focusX != 0 ? focusX : self.frame.size.width / 2.0;
     self.focusY = focusY != 0 ? focusY : self.frame.size.height / 2.0;
     self.scaleFactor = scaleFactor != 0 ? scaleFactor : 1.0;
     
+    // Define/update center of canvas
     self.centerX = self.frame.size.width / 2.0;
     self.centerY = self.frame.size.height / 2.0;
     
+    // Generate table locations
     [self generateTableLocations];
     
 }
 
-- (void) drawRect:(CGRect)rect{
+- (void) drawRect:(CGRect)rect{    
     if(self.isSetup){
         
+        CGContextRef context = UIGraphicsGetCurrentContext();
         NSArray* tables = [self.tables.tableDict allValues];
         
-        
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        
+        // Draw static tables.
         [self drawTableOnContext:context withData:self.mapAreaRect];
         [self drawTableOnContext:context withData:self.restAreaRect];
         [self drawTableOnContext:context withData:self.registrationAreaRect];
         
+        // Draw individual tables.
         for(int i = 0; i < [tables count]; i++){
             
             CFTableData* table = tables[i];
@@ -130,14 +132,16 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
 
 - (void) drawTableOnContext:(CGContextRef) context withData: (CFTableData*) tableData{
     
+    // Get relative position based on scale & focus point
     CGRect offsetRect = CGRectMake(self.focusX + ((tableData.rectangle.rect.origin.x - self.focusX) + (self.focusX - self.centerX)) * self.scaleFactor,
                                    self.focusY + ((tableData.rectangle.rect.origin.y - self.focusY) + (self.focusY - self.centerY)) * self.scaleFactor,
                                    tableData.rectangle.rect.size.width * self.scaleFactor,
                                    tableData.rectangle.rect.size.height * self.scaleFactor);
     
-    //draw table outline and background
+    // Draw table outline and background
     CGPathRef path = CGPathCreateWithRect(offsetRect, NULL);
     
+    // Draw table outline and background, yellow for flashing companies, green for populated, white for unpopulated.
     if(self.highlightCompany && [self.highlightCompany integerValue] == tableData.tableMapping.id){
         [RHCareerFairLayout.color_yellow setFill];
     }
@@ -150,9 +154,8 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     CGContextDrawPath(context, kCGPathFillStroke);
     CGPathRelease(path);
     
-    //draw text
+    // Draw text, if any.
     if(tableData.rectangle.text != nil){
-        //Draw Text
         NSMutableParagraphStyle* textStyle = NSMutableParagraphStyle.defaultParagraphStyle.mutableCopy;
         textStyle.alignment = NSTextAlignmentCenter;
         
@@ -169,127 +172,85 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     
     NSArray* tables = self.tables.tableDict.allValues;
     
+    // Get position of tap relative to center of map.
     CGPoint location = [gestureRecognizer locationInView:self];
     location.x = self.centerX + (location.x - self.focusX) / self.scaleFactor;
     location.y = self.centerY + (location.y - self.focusY) / self.scaleFactor;
     
+    // If tap falls in any of the tables, show detail
     for(int i = 0; i < [tables count]; i++){
         CFTableData* tableData = tables[i];
         if(tableData.rectangle.tappable){
             if(CGRectContainsPoint(tableData.rectangle.rect, location)){
                 
                 NSInteger companyId = [tableData.tableMapping.tableMapping_companyId integerValue];
+                
+                // Pass value through class-variable, and run segue
                 self.layoutViewController.selectedCompany = [DBManager getCompanyWithId:companyId];
                 [self.layoutViewController performSegueWithIdentifier:RHCareerFairLayout.companyDetailSegueIdentifier sender:self];
             }
         }
     }
-    
-    //    CGPoint location = [gestureRecognizer locationInView: self];
-    //    UIView* subview = [self hitTest:location withEvent:nil];
-    //
-    //    //If no subview there, add a new one
-    //    if(![self.subviews containsObject:subview]){
-    //
-    //        //create a new box centered at tap location, of size 50/50
-    //        UIView *newBox  = [[UIView alloc] initWithFrame:CGRectMake(location.x - 25, location.y - 25, 50, 50)];
-    //
-    //        //set background color and corner radius based on user settings
-    //        newBox.backgroundColor = [UIColor colorwithHexString:@"#000000" alpha:1.0];
-    ////        newBox.layer.cornerRadius = [[NSUserDefaults standardUserDefaults] doubleForKey:CORNER_ROUNDING_PREF_KEY];
-    //
-    //        //add to superview
-    //        [self addSubview:newBox];
-    //    }
-    //
-    //    //Otherwise, toggle subview selected.
-    //    else{
-    //        //if currently selected, remove from selected list, remove border
-    //        if([self.selectedSubviews containsObject:subview]){
-    //            [self.selectedSubviews removeObject:subview];
-    //            subview.layer.borderWidth = 0.0;
-    //        }
-    //        //if not currently selected, select it, add border.
-    //        else{
-    //            [self.selectedSubviews addObject:subview];
-    //            subview.layer.borderWidth = [[NSUserDefaults standardUserDefaults] doubleForKey:BORDER_WIDTH_PREF_KEY];
-    //            subview.layer.borderColor = [[UIColor redColor] CGColor];
-    //        }
-    //    }
 }
 
 - (void)handlePan: (UIPanGestureRecognizer*) gestureRecognizer{
     
-    //pan canvas on 1 finger touch.
-    //    if(gestureRecognizer.numberOfTouches == 1){
-    //
-    //        CGFloat newX = self.frame.origin.x ;
-    //        CGFloat newY = self.frame.origin.y ;
-    //
-    //        //set new frame on each object based on the changes reflected in gestureRecognizer
-    //        if(self.frame.origin.x >= self.superview.frame.size.width - self.frame.size.width && self.frame.origin.x <= 0){
-    //            newX = fmin(fmax(self.frame.origin.x + [gestureRecognizer translationInView:self].x, self.superview.frame.size.width - self.frame.size.width), 0);
-    //        }
-    //        if(self.frame.origin.y >= self.superview.frame.size.height - self.frame.size.height && self.frame.origin.y <= 0){
-    //            newY = fmin(fmax(self.frame.origin.y + [gestureRecognizer translationInView:self].y, self.superview.frame.size.height - self.frame.size.height), 0);
-    //        }
-    //        [self setFrame:CGRectMake(newX, newY, self.frame.size.width, self.frame.size.height)];
-    //        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:self];
-    //    }
-    //
-    //    //ignore everything but 2 finger touches.
-    //    if(gestureRecognizer.numberOfTouches == 2){
-    
-    //set new frame on each object based on the changes reflected in gestureRecognizer
-    //    for(UIView* subview in self.selectedSubviews){
-    //        [subview setFrame:CGRectMake(subview.frame.origin.x + [gestureRecognizer translationInView:self].x, subview.frame.origin.y + [gestureRecognizer translationInView:self].y, 50, 50)];
-    //    }
-    
+    // Get new bounded X, Y.
     self.focusX = [self getNewXWithDelta: [gestureRecognizer translationInView:self].x];
     self.focusY = [self getNewYWithDelta: [gestureRecognizer translationInView:self].y];
     
     NSLog(@"Pan to:(%f,%f)", self.focusX, self.focusY);
     
-    
+    // Save values.
+    // Portrait
     if(self.frame.size.height > self.frame.size.width){
         [[NSUserDefaults standardUserDefaults] setFloat:self.focusX forKey:@"focusX-port"];
         [[NSUserDefaults standardUserDefaults] setFloat:self.focusY forKey:@"focusY-port"];
     }
-    // landscape
+    // Landscape
     else{
         [[NSUserDefaults standardUserDefaults] setFloat:self.focusX forKey:@"focusX-land"];
         [[NSUserDefaults standardUserDefaults] setFloat:self.focusY forKey:@"focusY-land"];
     }
     
+    // Redraw.
     [self setNeedsDisplay];
     
-    //reset gestureRecognizer's translation
+    // Reset gestureRecognizer's translation
     [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:self];
-    //    }
 }
 
 
 - (void)handleZoom: (UIPinchGestureRecognizer*) gestureRecognizer{
+    
+    // ScaleFactor has range 1 <= scaleFactor <= 5
     self.scaleFactor = fmin(fmax(self.scaleFactor + gestureRecognizer.scale - 1, 1), 5);
     
     NSLog(@"Scale %f to:%f", gestureRecognizer.scale-1, self.scaleFactor);
     
+    // Reset Scale
     [gestureRecognizer setScale:1.0];
+    
+    // Redraw based on new scale.
     self.focusX = [self getNewXWithDelta:0];
     self.focusY = [self getNewYWithDelta:0];
     
+    // Save scaleFactor
+    // Portrait
     if(self.frame.size.height > self.frame.size.width){
         [[NSUserDefaults standardUserDefaults] setFloat:self.scaleFactor forKey:@"scaleFactor-port"];
     }
-    // landscape
+    // Landscape
     else{
         [[NSUserDefaults standardUserDefaults] setFloat:self.scaleFactor forKey:@"scaleFactor-land"];
     }
     
+    // Redraw
     [self setNeedsDisplay];
 }
 
 - (double) getNewXWithDelta: (double) delta{
+    // If scaled width greater than screen size, bound such that edges are always outside or on screen border.
     if(self.mapWidth * self.scaleFactor >= self.containerWidth){
         return fmax(
                     fmin(
@@ -299,9 +260,10 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
                     self.containerWidth-self.mapWidth * self.scaleFactor/2.0
                     );
     }
+    // If scaled width less than screen size, bound such that no part of map can go offscreen.
     else{
         return fmin(
-                    fmin(
+                    fmax(
                          self.focusX + delta,
                          self.mapWidth * self.scaleFactor/2.0
                          ),
@@ -313,6 +275,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
 - (double) getNewYWithDelta: (double) delta{
     
     
+    // If scaled height greater than screen size, bound such that edges are always outside or on screen border.
     if(self.mapHeight * self.scaleFactor >= self.containerHeight){
         return fmax(
                     fmin(
@@ -322,6 +285,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
                     self.containerHeight-self.mapHeight * self.scaleFactor/2.0
                     );
     }
+    // If scaled height less than screen size, bound such that no part of map can go offscreen.
     else{
         return fmin(
                     fmax(
@@ -335,28 +299,30 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
 
 -(void) generateTableLocations{
     
+    // Set container size
     self.containerWidth = self.frame.size.width;
     self.containerHeight = self.frame.size.height;
-    //
-    // Calculate usable width
+    
+    // Calculate usable size
     self.mapWidth = self.containerWidth >= self.containerHeight * 2.0 ? self.containerHeight * 2.0 : self.containerWidth;
     self.mapHeight = self.containerWidth >= self.containerHeight * 2.0 ? self.containerHeight : self.containerWidth / 2.0;
     
+    // Retrieve data from DB
     self.tables = [DBManager getTables];
     CFTerm* term = [DBManager getTerm];
     
-    //convenience assignments
+    // Convenience assignments
     NSInteger s1 = term.term_layout_Section1;
     NSInteger s2 = term.term_layout_Section2;
     NSInteger s2Rows = term.term_layout_Section2_Rows;
     NSInteger s2PathWidth = term.term_layout_Section2_PathWidth;
     NSInteger s3 = term.term_layout_Section3;
     
-    //count number of vertical and horizontal mTableMap there are
+    // Count number of vertical and horizontal tables there are
     NSInteger hrzCount = s2 + fmin(s1, 1.0) + fmin(s3, 1.0);
     NSInteger vrtCount = fmax(s1, s3);
     
-    //calculate width and height of mTableMap based on width of the canvas
+    // Calculate width and height units based on width of the map
     double unitX = self.mapWidth / 100.0;
     
     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
@@ -367,7 +333,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     double tableHeight = unitY * 70.0 / vrtCount;
     self.fontSize = tableHeight * 2.0 / 3.0;
     
-    //
+    // Starting tableId, offsets.
     NSInteger tableId = 1;
     double offsetX = (self.containerWidth - self.mapWidth) / 2.0;
     double offsetY = (self.containerHeight - self.mapHeight) / 2.0;
@@ -411,7 +377,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
                                                                  selected:false];
     
     
-    //
+    
     // section 1
     offsetX += 5 * unitX;
     if (s1 > 0) {
@@ -434,14 +400,14 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
         }
         offsetX += tableWidth + 5 * unitX;
     }
-    //
+    
     // section 2
     double pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
-    //
+    
     //rows
     if (s2Rows > 0 && s2 > 0) {
         for (int i = 0; i < s2Rows; i++) {
-            //
+            
             //Outer rows have no walkway.
             //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth == 0 || i == 0 || i == s2Rows - 1) {
@@ -464,7 +430,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
                     j += table.tableMapping.tableMapping_size;
                 }
             }
-            //
+            
             //inner rows need to have walkway halfway through
             else {
                 NSInteger leftTables = ((s2 - s2PathWidth) / 2);
@@ -509,7 +475,7 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
         }
         offsetX += s2 * tableWidth + 5 * unitX;
     }
-    //
+    
     // section 3
     if (s3 > 0) {
         for (int i = 0; i < s3; ) {
@@ -537,25 +503,6 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
         if([(NSNumber*)allKeys[i] integerValue] >= tableId){
             [self.tables removeObjectForKey:allKeys[i]];
         }
-    }
-}
-
-- (void) drawTables{
-    
-    NSArray* tables = [self.tables.tableDict allValues];
-    
-    for(int i = 0; i < [tables count]; i++){
-        
-        CFTableData* table = tables[i];
-        
-        UIView *newBox  = [[UIView alloc] initWithFrame:table.rectangle.rect];
-        
-        //set background color and corner radius based on user settings
-        //            newBox.backgroundColor = table.rectangle;
-        //        newBox.layer.cornerRadius = [[NSUserDefaults standardUserDefaults] doubleForKey:CORNER_ROUNDING_PREF_KEY];
-        
-        //add to superview
-        [self addSubview:newBox];
     }
 }
 
