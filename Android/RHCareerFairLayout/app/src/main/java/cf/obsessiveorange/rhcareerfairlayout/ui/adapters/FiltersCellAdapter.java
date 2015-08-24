@@ -185,7 +185,7 @@ public class FiltersCellAdapter extends RecyclerView.Adapter<FiltersCellAdapter.
                         Log.d(RHCareerFairLayout.RH_CFL, "Error updating selected categories", e);
                     }
 
-                    ((MainActivity) mContext).getSearch().setSearchString("");
+                    MainActivity.instance.getSearch().setSearchString("");
 
                     synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
                         RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();

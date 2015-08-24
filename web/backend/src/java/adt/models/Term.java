@@ -15,7 +15,7 @@ import misc.Utils;
 import servlets.ServletLog;
 
 @JsonInclude(Include.NON_NULL)
-public class Term implements Comparable<Term> {
+public class Term extends Entry implements Comparable<Term> {
 
     private Integer year;
     private String quarter;
@@ -84,19 +84,20 @@ public class Term implements Comparable<Term> {
     }
 
     public Term(Integer year, String quarter) {
-	this(year, quarter, null, null, null, null, null);
+	this(null, year, quarter, null, null, null, null, null);
     }
 
     public Term(ResultSet rs) throws SQLException {
 
-	this(rs.getInt("year"), rs.getString("quarter"), rs.getInt("layout_Section1"), rs.getInt("layout_Section2"),
-		rs.getInt("layout_Section2_PathWidth"), rs.getInt("layout_Section2_Rows"),
+	this(rs.getLong("id"), rs.getInt("year"), rs.getString("quarter"), rs.getInt("layout_Section1"),
+		rs.getInt("layout_Section2"), rs.getInt("layout_Section2_PathWidth"), rs.getInt("layout_Section2_Rows"),
 		rs.getInt("layout_Section3"));
     }
 
-    public Term(Integer year, String quarter, Integer layout_Section1, Integer layout_Section2,
+    public Term(Long id, Integer year, String quarter, Integer layout_Section1, Integer layout_Section2,
 	    Integer layout_Section2_PathWidth, Integer layout_Section2_Rows, Integer layout_Section3) {
 
+	super(id);
 	this.year = year;
 	this.quarter = quarter;
 	this.setLayout_Section1(layout_Section1);
@@ -240,5 +241,62 @@ public class Term implements Comparable<Term> {
      */
     public void setLayout_Section3(Integer layout_Section3) {
 	this.layout_Section3 = layout_Section3;
+    }
+
+    public Result insertIntoDB() throws SQLException, ClassNotFoundException {
+	Connection conn = null;
+	CallableStatement stmt = null;
+	ResultSet rs = null;
+
+	try {
+	    Result respObj;
+
+	    conn = SQLManager.getConn();
+
+	    stmt = conn.prepareCall("CALL Data_Insert_Term(?, ?, ?, ?, ?, ?, ?)");
+	    stmt.setInt(1, year);
+	    stmt.setString(2, quarter);
+	    stmt.setInt(3, layout_Section1);
+	    stmt.setInt(4, layout_Section2);
+	    stmt.setInt(5, layout_Section2_PathWidth);
+	    stmt.setInt(6, layout_Section2_Rows);
+	    stmt.setInt(7, layout_Section3);
+
+	    rs = stmt.executeQuery();
+
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
+		return respObj;
+	    }
+
+	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
+		while (rs.next()) {
+		    this.id = rs.getLong(rs.findColumn("newTermId"));
+		}
+	    }
+
+	    return new SuccessResult();
+	} finally {
+	    if (rs != null) {
+		try {
+		    rs.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	    if (stmt != null) {
+		try {
+		    stmt.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	    if (conn != null) {
+		try {
+		    conn.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	}
     }
 }

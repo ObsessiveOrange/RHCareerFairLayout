@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
@@ -50,10 +48,9 @@ public class LoadingActivity extends Activity {
         final TextView statusTextView = (TextView) findViewById(R.id.loading_txt_status);
         final Button retryButton = (Button) findViewById(R.id.loading_btn_retry);
 
-        final Timer timer = new Timer();
-
         DBManager.setupDBAdapterIfNeeded(this);
 
+        // Set default loading view
         statusTextView.setText(getString(R.string.loadingStatus_checkingForNewData));
         retryButton.setVisibility(View.INVISIBLE);
 
@@ -61,23 +58,23 @@ public class LoadingActivity extends Activity {
         Long localUpdateTime = DBManager.getLastUpdateTime();
 
         // TODO: Change this logic to factor in server update times.
+        // if no data, or data is within cache time, skip.
         if (localUpdateTime != null && (System.currentTimeMillis() - localUpdateTime) < TimeUnit.DAYS.toMillis(RHCareerFairLayout.DATA_CACHE_TIME_IN_DAYS)) {
+
             statusTextView.setText(getString(R.string.loadingStatus_dataUpToDate));
-            Log.d(RHCareerFairLayout.RH_CFL, "Data already downloaded, skipping retrieval.");
+            Log.d(RHCareerFairLayout.RH_CFL, getString(R.string.loadingStatus_dataUpToDate));
 
-            TimerTask doneLoadingData = new TimerTask() {
-                @Override
-                public void run() {
-                    doneLoadingData();
-                }
-            };
+            doneLoadingData();
 
-            timer.schedule(doneLoadingData, 500);
+        }
+        // Else, retrieve new data.
+        else {
 
-        } else {
+            // Set status as retrieving new data
             statusTextView.setText(getString(R.string.loadingStatus_downloadingData));
-            Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
+            Log.d(RHCareerFairLayout.RH_CFL, getString(R.string.loadingStatus_downloadingData));
 
+            // Set result handlers for success, fail and exceptions.
             Runnable successHandler = new Runnable() {
                 @Override
                 public void run() {
@@ -111,14 +108,14 @@ public class LoadingActivity extends Activity {
                 }
             };
 
+            // Create new request with the result handlers above, and add to request queue.
             GetAllDataRequest req = new GetAllDataRequest(successHandler, exceptionHandler, failHandler);
-
-            Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
             ConnectionManager.enqueueRequest(req);
         }
     }
 
-    private void doneLoadingData(){
+    private void doneLoadingData() {
+        // Go to next activity; do not cache this one.
         Intent launchNextActivity;
         launchNextActivity = new Intent(LoadingActivity.this, MainActivity.class);
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

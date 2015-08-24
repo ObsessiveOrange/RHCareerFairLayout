@@ -23,13 +23,13 @@ import cf.obsessiveorange.rhcareerfairlayout.data.models.wrappers.TableMappingAr
 import cf.obsessiveorange.rhcareerfairlayout.ui.models.wrappers.TableMap;
 
 public class DBManager {
-    //
+
     // DB Schema version constant
     private static final int DATABASE_VERSION = 2;
-    //
+
     // Filename constant
     private static final String DATABASE_NAME = "RHCareerFairLayout.db";
-    //
+
     // Table name constants
     private static final String TABLE_CATEGORY_NAME = "Category";
     private static final String TABLE_COMPANY_NAME = "Company";
@@ -38,14 +38,13 @@ public class DBManager {
     private static final String TABLE_TERM_NAME = "Term";
     private static final String TABLE_SELECTED_COMPANIES_NAME = "SelectedCompanies";
     private static final String TABLE_SELECTED_CATEGORIES_NAME = "SelectedCategories";
-    //
+
     // View name constants
     private static final String VIEW_FILTERED_COMPANIES_NAME = "FilteredCompanies";
     private static final String VIEW_FILTERED_COMPANIES_BY_MAJOR_NAME = "FilteredCompaniesByMajor";
     private static final String VIEW_FILTERED_COMPANIES_BY_WORK_AUTHORIZATION_NAME = "FilteredCompaniesByWorkAuthorization";
     private static final String VIEW_FILTERED_COMPANIES_BY_POSITION_TYPE_NAME = "FilteredCompaniesByPositionType";
 
-    //
     // Column key constants - see documentation for more
     public static final String KEY_PRIMARY_ID = "_id";
     public static final String KEY_ID = "id";
@@ -67,7 +66,7 @@ public class DBManager {
     public static final String KEY_LAYOUT_SECTION3 = "layout_Section3";
     public static final String KEY_LAST_UPDATE_TIME = "lastUpdateTime";
     public static final String KEY_SELECTED = "selected";
-    //
+
     // DB Helpers
     private static Context mContext = null;
     private static DBHelper mOpenHelper = null;
@@ -100,6 +99,12 @@ public class DBManager {
         return c.getLong(c.getColumnIndexOrThrow(KEY_LAST_UPDATE_TIME));
     }
 
+    /**
+     * Load all new data contained in DataWrapper into DB.
+     * Note that this mehtod deletes all previous data EXCEPT categories, and category selections.
+     *
+     * @param data Data to be input
+     */
     public static void loadNewData(DataWrapper data) throws SQLException {
         mOpenHelper.resetDB(mDatabase);
 
@@ -121,6 +126,12 @@ public class DBManager {
         Log.d(RHCareerFairLayout.RH_CFL, "Finished loading new data");
     }
 
+    /**
+     * Sets a category selected/deselected, and resets company selections to match categories.
+     *
+     * @param categoryId categoryId to change
+     * @param selected whether category with id as above is now true/false.
+     */
     public static void setCategorySelected(long categoryId, boolean selected) throws SQLException {
 
         ContentValues row = new ContentValues();
@@ -137,6 +148,11 @@ public class DBManager {
 
     }
 
+    /**
+     * Selects all categories selected/deselected
+     *
+     * @param selected boolean value of bulk-selection
+     */
     public static void setAllCategoriesSelected(boolean selected) throws SQLException {
         mDatabase.execSQL("UPDATE " + TABLE_SELECTED_CATEGORIES_NAME +
                         " SET " + KEY_SELECTED + " = " + (selected ? 1 : 0)
@@ -153,6 +169,12 @@ public class DBManager {
         bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(true), SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /**
+     * Sets company selected/deselected
+     *
+     * @param companyId company to change selection flag
+     * @param selected selection flag.
+     */
     public static void setCompanySelected(long companyId, boolean selected) {
 
         ContentValues row = new ContentValues();
@@ -163,6 +185,11 @@ public class DBManager {
         mDatabase.insertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, null, row, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /**
+     * Sets all companies matching currently selected filters selected/deselected.
+     *
+     * @param selected boolean flag to be set on all companies.
+     */
     public static void setFilteredCompaniesSelected(boolean selected) throws SQLException {
 
         // Set selected values of all companies to false
@@ -175,6 +202,10 @@ public class DBManager {
         bulkInsertWithOnConflict(TABLE_SELECTED_COMPANIES_NAME, companies.getSelectionContentValues(selected), SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /**
+     * Get all categories
+     * @return Cursor of data from categories table, with selection flags appended.
+     */
     public static Cursor getCategoriesCursor() {
 
         // Create new querybuilder

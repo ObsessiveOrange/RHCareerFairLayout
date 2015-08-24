@@ -131,22 +131,22 @@ function submitUpdatedMappings() {
             return;
         }
     }
-    alert("Not implemented yet!");
-    // $.ajax({
-    //     url: "/api/users/admin?method=updateTableMappings",
-    //     type: "POST",
-    //     contentType: "application/json",
-    //     processData: false,
-    //     data: JSON.stringify({
-    //         updatedMappings: careerFairData.tableMappingList.getValues("id")
-    //     }),
-    //     error: function(_, textStatus, errorThrown) {
-    //         console.log(textStatus + ":" + errorThrown);
-    //     },
-    //     success: function(response, textStatus) {
-    //         alert(response.message);
-    //     }
-    // });
+    // alert("Not implemented yet!");
+    $.ajax({
+        url: "/api/data/table_mapping/all",
+        type: "POST",
+        contentType: "application/json",
+        processData: false,
+        data: JSON.stringify({
+            updatedMappings: careerFairData.tableMappingList.getValues("id")
+        }),
+        error: function(_, textStatus, errorThrown) {
+            console.log(textStatus + ":" + errorThrown);
+        },
+        success: function(response, textStatus) {
+            alert(response.message);
+        }
+    });
 }
 
 function populateCompanyList() {

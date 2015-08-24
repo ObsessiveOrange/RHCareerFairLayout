@@ -21,8 +21,8 @@ $(document).ready(function() {
         successHandler: function(data) {
             var terms = data.termList;
             for(var i = 0; i < terms.length; i++){
-                var selected = (i === 0 ? "selected" : "");
-                $("#termSelectionBox").append("<option value='" + terms[i].quarter + "-" + terms[i].year + "' " + selected + ">" + terms[i].quarter + " " + terms[i].year + "</option>");
+                var selected = (i === terms.length ? "selected" : "");
+                $("#termSelectionBox").prepend("<option value='" + terms[i].quarter + "-" + terms[i].year + "' " + selected + ">" + terms[i].quarter + " " + terms[i].year + "</option>");
             }
             setupPage();
         },

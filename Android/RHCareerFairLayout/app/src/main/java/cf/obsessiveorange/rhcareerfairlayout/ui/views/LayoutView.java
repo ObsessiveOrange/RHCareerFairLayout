@@ -243,7 +243,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private VPParentFragment getParentFragment() {
-        return (VPParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(VPParentFragment.FRAGMENT_TAG);
+        return (VPParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(RHCareerFairLayout.PARENT_FRAGMENT_TAG);
     }
 
     private boolean isToolbarShown() {

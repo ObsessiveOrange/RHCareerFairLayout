@@ -20,6 +20,8 @@ public class RHCareerFairLayout {
     public static final String URL_BASE = "http://rhcareerfair.cf/api";
     public static final int DATA_CACHE_TIME_IN_DAYS = 1;
 
+    public static final String PARENT_FRAGMENT_TAG = "fragment";
+
     public static final String PREF_KEY_MAP_VIEW_FOCUS_X_PORT = "mapViewFocusX-Port";
     public static final String PREF_KEY_MAP_VIEW_FOCUS_Y_PORT = "mapViewFocusY-Port";
     public static final String PREF_KEY_MAP_VIEW_SCALE_PORT = "mapViewScale-Port";

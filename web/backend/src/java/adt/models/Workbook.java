@@ -79,13 +79,15 @@ public class Workbook {
 
 	while (rowIterator.hasNext()) {
 	    Row row = rowIterator.next();
-	    // For each row, iterate through all the columns
-	    Iterator<Cell> cellIterator = row.cellIterator();
 
 	    ArrayList<Object> newRow = new ArrayList<Object>();
 
-	    while (cellIterator.hasNext()) {
-		Cell cell = cellIterator.next();
+	    // For each row, iterate through all the columns
+	    for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
+		// If the cell is missing from the file, generate a blank one
+		// (Works by specifying a MissingCellPolicy)
+		Cell cell = row.getCell(cellIndex, Row.CREATE_NULL_AS_BLANK);
+
 		// Check the cell type and format accordingly
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_NUMERIC:
@@ -119,7 +121,6 @@ public class Workbook {
 		headersSet = true;
 	    } else {
 		sheet.addRow(newRow);
-		;
 	    }
 	}
 	return sheet;

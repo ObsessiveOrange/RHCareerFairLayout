@@ -16,7 +16,6 @@
 
 package cf.obsessiveorange.rhcareerfairlayout.ui.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -45,19 +44,20 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     // Hold on to a CursorAdapter for handling of cursor reference - will automatically
     // clear cursor when done.
     Cursor mCursor;
-    Context mContext;
     LayoutInflater mInflater;
 
     public CompaniesCellAdapter(Context context) {
-        mContext = context;
-        mInflater = LayoutInflater.from(mContext);
+        mInflater = LayoutInflater.from(context);
         refreshData();
     }
 
+    /**
+     * Get a new cursor, and force a refresh of the RecyclerView
+     */
     public void refreshData() {
         changeCursor(DBManager.getFilteredCompaniesCursor());
 
-        ((Activity) mContext).runOnUiThread(new Runnable() {
+        MainActivity.instance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 notifyDataSetChanged();
@@ -65,10 +65,13 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         });
     }
 
+    /**
+     * Get a new cursor, and force a refresh of the RecyclerView, refreshing only the single item that changed.
+     */
     public void refreshData(final int position) {
         changeCursor(DBManager.getFilteredCompaniesCursor());
 
-        ((Activity) mContext).runOnUiThread(new Runnable() {
+        MainActivity.instance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 notifyItemChanged(position);
@@ -76,6 +79,10 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         });
     }
 
+    /**
+     * Change cursor, and make sure previous one is closed properly.
+     * @param cursor New cursor
+     */
     public void changeCursor(Cursor cursor) {
         if (mCursor != null) {
             mCursor.close();
@@ -88,27 +95,43 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
         return mCursor.getCount();
     }
 
+    /**
+     * Bind new values to cell
+     * @param holder ViewHolder for cell
+     * @param position position of item.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        // Call helper method.
         buildItem(holder, position);
     }
 
+    /**
+     * Builds an item cell
+     * @param holder ViewHolder for cell
+     * @param position position of item
+     */
     private void buildItem(final ViewHolder holder, final int position) {
         if (mCursor.moveToPosition(position)) {
+            // Get company object for cursor at position.
             final Company company = new Company(mCursor);
+
+            // Get selected flag, and table number
             final Boolean selected = mCursor.getInt(mCursor.getColumnIndexOrThrow(DBManager.KEY_SELECTED)) > 0;
             final Long table = mCursor.getLong(mCursor.getColumnIndexOrThrow(DBManager.KEY_TABLE));
 
+            // Update checkbox (remove listener first to prevent infinite loop).
             holder.showOnMapCheckBox.setOnCheckedChangeListener(null);
             holder.showOnMapCheckBox.setChecked(selected);
 
+            // Set company name
             holder.companyNameTextView.setText(company.getName());
 
+            // Set table number
             holder.tableNumberTextView.setText(table.toString());
 
-//                v.setImageURI(Uri.parse(value));
-
+            // Add onCheck/onClick listeners for when user taps on them.
             holder.showOnMapCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -128,9 +151,9 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
                 public void onClick(View v) {
 
                     MainActivity.instance.clearSearchFocus();
-                    Intent detailIntent = new Intent(mContext, DetailActivity.class);
+                    Intent detailIntent = new Intent(MainActivity.instance, DetailActivity.class);
                     detailIntent.putExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, company.getId());
-                    ((Activity) mContext).startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
+                    MainActivity.instance.startActivityForResult(detailIntent, RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP);
 
                 }
             });
@@ -167,11 +190,14 @@ public class CompaniesCellAdapter extends RecyclerView.Adapter<CompaniesCellAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        // Create a new ViewHolder for the cell.
         View v = mInflater.inflate(R.layout.cell_company, parent, false);
         return new ViewHolder(v);
     }
 
-
+    /**
+     * Use viewholder pattern for efficiency, reducing calls to findViewById
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout cellRoot;
         CheckBox showOnMapCheckBox;

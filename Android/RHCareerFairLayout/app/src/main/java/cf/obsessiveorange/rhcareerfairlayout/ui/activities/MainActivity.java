@@ -25,10 +25,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -42,7 +42,6 @@ import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
 import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 import cf.obsessiveorange.rhcareerfairlayout.R;
@@ -58,7 +57,7 @@ import cf.obsessiveorange.rhcareerfairlayout.ui.fragments.VPParentFragment;
  * This activity just provides a toolbar.
  * Toolbar is manipulated by VPParentFragment.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static MainActivity instance;
 
@@ -81,15 +80,17 @@ public class MainActivity extends BaseActivity {
 
         DBManager.setupDBAdapterIfNeeded(this);
 
-
+        // Setup search, without suggestions, and defaulting to last searched string.
         search = (SearchBox) findViewById(R.id.searchbox);
         search.enableVoiceRecognition(this);
         search.setSearchWithoutSuggestions(true);
         search.setSearchString(getSearchString());
 
+        // Setup toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Setup title
         Term term = DBManager.getTerm();
         if (term == null) {
             reloadData();
@@ -98,11 +99,12 @@ public class MainActivity extends BaseActivity {
             ((TextView) findViewById(R.id.main_txt_title)).setText(getString(R.string.career_fair_format, term.getQuarter(), term.getYear()));
         }
 
+        // Setup parent fragment with tabPager
         FragmentManager fm = getSupportFragmentManager();
-        if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
+        if (fm.findFragmentByTag(RHCareerFairLayout.PARENT_FRAGMENT_TAG) == null) {
             FragmentTransaction ft = fm.beginTransaction();
             ft.add(R.id.main_frg_body, new VPParentFragment(),
-                    VPParentFragment.FRAGMENT_TAG);
+                    RHCareerFairLayout.PARENT_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
@@ -110,7 +112,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflates default menu, adds search icon (no drawable found, using IconDrawable library.)
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         menu.findItem(R.id.action_search).setIcon(
@@ -125,9 +127,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle option item selections.
         int id = item.getItemId();
         DialogFragment df;
 
@@ -191,6 +191,232 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        // Setup DBAdapter - may have been closed previously.
+        DBManager.setupDBAdapterIfNeeded(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        // Release resources & close adapter.
+        DBManager.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+//        Debug.stopMethodTracing()
+
+        super.onDestroy();
+    }
+
+    /**
+     * ActivityResults will usually be coming from either the detail activity's find on map button.
+     * the
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
+
+        switch (requestCode) {
+            case RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP:
+                if (resultCode == RESULT_OK) {
+                    // Go to Layout fragment.
+                    fragmentParent.getPager().setCurrentItem(0);
+
+                    // Check if current fragment is Layout fragment
+                    Fragment fragment = fragmentParent.getCurrentFragment();
+                    if (fragment instanceof VPLayoutContainerFragment) {
+                        VPLayoutContainerFragment mapFragment = (VPLayoutContainerFragment) fragment;
+                        long companyId = data.getLongExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, -1);
+                        if (companyId == -1) {
+                            throw new IllegalStateException("Invalid companyId provided back to map.");
+                        }
+                        mapFragment.flashCompany(companyId);
+                    }
+                }
+                break;
+//            case 1234:
+//                if (resultCode == RESULT_OK) {
+//                    ArrayList<String> matches = data
+//                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+//                    search.populateEditText(matches);
+//                }
+//                super.onActivityResult(requestCode, resultCode, data);
+            default:
+                break;
+        }
+    }
+
+    public void openSearch() {
+        // Negate toolbar title, reveal search and add listeners.
+        toolbar.setTitle("");
+        search.revealFromMenuItem(R.id.action_search, this);
+        search.setMenuListener(new MenuListener() {
+
+            @Override
+            public void onMenuClick() {
+                closeSearch();
+            }
+
+        });
+        search.setSearchListener(new SearchListener() {
+
+            @Override
+            public void onSearchOpened() {
+                // No specific setup needed
+            }
+
+            @Override
+            public void onSearchClosed() {
+                // Only close if search is already open - prevents bug where opening search immediately closes it.
+                if (search.getSearchOpen()) {
+                    closeSearch();
+                }
+            }
+
+            @Override
+            public void onSearchTermChanged(String term) {
+
+                // Immediately save the search string
+                saveSearchString();
+
+                // Refresh the companies list view.
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+            }
+
+            @Override
+            public void onSearch(String searchTerm) {
+
+                // Immediately save the search string
+                saveSearchString();
+
+                // Refresh the companies list view.
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+            }
+
+            @Override
+            public void onSearchCleared() {
+
+                // Immediately clear the search string
+                saveSearchString();
+
+                // Refresh the companies list view.
+                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
+                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
+                }
+            }
+
+        });
+
+    }
+
+    public String getSearchString() {
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
+                RHCareerFairLayout.RH_CFL,
+                Context.MODE_PRIVATE);
+
+        return prefs.getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "");
+    }
+
+    public SearchBox getSearch() {
+        return search;
+    }
+
+    /**
+     * Close the search bar, which hides keyboard as well.
+     */
+    public void closeSearch() {
+
+        // Make sure search string is saved
+        saveSearchString();
+
+        // Hide search bar.
+        search.hideCircularlyToMenuItem(R.id.action_search, this);
+    }
+
+    /**
+     * Clear search focus, then hide keyboard.
+     */
+    public void clearSearchFocus() {
+        if (search.hasFocus()) {
+            search.clearFocus();
+        }
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+    }
+
+    /**
+     * Handles back presses - changes action based on whta is visible
+     */
+    @Override
+    public void onBackPressed() {
+
+        // Preferentially close search
+        if (search.isShown()) {
+            closeSearch();
+            return;
+        }
+
+        // Then navigate down the backStack.
+        if (!backStack.isEmpty()) {
+
+            // Ignore next push to backStack - we caused it here.
+            pressedBack = true;
+
+            // Get last position, and send viewPager to that.
+            int newPosition = backStack.pop();
+            VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
+            fragmentParent.getPager().setCurrentItem(newPosition);
+
+        }
+    }
+
+    /**
+     * Add current view to backStack, for later navigation back down it.
+     * @param position The integer position of the current item.
+     */
+    public void pushToBackStack(int position) {
+        while (backStack.size() > 10) {
+            backStack.remove(0);
+        }
+
+        if (!pressedBack) {
+            backStack.push(position);
+        }
+        pressedBack = false;
+    }
+
+    /**
+     * Save search string to SharedPreferences.
+     */
+    private void saveSearchString() {
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
+                RHCareerFairLayout.RH_CFL,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, search.getSearchText());
+        editor.apply();
+    }
+
+
+    /**
+     * Private helper method to reload data, presenting dialog on failure.
+     */
     private void reloadData() {
 
         final ProgressDialog progressDialog = ProgressDialog.show(MainActivity.this, "", "Loading...");
@@ -301,217 +527,5 @@ public class MainActivity extends BaseActivity {
 
         Log.d(RHCareerFairLayout.RH_CFL, "Data not saved or outdated. Downloading.");
         ConnectionManager.enqueueRequest(req);
-    }
-
-    @Override
-    protected void onResume() {
-        DBManager.setupDBAdapterIfNeeded(this);
-        super.onResume();
-    }
-
-    @Override
-    protected void onStart() {
-        DBManager.setupDBAdapterIfNeeded(this);
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        DBManager.close();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-//        Debug.stopMethodTracing();
-
-
-        FragmentManager fm = getSupportFragmentManager();
-        if (fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG) == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.remove(fm.findFragmentByTag(VPParentFragment.FRAGMENT_TAG));
-            ft.commit();
-            fm.executePendingTransactions();
-        }
-
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
-
-        switch (requestCode) {
-            case RHCareerFairLayout.REQUEST_CODE_FIND_ON_MAP:
-                if (resultCode == RESULT_OK) {
-                    // Go to Layout fragment.
-                    fragmentParent.getPager().setCurrentItem(0);
-
-                    // Check if current fragment is Layout fragment
-                    Fragment fragment = fragmentParent.getCurrentFragment();
-                    if (fragment instanceof VPLayoutContainerFragment) {
-                        VPLayoutContainerFragment mapFragment = (VPLayoutContainerFragment) fragment;
-                        long companyId = data.getLongExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, -1);
-                        if (companyId == -1) {
-                            throw new IllegalStateException("Invalid companyId provided back to map.");
-                        }
-                        mapFragment.flashCompany(companyId);
-                    }
-                }
-                break;
-            case 1234:
-                if (resultCode == RESULT_OK) {
-                    ArrayList<String> matches = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    search.populateEditText(matches);
-                }
-                super.onActivityResult(requestCode, resultCode, data);
-            default:
-                break;
-        }
-    }
-
-    public void openSearch() {
-        toolbar.setTitle("");
-        search.revealFromMenuItem(R.id.action_search, this);
-//		for (int x = 0; x < 10; x++) {
-//			SearchResult option = new SearchResult("Result "
-//					+ Integer.toString(x), getResources().getDrawable(
-//					R.drawable.ic_history));
-//			search.addSearchable(option);
-//		}
-        search.setMenuListener(new MenuListener() {
-
-            @Override
-            public void onMenuClick() {
-                closeSearch();
-            }
-
-        });
-        search.setSearchListener(new SearchListener() {
-
-            @Override
-            public void onSearchOpened() {
-
-            }
-
-            @Override
-            public void onSearchClosed() {
-                if (search.getSearchOpen()) {
-                    closeSearch();
-                }
-            }
-
-            @Override
-            public void onSearchTermChanged(String term) {
-
-                saveSearchString();
-                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
-                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
-                }
-            }
-
-            @Override
-            public void onSearch(String searchTerm) {
-
-                saveSearchString();
-
-                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
-                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
-                }
-            }
-
-            @Override
-            public void onSearchCleared() {
-
-                saveSearchString();
-
-                synchronized (RHCareerFairLayout.refreshCompaniesNotifier) {
-                    RHCareerFairLayout.refreshCompaniesNotifier.notifyChanged();
-                }
-            }
-
-        });
-
-    }
-
-    public void closeSearch() {
-
-        saveSearchString();
-
-        search.hideCircularlyToMenuItem(R.id.action_search, this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (search.isShown()) {
-            closeSearch();
-            return;
-        }
-
-        if (!backStack.isEmpty()) {
-
-            // Ignore next push to backStack - we caused it here.
-            pressedBack = true;
-
-            // Get last position, and send viewPager to that.
-            int newPosition = backStack.pop();
-            VPParentFragment fragmentParent = (VPParentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frg_body);
-            fragmentParent.getPager().setCurrentItem(newPosition);
-
-        }
-    }
-
-    private String getSearchText() {
-        return search.getSearchText();
-    }
-
-    public SearchBox getSearch() {
-        return search;
-    }
-
-    private void saveSearchString() {
-        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
-                RHCareerFairLayout.RH_CFL,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        if (getSearchText() != null) {
-            editor.putString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, getSearchText());
-        }
-        editor.apply();
-    }
-
-    public String getSearchString() {
-        SharedPreferences prefs = MainActivity.this.getSharedPreferences(
-                RHCareerFairLayout.RH_CFL,
-                Context.MODE_PRIVATE);
-
-        return prefs.getString(RHCareerFairLayout.PREF_KEY_SEARCH_STRING, "");
-    }
-
-    public void clearSearchFocus(){
-        if(search.hasFocus()) {
-            search.clearFocus();
-        }
-
-        InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-    }
-
-    public void pushToBackStack(int position) {
-        while (backStack.size() > 10) {
-            backStack.remove(0);
-        }
-
-        if (!pressedBack) {
-            backStack.push(position);
-        }
-        pressedBack = false;
     }
 }

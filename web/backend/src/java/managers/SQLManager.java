@@ -34,7 +34,7 @@ public class SQLManager {
 	dataSource.setInitialSize(10);
 	dataSource.setMinIdle(10);
 	dataSource.setMaxIdle(20);
-	dataSource.setMaxTotal(100);
+	dataSource.setMaxTotal(30);
 	dataSource.setValidationQuery("SELECT 1");
 	dataSource.setTestOnBorrow(true);
 	dataSource.setTestOnReturn(true);

@@ -34,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
 
         DBManager.setupDBAdapterIfNeeded(this);
 
+        //
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -42,20 +43,22 @@ public class DetailActivity extends AppCompatActivity {
 
         }
 
+        // Get companyId from firing intent, retrieve company data from database.
         Intent data = getIntent();
         mCompanyId = data.getLongExtra(RHCareerFairLayout.INTENT_KEY_SELECTED_COMPANY, -1);
 
         if(mCompanyId == -1){
             throw new IllegalArgumentException("Invalid companyId provided");
         }
-
         Company company = DBManager.getCompany(mCompanyId);
         HashMap<String, ArrayList<Category>> categories = DBManager.getCategoriesForCompany(mCompanyId);
 
+        // Check to make sure valid company, categories were provided.
         if(company == null || categories == null){
             throw new IllegalArgumentException("No such company provided");
         }
 
+        // Generate category strings.
         StringBuilder majors = new StringBuilder();
         for(Category major : categories.get(RHCareerFairLayout.KEY_CATEGORY_MAJOR)){
             majors.append(major.getName());
@@ -77,6 +80,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         workAuthorizations.delete(workAuthorizations.length()-2, workAuthorizations.length());
 
+        // Find & set values for text fields.
         TextView detailName = (TextView) findViewById(R.id.detail_txt_companyName);
         TextView detailWebsite = (TextView) findViewById(R.id.detail_txt_websiteLink);
         TextView detailDescription = (TextView) findViewById(R.id.detail_txt_description);
@@ -87,6 +91,7 @@ public class DetailActivity extends AppCompatActivity {
 
         detailName.setText(company.getName());
 
+        // If text field empty, hide it, and it's header (if there is one).
         if(company.getWebsiteLink() == null || company.getWebsiteLink().isEmpty()){
             detailWebsite.setVisibility(View.GONE);
         }
@@ -137,9 +142,8 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        //Set actionbar actions.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

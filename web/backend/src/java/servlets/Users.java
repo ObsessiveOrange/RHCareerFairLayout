@@ -113,7 +113,7 @@ public class Users {
     @Path("check_authentication")
     public Response checkAuthentication(@CookieParam("authUser") String authUser,
 	    @CookieParam("authToken") String authToken, @HeaderParam("User-Agent") String userAgent) {
-	return checkAuthenticationHelper(authUser, authToken, userAgent, 0, response).toJAXRS();
+	return checkAuthenticationHelper(authUser, authToken, userAgent, 1, response).toJAXRS();
     }
 
     public static Result checkAuthenticationHelper(String authUser, String authToken, String userAgent,
@@ -201,12 +201,12 @@ public class Users {
 	    if (response != null) {
 		Cookie authUserCookie = new Cookie("authUser", authUser);
 		authUserCookie.setSecure(true);
-		authUserCookie.setPath("/api/users");
+		authUserCookie.setPath("/api");
 		authUserCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(SESSION_VALID_DAYS));
 
 		Cookie authTokenCookie = new Cookie("authToken", authToken);
 		authTokenCookie.setSecure(true);
-		authTokenCookie.setPath("/api/users");
+		authTokenCookie.setPath("/api");
 		authTokenCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(SESSION_VALID_DAYS));
 
 		response.addCookie(authUserCookie);
