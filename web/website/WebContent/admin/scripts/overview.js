@@ -1,10 +1,6 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data/term",
-        data: {
-            year: getSelectedYear(),
-            quarter : getSelectedQuarter()
-        },
+        url: "/api/data/" + getSelectedTermId() + "/term",
         successHandler: function(returnData) {
             $("#selectedQuarter").html(returnData.term.quarter);
             $("#selectedYear").html(returnData.term.year);
@@ -15,11 +11,7 @@
         }
     });
     sendGetRequest({
-        url: "/api/data/statistics",
-        data: {
-            year: getSelectedYear(),
-            quarter : getSelectedQuarter()
-        },
+        url: "/api/data/" + getSelectedTermId() + "/statistics",
         successHandler: function(returnData) {
                 $("#companyCount").html(returnData.companyCount);
                 $("#totalTableCount").html(returnData.totalTableCount);

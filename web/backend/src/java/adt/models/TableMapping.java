@@ -81,6 +81,8 @@ public class TableMapping extends Entry implements Comparable<TableMapping> {
 
 	    conn = SQLManager.getConn();
 
+	    System.out.println("Adding tableMapping: " + id + ", " + companyId + ", " + size + ", " + termId);
+
 	    stmt = conn.prepareCall("CALL Data_Insert_TableMapping(?, ?, ?, ?)");
 	    stmt.setLong(1, id);
 

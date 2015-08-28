@@ -2,6 +2,7 @@ package cf.obsessiveorange.rhcareerfairlayout.data.requests;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
@@ -27,7 +28,7 @@ public class GetAllDataRequest extends ConnectionManager.Request {
 
 //             For eventual support of historical data.
 //            req.setUrl(RHCareerFairLayout.URL_BASE + "/data/all");
-        setUrl(RHCareerFairLayout.URL_BASE + "/data/all/latest");
+        setUrl(RHCareerFairLayout.URL_BASE + "/data/latest/all");
         setMethod(ConnectionManager.Request.HTTPMethod.GET);
 //             For eventual support of historical data.
 //            req.setQueryParams(new HashMap<String, String>() {{
@@ -40,6 +41,10 @@ public class GetAllDataRequest extends ConnectionManager.Request {
             @Override
             public void handleSuccess(String response) {
                 ObjectMapper mapper = new ObjectMapper();
+                // NOTE:
+                // This will allow for backward-compatibility, should any new fields be added.
+                // However, it will also not warn if new fields are left unused.
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                 DataWrapper dataWrapper = null;
                 try {
                     dataWrapper = mapper.readValue(response, DataWrapper.class);

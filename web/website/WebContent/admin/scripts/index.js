@@ -17,12 +17,12 @@ $(document).ready(function() {
     });
 
     sendGetRequest({
-        url: "/api/data/term/all",
+        url: "/api/data/all/term?showInactive=true",
         successHandler: function(data) {
             var terms = data.termList;
             for(var i = 0; i < terms.length; i++){
                 var selected = (i === terms.length ? "selected" : "");
-                $("#termSelectionBox").prepend("<option value='" + terms[i].quarter + "-" + terms[i].year + "' " + selected + ">" + terms[i].quarter + " " + terms[i].year + "</option>");
+                $("#termSelectionBox").prepend("<option value='" + terms[i].id + "' " + selected + ">" + terms[i].quarter + " " + terms[i].year + "</option>");
             }
             setupPage();
         },
@@ -137,10 +137,6 @@ function loadScript(url, callback) {
     return undefined; // We handle everything using the script element injection
 }
 
-function getSelectedQuarter(){
-    return $("#termSelectionBox").val().split("-")[0];
-}
-
-function getSelectedYear(){
-    return $("#termSelectionBox").val().split("-")[1];
+function getSelectedTermId(){
+    return $("#termSelectionBox").val();
 }

@@ -11,34 +11,19 @@ import android.support.annotation.Nullable;
  */
 public class Rectangle {
 
-    private Rect rect = null;
+    private float left;
+    private float top;
+    private float right;
+    private float bottom;
     private Paint strokePaint = null;
     private Paint fillPaint = null;
     private boolean isTappable = false;
     private String text;
 
-    public static Rectangle RectangleBuilderFromTopLeft(double startX,
-                                                        double startY,
-                                                        double width,
-                                                        double height,
-                                                        @Nullable Paint strokePaint,
-                                                        @Nullable Paint fillPaint,
-                                                        boolean tappable,
-                                                        String text) {
-        return RectangleBuilderFromTopLeft((int) startX,
-                (int) startY,
-                (int) width,
-                (int) height,
-                strokePaint,
-                fillPaint,
-                tappable,
-                text);
-    }
-
-    public static Rectangle RectangleBuilderFromTopLeft(int startX,
-                                                        int startY,
-                                                        int width,
-                                                        int height,
+    public static Rectangle RectangleBuilderFromTopLeft(float startX,
+                                                        float startY,
+                                                        float width,
+                                                        float height,
                                                         @Nullable Paint strokePaint,
                                                         @Nullable Paint fillPaint,
                                                         boolean tappable,
@@ -46,7 +31,10 @@ public class Rectangle {
 
         Rectangle rectangle = new Rectangle();
 
-        rectangle.rect = new Rect(startX, startY, startX + width, startY + height);
+        rectangle.left = startX;
+        rectangle.top = startY;
+        rectangle.right = startX + width;
+        rectangle.bottom = startY + height;
         rectangle.setIsTappable(tappable);
         rectangle.text = text;
         rectangle.strokePaint = strokePaint;
@@ -55,28 +43,10 @@ public class Rectangle {
         return rectangle;
     }
 
-    public static Rectangle RectangleBuilderFromCenter(double centerX,
-                                                       double centerY,
-                                                       double width,
-                                                       double height,
-                                                       @Nullable Paint strokePaint,
-                                                       @Nullable Paint fillPaint,
-                                                       boolean tappable,
-                                                       String text) {
-        return RectangleBuilderFromCenter((int) centerX,
-                (int) centerY,
-                (int) width,
-                (int) height,
-                strokePaint,
-                fillPaint,
-                tappable,
-                text);
-    }
-
-    public static Rectangle RectangleBuilderFromCenter(int centerX,
-                                                       int centerY,
-                                                       int width,
-                                                       int height,
+    public static Rectangle RectangleBuilderFromCenter(float centerX,
+                                                       float centerY,
+                                                       float width,
+                                                       float height,
                                                        @Nullable Paint strokePaint,
                                                        @Nullable Paint fillPaint,
                                                        boolean tappable,
@@ -84,7 +54,10 @@ public class Rectangle {
 
         Rectangle rectangle = new Rectangle();
 
-        rectangle.rect = new Rect(centerX - width / 2, centerY - height / 2, centerX + width / 2, centerY + height / 2);
+        rectangle.left = centerX - width/2;
+        rectangle.top = centerY - height/2;
+        rectangle.right = centerX + width/2;
+        rectangle.bottom = centerY + height/2;
         rectangle.setIsTappable(tappable);
         rectangle.text = text;
         rectangle.strokePaint = strokePaint;
@@ -93,13 +66,23 @@ public class Rectangle {
         return rectangle;
     }
 
-    public Rect getRect() {
-        return rect;
+    public float getOriginX(){
+        return left;
     }
-
-    public Rectangle setRect(Rect rect) {
-        this.rect = rect;
-        return this;
+    public float getOriginY(){
+        return top;
+    }
+    public float getRectangleWidth(){
+        return right-left;
+    }
+    public float getRectangleHeight(){
+        return bottom-top;
+    }
+    public float getCenterX(){
+        return getOriginX() + getRectangleWidth()/2;
+    }
+    public float getCenterY(){
+        return getOriginY() + getRectangleHeight()/2;
     }
 
     public Paint getStrokePaint() {
@@ -140,10 +123,10 @@ public class Rectangle {
     public void draw(Canvas canvas, float fontSize) {
 
         if (getFillPaint() != null) {
-            canvas.drawRect(rect, fillPaint);
+            canvas.drawRect(left, top, right, bottom, fillPaint);
         }
         if (getStrokePaint() != null) {
-            canvas.drawRect(rect, strokePaint);
+            canvas.drawRect(left, top, right, bottom, strokePaint);
         }
         if (getText() != null) {
 
@@ -158,11 +141,15 @@ public class Rectangle {
             Rect textBounds = new Rect();
             textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
-            textPaint.setTextSize(Math.min(fontSize, fontSize * rect.width() * 0.9f / textBounds.width()));
+            textPaint.setTextSize(Math.min(fontSize, fontSize * getRectangleWidth() * 0.9f / textBounds.width()));
             textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
-            canvas.drawText(text, rect.exactCenterX(), rect.exactCenterY() - textBounds.exactCenterY(), textPaint);
+            canvas.drawText(text, getCenterX(), getCenterY() - textBounds.exactCenterY(), textPaint);
 //            canvas.drawText(text, rect.exactCenterX(), rect.exactCenterY() + rect.height() / 4, textPaint);
         }
+    }
+
+    public boolean contains (float pointX, float pointY){
+        return (pointX > left && pointX < right && pointY > top && pointY < bottom);
     }
 }

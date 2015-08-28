@@ -20,8 +20,7 @@ public class CompanyCategoryMap extends HashMap<Long, CompanyCategory> {
      */
     private static final long serialVersionUID = -4617007484637352031L;
 
-    public static Result getCompanyCategories(Integer year, String quarter)
-	    throws ClassNotFoundException, SQLException {
+    public static Result getCompanyCategories(Long termId) throws ClassNotFoundException, SQLException {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -31,9 +30,8 @@ public class CompanyCategoryMap extends HashMap<Long, CompanyCategory> {
 
 	    conn = SQLManager.getConn();
 
-	    stmt = conn.prepareCall("CALL Data_Get_CompanyCategoryList(?, ?)");
-	    stmt.setInt(1, year);
-	    stmt.setString(2, quarter);
+	    stmt = conn.prepareCall("CALL Data_Get_CompanyCategoryList(?)");
+	    stmt.setLong(1, termId);
 
 	    rs = stmt.executeQuery();
 

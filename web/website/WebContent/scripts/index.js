@@ -132,7 +132,7 @@ function prepareForPageSwitch() {
 //Get data from server, setup page
 function getNewData() {
     sendGetRequest({
-        url: "/api/data/all/latest",
+        url: "/api/data/latest/all",
         successHandler: function(data) {
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)

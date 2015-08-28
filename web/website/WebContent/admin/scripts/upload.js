@@ -4,7 +4,7 @@
     }
     $("#uploadDataSubmit").click(function() {
         $.ajax({
-            url: "/api/data/all",
+            url: "/api/data/new/all",
             type: "POST",
             contentType: false,
             processData: false,

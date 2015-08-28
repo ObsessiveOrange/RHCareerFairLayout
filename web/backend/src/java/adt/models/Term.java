@@ -24,8 +24,9 @@ public class Term extends Entry implements Comparable<Term> {
     private Integer layout_Section2_PathWidth;
     private Integer layout_Section2_Rows;
     private Integer layout_Section3;
+    private boolean active = false;
 
-    public static Result getTerm(int year, String quarter) throws ClassNotFoundException, SQLException {
+    public static Result getTerm(long termId) throws ClassNotFoundException, SQLException {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -35,9 +36,8 @@ public class Term extends Entry implements Comparable<Term> {
 
 	    conn = SQLManager.getConn();
 
-	    stmt = conn.prepareCall("CALL Data_Get_Term(?, ?);");
-	    stmt.setInt(1, year);
-	    stmt.setString(2, quarter);
+	    stmt = conn.prepareCall("CALL Data_Get_Term(?);");
+	    stmt.setLong(1, termId);
 
 	    rs = stmt.executeQuery();
 	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
@@ -83,19 +83,19 @@ public class Term extends Entry implements Comparable<Term> {
 	}
     }
 
-    public Term(Integer year, String quarter) {
-	this(null, year, quarter, null, null, null, null, null);
+    public Term(Integer year, String quarter, Boolean active) {
+	this(null, year, quarter, null, null, null, null, null, active);
     }
 
     public Term(ResultSet rs) throws SQLException {
 
 	this(rs.getLong("id"), rs.getInt("year"), rs.getString("quarter"), rs.getInt("layout_Section1"),
 		rs.getInt("layout_Section2"), rs.getInt("layout_Section2_PathWidth"), rs.getInt("layout_Section2_Rows"),
-		rs.getInt("layout_Section3"));
+		rs.getInt("layout_Section3"), rs.getBoolean("active"));
     }
 
     public Term(Long id, Integer year, String quarter, Integer layout_Section1, Integer layout_Section2,
-	    Integer layout_Section2_PathWidth, Integer layout_Section2_Rows, Integer layout_Section3) {
+	    Integer layout_Section2_PathWidth, Integer layout_Section2_Rows, Integer layout_Section3, Boolean active) {
 
 	super(id);
 	this.year = year;
@@ -105,6 +105,7 @@ public class Term extends Entry implements Comparable<Term> {
 	this.setLayout_Section2_PathWidth(layout_Section2_PathWidth);
 	this.setLayout_Section2_Rows(layout_Section2_Rows);
 	this.setLayout_Section3(layout_Section3);
+	this.active = active;
     }
 
     @Override
@@ -253,7 +254,7 @@ public class Term extends Entry implements Comparable<Term> {
 
 	    conn = SQLManager.getConn();
 
-	    stmt = conn.prepareCall("CALL Data_Insert_Term(?, ?, ?, ?, ?, ?, ?)");
+	    stmt = conn.prepareCall("CALL Data_Insert_Term(?, ?, ?, ?, ?, ?, ?, ?)");
 	    stmt.setInt(1, year);
 	    stmt.setString(2, quarter);
 	    stmt.setInt(3, layout_Section1);
@@ -261,6 +262,7 @@ public class Term extends Entry implements Comparable<Term> {
 	    stmt.setInt(5, layout_Section2_PathWidth);
 	    stmt.setInt(6, layout_Section2_Rows);
 	    stmt.setInt(7, layout_Section3);
+	    stmt.setBoolean(8, active);
 
 	    rs = stmt.executeQuery();
 
@@ -273,6 +275,58 @@ public class Term extends Entry implements Comparable<Term> {
 		    this.id = rs.getLong(rs.findColumn("newTermId"));
 		}
 	    }
+
+	    return new SuccessResult();
+	} finally {
+	    if (rs != null) {
+		try {
+		    rs.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	    if (stmt != null) {
+		try {
+		    stmt.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	    if (conn != null) {
+		try {
+		    conn.close();
+		} catch (SQLException e) {
+		    ServletLog.logEvent(e);
+		}
+	    }
+	}
+    }
+
+    public Boolean getActive() {
+	return active;
+    }
+
+    public Result setActive(boolean active) throws SQLException, ClassNotFoundException {
+	Connection conn = null;
+	CallableStatement stmt = null;
+	ResultSet rs = null;
+
+	try {
+	    Result respObj;
+
+	    conn = SQLManager.getConn();
+
+	    stmt = conn.prepareCall("CALL Data_Update_Term_SetActive(?, ?)");
+	    stmt.setLong(1, getId());
+	    stmt.setBoolean(2, active);
+
+	    rs = stmt.executeQuery();
+
+	    if (!(respObj = Utils.checkResultSuccess(rs, 500)).isSuccess()) {
+		return respObj;
+	    }
+
+	    this.active = true;
 
 	    return new SuccessResult();
 	} finally {

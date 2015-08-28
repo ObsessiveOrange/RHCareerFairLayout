@@ -21,7 +21,7 @@ public class TermArray extends ArrayList<Term> {
      */
     private static final long serialVersionUID = -4617007484637352031L;
 
-    public static Result getTermList() throws ClassNotFoundException, SQLException {
+    public static Result getTermList(boolean showInactive) throws ClassNotFoundException, SQLException {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -32,7 +32,8 @@ public class TermArray extends ArrayList<Term> {
 
 	    conn = SQLManager.getConn();
 
-	    stmt = conn.prepareCall("CALL Data_Get_TermList()");
+	    stmt = conn.prepareCall("CALL Data_Get_TermList(?)");
+	    stmt.setBoolean(1, showInactive);
 
 	    rs = stmt.executeQuery();
 
@@ -44,7 +45,7 @@ public class TermArray extends ArrayList<Term> {
 
 	    if ((rs = Utils.getNextResultSet(stmt)) != null) {
 		while (rs.next()) {
-		    Term t = new Term(rs.getInt("year"), rs.getString("quarter"));
+		    Term t = new Term(rs);
 		    termList.add(t);
 		}
 	    }

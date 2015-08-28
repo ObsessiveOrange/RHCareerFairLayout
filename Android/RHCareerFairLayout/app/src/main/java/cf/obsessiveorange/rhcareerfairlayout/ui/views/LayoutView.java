@@ -10,21 +10,16 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewParent;
-
-import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import cf.obsessiveorange.rhcareerfairlayout.R;
 import cf.obsessiveorange.rhcareerfairlayout.RHCareerFairLayout;
 import cf.obsessiveorange.rhcareerfairlayout.data.managers.DBManager;
 import cf.obsessiveorange.rhcareerfairlayout.data.models.Company;
@@ -52,29 +47,28 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     InteractionMode mode = InteractionMode.None;
     Matrix mMatrix = new Matrix();
     float mScaleFactor = 1.f;
-    double mTouchX;
-    double mTouchY;
-    double mTouchBackupX;
-    double mTouchBackupY;
-    double mTouchDownX;
-    double mTouchDownY;
+    float mTouchX;
+    float mTouchY;
+    float mTouchBackupX;
+    float mTouchBackupY;
+    float mTouchDownX;
+    float mTouchDownY;
     double mVPSwipeSlope = 1 / Math.sqrt(3);
 
-    double containerWidth;
-    double containerHeight;
+    float containerWidth;
+    float containerHeight;
 
     Rectangle mapAreaRect;
     Rectangle restAreaRect;
     Rectangle registrationAreaRect;
-    double mapWidth;
-    double mapHeight;
+    float mapWidth;
+    float mapHeight;
     private float mFontSize;
 
     Thread companySelectionChangedWatcher;
 
     private TableMap mTableMap;
     private final Object mTableMapSynchronizationObject = new Object();
-    private ViewParent parentView = null;
 
     private volatile Long mSelectedTable = null;
     private Paint fillPaintHighlightTables = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -109,7 +103,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
 
         if (!this.mScaleDetector.isInProgress()) {
@@ -119,20 +113,17 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     if (mode == InteractionMode.TouchStarted) {
                         mode = InteractionMode.Tap;
 
-                        int[] touchCoordinates = new int[]{(int) event.getX(), (int) event.getY()};
-
-
                         //relative distance from centerpoint of diagram
-                        double fromCenterX = (event.getX() - mTouchX) / mScaleFactor;
-                        double fromCenterY = (event.getY() - mTouchY) / mScaleFactor;
+                        float fromCenterX = (event.getX() - mTouchX) / mScaleFactor;
+                        float fromCenterY = (event.getY() - mTouchY) / mScaleFactor;
 
                         //relative point of touch, based on original drawing location.
-                        double relativeTapPointX = containerWidth / 2 + fromCenterX;
-                        double relativeTapPointY = containerHeight / 2 + fromCenterY;
+                        float relativeTapPointX = containerWidth / 2 + fromCenterX;
+                        float relativeTapPointY = containerHeight / 2 + fromCenterY;
 
                         synchronized (mTableMapSynchronizationObject) {
                             for (Table table : mTableMap.values()) {
-                                if (table.getRectangle().isTappable() && table.getRectangle().getRect().contains((int) relativeTapPointX, (int) relativeTapPointY)) {
+                                if (table.getRectangle().isTappable() && table.getRectangle().contains(relativeTapPointX, relativeTapPointY)) {
 
                                     Company company = DBManager.getCompanyForTableMapping(table.getId());
 
@@ -178,8 +169,8 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                 case MotionEvent.ACTION_MOVE:
                     Log.d(RHCareerFairLayout.RH_CFL, "Map panned: " + mode.name());
 
-                    final double diffX = event.getX() - mTouchDownX;
-                    final double diffY = event.getY() - mTouchDownY;
+                    final float diffX = event.getX() - mTouchDownX;
+                    final float diffY = event.getY() - mTouchDownY;
 
                     // If
                     if (diffX > 10 && !canMoveRight() && mode != InteractionMode.Pan &&
@@ -231,26 +222,11 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
-    private TouchInterceptionFrameLayout getTouchInterceptionFrameLayout() {
-        if (parentView == null) {
-
-            parentView = this.getParent();
-            while (!(parentView instanceof TouchInterceptionFrameLayout)) {
-                parentView = parentView.getParent();
-            }
-        }
-        return (TouchInterceptionFrameLayout) parentView;
-    }
-
     private VPParentFragment getParentFragment() {
         return (VPParentFragment) ((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag(RHCareerFairLayout.PARENT_FRAGMENT_TAG);
     }
 
-    private boolean isToolbarShown() {
-        return getTouchInterceptionFrameLayout().getTranslationY() == 0;
-    }
-
-    private double getNewX(double referencePoint, double delta) {
+    private float getNewX(float referencePoint, float delta) {
 
         if (mapWidth * mScaleFactor >= containerWidth) {
             return Math.min(mapWidth * (mScaleFactor / 2), Math.max(containerWidth - mapWidth * (mScaleFactor / 2), referencePoint + delta));
@@ -259,30 +235,12 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    private double getNewY(double referencePoint, double delta) {
-        View toolbarView = ((Activity) getContext()).findViewById(R.id.toolbar);
-        float translationY = -toolbarView.getHeight();
-//
-        int topOffset = 0;
-        int bottomOffset = 0;
-
-        if (!isToolbarShown()) {
-            MainActivity activity = ((MainActivity) getContext());
-            ActionBar actionBar = activity.getSupportActionBar();
-
-            int actionBarHeight = 0;
-            if (actionBar != null) {
-                actionBarHeight = actionBar.getHeight();
-            }
-
-//            topOffset = (int) (actionBarHeight * mScaleFactor * 1 / 2);
-//            bottomOffset = (int) (actionBarHeight * mScaleFactor * 1 / 2);
-        }
+    private float getNewY(float referencePoint, float delta) {
 
         if (mapHeight * mScaleFactor >= containerHeight) {
-            return Math.min(topOffset + mapHeight * (mScaleFactor / 2), Math.max(bottomOffset + containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
+            return Math.min(mapHeight * (mScaleFactor / 2), Math.max(containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
         } else {
-            return Math.max(topOffset + mapHeight * (mScaleFactor / 2), Math.min(bottomOffset + containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
+            return Math.max(mapHeight * (mScaleFactor / 2), Math.min(containerHeight - mapHeight * (mScaleFactor / 2), referencePoint + delta));
         }
     }
 
@@ -290,10 +248,6 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 
         int saveCount = canvas.getSaveCount();
-
-        if(canvas == null){
-            return;
-        }
 
         canvas.save();
         canvas.concat(mMatrix);
@@ -308,7 +262,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
             for (Table table : mTableMap.values()) {
 
-                if (table.getId() == mSelectedTable) {
+                if (table.getId().equals(mSelectedTable)) {
                     table.getRectangle().setFillPaint(fillPaintHighlightTables);
                     table.getRectangle().draw(canvas, mFontSize);
                 } else {
@@ -347,12 +301,12 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
                 SharedPreferences prefs = getContext().getSharedPreferences(RHCareerFairLayout.RH_CFL, Context.MODE_PRIVATE);
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) (containerWidth / 2));
-                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) (containerHeight / 2));
+                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, containerWidth / 2);
+                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, containerHeight / 2);
                     mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, 1);
                 } else {
-                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) (containerWidth / 2));
-                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) (containerHeight / 2));
+                    mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, containerWidth / 2);
+                    mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, containerHeight / 2);
                     mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, 1);
                 }
 
@@ -420,7 +374,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         mTouchY = getNewY(mTouchY, 0);
 
         // re-move the view to it's desired location
-        mMatrix.postTranslate((float) mTouchX, (float) mTouchY);
+        mMatrix.postTranslate(mTouchX, mTouchY);
 
         if (invalidate) {
             postInvalidate(); // re-draw
@@ -431,12 +385,12 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         SharedPreferences.Editor editor = prefs.edit();
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, (float) mTouchX);
-            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, (float) mTouchY);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, mTouchX);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, mTouchY);
             editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, mScaleFactor);
         } else {
-            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, (float) mTouchX);
-            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, (float) mTouchY);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, mTouchX);
+            editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, mTouchY);
             editor.putFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, mScaleFactor);
         }
         editor.apply();
@@ -445,10 +399,10 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
     private class ScaleListener extends
             ScaleGestureDetector.SimpleOnScaleGestureListener {
 
-        double mFocusStartX;
-        double mFocusStartY;
-        double mZoomBackupX;
-        double mZoomBackupY;
+        float mFocusStartX;
+        float mFocusStartY;
+        float mZoomBackupX;
+        float mZoomBackupY;
 
         public ScaleListener() {
         }
@@ -498,8 +452,8 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
             float focusY = detector.getFocusY();
 
             // get distance vector from initial event (onScaleBegin) to current
-            double diffX = focusX - mFocusStartX;
-            double diffY = focusY - mFocusStartY;
+            float diffX = focusX - mFocusStartX;
+            float diffY = focusY - mFocusStartY;
 
             // scale the distance vector accordingly
             diffX *= scale;
@@ -528,14 +482,6 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
         return (getNewX(mTouchX, 1) - mTouchX) >= 1;
     }
 
-    public boolean canMoveUp() {
-        return (mTouchY - getNewY(mTouchY, -1)) >= 1;
-    }
-
-    public boolean canMoveDown() {
-        return (getNewY(mTouchY, 1) - mTouchY) >= 1;
-    }
-
     public void generateTableLocations(final Runnable... callbacks) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -550,12 +496,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                 Paint strokePaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
                 strokePaintTables.setColor(Color.BLACK);
                 strokePaintTables.setStyle(Paint.Style.STROKE);
-                strokePaintTables.setStrokeWidth(2);
-
-                Paint strokePaintThin = new Paint(Paint.ANTI_ALIAS_FLAG);
-                strokePaintThin.setColor(Color.BLACK);
-                strokePaintThin.setStyle(Paint.Style.STROKE);
-                strokePaintThin.setStrokeWidth(1);
+                strokePaintTables.setStrokeWidth(0);
 
                 Paint fillPaintTables = new Paint(Paint.ANTI_ALIAS_FLAG);
                 fillPaintTables.setColor(Color.GREEN);
@@ -569,6 +510,11 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     mTableMap = DBManager.getTables();
                     Term term = DBManager.getTerm();
 
+                    if(term == null){
+                        Log.d(RHCareerFairLayout.RH_CFL, "Term null, data invalid.");
+                        return;
+                    }
+
                     //convenience assignments
                     int s1 = term.getLayout_Section1();
                     int s2 = term.getLayout_Section2();
@@ -581,20 +527,20 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     int vrtCount = Math.max(s1, s3);
 
                     //calculate width and height of mTableMap based on width of the canvas
-                    double unitX = mapWidth / 100;
+                    float unitX = mapWidth / 100;
 
                     //10 + (number of sections - 1) * 5 % of space allocated to (vertical) walkways
-                    double tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
-                    double unitY = mapHeight / 100;
+                    float tableWidth = unitX * (90 - Math.min(s1, 1) * 5 - Math.min(s3, 1) * 5) / hrzCount;
+                    float unitY = mapHeight / 100;
 
                     //30% of space allocated to registration and rest area.
-                    double tableHeight = unitY * 70 / vrtCount;
-                    mFontSize = (float) tableHeight * 2 / 3;
+                    float tableHeight = unitY * 70 / vrtCount;
+                    mFontSize = tableHeight * 2 / 3;
 
                     //
                     long id = 1;
-                    double offsetX = (containerWidth - mapWidth) / 2;
-                    double offsetY = (containerHeight - mapHeight) / 2;
+                    float offsetX = (containerWidth - mapWidth) / 2;
+                    float offsetY = (containerHeight - mapHeight) / 2;
 
 
                     // static tables.
@@ -603,7 +549,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                             containerHeight / 2,
                             mapWidth,
                             mapHeight,
-                            strokePaintThin,
+                            strokePaintTables,
                             null,
                             false,
                             null
@@ -613,7 +559,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                             offsetY + 80 * unitY,
                             45 * unitX,
                             15 * unitY,
-                            strokePaintThin,
+                            strokePaintTables,
                             null,
                             false,
                             "Rest Area"
@@ -623,7 +569,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                             offsetY + 80 * unitY,
                             30 * unitX,
                             15 * unitY,
-                            strokePaintThin,
+                            strokePaintTables,
                             null,
                             false,
                             "Registration"
@@ -655,7 +601,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                     //
                     // section 2
-                    double pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
+                    float pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
                     //
                     //rows
                     if (s2Rows > 0 && s2 > 0) {
@@ -668,7 +614,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                                     Table table = mTableMap.get(id);
                                     Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
                                             offsetX + (j * tableWidth),
-                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            offsetY + 5 * unitY + (float) Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                             tableWidth * table.getSize(),
                                             tableHeight,
                                             strokePaintTables,
@@ -691,7 +637,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                                     Table table = mTableMap.get(id);
                                     Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
                                             offsetX + (j * tableWidth),
-                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            offsetY + 5 * unitY + (float) Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                             tableWidth * table.getSize(),
                                             tableHeight,
                                             strokePaintTables,
@@ -708,7 +654,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                                     Table table = mTableMap.get(id);
                                     Rectangle rectangle = Rectangle.RectangleBuilderFromTopLeft(
                                             offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
-                                            offsetY + 5 * unitY + Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
+                                            offsetY + 5 * unitY + (float) Math.floor((i + 1) / 2) * pathWidth + i * tableHeight,
                                             tableWidth * table.getSize(),
                                             tableHeight,
                                             strokePaintTables,
@@ -747,11 +693,10 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                             i += table.getSize();
                         }
                     }
-                    offsetX += tableWidth + 5 * unitX;
 
                     //
                     // Trim mTableMap array, make sure there are no more beyond what layout specifies
-                    Set<Long> tableIds = new HashSet<Long>(mTableMap.keySet());
+                    Set<Long> tableIds = new HashSet<>(mTableMap.keySet());
                     for (long tableId : tableIds) {
                         if (tableId >= id) {
                             mTableMap.remove(tableId);
@@ -785,11 +730,11 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
 
                 mTouchX = getHolder().getSurfaceFrame().width() / 2 +
                         (getHolder().getSurfaceFrame().width() / 2
-                                - table.getRectangle().getRect().exactCenterX()
+                                - table.getRectangle().getCenterX()
                         ) * mScaleFactor;
                 mTouchY = getHolder().getSurfaceFrame().height() / 2 +
                         (getHolder().getSurfaceFrame().height() / 2
-                                - table.getRectangle().getRect().exactCenterY()
+                                - table.getRectangle().getCenterY()
                         ) * mScaleFactor;
 
                 CalculateMatrix(true);

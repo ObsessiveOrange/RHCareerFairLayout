@@ -1,10 +1,6 @@
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data/all",
-        data: {
-            year: getSelectedYear(),
-            quarter: getSelectedQuarter()
-        },
+        url: "/api/data/" + getSelectedTermId() + "/all",
         successHandler: function(careerFairData) {
             var companies = careerFairData.companyMap;
             var categories = buildCategories(careerFairData.categoryMap);
@@ -37,10 +33,10 @@
                 companyHtml += company.name;
                 companyHtml += "</td>";
                 companyHtml += "<td>";
-                companyHtml += company.description;
+                companyHtml += company.websiteLink;
                 companyHtml += "</td>";
                 companyHtml += "<td>";
-                companyHtml += company.websiteLink;
+                companyHtml += company.description;
                 companyHtml += "</td>";
                 Object.keys(categories).forEach(function(categoryType) {
                     var first = true;

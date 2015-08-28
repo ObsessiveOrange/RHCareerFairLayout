@@ -16,11 +16,7 @@ var unusedColor = "#DDD";
 var hoverUnusedColor = "#BBB";
 (window.setup = function() {
     sendGetRequest({
-        url: "/api/data/all",
-        data: {
-            year: getSelectedYear(),
-            quarter: getSelectedQuarter()
-        },
+        url: "/api/data/" + getSelectedTermId() + "/all",
         successHandler: function(data) {
             //
             //jQuery auto-parses the json data, since the content type is application/json (may switch to JSONP eventually... how does that affect this?)
@@ -131,20 +127,17 @@ function submitUpdatedMappings() {
             return;
         }
     }
-    // alert("Not implemented yet!");
     $.ajax({
-        url: "/api/data/table_mapping/all",
+        url: "/api/data/" + getSelectedTermId() + "/table_mapping/all",
         type: "POST",
         contentType: "application/json",
         processData: false,
-        data: JSON.stringify({
-            updatedMappings: careerFairData.tableMappingList.getValues("id")
-        }),
+        data: JSON.stringify(careerFairData.tableMappingList.getValues("id")),
         error: function(_, textStatus, errorThrown) {
             console.log(textStatus + ":" + errorThrown);
         },
         success: function(response, textStatus) {
-            alert(response.message);
+            alert("Successfully updated table mappings.");
         }
     });
 }
@@ -474,7 +467,6 @@ function drawTag(id) {
     var tableHeight = unitY * 70 / vrtCount;
     var pathWidth = (unitY * 70 - s2Rows * tableHeight) / (s2Rows / 2);
     var points = {};
-
     var group = tableLocations[id].group;
     var section = Number(group.charAt(group.indexOf("section") + "section".length));
     switch (section) {
@@ -608,10 +600,13 @@ function generateTableLocations() {
     var size = 1;
     var offsetX = 5 * unitX;
     //
+    // Keep track of invalid tables (extending into walkways)
+    var invalidPositions = [];
+    //
     // section 1
     if (s1 > 0) {
         for (var i = 0; i < s1;) {
-            size = careerFairData.tableMappingList.get("id", id).size;
+            size = careerFairData.tableMappingList.get("id", id) === null ? 1 : careerFairData.tableMappingList.get("id", id).size;
             tableLocations[id] = {
                 id: id,
                 x: offsetX,
@@ -623,6 +618,9 @@ function generateTableLocations() {
                 group: "section1"
             };
             i += size;
+            if (i > s1) {
+                invalidPositions.push(id);
+            }
             id++;
         }
         offsetX += tableWidth + 5 * unitX;
@@ -639,7 +637,7 @@ function generateTableLocations() {
             //Also use this if there is no path inbetween the left and right.
             if (s2PathWidth === 0 || i === 0 || i == s2Rows - 1) {
                 for (var j = 0; j < s2;) {
-                    size = careerFairData.tableMappingList.get("id", id).size;
+                    size = careerFairData.tableMappingList.get("id", id) === null ? 1 : careerFairData.tableMappingList.get("id", id).size;
                     tableLocations[id] = {
                         id: id,
                         x: offsetX + (j * tableWidth),
@@ -651,6 +649,9 @@ function generateTableLocations() {
                         group: "section2row" + i
                     };
                     j += size;
+                    if (j > s2) {
+                        invalidPositions.push(id);
+                    }
                     id++;
                 }
             }
@@ -660,7 +661,7 @@ function generateTableLocations() {
                 var leftTables = Math.floor((s2 - s2PathWidth) / 2);
                 var rightTables = s2 - s2PathWidth - leftTables;
                 for (var j = 0; j < leftTables;) {
-                    size = careerFairData.tableMappingList.get("id", id).size;
+                    size = careerFairData.tableMappingList.get("id", id) === null ? 1 : careerFairData.tableMappingList.get("id", id).size;
                     tableLocations[id] = {
                         id: id,
                         x: offsetX + (j * tableWidth),
@@ -672,10 +673,13 @@ function generateTableLocations() {
                         group: "section2row" + i + "L"
                     };
                     j += size;
+                    if (j > leftTables) {
+                        invalidPositions.push(id);
+                    }
                     id++;
                 }
                 for (var j = 0; j < rightTables;) {
-                    size = careerFairData.tableMappingList.get("id", id).size;
+                    size = careerFairData.tableMappingList.get("id", id) === null ? 1 : careerFairData.tableMappingList.get("id", id).size;
                     tableLocations[id] = {
                         id: id,
                         x: offsetX + ((leftTables + s2PathWidth + j) * tableWidth),
@@ -687,6 +691,10 @@ function generateTableLocations() {
                         group: "section2row" + i + "R"
                     };
                     j += size;
+                    if (j > rightTables) {
+                        invalidPositions.push(id);
+                    }
+
                     id++;
                 }
             }
@@ -697,7 +705,7 @@ function generateTableLocations() {
     // section 3
     if (s3 > 0) {
         for (var i = 0; i < s3;) {
-            size = careerFairData.tableMappingList.get("id", id).size;
+            size = careerFairData.tableMappingList.get("id", id) === null ? 1 : careerFairData.tableMappingList.get("id", id).size;
             tableLocations[id] = {
                 id: id,
                 x: offsetX,
@@ -709,10 +717,16 @@ function generateTableLocations() {
                 group: "section3"
             };
             i += size;
+            if (i > s3) {
+                invalidPositions.push(id);
+            }
             id++;
         }
     }
     offsetX += tableWidth + 5 * unitX;
+    if (invalidPositions.length > 0) {
+        alert("Table(s) " + invalidPositions + " may be in invalid positions. They are beyond the stated size ranges.");
+    }
 }
 //
 //draw actual tables, then draw registration and rest areas

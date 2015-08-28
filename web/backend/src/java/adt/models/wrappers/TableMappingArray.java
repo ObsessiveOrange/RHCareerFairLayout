@@ -20,7 +20,7 @@ public class TableMappingArray extends ArrayList<TableMapping> {
      */
     private static final long serialVersionUID = -4617007484637352031L;
 
-    public static Result getTableMappings(Integer year, String quarter) throws ClassNotFoundException, SQLException {
+    public static Result getTableMappings(Long termId) throws ClassNotFoundException, SQLException {
 	Connection conn = null;
 	CallableStatement stmt = null;
 	ResultSet rs = null;
@@ -30,9 +30,8 @@ public class TableMappingArray extends ArrayList<TableMapping> {
 
 	    conn = SQLManager.getConn();
 
-	    stmt = conn.prepareCall("CALL Data_Get_TableMappingList(?, ?);");
-	    stmt.setInt(1, year);
-	    stmt.setString(2, quarter);
+	    stmt = conn.prepareCall("CALL Data_Get_TableMappingList(?);");
+	    stmt.setLong(1, termId);
 
 	    rs = stmt.executeQuery();
 
