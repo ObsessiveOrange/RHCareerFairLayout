@@ -42,6 +42,12 @@
     self.canvasView.layoutViewController = self;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [self.canvasView updateView];
+    
+}
+
 - (void)viewDidAppear:(BOOL)animated{
     
     // If there is a company to be highlighted, setup the future calls to flash it.
@@ -82,7 +88,7 @@
 
 - (IBAction)showMenuActionSheet:(id)sender {
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Layout Options Menu"
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil

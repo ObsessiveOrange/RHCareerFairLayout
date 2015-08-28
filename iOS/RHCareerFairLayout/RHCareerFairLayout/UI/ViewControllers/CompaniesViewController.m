@@ -262,7 +262,7 @@ static FAKFontAwesome* uncheckedCheckbox;
 
 - (IBAction)showMenuActionSheet:(UIBarButtonItem *)sender {
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Companies Options Menu"
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil

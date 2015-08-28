@@ -128,7 +128,7 @@ static NSString* filtersCellReuseIdentifier = @"FilterCell";
 
 - (IBAction)showMenuActionSheet:(id)sender {
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Filters Options Menu"
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil

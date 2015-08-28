@@ -79,8 +79,15 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     // Mark setup - prevents first draw on load, when view sizes are not correct.
     self.isSetup = true;
     
+    // Define/update center of canvas
+    self.centerX = self.frame.size.width / 2.0;
+    self.centerY = self.frame.size.height / 2.0;
+    
+    // Generate table locations
+    [self generateTableLocations];
+    
     // Get saved focus & scale factors
-    float focusX = 0, focusY = 0, scaleFactor = 1;
+    float focusX = 0, focusY = 0, scaleFactor = fmax((float)self.containerHeight / (float)self.mapHeight, (float)self.containerWidth / (float)self.mapWidth);
     
     // Portrait
     if(self.frame.size.height > self.frame.size.width){
@@ -98,14 +105,15 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     // If not set, default to center of screen
     self.focusX = focusX != 0 ? focusX : self.frame.size.width / 2.0;
     self.focusY = focusY != 0 ? focusY : self.frame.size.height / 2.0;
-    self.scaleFactor = scaleFactor != 0 ? scaleFactor : 1.0;
+    self.scaleFactor = scaleFactor != 0 ? scaleFactor : fmax((float)self.containerHeight / (float)self.mapHeight, (float)self.containerWidth / (float)self.mapWidth);
     
-    // Define/update center of canvas
-    self.centerX = self.frame.size.width / 2.0;
-    self.centerY = self.frame.size.height / 2.0;
     
+}
+
+- (void) updateView{
     // Generate table locations
     [self generateTableLocations];
+    [self setNeedsDisplay];
     
 }
 

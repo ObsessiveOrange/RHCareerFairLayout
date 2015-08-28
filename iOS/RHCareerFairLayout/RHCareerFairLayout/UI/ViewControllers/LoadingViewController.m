@@ -53,11 +53,11 @@
     else{
         
         NSLog(@"Data outdated or not found. Updating.");
-        ((AppDelegate*)[[UIApplication sharedApplication] delegate]).forceReload = false;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            NSURL *requestURL = [NSURL URLWithString:@"http://rhcareerfair.cf/api/data/all/latest"];
+            NSURL *requestURL = [NSURL URLWithString:@"http://rhcareerfair.cf/api/data/latest/all"];
+//            NSURL *requestURL = [NSURL URLWithString:@"http://192.168.2.30:8080/api/data/latest/all"];
             //    NSURL *requestURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://rhcareerfair.cf/api/data/all?year=%@&quarter=%@", year, quarter]];
             
             
@@ -104,6 +104,8 @@
             NSLog(@"Data parsed");
             
             [DBManager loadNewData:careerFairData];
+            
+            ((AppDelegate*)[[UIApplication sharedApplication] delegate]).forceReload = false;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"%@", @"Done loading data.");
