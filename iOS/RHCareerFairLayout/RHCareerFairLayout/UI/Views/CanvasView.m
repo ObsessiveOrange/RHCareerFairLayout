@@ -117,7 +117,19 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     
 }
 
-- (void) drawRect:(CGRect)rect{    
+- (void) setFocus: (NSNumber*) companyId{
+    
+    if(self.tables == nil){
+        [self generateTableLocations];
+    }
+    
+    CGRect rect = ((CFRectangle*)((CFTableData*)[self.tables objectForKey:companyId]).rectangle).rect;
+    
+    [self setFocusX:(self.centerX - (rect.origin.x + rect.size.width/2.0 - self.centerX) * self.scaleFactor) focusY:(self.centerY - (rect.origin.y + rect.size.height/2.0 - self.centerY) * self.scaleFactor)];
+    
+}
+
+- (void) drawRect:(CGRect)rect{
     if(self.isSetup){
         
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -201,11 +213,14 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     }
 }
 
-- (void)handlePan: (UIPanGestureRecognizer*) gestureRecognizer{
+- (void) setFocusX: (float) focusX focusY: (float) focusY{
     
     // Get new bounded X, Y.
-    self.focusX = [self getNewXWithDelta: [gestureRecognizer translationInView:self].x];
-    self.focusY = [self getNewYWithDelta: [gestureRecognizer translationInView:self].y];
+    self.focusX = focusX;
+    self.focusX = [self getNewXWithDelta: 0];
+    
+    self.focusY = focusY;
+    self.focusY = [self getNewYWithDelta: 0];
     
     NSLog(@"Pan to:(%f,%f)", self.focusX, self.focusY);
     
@@ -223,6 +238,12 @@ static NSString * const SHAPE_COLOR_PREF_KEY = @"shapeColor";
     
     // Redraw.
     [self setNeedsDisplay];
+}
+
+- (void)handlePan: (UIPanGestureRecognizer*) gestureRecognizer{
+    
+    // Get new bounded X, Y.
+    [self setFocusX: self.focusX + [gestureRecognizer translationInView:self].x focusY: self.focusY + [gestureRecognizer translationInView:self].y];
     
     // Reset gestureRecognizer's translation
     [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:self];

@@ -59,6 +59,7 @@
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         
         // Start new animation cycle
+        [self.canvasView setfocus: highlightCompany];
         [self performSelector:@selector(flashCompany:) withObject:highlightCompany afterDelay:0.0];
         [self performSelector:@selector(flashCompany:) withObject:nil afterDelay:1.0];
         [self performSelector:@selector(flashCompany:) withObject:highlightCompany afterDelay:2.0];

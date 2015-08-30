@@ -19,6 +19,8 @@ typedef NS_ENUM(NSInteger, UIOrientation) {
 - (void) setupView;
 - (void) updateView;
 
+- (void) setFocusX: (float) focusX focusY: (float) focusY;
+
 @property (strong, nonatomic) volatile NSNumber *highlightCompany;
 @property (weak, nonatomic) LayoutViewController* layoutViewController;
 
