@@ -1,0 +1,240 @@
+/**
+ * CSS styling for all public pages
+ *
+ * Creator: Benedict Wong, 2015
+ */
+
+html {
+    position: relative;
+    margin: 0;
+    padding: 0 20px 0 20px;
+    width: calc(100% - 40px);
+    background-color: #222;
+    -webkit-overflow-scrolling: touch;
+    font-family: sans-serif;
+    min-height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    font-family: sans-serif;
+    color: #000;
+    background-color: #DDD;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+/*
+ *
+ * Navbar Customization:
+ */
+
+.navBarContainer {
+    display: block;
+    width: calc(100% - 40px);
+    height: 75px;
+    padding: 25px 20px 20px 20px;
+    background-color: #800000;
+    color: #FFF;
+    -webkit-box-shadow: 0 7px 5px -2px #888;
+    -moz-box-shadow: 0 7px 5px -2px #888;
+    box-shadow: 0 7px 5px -2px #888;
+    z-index: 1;
+}
+.rhLogo {
+    float: left;
+    height: 100%;
+}
+/*
+ * 
+ * Body Customization:
+ */
+
+.bodyContent {
+    -webkit-flex: 1 0 auto;
+    flex: 1 0 auto;
+    display: -webkit-flex;
+    display: flex;
+}
+.container {
+    position: relative;
+}
+.contentTable tr td {
+    padding: 1px 5px 1px 5px;
+}
+.innerBorder {
+    border-collapse: collapse;
+}
+.innerBorder td, .innerBorder th {
+    border: 1px solid #BBB;
+}
+.innerBorder tr:first-child th {
+    border-top: 0;
+}
+.innerBorder tr: : last-child td {
+    border-bottom: 0;
+}
+.innerBorder tr td:first-child, .innerBorder tr th:first-child {
+    border-left: 0;
+}
+.innerBorder tr td: last-child, .innerBorder tr th: last-child {
+    border-right: 0;
+}
+/**
+ * INDEX
+ * Body customization
+ */
+
+.menuContainer {
+    position: relative;
+    padding: 25px 10px 25px 10px;
+    background-color: #BBB;
+    -webkit-box-shadow: 5px 0 5px 0 #888;
+    -moz-box-shadow: 5px 0 5px 0 #888;
+    box-shadow: 5px 0 5px 0 #888;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+.menuList {
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+}
+.menuList tr {
+    border: none;
+    border-top: solid 1px #CCC;
+    color: #000;
+    cursor: pointer;
+}
+.menuList tr:hover {
+    color: #000;
+    background-color: #CFF;
+}
+.menuList tr: : last-child {
+    border-bottom: solid 1px #CCC;
+}
+.menuList td {
+    border: none;
+    padding: 5px 5px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.menuList .level1 {
+    font-weight: bold;
+    font-size: 20px;
+}
+.menuList .level2 {
+    font-size: 16px;
+}
+.contentFrame {
+    position: relative;
+    padding: 25px 25px 25px 25px;
+    word-wrap: break-word;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+.mapContainer {
+    position: relative;
+    width: 100%;
+}
+.mapContainer:before {
+    display: block;
+    padding-top: 50%;
+}
+.canvasMap {
+    width: 100%;
+}
+.canvasBase {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+.canvasOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/**
+ *
+ * Footer customization
+ */
+
+.footer {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    bottom: 0;
+    width: calc(100% - 40px);
+    padding: 5px 20px 5px 20px;
+    background-color: #800000;
+    text-align: center;
+    font-size: 12px;
+    color: #FFF;
+}
+/**
+ *
+ * Modification classes
+ */
+
+.left {
+    text-align: left;
+}
+.center {
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+.verticalAlignTop {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+}
+.verticalAlignCenter {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.verticalAlignBottom {
+    display: inline-block;
+    position: relative;
+    top: 100%;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+}
+.horizontalAlignLeft {
+    display: inline-block;
+    position: relative;
+    left: 0;
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+}
+.horizontalAlignCenter {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.horizontalAlignRight {
+    display: inline-block;
+    position: relative;
+    left: 100%;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
