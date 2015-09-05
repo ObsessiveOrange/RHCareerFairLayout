@@ -303,11 +303,19 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_LAND, containerWidth / 2);
                     mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_LAND, containerHeight / 2);
-                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND, 1);
+                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_LAND,
+                            Math.min(
+                                    Math.max(containerWidth / mapWidth, containerHeight / mapHeight),
+                                    5.0f
+                            ));
                 } else {
                     mTouchX = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_X_PORT, containerWidth / 2);
                     mTouchY = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_FOCUS_Y_PORT, containerHeight / 2);
-                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT, 1);
+                    mScaleFactor = prefs.getFloat(RHCareerFairLayout.PREF_KEY_MAP_VIEW_SCALE_PORT,
+                            Math.min(
+                                    Math.max(containerWidth / mapWidth, containerHeight / mapHeight),
+                                    5.0f
+                            ));
                 }
 
                 CalculateMatrix(true);
@@ -510,7 +518,7 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     mTableMap = DBManager.getTables();
                     Term term = DBManager.getTerm();
 
-                    if(term == null){
+                    if (term == null) {
                         Log.d(RHCareerFairLayout.RH_CFL, "Term null, data invalid.");
                         return;
                     }
