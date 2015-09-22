@@ -260,6 +260,10 @@ public class Data {
 		String companyWebsiteLink = dataSheet.getItem(i, "companyDetailWebsite-href", String.class);
 		String companyAddress = dataSheet.getItem(i, "companyDetailAddress", String.class);
 
+		if ("null".equalsIgnoreCase(companyDescription.trim())) {
+		    companyDescription = null;
+		}
+
 		Company company = new Company(companyName, companyDescription, companyWebsiteLink, companyAddress);
 		insertResult = company.insertIntoDB(term.getId());
 		if (!insertResult.isSuccess()) {

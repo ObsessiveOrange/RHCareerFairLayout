@@ -559,7 +559,7 @@ function drawTag(id) {
         fontSize: tableHeight / 2,
         text: getWrappedText({
             text: careerFairData.companyMap[careerFairData.tableMappingList.get("id", id).companyId].name,
-            maxWidth: pathWidth - tableWidth / 2,
+            maxWidth: unitY * 25 - tableWidth / 2,
             maxLines: lines,
             fontSize: tableHeight / 2,
             breakWord: true

@@ -530,6 +530,8 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     int s2PathWidth = term.getLayout_Section2_PathWidth();
                     int s3 = term.getLayout_Section3();
 
+                    Integer numTables = s1 + s2 * s2Rows - (s2 - 2) * s2PathWidth + s3;
+
                     //count number of vertical and horizontal mTableMap there are
                     int hrzCount = s2 + Math.min(s1, 1) + Math.min(s3, 1);
                     int vrtCount = Math.max(s1, s3);
@@ -544,6 +546,12 @@ public class LayoutView extends SurfaceView implements SurfaceHolder.Callback {
                     //30% of space allocated to registration and rest area.
                     float tableHeight = unitY * 70 / vrtCount;
                     mFontSize = tableHeight * 2 / 3;
+                    fillPaintText.setTextSize(mFontSize);
+
+                    float adjustedFontSize = fillPaintText.measureText(numTables.toString(), 0, numTables.toString().length());
+                    if(adjustedFontSize > tableWidth){
+                        mFontSize = mFontSize * (tableWidth / adjustedFontSize) * 0.75f;
+                    }
 
                     //
                     long id = 1;

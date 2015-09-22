@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-c15597d3611466f4edef260ac7f81611c8fd711c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\support-annotations-22.2.1-7cbd1fb143d0e05462d63836f504d5c104f1babf.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\RHCareerFairLayout\persistentSearch\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6ee0ec8cb03678825a27d75d95c94a034e3df617">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-4c485cad71e4d35d1659b8471ff94cb5a6445537.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\library-2.4.0-99dee8102752c560b9dcb759736ede0730c7fa47.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-5a8412cc91c54d5df8b9784a560545b1cc2d7b17.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.5.4\5dfa42af84584b4a862ea488da84bbbebbb06c35\jackson-databind-2.5.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5dfa42af84584b4a862ea488da84bbbebbb06c35">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\jackson-databind-2.5.4-5385630281d8c2a4b5d8104730bef9e2c62a6c25.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-ad0eddef9d1e20d40021b406bbf6b9694b077a64.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.5.4\a57a2df1a23ca1ee32f129173ba7f5feaa9ac24\jackson-core-2.5.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0a57a2df1a23ca1ee32f129173ba7f5feaa9ac24">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\jackson-core-2.5.4-7884da146fad4b00e38b2169b2b7e108b988ab7f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.5.4\7a93b60f5d2d43024f34e15893552ee6defdb971\jackson-annotations-2.5.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7a93b60f5d2d43024f34e15893552ee6defdb971">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\jackson-annotations-2.5.4-011a4ee35d3ef128cf587bf4439ea2a84853af0f.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\internal_impl-22.2.1-00740d456165243cc1318daa39d8290cc4266542.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-e9131ad07c5314fe62b1a308bee0d7c32680b3ec.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-8c66b1b522d422a539ed868991f7a5dbf709d96b.jar" />
+    </item>
+    <item
+        jar="C:\Users\Benedict\.gradle\caches\modules-2\files-2.1\com.joanzapata.android\android-iconify\1.0.9\27817b0ae26d4fa788711f1f75aaa45d76901722\android-iconify-1.0.9.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="27817b0ae26d4fa788711f1f75aaa45d76901722">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\android-iconify-1.0.9-4abaa1685b68e8f766b7d78cc680364a1d24332b.jar" />
+    </item>
+    <item
+        jar="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\exploded-aar\com.github.ksoichiro\android-observablescrollview\1.5.2\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="256c2cf84542c459927ed4aa5f99a9b47855c071">
+        <dex dex="D:\1. Work\Workspaces\Java Workspace\RHCareerFairLayout\Android\RHCareerFairLayout\app\build\intermediates\pre-dexed\release\classes-1d5f618453d1a923dfbd2914ccc4d11458e8483c.jar" />
+    </item>
+
+</items>

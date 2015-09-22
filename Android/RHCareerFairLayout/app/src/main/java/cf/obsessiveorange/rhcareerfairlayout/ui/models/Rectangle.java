@@ -134,18 +134,9 @@ public class Rectangle {
             textPaint.setColor(Color.BLACK);
             textPaint.setStyle(Paint.Style.FILL);
             textPaint.setTextAlign(Paint.Align.CENTER);
+            textPaint.setTextSize(fontSize);
 
-            float testTextSize = fontSize;
-            textPaint.setTextSize(testTextSize);
-
-            Rect textBounds = new Rect();
-            textPaint.getTextBounds(text, 0, text.length(), textBounds);
-
-            textPaint.setTextSize(Math.min(fontSize, fontSize * getRectangleWidth() * 0.9f / textBounds.width()));
-            textPaint.getTextBounds(text, 0, text.length(), textBounds);
-
-            canvas.drawText(text, getCenterX(), getCenterY() - textBounds.exactCenterY(), textPaint);
-//            canvas.drawText(text, rect.exactCenterX(), rect.exactCenterY() + rect.height() / 4, textPaint);
+            canvas.drawText(text, getCenterX(), getCenterY() + textPaint.getTextSize()/2, textPaint);
         }
     }
 
